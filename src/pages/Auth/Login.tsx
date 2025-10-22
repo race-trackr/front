@@ -20,6 +20,14 @@ const Login: React.FC = () => {
   const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
+  const form = useForm<LoginPayload>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
   React.useEffect(() => {
     if (!loading && isAuthenticated) {
       navigate('/dashboard', { replace: true });
