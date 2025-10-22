@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true); // Initial loading state
 
   useEffect(() => {
-    console.log(window.href)
     const storedToken = localStorage.getItem('authToken');
     if (storedToken) {
       setToken(storedToken);
