@@ -4,14 +4,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import Sidebar from './Sidebar'; // Import the new Sidebar component
+import Sidebar from './Sidebar';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -20,6 +20,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const sidebarWidthClass = isCollapsed ? 'w-[60px]' : 'w-[280px]';
   const gridColsClass = isCollapsed ? 'md:grid-cols-[60px_1fr]' : 'md:grid-cols-[280px_1fr]';
+
+  // If not authenticated and not loading, don't render the sidebar layout
+  if (!loading && !isAuthenticated) {
+    return <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">{children}</main>;
+  }
 
   return (
     <div className={`grid min-h-screen w-full ${gridColsClass} lg:${gridColsClass}`}>
@@ -43,7 +48,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex-1 overflow-y-auto">
             <Sidebar isCollapsed={isCollapsed} />
           </div>
-          {/* MadeWithDyad is now inside Sidebar */}
         </div>
       </div>
 
@@ -66,7 +70,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 Race Trackr
               </Link>
               <Sidebar isMobile={true} />
-              {/* MadeWithDyad is now inside Sidebar */}
             </SheetContent>
           </Sheet>
           <Link to="/" className="text-2xl font-bold text-primary ml-auto">Race Trackr</Link>

@@ -12,7 +12,7 @@ const Index: React.FC = () => {
       if (isAuthenticated) {
         navigate('/dashboard', { replace: true });
       } else {
-        navigate('/login', { replace: true });
+        navigate('/auth', { replace: true }); // Redirect to /auth
       }
     }
   }, [isAuthenticated, loading, navigate]);

@@ -8,8 +8,7 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
+import AuthTabs from "./pages/Auth/AuthTabs"; // New AuthTabs component
 import Dashboard from "./pages/Dashboard";
 import TrackdayList from "./pages/Trackdays/TrackdayList";
 import TrackdayCreate from "./pages/Trackdays/TrackdayCreate";
@@ -44,8 +43,7 @@ const App = () => (
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Index />} /> {/* Default route */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/auth" element={<AuthTabs />} /> {/* Combined Auth page */}
 
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>

@@ -4,8 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
 import { Car, Wrench, Users, Gauge, CalendarDays, LogOut } from 'lucide-react';
-import UserMenu from './UserMenu'; // Import the new UserMenu component
-import { MadeWithDyad } from './made-with-dyad'; // Import MadeWithDyad
+import UserMenu from './UserMenu';
+import { MadeWithDyad } from './made-with-dyad';
 
 interface NavLinkProps {
   to: string;
@@ -13,7 +13,7 @@ interface NavLinkProps {
   icon?: ReactNode;
   onClick?: () => void;
   isMobile?: boolean;
-  isCollapsed?: boolean; // Add isCollapsed prop
+  isCollapsed?: boolean;
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile, isCollapsed }) => {
@@ -21,10 +21,10 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-lg px-3 py-1 text-muted-foreground transition-all hover:text-primary" // Adjusted padding
+      className="flex items-center gap-3 rounded-lg px-3 py-1 text-muted-foreground transition-all hover:text-primary"
     >
       {icon}
-      {!isCollapsed && children} {/* Conditionally render text */}
+      {!isCollapsed && children}
     </Link>
   );
 
@@ -33,7 +33,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
 
 interface SidebarProps {
   isMobile?: boolean;
-  isCollapsed?: boolean; // Add isCollapsed prop
+  isCollapsed?: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
@@ -43,36 +43,28 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
     logout();
   };
 
-  const navItems = isAuthenticated ? (
-    <>
-      <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Dashboard</NavLink>
-      <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Trackdays</NavLink>
-      <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Vehicles</NavLink>
-      <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Maintenances</NavLink>
-      {user?.role === 'owner' && (
-        <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Admin</NavLink>
-      )}
-    </>
-  ) : (
-    <>
-      <NavLink to="/login" isMobile={isMobile} isCollapsed={isCollapsed}>Login</NavLink>
-      <NavLink to="/register" isMobile={isMobile} isCollapsed={isCollapsed}>Register</NavLink>
-    </>
-  );
-
   return (
     <div className="flex flex-col h-full">
-      <nav className="items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1"> {/* Added gap-1 */}
-        {navItems}
-      </nav>
+      {isAuthenticated && ( // Only show navigation links if authenticated
+        <nav className="flex flex-col items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1">
+          <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Dashboard</NavLink>
+          <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Trackdays</NavLink>
+          <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Vehicles</NavLink>
+          <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Maintenances</NavLink>
+          {user?.role === 'owner' && (
+            <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Admin</NavLink>
+          )}
+        </nav>
+      )}
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
           <UserMenu isCollapsed={isCollapsed} />
         ) : (
-          <NavLink to="/login" onClick={handleLogout} icon={<LogOut className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Logout</NavLink>
+          // If not authenticated, this section can be empty as the primary interaction will be on the /auth page.
+          null
         )}
       </div>
-      <MadeWithDyad /> {/* Always render MadeWithDyad at the bottom */}
+      <MadeWithDyad />
     </div>
   );
 };
