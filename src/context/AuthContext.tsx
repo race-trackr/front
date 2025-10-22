@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
       const { token: newToken } = response.data;
 
-      console.log(response)
       localStorage.setItem('authToken', newToken);
       setToken(newToken);
       // Fetch user details after login
@@ -65,7 +64,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(userResponse.data.user);
       showSuccess(t('logged_in_successfully'));
     } catch (error: any) {
-      showError(error.response?.data?.message || t('login_failed'));
+      showError(document.URL || t('login_failed'));
       throw error;
     } finally {
       setLoading(false); // End loading for login process
