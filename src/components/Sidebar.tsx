@@ -10,10 +10,11 @@ interface NavLinkProps {
   children: ReactNode;
   icon?: ReactNode;
   onClick?: () => void;
+  isMobile?: boolean; // Add isMobile prop
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick }) => (
-  <SheetClose asChild>
+const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile }) => {
+  const content = (
     <Link
       to={to}
       onClick={onClick}
@@ -22,8 +23,10 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick }) => (
       {icon}
       {children}
     </Link>
-  </SheetClose>
-);
+  );
+
+  return isMobile ? <SheetClose asChild>{content}</SheetClose> : content;
+};
 
 interface SidebarProps {
   isMobile?: boolean;
@@ -38,18 +41,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile }) => {
 
   const navItems = isAuthenticated ? (
     <>
-      <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />}>Dashboard</NavLink>
-      <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />}>Trackdays</NavLink>
-      <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />}>Vehicles</NavLink>
-      <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />}>Maintenances</NavLink>
+      <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile}>Dashboard</NavLink>
+      <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile}>Trackdays</NavLink>
+      <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile}>Vehicles</NavLink>
+      <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile}>Maintenances</NavLink>
       {user?.role === 'owner' && (
-        <NavLink to="/admin" icon={<Users className="h-4 w-4" />}>Admin</NavLink>
+        <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile}>Admin</NavLink>
       )}
     </>
   ) : (
     <>
-      <NavLink to="/login">Login</NavLink>
-      <NavLink to="/register">Register</NavLink>
+      <NavLink to="/login" isMobile={isMobile}>Login</NavLink>
+      <NavLink to="/register" isMobile={isMobile}>Register</NavLink>
     </>
   );
 
@@ -57,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile }) => {
     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
       {navItems}
       {isAuthenticated && (
-        <NavLink to="/login" onClick={handleLogout} icon={<LogOut className="h-4 w-4" />}>Logout</NavLink>
+        <NavLink to="/login" onClick={handleLogout} icon={<LogOut className="h-4 w-4" />} isMobile={isMobile}>Logout</NavLink>
       )}
     </nav>
   );
