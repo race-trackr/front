@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { MenuIcon } from 'lucide-react';
+import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { MadeWithDyad } from './made-with-dyad';
 import Sidebar from './Sidebar'; // Import the new Sidebar component
 
@@ -13,19 +13,36 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, logout, user } = useAuth();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const sidebarWidthClass = isCollapsed ? 'w-[60px]' : 'w-[280px]';
+  const gridColsClass = isCollapsed ? 'md:grid-cols-[60px_1fr]' : 'md:grid-cols-[280px_1fr]';
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className={`grid min-h-screen w-full ${gridColsClass} lg:${gridColsClass}`}>
       {/* Desktop Sidebar */}
-      <div className="hidden border-r bg-muted/40 md:block">
+      <div className={`hidden border-r bg-muted/40 md:block ${sidebarWidthClass} transition-all duration-300 ease-in-out`}>
         <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 justify-between">
             <Link to="/" className="flex items-center gap-2 font-semibold">
-              <span className="text-2xl font-bold text-primary">Race Trackr</span>
+              {!isCollapsed && <span className="text-2xl font-bold text-primary">Race Trackr</span>}
             </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="h-8 w-8"
+            >
+              {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+              <span className="sr-only">Toggle sidebar</span>
+            </Button>
           </div>
-          <div className="flex-1">
-            <Sidebar />
+          <div className="flex-1 overflow-y-auto">
+            <Sidebar isCollapsed={isCollapsed} />
           </div>
           <MadeWithDyad />
         </div>
