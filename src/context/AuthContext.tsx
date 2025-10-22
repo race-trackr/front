@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(userResponse.data.user);
       showSuccess('Logged in successfully!');
     } catch (error: any) {
-      showError(error.response?.data?.message || 'Login failed.');
+      showError(document.URL || 'Login failed.');
       throw error;
     } finally {
       setLoading(false); // End loading for login process
