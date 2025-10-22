@@ -21,7 +21,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-lg p-2 text-muted-foreground transition-all hover:text-primary" // Changed px-3 py-2 to p-2
+      className="flex items-center gap-3 rounded-lg px-3 py-1 text-muted-foreground transition-all hover:text-primary" // Adjusted padding
     >
       {icon}
       {!isCollapsed && children} {/* Conditionally render text */}
@@ -62,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <nav className="grid items-start px-2 text-sm font-medium lg:px-4 flex-1">
+      <nav className="grid items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1"> {/* Added gap-1 */}
         {navItems}
       </nav>
       <div className="mt-auto p-2 border-t">
@@ -72,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
           <NavLink to="/login" onClick={handleLogout} icon={<LogOut className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Logout</NavLink>
         )}
       </div>
-      {!isMobile && <MadeWithDyad />} {/* MadeWithDyad only for desktop sidebar */}
+      <MadeWithDyad /> {/* Always render MadeWithDyad at the bottom */}
     </div>
   );
 };
