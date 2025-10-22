@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true); // Initial loading state
 
   useEffect(() => {
+    console.log(window.href)
     const storedToken = localStorage.getItem('authToken');
     if (storedToken) {
       setToken(storedToken);
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       apiClient.get('/auth/me')
         .then(response => {
           console.log(response)
-          setUser(response.data);
+          setUser(response.data.user);
         })
         .catch(() => {
           // If token is invalid or expired, clear it
