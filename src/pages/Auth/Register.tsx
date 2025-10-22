@@ -22,7 +22,7 @@ const formSchema = z.object({
 });
 
 const Register: React.FC = () => {
-  const { register: authRegister, isAuthenticated } = useAuth();
+  const { register: authRegister, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const form = useForm<RegisterPayload>({
@@ -45,15 +45,15 @@ const Register: React.FC = () => {
   });
 
   React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
+    if (!authLoading && isAuthenticated) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const onSubmit = async (values: RegisterPayload) => {
     try {
       await authRegister(values);
-      navigate('/login');
+      navigate('/login', { replace: true });
     } catch (error) {
       // Error handled by AuthContext and toast
     }
@@ -63,7 +63,7 @@ const Register: React.FC = () => {
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle className="text-2xl">Register</CardTitle>
+          <CardTitle className="2xl">Register</CardTitle>
           <CardDescription>Create your account to get started.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -114,7 +114,7 @@ const Register: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Country</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCountries || isErrorCountries}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCountries || isErrorCountries || authLoading}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={isLoadingCountries ? "Loading countries..." : isErrorCountries ? "Error loading countries" : "Select a country"} />
@@ -135,8 +135,8 @@ const Register: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || isLoadingCountries}>
-                {form.formState.isSubmitting ? 'Registering...' : 'Register'}
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
+                {form.formState.isSubmitting || authLoading ? 'Registering...' : 'Register'}
               </Button>
             </form>
           </Form>

@@ -17,27 +17,19 @@ const formSchema = z.object({
 });
 
 const Login: React.FC = () => {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
-  const form = useForm<LoginPayload>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
   React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
+    if (!loading && isAuthenticated) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
   const onSubmit = async (values: LoginPayload) => {
     try {
       await login(values);
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (error) {
       // Error handled by AuthContext and toast
     }
@@ -79,8 +71,8 @@ const Login: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Logging in...' : 'Login'}
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || loading}>
+                {form.formState.isSubmitting || loading ? 'Logging in...' : 'Login'}
               </Button>
             </form>
           </Form>

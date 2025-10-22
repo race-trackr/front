@@ -10,7 +10,7 @@ interface AuthContextType {
   login: (credentials: LoginPayload) => Promise<void>;
   register: (userData: RegisterPayload) => Promise<void>;
   logout: () => void;
-  loading: boolean;
+  loading: boolean; // This indicates if the auth state is currently being determined or changed
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,34 +22,34 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true); // Initial loading state
 
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
     if (storedToken) {
       setToken(storedToken);
-      // In a real app, you'd verify the token with the backend and fetch user details
-      // For now, we'll assume a valid token means authenticated
-      // A more robust solution would involve a /me endpoint
+      // Verify the token and fetch user details
       apiClient.get('/auth/me')
         .then(response => {
           setUser(response.data.user);
         })
         .catch(() => {
+          // If token is invalid or expired, clear it
           localStorage.removeItem('authToken');
           setToken(null);
           setUser(null);
           showError('Session expired or invalid. Please log in again.');
         })
         .finally(() => {
-          setLoading(false);
+          setLoading(false); // Auth state determined
         });
     } else {
-      setLoading(false);
+      setLoading(false); // No token, not authenticated
     }
   }, []);
 
   const login = async (credentials: LoginPayload) => {
+    setLoading(true); // Start loading for login process
     try {
       const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
       const { token: newToken } = response.data;
@@ -62,24 +62,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error: any) {
       showError(error.response?.data?.message || 'Login failed.');
       throw error;
+    } finally {
+      setLoading(false); // End loading for login process
     }
   };
 
   const register = async (userData: RegisterPayload) => {
+    setLoading(true); // Start loading for registration process
     try {
       await apiClient.post('/auth/register', userData);
       showSuccess('Registration successful! Please log in.');
     } catch (error: any) {
       showError(error.response?.data?.message || 'Registration failed.');
       throw error;
+    } finally {
+      setLoading(false); // End loading for registration process
     }
   };
 
   const logout = () => {
+    setLoading(true); // Start loading for logout process
     localStorage.removeItem('authToken');
     setToken(null);
     setUser(null);
     showSuccess('Logged out successfully.');
+    setLoading(false); // End loading for logout process
   };
 
   const isAuthenticated = !!token && !!user;
