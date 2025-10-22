@@ -33,7 +33,6 @@ const Login: React.FC = () => {
   const onSubmit = async (values: LoginPayload) => {
     try {
       await login(values);
-      console.log('Login successful');
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error(error);
