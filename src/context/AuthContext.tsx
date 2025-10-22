@@ -31,7 +31,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Verify the token and fetch user details
       apiClient.get('/auth/me')
         .then(response => {
-          setUser(response.data.user);
+          console.log(response)
+          setUser(response.data);
         })
         .catch(() => {
           // If token is invalid or expired, clear it
@@ -53,6 +54,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
       const { token: newToken } = response.data;
+
+      console.log(response)
       localStorage.setItem('authToken', newToken);
       setToken(newToken);
       // Fetch user details after login
