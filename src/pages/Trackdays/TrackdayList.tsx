@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { Trackday } from '@/types';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const TrackdayList: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   // Placeholder for fetching trackdays
   const trackdays: Trackday[] = [
     {
@@ -51,17 +53,17 @@ const TrackdayList: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Your Trackdays</h1>
+        <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1>
         <Button asChild>
           <Link to="/trackdays/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Trackday
+            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_trackday')}
           </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {trackdays.length === 0 ? (
-          <p className="text-muted-foreground">No trackdays recorded yet. Start by adding one!</p>
+          <p className="text-muted-foreground">{t('no_trackdays_recorded')}</p>
         ) : (
           trackdays.map((trackday) => (
             <Card key={trackday.id}>
@@ -70,12 +72,12 @@ const TrackdayList: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{new Date(trackday.date).toLocaleDateString()}</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>Vehicle:</strong> {trackday.vehicle?.name || 'N/A'}</p>
-                <p><strong>Best Laptime:</strong> {trackday.bestLaptime}</p>
-                <p><strong>Total Laps:</strong> {trackday.totalLaps}</p>
-                <p><strong>Weather:</strong> {trackday.weather}</p>
+                <p><strong>{t('vehicle')}:</strong> {trackday.vehicle?.name || 'N/A'}</p>
+                <p><strong>{t('best_laptime')}:</strong> {trackday.bestLaptime}</p>
+                <p><strong>{t('total_laps')}:</strong> {trackday.totalLaps}</p>
+                <p><strong>{t('weather')}:</strong> {trackday.weather}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/trackdays/edit/${trackday.id}`}>View/Edit Details</Link>
+                  <Link to={`/trackdays/edit/${trackday.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>

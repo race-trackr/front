@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { Country } from '@/types';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const AdminCountries: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   // Placeholder for fetching countries
   const countries: Country[] = [
     {
@@ -19,17 +21,17 @@ const AdminCountries: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Manage Countries</h1>
+        <h1 className="text-3xl font-bold">{t('manage_countries')}</h1>
         <Button asChild>
           <Link to="/admin/countries/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Country
+            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_country')}
           </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {countries.length === 0 ? (
-          <p className="text-muted-foreground">No countries added yet.</p>
+          <p className="text-muted-foreground">{t('no_countries_added')}</p>
         ) : (
           countries.map((country) => (
             <Card key={country.id}>
@@ -38,9 +40,9 @@ const AdminCountries: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{country.capital} ({country.iso})</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>Timezone:</strong> {country.timezone}</p>
+                <p><strong>{t('timezone')}:</strong> {country.timezone}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/admin/countries/edit/${country.id}`}>View/Edit Details</Link>
+                  <Link to={`/admin/countries/edit/${country.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>

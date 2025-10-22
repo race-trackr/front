@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { Maintenance } from '@/types';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const MaintenanceList: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   // Placeholder for fetching maintenances
   const maintenances: Maintenance[] = [
     {
@@ -19,17 +21,17 @@ const MaintenanceList: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Your Maintenances</h1>
+        <h1 className="text-3xl font-bold">{t('your_maintenances')}</h1>
         <Button asChild>
           <Link to="/maintenances/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Maintenance
+            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_maintenance')}
           </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {maintenances.length === 0 ? (
-          <p className="text-muted-foreground">No maintenances recorded yet. Start by adding one!</p>
+          <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
         ) : (
           maintenances.map((maintenance) => (
             <Card key={maintenance.id}>
@@ -38,12 +40,12 @@ const MaintenanceList: React.FC = () => {
                 <p className="text-sm text-muted-foreground">For Vehicle ID: {maintenance.vehicleId}</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>Type:</strong> {maintenance.type}</p>
-                <p><strong>Date:</strong> {new Date(maintenance.date).toLocaleDateString()}</p>
-                <p><strong>Cost:</strong> ${maintenance.cost.toFixed(2)}</p>
-                <p><strong>Mileage:</strong> {maintenance.mileage} km</p>
+                <p><strong>{t('type')}:</strong> {maintenance.type}</p>
+                <p><strong>{t('date')}:</strong> {new Date(maintenance.date).toLocaleDateString()}</p>
+                <p><strong>{t('cost')}:</strong> ${maintenance.cost.toFixed(2)}</p>
+                <p><strong>{t('mileage')}:</strong> {maintenance.mileage} km</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/maintenances/edit/${maintenance.id}`}>View/Edit Details</Link>
+                  <Link to={`/maintenances/edit/${maintenance.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>

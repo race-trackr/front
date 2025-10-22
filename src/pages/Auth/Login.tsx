@@ -10,15 +10,17 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { LoginPayload } from '@/types';
-
-const formSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(3, { message: 'Password must be at least 6 characters.' }),
-});
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Login: React.FC = () => {
-  const { login, isAuthenticated, loading } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize useTranslation
+
+  const formSchema = z.object({
+    email: z.string().email({ message: t('invalid_email') }),
+    password: z.string().min(3, { message: t('password_min_length') }),
+  });
 
   const form = useForm<LoginPayload>({
     resolver: zodResolver(formSchema),
@@ -42,8 +44,8 @@ const Login: React.FC = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>Enter your email below to login to your account.</CardDescription>
+        <CardTitle className="text-2xl">{t('login')}</CardTitle>
+        <CardDescription>{t('enter_email_to_login')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -53,7 +55,7 @@ const Login: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -66,7 +68,7 @@ const Login: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('password')}</FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
@@ -75,14 +77,14 @@ const Login: React.FC = () => {
               )}
             />
             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || loading}>
-              {form.formState.isSubmitting || loading ? 'Logging in...' : 'Login'}
+              {form.formState.isSubmitting || loading ? t('logging_in') : t('login')}
             </Button>
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Don't have an account?{' '}
+          {t('dont_have_account')}{' '}
           <Link to="/auth?tab=register" className="underline">
-            Sign up
+            {t('sign_up')}
           </Link>
         </div>
       </CardContent>

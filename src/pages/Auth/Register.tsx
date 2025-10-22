@@ -13,17 +13,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RegisterPayload, Country } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
-
-const formSchema = z.object({
-  username: z.string().min(2, { message: 'Username must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
-  countryId: z.string().min(1, { message: 'Country is required.' }),
-});
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Register: React.FC = () => {
-  const { register: authRegister, isAuthenticated, loading: authLoading } = useAuth();
+  const { register: authRegister, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize useTranslation
+
+  const formSchema = z.object({
+    username: z.string().min(2, { message: t('username_min_length') }),
+    email: z.string().email({ message: t('invalid_email') }),
+    password: z.string().min(6, { message: t('password_min_length') }),
+    countryId: z.string().min(1, { message: t('country_required') }),
+  });
 
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(formSchema),
@@ -56,8 +58,8 @@ const Register: React.FC = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="2xl">Register</CardTitle>
-        <CardDescription>Create your account to get started.</CardDescription>
+        <CardTitle className="2xl">{t('register')}</CardTitle>
+        <CardDescription>{t('create_account_to_get_started')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -67,7 +69,7 @@ const Register: React.FC = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>{t('username')}</FormLabel>
                   <FormControl>
                     <Input placeholder="JohnDoe" {...field} />
                   </FormControl>
@@ -80,7 +82,7 @@ const Register: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -93,7 +95,7 @@ const Register: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('password')}</FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
@@ -106,11 +108,11 @@ const Register: React.FC = () => {
               name="countryId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>{t('country')}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCountries || isErrorCountries || authLoading}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={isLoadingCountries ? "Loading countries..." : isErrorCountries ? "Error loading countries" : "Select a country"} />
+                        <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -122,21 +124,21 @@ const Register: React.FC = () => {
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Select the country you are from.
+                    {t('select_your_country')}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
-              {form.formState.isSubmitting || authLoading ? 'Registering...' : 'Register'}
+              {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
             </Button>
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Already have an account?{' '}
+          {t('already_have_account')}{' '}
           <Link to="/auth?tab=login" className="underline">
-            Login
+            {t('login')}
           </Link>
         </div>
       </CardContent>

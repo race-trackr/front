@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { UserVehicle } from '@/types';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const VehicleList: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   // Placeholder for fetching vehicles
   const vehicles: UserVehicle[] = [
     {
@@ -19,17 +21,17 @@ const VehicleList: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Your Vehicles</h1>
+        <h1 className="text-3xl font-bold">{t('your_vehicles')}</h1>
         <Button asChild>
           <Link to="/vehicles/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Vehicle
+            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_vehicle')}
           </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {vehicles.length === 0 ? (
-          <p className="text-muted-foreground">No vehicles added yet. Start by adding one!</p>
+          <p className="text-muted-foreground">{t('no_vehicles_added')}</p>
         ) : (
           vehicles.map((vehicle) => (
             <Card key={vehicle.id}>
@@ -38,10 +40,10 @@ const VehicleList: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{vehicle.brand} {vehicle.model} ({vehicle.year})</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>Type:</strong> {vehicle.type}</p>
-                <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
+                <p><strong>{t('type')}:</strong> {vehicle.type}</p>
+                <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/vehicles/edit/${vehicle.id}`}>View/Edit Details</Link>
+                  <Link to={`/vehicles/edit/${vehicle.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>

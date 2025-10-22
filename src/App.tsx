@@ -6,9 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n'; // Import i18n configuration
+import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
 
 // Pages
-import AuthTabs from "./pages/Auth/AuthTabs"; // New AuthTabs component
+import AuthTabs from "./pages/Auth/AuthTabs";
 import Dashboard from "./pages/Dashboard";
 import TrackdayList from "./pages/Trackdays/TrackdayList";
 import TrackdayCreate from "./pages/Trackdays/TrackdayCreate";
@@ -37,45 +40,49 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Layout>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Index />} /> {/* Default route */}
-              <Route path="/auth" element={<AuthTabs />} /> {/* Combined Auth page */}
+      <I18nextProvider i18n={i18n}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <BrowserRouter>
+            <AuthProvider>
+              <Layout>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<AuthTabs />} />
 
-              {/* Protected Routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/trackdays" element={<TrackdayList />} />
-                <Route path="/trackdays/create" element={<TrackdayCreate />} />
-                <Route path="/trackdays/edit/:id" element={<TrackdayEdit />} />
-                <Route path="/vehicles" element={<VehicleList />} />
-                <Route path="/vehicles/create" element={<VehicleCreate />} />
-                <Route path="/vehicles/edit/:id" element={<VehicleEdit />} />
-                <Route path="/maintenances" element={<MaintenanceList />} />
-                <Route path="/maintenances/create" element={<MaintenanceCreate />} />
-                <Route path="/maintenances/edit/:id" element={<MaintenanceEdit />} />
-              </Route>
+                  {/* Protected Routes */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/trackdays" element={<TrackdayList />} />
+                    <Route path="/trackdays/create" element={<TrackdayCreate />} />
+                    <Route path="/trackdays/edit/:id" element={<TrackdayEdit />} />
+                    <Route path="/vehicles" element={<VehicleList />} />
+                    <Route path="/vehicles/create" element={<VehicleCreate />} />
+                    <Route path="/vehicles/edit/:id" element={<VehicleEdit />} />
+                    <Route path="/maintenances" element={<MaintenanceList />} />
+                    <Route path="/maintenances/create" element={<MaintenanceCreate />} />
+                    <Route path="/maintenances/edit/:id" element={<MaintenanceEdit />} />
+                  </Route>
 
-              {/* Admin Protected Routes (only for 'owner' role) */}
-              <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/tracks" element={<AdminTracks />} />
-                <Route path="/admin/tracks/create" element={<AdminTracksCreate />} />
-                <Route path="/admin/tracks/edit/:id" element={<AdminTracksEdit />} />
-                <Route path="/admin/countries" element={<AdminCountries />} />
-                <Route path="/admin/countries/create" element={<AdminCountriesCreate />} />
-                <Route path="/admin/countries/edit/:id" element={<AdminCountriesEdit />} />
-              </Route>
+                  {/* Admin Protected Routes (only for 'owner' role) */}
+                  <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/tracks" element={<AdminTracks />} />
+                    <Route path="/admin/tracks/create" element={<AdminTracksCreate />} />
+                    <Route path="/admin/tracks/edit/:id" element={<AdminTracksEdit />} />
+                    <Route path="/admin/countries" element={<AdminCountries />} />
+                    <Route path="/admin/countries/create" element={<AdminCountriesCreate />} />
+                    <Route path="/admin/countries/edit/:id" element={<AdminCountriesEdit />} />
+                  </Route>
 
-              {/* Catch-all Route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Layout>
-        </AuthProvider>
-      </BrowserRouter>
+                  {/* Catch-all Route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            </AuthProvider>
+          </BrowserRouter>
+        </ThemeProvider>
+      </I18nextProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

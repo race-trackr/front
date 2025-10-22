@@ -3,38 +3,40 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Flag, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const AdminDashboard: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-      <p className="text-lg text-muted-foreground">Manage application-wide data.</p>
+      <h1 className="text-3xl font-bold">{t('admin_dashboard')}</h1>
+      <p className="text-lg text-muted-foreground">{t('manage_application_data')}</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Manage Tracks</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('manage_tracks')}</CardTitle>
             <Flag className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">10</div> {/* Placeholder data */}
-            <p className="text-xs text-muted-foreground">Total tracks in the system.</p>
+            <p className="text-xs text-muted-foreground">{t('total_tracks_in_system')}</p>
             <Button asChild className="mt-4">
-              <Link to="/admin/tracks">Go to Tracks</Link>
+              <Link to="/admin/tracks">{t('go_to_tracks')}</Link>
             </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Manage Countries</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('manage_countries')}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">50</div> {/* Placeholder data */}
-            <p className="text-xs text-muted-foreground">Total countries in the system.</p>
+            <p className="text-xs text-muted-foreground">{t('total_countries_in_system')}</p>
             <Button asChild className="mt-4">
-              <Link to="/admin/countries">Go to Countries</Link>
+              <Link to="/admin/countries">{t('go_to_countries')}</Link>
             </Button>
           </CardContent>
         </Card>

@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import apiClient from '@/lib/apiClient';
 import { User, LoginPayload, RegisterPayload, AuthResponse } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // Initial loading state
+  const { t } = useTranslation(); // Initialize useTranslation
 
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           localStorage.removeItem('authToken');
           setToken(null);
           setUser(null);
-          showError('Session expired or invalid. Please log in again.');
+          showError(t('session_expired'));
         })
         .finally(() => {
           setLoading(false); // Auth state determined
@@ -61,9 +63,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Fetch user details after login
       const userResponse = await apiClient.get('/auth/me');
       setUser(userResponse.data.user);
-      showSuccess('Logged in successfully!');
+      showSuccess(t('logged_in_successfully'));
     } catch (error: any) {
-      showError(document.URL || 'Login failed.');
+      showError(error.response?.data?.message || t('login_failed'));
       throw error;
     } finally {
       setLoading(false); // End loading for login process
@@ -74,9 +76,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true); // Start loading for registration process
     try {
       await apiClient.post('/auth/register', userData);
-      showSuccess('Registration successful! Please log in.');
+      showSuccess(t('registration_successful'));
     } catch (error: any) {
-      showError(error.response?.data?.message || 'Registration failed.');
+      showError(error.response?.data?.message || t('registration_failed'));
       throw error;
     } finally {
       setLoading(false); // End loading for registration process
@@ -88,7 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('authToken');
     setToken(null);
     setUser(null);
-    showSuccess('Logged out successfully.');
+    showSuccess(t('logged_out_successfully'));
     setLoading(false); // End loading for logout process
   };
 

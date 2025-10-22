@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
-import { Car, Wrench, Users, Gauge, CalendarDays, LogOut } from 'lucide-react';
+import { Car, Wrench, Users, Gauge, CalendarDays } from 'lucide-react';
 import UserMenu from './UserMenu';
 import { MadeWithDyad } from './made-with-dyad';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface NavLinkProps {
   to: string;
@@ -37,22 +38,19 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
-  const { isAuthenticated, logout, user } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-  };
+  const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   return (
     <div className="flex flex-col h-full">
-      {isAuthenticated && ( // Only show navigation links if authenticated
+      {isAuthenticated && (
         <nav className="flex flex-col items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1">
-          <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Dashboard</NavLink>
-          <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Trackdays</NavLink>
-          <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Vehicles</NavLink>
-          <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Maintenances</NavLink>
+          <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
+          <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
+          <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
+          <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('maintenances')}</NavLink>
           {user?.role === 'owner' && (
-            <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Admin</NavLink>
+            <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('admin')}</NavLink>
           )}
         </nav>
       )}
@@ -60,7 +58,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
         {isAuthenticated ? (
           <UserMenu isCollapsed={isCollapsed} />
         ) : (
-          // If not authenticated, this section can be empty as the primary interaction will be on the /auth page.
           null
         )}
       </div>

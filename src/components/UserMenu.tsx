@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface UserMenuProps {
   isCollapsed: boolean;
@@ -19,6 +20,7 @@ interface UserMenuProps {
 
 const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation(); // Initialize useTranslation
   const isFreeTier = true; // Placeholder: Replace with actual logic to check user's subscription status
 
   const handleLogout = () => {
@@ -30,18 +32,18 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="w-full justify-start h-auto p-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/placeholder-user.jpg" alt={user?.username || "User"} />
+            <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
           </Avatar>
           {!isCollapsed && (
-            <span className="ml-3 text-sm font-medium truncate">{user?.username || "Guest"}</span>
+            <span className="ml-3 text-sm font-medium truncate">{user?.username || t("guest")}</span>
           )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.username || "Guest"}</p>
+            <p className="text-sm font-medium leading-none">{user?.username || t("guest")}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email || "guest@example.com"}
             </p>
@@ -51,27 +53,27 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         <DropdownMenuItem asChild>
           <Link to="/settings" className="flex items-center">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <span>{t('settings')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/profile" className="flex items-center">
             <UserIcon className="mr-2 h-4 w-4" />
-            <span>My Account</span>
+            <span>{t('my_account')}</span>
           </Link>
         </DropdownMenuItem>
         {isFreeTier && (
           <DropdownMenuItem asChild>
             <Link to="/upgrade" className="flex items-center text-primary">
               <Gem className="mr-2 h-4 w-4" />
-              <span>Upgrade to Pro</span>
+              <span>{t('upgrade_to_pro')}</span>
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="flex items-center text-destructive">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>{t('logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

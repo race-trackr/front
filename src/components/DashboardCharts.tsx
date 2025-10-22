@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const trackdayData = [
   { name: 'Jan', trackdays: 4 },
@@ -32,11 +33,12 @@ const maintenanceData = [
 ];
 
 const DashboardCharts: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Trackdays par mois</CardTitle>
+          <CardTitle>{t('trackdays_per_month')}</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -46,7 +48,7 @@ const DashboardCharts: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="trackdays" fill="#8884d8" name="Nombre de Trackdays" />
+              <Bar dataKey="trackdays" fill="#8884d8" name={t('number_of_trackdays')} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -54,7 +56,7 @@ const DashboardCharts: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Coût de maintenance par mois</CardTitle>
+          <CardTitle>{t('maintenance_cost_per_month')}</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -64,7 +66,7 @@ const DashboardCharts: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="cost" stroke="#82ca9d" name="Coût (€)" />
+              <Line type="monotone" dataKey="cost" stroke="#82ca9d" name={t('cost_currency')} />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>

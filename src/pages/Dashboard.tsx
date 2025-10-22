@@ -4,45 +4,46 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Car, Wrench, CalendarDays, Users } from "lucide-react";
-import DashboardCharts from "@/components/DashboardCharts"; // Import the new charts component
+import DashboardCharts from "@/components/DashboardCharts";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">
-        Welcome, {user?.username || "User"}!
+        {t('welcome')}, {user?.username || t("user")}!
       </h1>
-      {/* Removed: <p className="text-lg text-muted-foreground">Your role: <span className="font-semibold capitalize">{user?.role}</span></p> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Trackdays</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('my_trackdays')}</CardTitle>
             <CalendarDays className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div> {/* Placeholder data */}
+            <div className="text-2xl font-bold">5</div>
             <p className="text-xs text-muted-foreground">
-              You have participated in 5 trackdays.
+              {t('you_have_participated_in_trackdays', { count: 5 })}
             </p>
             <Button asChild className="mt-4">
-              <Link to="/trackdays">View Trackdays</Link>
+              <Link to="/trackdays">{t('view_trackdays')}</Link>
             </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Vehicles</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('my_vehicles')}</CardTitle>
             <Car className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2</div> {/* Placeholder data */}
-            <p className="text-xs text-muted-foreground">You own 2 vehicles.</p>
+            <div className="text-2xl font-bold">2</div>
+            <p className="text-xs text-muted-foreground">{t('you_own_vehicles', { count: 2 })}</p>
             <Button asChild className="mt-4">
-              <Link to="/vehicles">Manage Vehicles</Link>
+              <Link to="/vehicles">{t('manage_vehicles')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -50,17 +51,17 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Upcoming Maintenances
+              {t('upcoming_maintenances')}
             </CardTitle>
             <Wrench className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1</div> {/* Placeholder data */}
+            <div className="text-2xl font-bold">1</div>
             <p className="text-xs text-muted-foreground">
-              1 maintenance due soon.
+              {t('maintenance_due_soon', { count: 1 })}
             </p>
             <Button asChild className="mt-4">
-              <Link to="/maintenances">View Maintenances</Link>
+              <Link to="/maintenances">{t('view_maintenances')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -68,23 +69,23 @@ const Dashboard: React.FC = () => {
         {user?.role === "owner" && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Admin Panel</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin_panel')}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Access Admin Tools</div>
+              <div className="text-2xl font-bold">{t('access_admin_tools')}</div>
               <p className="text-xs text-muted-foreground">
-                Manage tracks, countries, and users.
+                {t('manage_tracks_countries_users')}
               </p>
               <Button asChild className="mt-4">
-                <Link to="/admin">Go to Admin</Link>
+                <Link to="/admin">{t('go_to_admin')}</Link>
               </Button>
             </CardContent>
           </Card>
         )}
       </div>
 
-      <DashboardCharts /> {/* Render the new charts component */}
+      <DashboardCharts />
     </div>
   );
 };

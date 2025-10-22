@@ -12,23 +12,25 @@ import { Textarea } from '@/components/ui/textarea';
 import { CreateTrackdayPayload } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
-
-const formSchema = z.object({
-  vehicleId: z.string().min(1, { message: 'Vehicle is required.' }),
-  trackId: z.string().min(1, { message: 'Track is required.' }),
-  date: z.string().min(1, { message: 'Date is required.' }),
-  weather: z.string().min(1, { message: 'Weather is required.' }),
-  airTemperature: z.coerce.number().min(-50).max(50),
-  trackTemperature: z.coerce.number().min(-50).max(100),
-  trackCondition: z.string().min(1, { message: 'Track condition is required.' }),
-  note: z.string().optional(),
-  bestLaptime: z.string().optional(),
-  totalLaps: z.coerce.number().min(0),
-  otherDetails: z.string().optional(), // Will be parsed as JSON
-});
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const TrackdayCreate: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize useTranslation
+
+  const formSchema = z.object({
+    vehicleId: z.string().min(1, { message: t('vehicle_id_placeholder') }), // Placeholder message
+    trackId: z.string().min(1, { message: t('track_id_placeholder') }),     // Placeholder message
+    date: z.string().min(1, { message: t('date') }),
+    weather: z.string().min(1, { message: t('weather') }),
+    airTemperature: z.coerce.number().min(-50).max(50),
+    trackTemperature: z.coerce.number().min(-50).max(100),
+    trackCondition: z.string().min(1, { message: t('track_condition') }),
+    note: z.string().optional(),
+    bestLaptime: z.string().optional(),
+    totalLaps: z.coerce.number().min(0),
+    otherDetails: z.string().optional(), // Will be parsed as JSON
+  });
 
   const form = useForm<CreateTrackdayPayload>({
     resolver: zodResolver(formSchema),
@@ -54,19 +56,19 @@ const TrackdayCreate: React.FC = () => {
         otherDetails: values.otherDetails ? JSON.parse(values.otherDetails) : null,
       };
       await apiClient.post('/trackdays', payload);
-      showSuccess('Trackday created successfully!');
+      showSuccess(t('trackday_created_successfully'));
       navigate('/trackdays');
     } catch (error: any) {
-      showError(error.response?.data?.message || 'Failed to create trackday.');
+      showError(error.response?.data?.message || t('failed_to_create_trackday'));
     }
   };
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Create New Trackday</h1>
+      <h1 className="text-3xl font-bold">{t('create_new_trackday')}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Trackday Details</CardTitle>
+          <CardTitle>{t('trackday_details')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -76,7 +78,7 @@ const TrackdayCreate: React.FC = () => {
                 name="vehicleId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Vehicle ID (Placeholder)</FormLabel>
+                    <FormLabel>{t('vehicle_id_placeholder')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -90,7 +92,7 @@ const TrackdayCreate: React.FC = () => {
                 name="trackId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Track ID (Placeholder)</FormLabel>
+                    <FormLabel>{t('track_id_placeholder')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -104,7 +106,7 @@ const TrackdayCreate: React.FC = () => {
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>{t('date')}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -117,7 +119,7 @@ const TrackdayCreate: React.FC = () => {
                 name="weather"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Weather</FormLabel>
+                    <FormLabel>{t('weather')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -130,7 +132,7 @@ const TrackdayCreate: React.FC = () => {
                 name="airTemperature"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Air Temperature (°C)</FormLabel>
+                    <FormLabel>{t('air_temperature')}</FormLabel>
                     <FormControl>
                       <Input type="number" step="0.1" {...field} />
                     </FormControl>
@@ -143,7 +145,7 @@ const TrackdayCreate: React.FC = () => {
                 name="trackTemperature"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Track Temperature (°C)</FormLabel>
+                    <FormLabel>{t('track_temperature')}</FormLabel>
                     <FormControl>
                       <Input type="number" step="0.1" {...field} />
                     </FormControl>
@@ -156,7 +158,7 @@ const TrackdayCreate: React.FC = () => {
                 name="trackCondition"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Track Condition</FormLabel>
+                    <FormLabel>{t('track_condition')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -169,7 +171,7 @@ const TrackdayCreate: React.FC = () => {
                 name="bestLaptime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Best Laptime</FormLabel>
+                    <FormLabel>{t('best_laptime')}</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g., 1:30.123" {...field} />
                     </FormControl>
@@ -182,7 +184,7 @@ const TrackdayCreate: React.FC = () => {
                 name="totalLaps"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Total Laps</FormLabel>
+                    <FormLabel>{t('total_laps')}</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -195,7 +197,7 @@ const TrackdayCreate: React.FC = () => {
                 name="note"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Notes</FormLabel>
+                    <FormLabel>{t('notes')}</FormLabel>
                     <FormControl>
                       <Textarea rows={3} {...field} />
                     </FormControl>
@@ -208,17 +210,17 @@ const TrackdayCreate: React.FC = () => {
                 name="otherDetails"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Other Details (JSON)</FormLabel>
+                    <FormLabel>{t('other_details_json')}</FormLabel>
                     <FormControl>
                       <Textarea rows={3} placeholder='{"tirePressure": "2.0 bar"}' {...field} />
                     </FormControl>
-                    <FormDescription>Enter additional details as a JSON string.</FormDescription>
+                    <FormDescription>{t('enter_additional_details_json')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" className="w-full md:col-span-2" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Creating...' : 'Create Trackday'}
+                {form.formState.isSubmitting ? t('creating') : t('create_trackday')}
               </Button>
             </form>
           </Form>

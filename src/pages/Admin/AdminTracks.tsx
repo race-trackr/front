@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { Track } from '@/types';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const AdminTracks: React.FC = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   // Placeholder for fetching tracks
   const tracks: Track[] = [
     {
@@ -19,17 +21,17 @@ const AdminTracks: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Manage Tracks</h1>
+        <h1 className="text-3xl font-bold">{t('manage_tracks')}</h1>
         <Button asChild>
           <Link to="/admin/tracks/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Track
+            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_track')}
           </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tracks.length === 0 ? (
-          <p className="text-muted-foreground">No tracks added yet.</p>
+          <p className="text-muted-foreground">{t('no_tracks_added')}</p>
         ) : (
           tracks.map((track) => (
             <Card key={track.id}>
@@ -38,10 +40,10 @@ const AdminTracks: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{track.city}, {track.countryId}</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>Length:</strong> {track.length} km</p>
-                <p><strong>Turns:</strong> {track.turn}</p>
+                <p><strong>{t('length')}:</strong> {track.length} km</p>
+                <p><strong>{t('turns')}:</strong> {track.turn}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/admin/tracks/edit/${track.id}`}>View/Edit Details</Link>
+                  <Link to={`/admin/tracks/edit/${track.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>
