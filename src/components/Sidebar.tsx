@@ -62,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <nav className="grid items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1"> {/* Added gap-1 */}
+      <nav className="items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1"> {/* Added gap-1 */}
         {navItems}
       </nav>
       <div className="mt-auto p-2 border-t">
