@@ -7,6 +7,8 @@ import { Car, Wrench, Users, Gauge, CalendarDays } from 'lucide-react';
 import UserMenu from './UserMenu';
 import { MadeWithDyad } from './made-with-dyad';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import LanguageSwitcher from './LanguageSwitcher'; // Import LanguageSwitcher
+import ThemeToggle from './ThemeToggle'; // Import ThemeToggle
 
 interface NavLinkProps {
   to: string;
@@ -56,7 +58,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
       )}
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
-          <UserMenu isCollapsed={isCollapsed} />
+          <>
+            <div className="flex items-center justify-between mb-2 px-2"> {/* New container for toggles */}
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+            <UserMenu isCollapsed={isCollapsed} />
+          </>
         ) : (
           null
         )}

@@ -7,10 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Check } from 'lucide-react'; // Import Check icon
 
 const ThemeToggle: React.FC = () => {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme(); // Get current theme
 
   return (
     <DropdownMenu>
@@ -22,14 +22,17 @@ const ThemeToggle: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem onClick={() => setTheme('light')} className="flex items-center justify-between">
           Light
+          {theme === 'light' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem onClick={() => setTheme('dark')} className="flex items-center justify-between">
           Dark
+          {theme === 'dark' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem onClick={() => setTheme('system')} className="flex items-center justify-between">
           System
+          {theme === 'system' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

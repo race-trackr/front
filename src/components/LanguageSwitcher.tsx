@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Globe } from 'lucide-react';
+import { Globe, Check } from 'lucide-react'; // Import Check icon
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -25,17 +25,21 @@ const LanguageSwitcher: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeLanguage('en')}>
+        <DropdownMenuItem onClick={() => changeLanguage('en')} className="flex items-center justify-between">
           English
+          {i18n.language === 'en' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('fr')}>
+        <DropdownMenuItem onClick={() => changeLanguage('fr')} className="flex items-center justify-between">
           Français
+          {i18n.language === 'fr' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('it')}>
+        <DropdownMenuItem onClick={() => changeLanguage('it')} className="flex items-center justify-between">
           Italiano
+          {i18n.language === 'it' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('es')}>
+        <DropdownMenuItem onClick={() => changeLanguage('es')} className="flex items-center justify-between">
           Español
+          {i18n.language === 'es' && <Check className="ml-2 h-4 w-4" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

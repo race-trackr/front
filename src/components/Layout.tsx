@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
-import LanguageSwitcher from './LanguageSwitcher'; // Import LanguageSwitcher
-import ThemeToggle from './ThemeToggle'; // Import ThemeToggle
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface LayoutProps {
@@ -39,19 +37,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Link to="/" className="flex items-center gap-2 font-semibold">
               {!isCollapsed && <span className="text-2xl font-bold text-primary">Race Trackr</span>}
             </Link>
-            <div className="flex items-center gap-2"> {/* Container for toggles */}
-              <LanguageSwitcher />
-              <ThemeToggle />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSidebar}
-                className="h-8 w-8"
-              >
-                {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-                <span className="sr-only">Toggle sidebar</span>
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="h-8 w-8"
+            >
+              {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+              <span className="sr-only">Toggle sidebar</span>
+            </Button>
           </div>
           <div className="flex-1 overflow-y-auto">
             <Sidebar isCollapsed={isCollapsed} />
@@ -81,10 +75,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </SheetContent>
           </Sheet>
           <Link to="/" className="text-2xl font-bold text-primary ml-auto">Race Trackr</Link>
-          <div className="flex items-center gap-2"> {/* Container for toggles */}
-            <LanguageSwitcher />
-            <ThemeToggle />
-          </div>
         </header>
 
         {/* Main Content */}
