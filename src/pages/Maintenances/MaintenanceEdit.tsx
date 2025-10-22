@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } => 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
