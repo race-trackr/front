@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
 import { Car, Wrench, Users, Gauge, CalendarDays, LogOut } from 'lucide-react';
 import UserMenu from './UserMenu'; // Import the new UserMenu component
+import { MadeWithDyad } from './made-with-dyad'; // Import MadeWithDyad
 
 interface NavLinkProps {
   to: string;
@@ -20,7 +21,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+      className="flex items-center gap-3 rounded-lg p-2 text-muted-foreground transition-all hover:text-primary" // Changed px-3 py-2 to p-2
     >
       {icon}
       {!isCollapsed && children} {/* Conditionally render text */}
@@ -71,6 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
           <NavLink to="/login" onClick={handleLogout} icon={<LogOut className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>Logout</NavLink>
         )}
       </div>
+      {!isMobile && <MadeWithDyad />} {/* MadeWithDyad only for desktop sidebar */}
     </div>
   );
 };

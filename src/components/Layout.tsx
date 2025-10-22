@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { MadeWithDyad } from './made-with-dyad';
 import Sidebar from './Sidebar'; // Import the new Sidebar component
 
 interface LayoutProps {
@@ -44,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex-1 overflow-y-auto">
             <Sidebar isCollapsed={isCollapsed} />
           </div>
-          <MadeWithDyad />
+          {/* MadeWithDyad is now inside Sidebar */}
         </div>
       </div>
 
@@ -67,9 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 Race Trackr
               </Link>
               <Sidebar isMobile={true} />
-              <div className="mt-auto">
-                <MadeWithDyad />
-              </div>
+              {/* MadeWithDyad is now inside Sidebar */}
             </SheetContent>
           </Sheet>
           <Link to="/" className="text-2xl font-bold text-primary ml-auto">Race Trackr</Link>
