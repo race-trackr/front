@@ -117,12 +117,10 @@ const Register: React.FC = () => {
                     <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCountries || isErrorCountries}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a country" />
+                          <SelectValue placeholder={isLoadingCountries ? "Loading countries..." : isErrorCountries ? "Error loading countries" : "Select a country"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {isLoadingCountries && <SelectItem value="" disabled>Loading countries...</SelectItem>}
-                        {isErrorCountries && <SelectItem value="" disabled>Error loading countries</SelectItem>}
                         {countries?.map((country) => (
                           <SelectItem key={country.id} value={country.id}>
                             {country.name}
