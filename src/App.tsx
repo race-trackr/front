@@ -23,7 +23,13 @@ import MaintenanceEdit from "./pages/Maintenances/MaintenanceEdit";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminTracks from "./pages/Admin/AdminTracks";
 import AdminCountries from "./pages/Admin/AdminCountries";
+import AdminTracksCreate from "./pages/Admin/AdminTracksCreate";
+import AdminTracksEdit from "./pages/Admin/AdminTracksEdit";
+import AdminCountriesCreate from "./pages/Admin/AdminCountriesCreate";
+import AdminCountriesEdit from "./pages/Admin/AdminCountriesEdit";
 import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
+
 
 const queryClient = new QueryClient();
 
@@ -37,12 +43,12 @@ const App = () => (
           <Layout>
             <Routes>
               {/* Public Routes */}
+              <Route path="/" element={<Index />} /> {/* Default route */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<Dashboard />} /> {/* Default authenticated route */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/trackdays" element={<TrackdayList />} />
                 <Route path="/trackdays/create" element={<TrackdayCreate />} />
@@ -55,11 +61,15 @@ const App = () => (
                 <Route path="/maintenances/edit/:id" element={<MaintenanceEdit />} />
               </Route>
 
-              {/* Admin Protected Routes */}
-              <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} />}>
+              {/* Admin Protected Routes (only for 'owner' role) */}
+              <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/tracks" element={<AdminTracks />} />
+                <Route path="/admin/tracks/create" element={<AdminTracksCreate />} />
+                <Route path="/admin/tracks/edit/:id" element={<AdminTracksEdit />} />
                 <Route path="/admin/countries" element={<AdminCountries />} />
+                <Route path="/admin/countries/create" element={<AdminCountriesCreate />} />
+                <Route path="/admin/countries/edit/:id" element={<AdminCountriesEdit />} />
               </Route>
 
               {/* Catch-all Route */}

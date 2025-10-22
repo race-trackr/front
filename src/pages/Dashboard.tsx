@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Car, Wrench, CalendarDays, Users } from "lucide-react";
+import DashboardCharts from "@/components/DashboardCharts"; // Import the new charts component
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -13,10 +14,7 @@ const Dashboard: React.FC = () => {
       <h1 className="text-3xl font-bold">
         Welcome, {user?.username || "User"}!
       </h1>
-      <p className="text-lg text-muted-foreground">
-        Your role:{" "}
-        <span className="font-semibold capitalize">{user?.role}</span>
-      </p>
+      {/* Removed: <p className="text-lg text-muted-foreground">Your role: <span className="font-semibold capitalize">{user?.role}</span></p> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
@@ -67,7 +65,7 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        {(user?.role === "admin" || user?.role === "super_admin") && (
+        {user?.role === "owner" && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Admin Panel</CardTitle>
@@ -85,6 +83,8 @@ const Dashboard: React.FC = () => {
           </Card>
         )}
       </div>
+
+      <DashboardCharts /> {/* Render the new charts component */}
     </div>
   );
 };

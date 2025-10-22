@@ -1,4 +1,4 @@
-export type Role = 'super_admin' | 'admin' | 'user';
+export type Role = 'super_admin' | 'admin' | 'user' | 'owner';
 export type VehicleType = 'moto' | 'voiture' | 'karting' | 'autre';
 export type MaintenanceType = 'réparation' | 'maintenance' | 'modification' | 'autre';
 
