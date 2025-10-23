@@ -100,14 +100,17 @@ const Dashboard: React.FC = () => {
         {/* Recent Trackdays Card - Moved to the top */}
         <Card className="w-full">
           <CardHeader>
-            <CardTitle>{t('recent_trackdays')}</CardTitle>
+            <div className="flex items-center justify-between"> {/* Flex container for title and icon */}
+              <CardTitle>{t('recent_trackdays')}</CardTitle>
+              <Calendar className="h-5 w-5 text-muted-foreground" /> {/* Calendar icon added */}
+            </div>
             <CardDescription>{t('no_recent_trackdays')}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoadingTrackdays ? (
-              <div>Loading recent trackdays...</div>
+              <div className="text-center text-muted-foreground">Loading recent trackdays...</div>
             ) : recentTrackdays.length === 0 ? (
-              <p>{t('no_recent_trackdays')}</p>
+              <p className="text-center text-muted-foreground">{t('no_recent_trackdays')}</p> {/* Centered text */}
             ) : (
               <ul className="space-y-2">
                 {recentTrackdays.map((trackday) => (
@@ -120,9 +123,9 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             )}
-            <div className="mt-4 text-right">
+            <div className="mt-4 flex justify-center"> {/* Centered button */}
               <Link to="/trackdays/new">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700">
+                <Button className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600"> {/* Gradient changed */}
                   {t('add_trackday')}
                 </Button>
               </Link>
@@ -138,9 +141,9 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             {isLoadingTrackdays ? (
-              <div>Loading upcoming events...</div>
+              <div className="text-center text-muted-foreground">Loading upcoming events...</div>
             ) : upcomingEvents.length === 0 ? (
-              <p>{t('no_upcoming_events')}</p>
+              <p className="text-center text-muted-foreground">{t('no_upcoming_events')}</p>
             ) : (
               <ul className="space-y-2">
                 {upcomingEvents.map((trackday) => (
