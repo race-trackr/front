@@ -2,13 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"; // Import Outlet
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n'; // Import i18n configuration
-import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
+import i18n from './i18n';
+import { ThemeProvider } from 'next-themes';
 
 // Pages
 import AuthTabs from "./pages/Auth/AuthTabs";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
     handle: { crumb: () => i18n.t('auth') },
   },
   {
-    element: <Layout><Outlet /></Layout>, // Layout now wraps an Outlet for nested routes
+    element: <Layout><Outlet /></Layout>,
     children: [
       {
         element: <ProtectedRoute />,
@@ -155,17 +155,19 @@ const router = createBrowserRouter([
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <I18nextProvider i18n={i18n}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider>
-            <RouterProvider router={router} />
-          </AuthProvider>
-        </ThemeProvider>
-      </I18nextProvider>
-    </TooltipProvider>
+    <I18nextProvider i18n={i18n}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <AuthProvider>
+          <TooltipProvider>
+            <> {/* Utilisation d'un fragment React comme enfant unique */}
+              <RouterProvider router={router} />
+              <Toaster />
+              <Sonner />
+            </>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </I18nextProvider>
   </QueryClientProvider>
 );
 
