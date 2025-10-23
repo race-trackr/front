@@ -13,6 +13,8 @@ import { CreateTrackdayPayload, Trackday } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
+import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { format } from 'date-fns';
 
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -142,10 +144,15 @@ const TrackdayEdit: React.FC = () => {
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>{t('date')}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <DatePicker
+                        value={field.value ? new Date(field.value) : undefined}
+                        onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                        disabled={field.disabled}
+                        placeholder={t('pick_a_date')}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

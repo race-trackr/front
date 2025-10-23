@@ -33,6 +33,8 @@ import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { UserVehicle, CreateTrackdayPayload, Track } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
+import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { format } from 'date-fns';
 
 const formSchema = z.object({
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
@@ -175,10 +177,15 @@ const TrackdayCreate: React.FC = () => {
             control={form.control}
             name="date"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>{t('date')}</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <DatePicker
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                    disabled={field.disabled}
+                    placeholder={t('pick_a_date')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

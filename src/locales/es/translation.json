@@ -164,5 +164,6 @@
   "select_option": "Selecciona opción...",
   "search_option": "Buscar opción...",
   "no_option_found": "Ninguna opción encontrada.",
-  "create_new": "Crear nuevo"
+  "create_new": "Crear nuevo",
+  "pick_a_date": "Selecciona una fecha"
 }
