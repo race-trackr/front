@@ -1,59 +1,41 @@
+"use client";
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle } from 'lucide-react';
-import { Trackday } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from 'lucide-react';
+import { getTrackdays } from '@/lib/api/trackdays';
+import { format } from 'date-fns';
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
-  // Placeholder for fetching trackdays
-  const trackdays: Trackday[] = [
-    {
-      id: 'td1',
-      userId: 'user1',
-      vehicleId: 'v1',
-      trackId: 't1',
-      date: '2023-10-26',
-      weather: 'Sunny',
-      airTemperature: 25,
-      trackTemperature: 35,
-      trackCondition: 'Dry',
-      note: 'Great day!',
-      bestLaptime: '1:30.123',
-      totalLaps: 20,
-      otherDetails: null,
-      createdAt: '2023-10-20T10:00:00Z',
-      updatedAt: '2023-10-20T10:00:00Z',
-      track: { id: 't1', name: 'Nürburgring Nordschleife', slug: 'nurburgring', city: 'Nürburg', countryId: 'c1', address: '...', width: 10, length: 20.8, turn: 73, maxDb: 100, details: '...', bestLaptime: '...', bestLaptimePilote: '...', createdAt: '...', updatedAt: '...' },
-      vehicle: { id: 'v1', userId: 'user1', name: 'My Race Car', slug: 'my-race-car', brand: 'Porsche', model: '911 GT3', year: 2020, licensePlate: 'RACE001', type: 'voiture', details: '...', createdAt: '...', updatedAt: '...' }
-    },
-    {
-      id: 'td2',
-      userId: 'user1',
-      vehicleId: 'v2',
-      trackId: 't2',
-      date: '2023-11-15',
-      weather: 'Cloudy',
-      airTemperature: 18,
-      trackTemperature: 22,
-      trackCondition: 'Damp',
-      note: 'Challenging conditions.',
-      bestLaptime: '2:05.456',
-      totalLaps: 15,
-      otherDetails: null,
-      createdAt: '2023-11-10T10:00:00Z',
-      updatedAt: '2023-11-10T10:00:00Z',
-      track: { id: 't2', name: 'Spa-Francorchamps', slug: 'spa-francorchamps', city: 'Spa', countryId: 'c2', address: '...', width: 12, length: 7.004, turn: 19, maxDb: 100, details: '...', bestLaptime: '...', bestLaptimePilote: '...', createdAt: '...', updatedAt: '...' },
-      vehicle: { id: 'v2', userId: 'user1', name: 'My Race Bike', slug: 'my-race-bike', brand: 'Yamaha', model: 'R1', year: 2022, licensePlate: 'BIKE001', type: 'moto', details: '...', createdAt: '...', updatedAt: '...' }
-    },
-  ];
+  const { data: trackdays, isLoading, isError } = useQuery({
+    queryKey: ['trackdays'],
+    queryFn: getTrackdays,
+  });
+
+  if (isLoading) {
+    return <div className="container mx-auto p-4 text-center">{t('loading_trackdays')}</div>;
+  }
+
+  if (isError) {
+    return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_trackdays')}</div>;
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1>
+    <div className="container mx-auto p-4">
+      <div className="flex items-center justify-between mb-6">
+        {/* <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1> */}
         <Button asChild className="btn-primary-gradient">
           <Link to="/trackdays/create">
             <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_trackday')}
@@ -61,29 +43,38 @@ const TrackdayList: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trackdays.length === 0 ? (
-          <p className="text-muted-foreground">{t('no_trackdays_recorded')}</p>
-        ) : (
-          trackdays.map((trackday) => (
-            <Card key={trackday.id}>
-              <CardHeader>
-                <CardTitle>{trackday.track?.name || 'Unknown Track'}</CardTitle>
-                <p className="text-sm text-muted-foreground">{new Date(trackday.date).toLocaleDateString()}</p>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p><strong>{t('vehicle')}:</strong> {trackday.vehicle?.name || 'N/A'}</p>
-                <p><strong>{t('best_laptime')}:</strong> {trackday.bestLaptime}</p>
-                <p><strong>{t('total_laps')}:</strong> {trackday.totalLaps}</p>
-                <p><strong>{t('weather')}:</strong> {trackday.weather}</p>
-                <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/trackdays/edit/${trackday.id}`}>{t('view_edit_details')}</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
+      {trackdays && trackdays.length > 0 ? (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('date')}</TableHead>
+                <TableHead>{t('track')}</TableHead>
+                <TableHead>{t('vehicle')}</TableHead>
+                <TableHead>{t('best_laptime')}</TableHead>
+                <TableHead className="text-right">{t('actions')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {trackdays.map((trackday) => (
+                <TableRow key={trackday.id}>
+                  <TableCell>{format(new Date(trackday.date), 'PPP')}</TableCell>
+                  <TableCell>{trackday.track?.name || trackday.trackId}</TableCell>
+                  <TableCell>{trackday.vehicle?.license_plate || trackday.vehicleId}</TableCell>
+                  <TableCell>{trackday.best_laptime || '-'}</TableCell>
+                  <TableCell className="text-right">
+                    <Link to={`/trackdays/${trackday.id}`}>
+                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <p className="text-center text-muted-foreground">{t('no_trackdays_recorded')}</p>
+      )}
     </div>
   );
 };
