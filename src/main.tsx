@@ -1,11 +1,15 @@
+"use client";
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './globals.css'; // Correction du chemin d'importation
-import './i18n'; // Assurez-vous que ce fichier est importé pour initialiser i18next
+import './index.css';
+import { ThemeProvider } from './components/theme-provider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
 );
