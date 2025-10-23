@@ -63,8 +63,6 @@
   "notes": "Notas",
   "best_laptime": "Mejor tiempo de vuelta",
   "total_laps": "Vueltas totales",
-  "other_details_json": "Otros detalles (JSON)",
-  "enter_additional_details_json": "Introduce detalles adicionales como una cadena JSON.",
   "create_trackday": "Crear día de pista",
   "creating": "Creando...",
   "trackday_created_successfully": "¡Día de pista creado con éxito!",

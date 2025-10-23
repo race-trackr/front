@@ -32,7 +32,7 @@ import { PlusCircle } from 'lucide-react';
 import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { UserVehicle, CreateTrackdayPayload, Track } from '@/types';
-import { Combobox } from '@/components/ui/combobox'; // Import Combobox
+import { Combobox } from '@/components/ui/combobox';
 
 const formSchema = z.object({
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
@@ -45,7 +45,6 @@ const formSchema = z.object({
   note: z.string().optional(),
   bestLaptime: z.string().optional(),
   totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }),
-  otherDetails: z.string().optional(),
 });
 
 const TrackdayCreate: React.FC = () => {
@@ -66,7 +65,6 @@ const TrackdayCreate: React.FC = () => {
       note: '',
       bestLaptime: '',
       totalLaps: 0,
-      otherDetails: '',
     },
   });
 
@@ -95,7 +93,6 @@ const TrackdayCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateTrackdayPayload = {
       ...values,
-      otherDetails: values.otherDetails ? JSON.parse(values.otherDetails) : null,
     };
     createTrackdayMutation.mutate(payload);
   };
@@ -274,20 +271,6 @@ const TrackdayCreate: React.FC = () => {
                 <FormControl>
                   <Textarea rows={3} {...field} />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="otherDetails"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t('other_details_json')}</FormLabel>
-                <FormControl>
-                  <Textarea rows={3} placeholder='{"tirePressure": "2.0 bar"}' {...field} />
-                </FormControl>
-                <FormDescription>{t('enter_additional_details_json')}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

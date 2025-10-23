@@ -17,8 +17,6 @@
   "note": "Note",
   "best_laptime": "Meilleur temps au tour",
   "total_laps": "Tours totaux",
-  "other_details_json": "Autres détails (JSON)",
-  "enter_additional_details_json": "Saisissez des détails supplémentaires sous forme de chaîne JSON.",
   "create_new_trackday": "Créer une nouvelle journée en piste",
   "trackday_details": "Détails de la journée en piste",
   "creating": "Création en cours...",

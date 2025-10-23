@@ -63,8 +63,6 @@
   "notes": "Note",
   "best_laptime": "Miglior tempo sul giro",
   "total_laps": "Giri totali",
-  "other_details_json": "Altri dettagli (JSON)",
-  "enter_additional_details_json": "Inserisci dettagli aggiuntivi come stringa JSON.",
   "create_trackday": "Crea giornata in pista",
   "creating": "Creazione in corso...",
   "trackday_created_successfully": "Giornata in pista creata con successo!",

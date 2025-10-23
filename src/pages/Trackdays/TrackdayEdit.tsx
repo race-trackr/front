@@ -30,7 +30,6 @@ const TrackdayEdit: React.FC = () => {
     note: z.string().optional(),
     bestLaptime: z.string().optional(),
     totalLaps: z.coerce.number().min(0),
-    otherDetails: z.string().optional(), // Will be parsed as JSON
   });
 
   const form = useForm<CreateTrackdayPayload>({
@@ -46,7 +45,6 @@ const TrackdayEdit: React.FC = () => {
       note: '',
       bestLaptime: '',
       totalLaps: 0,
-      otherDetails: '',
     },
   });
 
@@ -67,7 +65,6 @@ const TrackdayEdit: React.FC = () => {
         note: 'Great day!',
         bestLaptime: '1:30.123',
         totalLaps: 20,
-        otherDetails: { tirePressure: '2.0 bar' },
         createdAt: '2023-10-20T10:00:00Z',
         updatedAt: '2023-10-20T10:00:00Z',
       };
@@ -75,7 +72,6 @@ const TrackdayEdit: React.FC = () => {
       form.reset({
         ...fetchedTrackday,
         date: fetchedTrackday.date.split('T')[0], // Format date for input type="date"
-        otherDetails: fetchedTrackday.otherDetails ? JSON.stringify(fetchedTrackday.otherDetails, null, 2) : '',
       });
     }
   }, [id, form]);
@@ -84,7 +80,6 @@ const TrackdayEdit: React.FC = () => {
     try {
       const payload = {
         ...values,
-        otherDetails: values.otherDetails ? JSON.parse(values.otherDetails) : null,
       };
       await apiClient.put(`/trackdays/${id}`, payload); // Use PUT for updates
       showSuccess(t('trackday_updated_successfully'));
@@ -243,20 +238,6 @@ const TrackdayEdit: React.FC = () => {
                     <FormControl>
                       <Textarea rows={3} {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="otherDetails"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>{t('other_details_json')}</FormLabel>
-                    <FormControl>
-                      <Textarea rows={3} placeholder='{"tirePressure": "2.0 bar"}' {...field} />
-                    </FormControl>
-                    <FormDescription>{t('enter_additional_details_json')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

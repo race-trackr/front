@@ -17,8 +17,6 @@
   "note": "Note",
   "best_laptime": "Best Laptime",
   "total_laps": "Total Laps",
-  "other_details_json": "Other Details (JSON)",
-  "enter_additional_details_json": "Enter additional details as a JSON string.",
   "create_new_trackday": "Create New Trackday",
   "trackday_details": "Trackday Details",
   "creating": "Creating...",
