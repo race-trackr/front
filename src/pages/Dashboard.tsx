@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_trackdays')}</CardTitle>
-            <div className="rounded-full p-2 bg-blue-100">
+            <div className="rounded-md p-2 bg-blue-100">
               <CalendarDays className="h-4 w-4 text-blue-500" />
             </div>
           </CardHeader>
@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_vehicles')}</CardTitle>
-            <div className="rounded-full p-2 bg-green-100">
+            <div className="rounded-md p-2 bg-green-100">
               <Car className="h-4 w-4 text-green-500" />
             </div>
           </CardHeader>
@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_drivers')}</CardTitle>
-            <div className="rounded-full p-2 bg-purple-100">
+            <div className="rounded-md p-2 bg-purple-100">
               <Users className="h-4 w-4 text-purple-500" />
             </div>
           </CardHeader>
