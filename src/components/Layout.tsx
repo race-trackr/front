@@ -44,7 +44,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
                   "bg-gradient-to-r from-red-500 to-orange-500",
-                  !isCollapsed && "mr-2" // Add margin only when not collapsed
+                  !isCollapsed && "mr-2", // Add margin only when not collapsed
+                  isCollapsed && "hidden" // Hide when collapsed
                 )}
               >
                 R
