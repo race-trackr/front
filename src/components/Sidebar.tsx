@@ -28,7 +28,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       onClick={onClick}
       className={cn(
         "flex items-center rounded-lg py-2.5 w-full transition-all",
-        isCollapsed ? "justify-center px-2" : "gap-3 px-3", // Ajusté pour l'état réduit
+        isCollapsed ? "justify-center px-3" : "gap-3 px-3", // Ajusté px-2 à px-3 pour l'état réduit
         isActive
           ? "btn-primary-gradient"
           : "text-muted-foreground hover:text-primary"
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
   return (
     <div className="flex flex-col h-full">
       {isAuthenticated && (
-        <nav className="flex flex-col items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1">
+        <nav className="flex flex-col items-start text-sm font-medium flex-1 gap-1"> {/* Supprimé px-2 lg:px-4 */}
           <NavLink to="/dashboard" icon={<Gauge className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
           <NavLink to="/trackdays" icon={<CalendarDays className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
           <NavLink to="/vehicles" icon={<Car className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>

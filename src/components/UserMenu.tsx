@@ -31,7 +31,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("w-full h-auto p-2", isCollapsed ? "justify-center" : "justify-start")}>
+        <Button variant="ghost" className={cn("w-full h-auto py-2", isCollapsed ? "justify-center px-3" : "justify-start px-3")}> {/* Ajusté p-2 à px-3 py-2 */}
           <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
