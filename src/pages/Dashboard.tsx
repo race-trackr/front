@@ -22,22 +22,17 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
-    queryKey: ['dashboardSummary'],
-    queryFn: getDashboardSummary,
-  });
-
-  const { data: recentTrackdays, isLoading: isLoadingTrackdays } = useQuery({
+  const { data: recentTrackdays, isLoading: isLoadingTrackdays, isError: isErrorTrackdays } = useQuery({
     queryKey: ['trackdays', { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery({
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery({
     queryKey: ['vehicles', { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances } = useQuery({
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery({
     queryKey: ['maintenances', { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
@@ -55,11 +50,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (isLoadingSummary || isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
+  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t('loading')}...</div>;
   }
 
-  if (isErrorSummary || isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
+  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
     return <div>{t('error_loading_dashboard_summary')}</div>;
   }
 
@@ -76,7 +71,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalTrackdays || 0}</div>
+            <div className="text-2xl font-bold">{recentTrackdays.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_trackdays')}
             </p>
@@ -90,7 +85,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalVehicles || 0}</div>
+            <div className="text-2xl font-bold">{vehicles.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_vehicles')}
             </p>
@@ -104,7 +99,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalMaintenances || 0}</div>
+            <div className="text-2xl font-bold">{maintenances.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_maintenances')}
             </p>
@@ -125,7 +120,7 @@ const Dashboard: React.FC = () => {
                   <li key={trackday.id} className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors">
                     {/* Full-area link for viewing */}
                     <Link to={`/trackdays/view/${trackday.id}`} className="absolute inset-0 z-0" aria-label={t('view_trackday', { id: trackday.id })}></Link>
-                    
+
                     <div className="flex-1 text-left z-10"> {/* Ensure text is above the full-area link */}
                       <p className="font-medium">{trackday.vehicle?.name || trackday.vehicleId} - {trackday.track?.name || trackday.trackId}</p>
                       <p className="text-sm text-muted-foreground">
