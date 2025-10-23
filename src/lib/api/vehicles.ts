@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../apiClient';
 import { CreateVehiclePayload, UserVehicle } from '@/types';
 
 export const getVehicles = async (): Promise<UserVehicle[]> => {
