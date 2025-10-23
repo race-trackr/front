@@ -3,10 +3,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Login from './Login';
 import Register from './Register';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const AuthTabs: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'login';
+  const { t } = useTranslation(); // Initialize useTranslation
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
@@ -16,8 +18,8 @@ const AuthTabs: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <Tabs defaultValue={defaultTab} onValueChange={handleTabChange} className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Login</TabsTrigger>
-          <TabsTrigger value="register">Register</TabsTrigger>
+          <TabsTrigger value="login">{t('login')}</TabsTrigger>
+          <TabsTrigger value="register">{t('register')}</TabsTrigger>
         </TabsList>
         <TabsContent 
           value="login" 
