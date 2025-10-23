@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from 'lucide-react';
+import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from 'lucide-react'; // Import Edit and Trash icons
 import {
   Card,
   CardContent,
@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { getDashboardSummary } from '@/lib/api/dashboard';
 import { getTrackdays } from '@/lib/api/trackdays';
 import { getVehicles } from '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
@@ -22,22 +21,17 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
-    queryKey: ['dashboardSummary'],
-    queryFn: getDashboardSummary,
-  });
-
-  const { data: recentTrackdays, isLoading: isLoadingTrackdays } = useQuery({
+  const { data: recentTrackdays, isLoading: isLoadingTrackdays, isError: isErrorTrackdays } = useQuery({
     queryKey: ['trackdays', { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery({
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery({
     queryKey: ['vehicles', { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances } = useQuery({
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery({
     queryKey: ['maintenances', { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
@@ -55,11 +49,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (isLoadingSummary) {
+  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t('loading')}...</div>;
   }
 
-  if (isErrorSummary) {
+  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
     return <div>{t('error_loading_dashboard_summary')}</div>;
   }
 
@@ -76,7 +70,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalTrackdays || 0}</div>
+            <div className="text-2xl font-bold">{recentTrackdays?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_trackdays')}
             </p>
@@ -90,7 +84,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalVehicles || 0}</div>
+            <div className="text-2xl font-bold">{vehicles?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_vehicles')}
             </p>
@@ -104,7 +98,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalMaintenances || 0}</div>
+            <div className="text-2xl font-bold">{maintenances?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_maintenances')}
             </p>
@@ -123,14 +117,12 @@ const Dashboard: React.FC = () => {
               <ul className="space-y-4 w-full mb-6">
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3">
-                    <Link to={`/trackdays/view/${trackday.id}`} className="flex-1 flex items-center justify-between group"> {/* Made the content area a link */}
-                      <div className="text-left">
-                        <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
-                        </p>
-                      </div>
-                    </Link>
+                    <div className="text-left">
+                      <p className="font-medium">{trackday.vehicle?.name} - {trackday.track?.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
+                      </p>
+                    </div>
                     <div className="flex items-center gap-2">
                       <Button asChild variant="ghost" size="icon">
                         <Link to={`/trackdays/edit/${trackday.id}`}>
