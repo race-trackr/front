@@ -100,22 +100,22 @@ const Dashboard: React.FC = () => {
         {/* Recent Trackdays Card - Moved to the top */}
         <Card className="w-full">
           <CardHeader>
-            <div className="flex items-center justify-between"> {/* Flex container for title and icon */}
+            <div className="flex items-center justify-between">
               <CardTitle>{t('recent_trackdays')}</CardTitle>
-              <Calendar className="h-5 w-5 text-muted-foreground" /> {/* Calendar icon added */}
+              <Calendar className="h-5 w-5 text-muted-foreground" />
             </div>
-            <CardDescription>{t('no_recent_trackdays')}</CardDescription>
+            {/* CardDescription removed as it was redundant with the p tag below */}
           </CardHeader>
           <CardContent>
             {isLoadingTrackdays ? (
               <div className="text-center text-muted-foreground">Loading recent trackdays...</div>
             ) : recentTrackdays.length === 0 ? (
-              <p className="text-center text-muted-foreground">{t('no_recent_trackdays')}</p> {/* Centered text */}
+              <p className="text-center text-muted-foreground">{t('no_recent_trackdays')}</p>
             ) : (
               <ul className="space-y-2">
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex justify-between items-center">
-                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
+                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
                     <Link to={`/trackdays/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
                     </Link>
@@ -123,9 +123,9 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             )}
-            <div className="mt-4 flex justify-center"> {/* Centered button */}
+            <div className="mt-4 flex justify-center">
               <Link to="/trackdays/new">
-                <Button className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600"> {/* Gradient changed */}
+                <Button className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600">
                   {t('add_trackday')}
                 </Button>
               </Link>
@@ -137,7 +137,7 @@ const Dashboard: React.FC = () => {
         <Card className="w-full">
           <CardHeader>
             <CardTitle>{t('upcoming_events')}</CardTitle>
-            <CardDescription>{t('no_upcoming_events')}</CardDescription>
+            {/* CardDescription removed as it was redundant with the p tag below */}
           </CardHeader>
           <CardContent>
             {isLoadingTrackdays ? (
@@ -148,7 +148,7 @@ const Dashboard: React.FC = () => {
               <ul className="space-y-2">
                 {upcomingEvents.map((trackday) => (
                   <li key={trackday.id} className="flex justify-between items-center">
-                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
+                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
                     <Link to={`/trackdays/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
                     </Link>
