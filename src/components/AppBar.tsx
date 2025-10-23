@@ -1,77 +1,54 @@
 import React from 'react';
-import { Link, useLocation, useMatches } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import LanguageSwitcher from './LanguageSwitcher';
-import ThemeToggle from './ThemeToggle';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'; // Importation de useTranslation
 import { cn } from '@/lib/utils';
 
-interface MatchHandle {
-  crumb?: string | ((data: any) => React.ReactNode);
+interface AppBarProps {
+  isCollapsed?: boolean;
 }
 
-const AppBar: React.FC = () => {
-  const { t } = useTranslation();
+const AppBar: React.FC<AppBarProps> = ({ isCollapsed }) => {
   const location = useLocation();
-  const matches = useMatches();
-
-  // Filter out the root match (path: '/') from the matches array
-  // and then map to crumbs. The explicit "Home" link is handled separately.
-  const crumbs = matches
-    .filter((match) => match.pathname !== '/' && (match.handle as MatchHandle)?.crumb)
-    .map((match, index, array) => {
-      const handle = match.handle as MatchHandle;
-      const crumb = typeof handle.crumb === 'function' ? handle.crumb(match.data) : handle.crumb;
-      const isLast = index === array.length - 1; // This 'isLast' is relative to the filtered crumbs
-
-      return (
-        <React.Fragment key={match.id}>
-          <BreadcrumbItem>
-            {isLast ? (
-              <BreadcrumbPage>{crumb}</BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink asChild>
-                <Link to={match.pathname}>{crumb}</Link>
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
-          {!isLast && <BreadcrumbSeparator />}
-        </React.Fragment>
-      );
-    });
-
-  // Don't render AppBar on auth page
-  if (location.pathname === '/auth') {
-    return null;
-  }
+  const pathnames = location.pathname.split('/').filter((x) => x);
+  const { t } = useTranslation(); // Utilisation du hook useTranslation
 
   return (
-    <div className="fixed top-0 right-0 z-50 bg-background border-b h-14 flex items-center px-4 lg:px-6 md:left-[var(--sidebar-width)] transition-[left] duration-300 ease-in-out">
-      <div className="flex-1">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">{t('home')}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            {/* Only add separator if there are other crumbs after the explicit Home link */}
-            {crumbs.length > 0 && <BreadcrumbSeparator />}
-            {crumbs}
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="flex items-center gap-2">
-        <LanguageSwitcher />
-        <ThemeToggle />
-      </div>
+    <div className={cn("flex items-center h-16 px-4 border-b bg-background", isCollapsed ? "justify-center" : "justify-between")}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to="/">{t('home')}</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        {/* Only add separator if there are other crumbs after the explicit Home link */}
+        {pathnames.length > 0 && <BreadcrumbSeparator />}
+        {pathnames.map((name, index) => {
+          const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+          const isLast = index === pathnames.length - 1;
+          const translatedName = t(name.toLowerCase()); // Traduire chaque segment du chemin
+
+          return (
+            <React.Fragment key={name}>
+              <BreadcrumbItem>
+                {isLast ? (
+                  <span className="text-foreground">{translatedName}</span>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link to={routeTo}>{translatedName}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              {!isLast && <BreadcrumbSeparator />}
+            </React.Fragment>
+          );
+        })}
+      </Breadcrumb>
     </div>
   );
 };
