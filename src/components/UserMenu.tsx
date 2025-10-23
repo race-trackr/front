@@ -31,7 +31,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("w-full h-auto py-2", isCollapsed ? "justify-center px-3" : "justify-start px-3")}>
+        <Button
+          variant="ghost"
+          className={cn(
+            "h-auto",
+            isCollapsed
+              ? "w-10 h-10 p-0 flex items-center justify-center" // Taille fixe, pas de padding, centrage du contenu
+              : "w-full py-2 justify-start px-3"
+          )}
+        >
           <Avatar className="h-8 w-8 flex-shrink-0 flex items-center justify-center">
             <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
@@ -39,7 +47,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           <span
             className={cn(
               "text-sm font-medium truncate overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
-              isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100 ml-3" // ml-3 est maintenant conditionnel
+              isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100 ml-3"
             )}
           >
             {user?.username || t("guest")}
