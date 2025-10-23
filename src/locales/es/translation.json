@@ -195,5 +195,10 @@
   "error": "Error",
   "oops_something_went_wrong": "¡Ups! Algo salió mal.",
   "recent_maintenances": "Mantenimientos recientes",
-  "no_recent_maintenances": "No hay mantenimientos recientes para mostrar."
+  "no_recent_maintenances": "No hay mantenimientos recientes para mostrar.",
+  "loading_trackday": "Cargando día de pista...",
+  "error_loading_trackday": "Error al cargar los detalles del día de pista.",
+  "view_trackday": "Ver día de pista #{{id}}",
+  "back_to_trackdays": "Volver a días de pista",
+  "edit_trackday_button": "Editar día de pista"
 }

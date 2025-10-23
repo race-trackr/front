@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from 'lucide-react'; // Import Edit and Trash icons
+import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -22,17 +22,22 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const { data: recentTrackdays, isLoading: isLoadingTrackdays, isError: isErrorTrackdays } = useQuery({
+  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
+    queryKey: ['dashboardSummary'],
+    queryFn: getDashboardSummary,
+  });
+
+  const { data: recentTrackdays, isLoading: isLoadingTrackdays } = useQuery({
     queryKey: ['trackdays', { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery({
+  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery({
     queryKey: ['vehicles', { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery({
+  const { data: maintenances, isLoading: isLoadingMaintenances } = useQuery({
     queryKey: ['maintenances', { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
@@ -50,11 +55,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
+  if (isLoadingSummary) {
     return <div>{t('loading')}...</div>;
   }
 
-  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
+  if (isErrorSummary) {
     return <div>{t('error_loading_dashboard_summary')}</div>;
   }
 
@@ -118,12 +123,14 @@ const Dashboard: React.FC = () => {
               <ul className="space-y-4 w-full mb-6">
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3">
-                    <div className="text-left">
-                      <p className="font-medium">{trackday.vehicle?.name} - {trackday.track?.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
-                      </p>
-                    </div>
+                    <Link to={`/trackdays/view/${trackday.id}`} className="flex-1 flex items-center justify-between group"> {/* Made the content area a link */}
+                      <div className="text-left">
+                        <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
+                        </p>
+                      </div>
+                    </Link>
                     <div className="flex items-center gap-2">
                       <Button asChild variant="ghost" size="icon">
                         <Link to={`/trackdays/edit/${trackday.id}`}>

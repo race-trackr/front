@@ -180,5 +180,10 @@
   "error": "Error",
   "oops_something_went_wrong": "Oops! Something went wrong.",
   "recent_maintenances": "Recent Maintenances",
-  "no_recent_maintenances": "No recent maintenances to display."
+  "no_recent_maintenances": "No recent maintenances to display.",
+  "loading_trackday": "Loading trackday...",
+  "error_loading_trackday": "Error loading trackday details.",
+  "view_trackday": "View Trackday #{{id}}",
+  "back_to_trackdays": "Back to Trackdays",
+  "edit_trackday_button": "Edit Trackday"
 }

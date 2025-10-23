@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound';
 import TrackdayList from './pages/Trackdays/TrackdayList';
 import TrackdayCreate from './pages/Trackdays/TrackdayCreate';
 import TrackdayEdit from './pages/Trackdays/TrackdayEdit';
+import TrackdayView from './pages/Trackdays/TrackdayView'; // Import the new TrackdayView component
 import VehicleList from './pages/Vehicles/VehicleList';
 import VehicleCreate from './pages/Vehicles/VehicleCreate';
 import VehicleEdit from './pages/Vehicles/VehicleEdit';
@@ -25,7 +26,7 @@ import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ErrorPage from './components/ErrorPage'; // Import the new ErrorPage component
+import ErrorPage from './components/ErrorPage';
 
 const queryClient = new QueryClient();
 
@@ -33,16 +34,16 @@ const routesConfig = [
   {
     path: "/",
     element: <Index />,
-    errorElement: <ErrorPage />, // Add errorElement to the root route
+    errorElement: <ErrorPage />,
   },
   {
     path: "/auth",
     element: <AuthTabs />,
-    errorElement: <ErrorPage />, // Add errorElement
+    errorElement: <ErrorPage />,
   },
   {
-    element: <ProtectedRoute />, // Parent route for authenticated users
-    errorElement: <ErrorPage />, // Add errorElement to the protected route
+    element: <ProtectedRoute />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/dashboard",
@@ -58,6 +59,11 @@ const routesConfig = [
         path: "/trackdays/create",
         element: <Layout><TrackdayCreate /></Layout>,
         handle: { crumb: () => 'Create Trackday' },
+      },
+      {
+        path: "/trackdays/view/:id", // New route for viewing
+        element: <Layout><TrackdayView /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `View Trackday ${params.id || ''}` },
       },
       {
         path: "/trackdays/edit/:id",
@@ -97,8 +103,8 @@ const routesConfig = [
     ],
   },
   {
-    element: <ProtectedRoute allowedRoles={['owner']} />, // Parent route for admin users
-    errorElement: <ErrorPage />, // Add errorElement to the admin protected route
+    element: <ProtectedRoute allowedRoles={['owner']} />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/admin",
@@ -140,7 +146,7 @@ const routesConfig = [
   {
     path: "*",
     element: <NotFound />,
-    errorElement: <ErrorPage />, // Add errorElement to the NotFound route as well
+    errorElement: <ErrorPage />,
   },
 ];
 
