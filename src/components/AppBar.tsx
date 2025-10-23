@@ -22,12 +22,14 @@ const AppBar: React.FC = () => {
   const location = useLocation();
   const matches = useMatches();
 
+  // Filter out the root match (path: '/') from the matches array
+  // and then map to crumbs. The explicit "Home" link is handled separately.
   const crumbs = matches
-    .filter((match) => (match.handle as MatchHandle)?.crumb)
+    .filter((match) => match.pathname !== '/' && (match.handle as MatchHandle)?.crumb)
     .map((match, index, array) => {
       const handle = match.handle as MatchHandle;
       const crumb = typeof handle.crumb === 'function' ? handle.crumb(match.data) : handle.crumb;
-      const isLast = index === array.length - 1;
+      const isLast = index === array.length - 1; // This 'isLast' is relative to the filtered crumbs
 
       return (
         <React.Fragment key={match.id}>
@@ -60,6 +62,7 @@ const AppBar: React.FC = () => {
                 <Link to="/">{t('home')}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
+            {/* Only add separator if there are other crumbs after the explicit Home link */}
             {crumbs.length > 0 && <BreadcrumbSeparator />}
             {crumbs}
           </BreadcrumbList>
