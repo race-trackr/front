@@ -40,7 +40,7 @@ const formSchema = z.object({
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
   trackId: z.string().min(1, { message: "La piste est requise." }),
   date: z.string().min(1, { message: "La date est requise." }),
-  weather: z.string().min(1, { message: "La météo est requise." }),
+  weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
   airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }),
   trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }),
   trackCondition: z.string().min(1, { message: "La condition de la piste est requise." }),
@@ -63,7 +63,7 @@ const TrackdayCreate: React.FC = () => {
       vehicleId: '',
       trackId: '',
       date: '',
-      weather: '',
+      weather: 'clear', // Valeur par défaut pour le sélecteur
       airTemperature: 0,
       trackTemperature: 0,
       trackCondition: '',
@@ -200,9 +200,18 @@ const TrackdayCreate: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('weather')}</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('select_weather_condition')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="clear">{t('weather_clear')}</SelectItem>
+                    <SelectItem value="cloudy">{t('weather_cloudy')}</SelectItem>
+                    <SelectItem value="rainy">{t('weather_rainy')}</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

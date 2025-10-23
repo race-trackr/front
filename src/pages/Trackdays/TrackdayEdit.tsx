@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate, useParams } from 'react-router-dom'; // Correction ici
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +15,13 @@ import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +32,7 @@ const TrackdayEdit: React.FC = () => {
     vehicleId: z.string().min(1, { message: t('vehicle_id_placeholder') }),
     trackId: z.string().min(1, { message: t('track_id_placeholder') }),
     date: z.string().min(1, { message: t('date') }),
-    weather: z.string().min(1, { message: t('weather') }),
+    weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
     airTemperature: z.coerce.number().min(-50).max(50),
     trackTemperature: z.coerce.number().min(-50).max(100),
     trackCondition: z.string().min(1, { message: t('track_condition') }),
@@ -43,7 +50,7 @@ const TrackdayEdit: React.FC = () => {
       vehicleId: '',
       trackId: '',
       date: '',
-      weather: '',
+      weather: 'clear', // Valeur par défaut pour le sélecteur
       airTemperature: 0,
       trackTemperature: 0,
       trackCondition: '',
@@ -63,12 +70,12 @@ const TrackdayEdit: React.FC = () => {
         vehicleId: 'v1',
         trackId: 't1',
         date: '2023-10-26',
-        weather: 'Sunny',
+        weather: 'clear', // Exemple avec la nouvelle option
         airTemperature: 25,
         trackTemperature: 35,
         trackCondition: 'Dry',
         note: 'Great day!',
-        bestLaptime: '01:30.123', // Example with new format
+        bestLaptime: '01:30.123',
         totalLaps: 20,
         createdAt: '2023-10-20T10:00:00Z',
         updatedAt: '2023-10-20T10:00:00Z',
@@ -167,9 +174,18 @@ const TrackdayEdit: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('weather')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_weather_condition')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="clear">{t('weather_clear')}</SelectItem>
+                        <SelectItem value="cloudy">{t('weather_cloudy')}</SelectItem>
+                        <SelectItem value="rainy">{t('weather_rainy')}</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
