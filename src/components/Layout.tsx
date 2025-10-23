@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     >
       {/* Desktop Sidebar */}
       <div className={cn(
-        "hidden border-r bg-muted/40 md:block",
+        "hidden border-r md:block", // Removed bg-muted/40
         "transition-all duration-300 ease-in-out"
       )}>
         <div className="flex h-full max-h-screen flex-col gap-2">
