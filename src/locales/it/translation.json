@@ -193,5 +193,7 @@
   "enter_any_details": "Inserisci i dettagli del veicolo",
   "no_best_laptime": "Nessun miglior tempo sul giro",
   "error": "Errore",
-  "oops_something_went_wrong": "Ops! Qualcosa è andato storto."
+  "oops_something_went_wrong": "Ops! Qualcosa è andato storto.",
+  "recent_maintenances": "Manutenzioni recenti",
+  "no_recent_maintenances": "Nessuna manutenzione recente da visualizzare."
 }

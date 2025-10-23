@@ -178,5 +178,7 @@
   "enter_any_details": "Enter any details about the vehicle",
   "no_best_laptime": "No best laptime",
   "error": "Error",
-  "oops_something_went_wrong": "Oops! Something went wrong."
+  "oops_something_went_wrong": "Oops! Something went wrong.",
+  "recent_maintenances": "Recent Maintenances",
+  "no_recent_maintenances": "No recent maintenances to display."
 }

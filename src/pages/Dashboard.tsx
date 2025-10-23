@@ -148,8 +148,8 @@ const Dashboard: React.FC = () => {
 
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
-            <h3 className="text-xl font-semibold mb-4">{t('upcoming_events')}</h3>
-            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
+            <h3 className="text-xl font-semibold mb-4">{t('recent_maintenances')}</h3> {/* Changed title here */}
+            <Wrench className="h-12 w-12 text-muted-foreground mb-6" /> {/* Changed icon here */}
             {isLoadingMaintenances ? (
               <div>{t('loading')}...</div>
             ) : maintenances && maintenances.length > 0 ? (
@@ -169,7 +169,7 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground mb-6">{t('no_upcoming_events')}</p>
+              <p className="text-muted-foreground mb-6">{t('no_recent_maintenances')}</p> {/* Changed text here */}
             )}
             <Button asChild className="btn-primary-gradient" size="sm">
               <Link to="/maintenances">
