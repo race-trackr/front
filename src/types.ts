@@ -13,7 +13,7 @@ export interface UserVehicle {
   updatedAt: string;
 }
 
-export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
+export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt'>;
 
 export interface Track {
   id: string;

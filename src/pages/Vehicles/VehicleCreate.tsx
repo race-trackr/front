@@ -32,12 +32,11 @@ import { CreateVehiclePayload } from '@/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  slug: z.string().min(1, { message: "Le slug du véhicule est requis." }),
-  type: z.enum(['car', 'motorcycle', 'karting', 'other']).optional().or(z.literal('')), // Ajout de 'karting'
-  brand: z.string().optional().or(z.literal('')), // Rendu optionnel
-  model: z.string().optional().or(z.literal('')), // Rendu optionnel
-  licensePlate: z.string().optional().or(z.literal('')), // Rendu optionnel
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).optional(), // Rendu optionnel
+  type: z.enum(['car', 'motorcycle', 'karting', 'other']).optional().or(z.literal('')),
+  brand: z.string().optional().or(z.literal('')),
+  model: z.string().optional().or(z.literal('')),
+  licensePlate: z.string().optional().or(z.literal('')),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).optional(),
   details: z.string().optional().or(z.literal('')),
 });
 
@@ -50,7 +49,6 @@ const VehicleCreate: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      slug: '',
       type: '',
       brand: '',
       model: '',
@@ -108,19 +106,7 @@ const VehicleCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('vehicle_slug')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_vehicle_slug')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Le champ slug a été supprimé car il est généré par le backend */}
               <FormField
                 control={form.control}
                 name="type"
@@ -136,7 +122,7 @@ const VehicleCreate: React.FC = () => {
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
                         <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
-                        <SelectItem value="karting">{t('type_karting')}</SelectItem> {/* Ajout de Karting */}
+                        <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>
                     </Select>
