@@ -99,3 +99,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .btn-primary-gradient {
+    @apply bg-gradient-to-r from-red-500 to-orange-500 text-white;
+  }
+  .btn-primary-gradient:hover {
+    @apply from-red-600 to-orange-600;
+  }
+}

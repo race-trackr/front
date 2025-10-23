@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Car, Wrench, CalendarDays, Users } from "lucide-react";
 import DashboardCharts from "@/components/DashboardCharts";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-6">
@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">
               {t('you_have_participated_in_trackdays', { count: 5 })}
             </p>
-            <Button asChild className="mt-4">
+            <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/trackdays">{t('view_trackdays')}</Link>
             </Button>
           </CardContent>
@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">2</div>
             <p className="text-xs text-muted-foreground">{t('you_own_vehicles', { count: 2 })}</p>
-            <Button asChild className="mt-4">
+            <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/vehicles">{t('manage_vehicles')}</Link>
             </Button>
           </CardContent>
@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">
               {t('maintenance_due_soon', { count: 1 })}
             </p>
-            <Button asChild className="mt-4">
+            <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/maintenances">{t('view_maintenances')}</Link>
             </Button>
           </CardContent>
@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
               <p className="text-xs text-muted-foreground">
                 {t('manage_tracks_countries_users')}
               </p>
-              <Button asChild className="mt-4">
+              <Button asChild className="mt-4 btn-primary-gradient">
                 <Link to="/admin">{t('go_to_admin')}</Link>
               </Button>
             </CardContent>

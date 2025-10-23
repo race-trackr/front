@@ -12,11 +12,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { CreateTrackdayPayload } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const TrackdayCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const formSchema = z.object({
     vehicleId: z.string().min(1, { message: t('vehicle_id_placeholder') }), // Placeholder message
@@ -219,7 +219,7 @@ const TrackdayCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full md:col-span-2" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="w-full md:col-span-2 btn-primary-gradient" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? t('creating') : t('create_trackday')}
               </Button>
             </form>

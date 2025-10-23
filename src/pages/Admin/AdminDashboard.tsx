@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Flag, Users } from 'lucide-react';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const AdminDashboard: React.FC = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{t('admin_dashboard')}</h1>
@@ -21,7 +21,7 @@ const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">10</div> {/* Placeholder data */}
             <p className="text-xs text-muted-foreground">{t('total_tracks_in_system')}</p>
-            <Button asChild className="mt-4">
+            <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/tracks">{t('go_to_tracks')}</Link>
             </Button>
           </CardContent>
@@ -35,7 +35,7 @@ const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">50</div> {/* Placeholder data */}
             <p className="text-xs text-muted-foreground">{t('total_countries_in_system')}</p>
-            <Button asChild className="mt-4">
+            <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/countries">{t('go_to_countries')}</Link>
             </Button>
           </CardContent>

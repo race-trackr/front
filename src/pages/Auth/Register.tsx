@@ -13,12 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RegisterPayload, Country } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const Register: React.FC = () => {
   const { register: authRegister, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const formSchema = z.object({
     username: z.string().min(2, { message: t('username_min_length') }),
@@ -130,7 +130,7 @@ const Register: React.FC = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
+            <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
               {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
             </Button>
           </form>

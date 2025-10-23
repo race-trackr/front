@@ -10,12 +10,12 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { LoginPayload } from '@/types';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const formSchema = z.object({
     email: z.string().email({ message: t('invalid_email') }),
@@ -33,6 +33,7 @@ const Login: React.FC = () => {
   const onSubmit = async (values: LoginPayload) => {
     try {
       await login(values);
+      console.log('Login successful');
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error(error);
@@ -75,7 +76,7 @@ const Login: React.FC = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || loading}>
+            <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || loading}>
               {form.formState.isSubmitting || loading ? t('logging_in') : t('login')}
             </Button>
           </form>

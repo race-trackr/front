@@ -2,12 +2,12 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const AdminCountriesEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const handleSubmit = () => {
     // Simulate API call
     console.log(`Updating country ${id}...`);
@@ -30,7 +30,7 @@ const AdminCountriesEdit: React.FC = () => {
             It would use `react-hook-form` and shadcn/ui components.
           </p>
           <div className="flex justify-between mt-4">
-            <Button onClick={handleSubmit}>{t('save_changes')}</Button>
+            <Button onClick={handleSubmit} className="btn-primary-gradient">{t('save_changes')}</Button>
             <Button variant="destructive" onClick={handleDelete}>{t('delete_country')}</Button>
           </div>
         </CardContent>

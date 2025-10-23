@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { Trackday } from '@/types';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const TrackdayList: React.FC = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   // Placeholder for fetching trackdays
   const trackdays: Trackday[] = [
     {
@@ -54,7 +54,7 @@ const TrackdayList: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1>
-        <Button asChild>
+        <Button asChild className="btn-primary-gradient">
           <Link to="/trackdays/create">
             <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_trackday')}
           </Link>

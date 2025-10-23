@@ -1,14 +1,15 @@
 import React, { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
 import { Car, Wrench, Users, Gauge, CalendarDays } from 'lucide-react';
 import UserMenu from './UserMenu';
 import { MadeWithDyad } from './made-with-dyad';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import LanguageSwitcher from './LanguageSwitcher'; // Import LanguageSwitcher
-import ThemeToggle from './ThemeToggle'; // Import ThemeToggle
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
+import ThemeToggle from './ThemeToggle';
+import { cn } from '@/lib/utils';
 
 interface NavLinkProps {
   to: string;
@@ -20,11 +21,19 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile, isCollapsed }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
   const content = (
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-lg px-3 py-1 text-muted-foreground transition-all hover:text-primary"
+      className={cn(
+        "flex items-center gap-3 rounded-lg px-3 py-1 transition-all",
+        isActive
+          ? "btn-primary-gradient" // Use the new utility class
+          : "text-muted-foreground hover:text-primary"
+      )}
     >
       {icon}
       {!isCollapsed && children}
@@ -41,7 +50,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
   const { isAuthenticated, user } = useAuth();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col h-full">
@@ -59,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
           <>
-            <div className="flex items-center justify-between mb-2 px-2"> {/* New container for toggles */}
+            <div className="flex items-center justify-between mb-2 px-2">
               <LanguageSwitcher />
               <ThemeToggle />
             </div>

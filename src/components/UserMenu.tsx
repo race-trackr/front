@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 interface UserMenuProps {
   isCollapsed: boolean;
@@ -20,7 +20,7 @@ interface UserMenuProps {
 
 const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   const { user, logout } = useAuth();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const isFreeTier = true; // Placeholder: Replace with actual logic to check user's subscription status
 
   const handleLogout = () => {
@@ -64,7 +64,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         </DropdownMenuItem>
         {isFreeTier && (
           <DropdownMenuItem asChild>
-            <Link to="/upgrade" className="flex items-center text-primary">
+            <Link to="/upgrade" className="flex items-center btn-primary-gradient p-2 rounded-md">
               <Gem className="mr-2 h-4 w-4" />
               <span>{t('upgrade_to_pro')}</span>
             </Link>

@@ -12,12 +12,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { CreateTrackdayPayload, Trackday } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const formSchema = z.object({
     vehicleId: z.string().min(1, { message: t('vehicle_id_placeholder') }),
@@ -262,7 +262,7 @@ const TrackdayEdit: React.FC = () => {
                 )}
               />
               <div className="flex justify-between w-full md:col-span-2">
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button type="submit" className="btn-primary-gradient" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? t('saving') : t('save_changes')}
                 </Button>
                 <Button type="button" variant="destructive" onClick={onDelete}>

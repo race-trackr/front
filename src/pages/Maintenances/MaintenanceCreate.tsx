@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const MaintenanceCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const handleSubmit = () => {
     // Simulate API call
     console.log('Creating maintenance...');
@@ -23,7 +23,7 @@ const MaintenanceCreate: React.FC = () => {
             This is a placeholder for the Maintenance creation form.
             It would use `react-hook-form` and shadcn/ui components similar to TrackdayCreate.
           </p>
-          <Button onClick={handleSubmit} className="mt-4">{t('save_maintenance')}</Button>
+          <Button onClick={handleSubmit} className="mt-4 btn-primary-gradient">{t('save_maintenance')}</Button>
         </CardContent>
       </Card>
     </div>
