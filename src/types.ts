@@ -3,23 +3,12 @@ export interface UserVehicle {
   userId: string;
   name: string;
   slug: string;
-  type?: 'car' | 'motorcycle' | 'other'; // Rendu optionnel
+  type?: string; // Rendu optionnel et de type string
   brand?: string; // Rendu optionnel
   model?: string; // Rendu optionnel
   year?: number; // Rendu optionnel
-  licensePlate?: string; // Rendu optionnel (gardé le nom existant pour la cohérence)
-  vin?: string;
-  color?: string;
-  weight?: number;
-  power?: number;
-  torque?: number;
-  tireSizeFront?: string;
-  tireSizeRear?: string;
-  tirePressureFront?: number;
-  tirePressureRear?: number;
-  fuelType?: 'gasoline' | 'diesel' | 'electric' | 'hybrid' | 'other';
-  transmissionType?: 'manual' | 'automatic' | 'semi-automatic' | 'other';
-  details?: string;
+  licensePlate?: string; // Rendu optionnel (conservé licensePlate pour la cohérence)
+  details?: string; // Rendu optionnel
   createdAt: string;
   updatedAt: string;
 }
