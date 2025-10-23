@@ -135,5 +135,13 @@
   "or_separator": "OR",
   "login_with_google": "Login with Google",
   "register_with_google": "Sign up with Google",
-  "home": "Home"
+  "home": "Home",
+  "total_trackdays": "Total trackdays",
+  "total_vehicles": "Total vehicles",
+  "total_drivers": "Total drivers",
+  "my_drivers": "My Drivers",
+  "recent_trackdays": "Recent Trackdays",
+  "no_recent_trackdays": "No recent trackdays to display.",
+  "upcoming_events": "Upcoming Events",
+  "no_upcoming_events": "No upcoming events."
 }

@@ -135,5 +135,13 @@
   "or_separator": "O",
   "login_with_google": "Iniciar sesión con Google",
   "register_with_google": "Registrarse con Google",
-  "home": "Inicio"
+  "home": "Inicio",
+  "total_trackdays": "Total de días de pista",
+  "total_vehicles": "Total de vehículos",
+  "total_drivers": "Total de pilotos",
+  "my_drivers": "Mis pilotos",
+  "recent_trackdays": "Días de pista recientes",
+  "no_recent_trackdays": "No hay días de pista recientes para mostrar.",
+  "upcoming_events": "Próximos eventos",
+  "no_upcoming_events": "No hay eventos próximos."
 }
