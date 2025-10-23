@@ -1,6 +1,9 @@
 export interface UserVehicle {
   id: string;
   userId: string;
+  name: string; // Nouveau champ
+  slug: string; // Nouveau champ
+  type: 'car' | 'motorcycle' | 'other'; // Nouveau champ avec des types spécifiques
   brand: string;
   model: string;
   licensePlate: string;
@@ -16,7 +19,7 @@ export interface UserVehicle {
   tirePressureRear?: number;
   fuelType?: 'gasoline' | 'diesel' | 'electric' | 'hybrid' | 'other';
   transmissionType?: 'manual' | 'automatic' | 'semi-automatic' | 'other';
-  notes?: string;
+  details?: string; // Remplacement de 'notes' par 'details'
   createdAt: string;
   updatedAt: string;
 }

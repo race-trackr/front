@@ -32,6 +32,9 @@ import { createVehicle } from '@/lib/api/vehicles';
 import { CreateVehiclePayload } from '@/types';
 
 const formSchema = z.object({
+  name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
+  slug: z.string().min(1, { message: "Le slug du véhicule est requis." }),
+  type: z.enum(['car', 'motorcycle', 'other'], { message: "Le type de véhicule est requis et doit être 'car', 'motorcycle' ou 'other'." }),
   brand: z.string().min(1, { message: "La marque est requise." }),
   model: z.string().min(1, { message: "Le modèle est requis." }),
   licensePlate: z.string().min(1, { message: "La plaque d'immatriculation est requise." }),
@@ -47,7 +50,7 @@ const formSchema = z.object({
   tirePressureRear: z.coerce.number().min(0, { message: "La pression des pneus arrière ne peut pas être négative." }).optional(),
   fuelType: z.enum(['gasoline', 'diesel', 'electric', 'hybrid', 'other']).optional().or(z.literal('')),
   transmissionType: z.enum(['manual', 'automatic', 'semi-automatic', 'other']).optional().or(z.literal('')),
-  notes: z.string().optional().or(z.literal('')),
+  details: z.string().optional().or(z.literal('')), // Remplacement de 'notes' par 'details'
 });
 
 const VehicleCreate: React.FC = () => {
@@ -58,6 +61,9 @@ const VehicleCreate: React.FC = () => {
   const form = useForm<CreateVehiclePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: '',
+      slug: '',
+      type: 'car', // Valeur par défaut
       brand: '',
       model: '',
       licensePlate: '',
@@ -73,7 +79,7 @@ const VehicleCreate: React.FC = () => {
       tirePressureRear: undefined,
       fuelType: '',
       transmissionType: '',
-      notes: '',
+      details: '',
     },
   });
 
@@ -115,6 +121,54 @@ const VehicleCreate: React.FC = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('vehicle_name')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_vehicle_name')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('vehicle_slug')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_vehicle_slug')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('vehicle_type')}</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_vehicle_type')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="car">{t('type_car')}</SelectItem>
+                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
+                        <SelectItem value="other">{t('type_other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="brand"
@@ -333,12 +387,12 @@ const VehicleCreate: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="notes"
+                name="details" // Nouveau champ 'details'
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>{t('notes')}</FormLabel>
+                    <FormLabel>{t('vehicle_details')}</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} placeholder={t('enter_any_notes')} />
+                      <Textarea rows={3} {...field} placeholder={t('enter_any_details')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
