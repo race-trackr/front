@@ -112,11 +112,14 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6"> {/* Changed to grid-cols-1 for full width */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>{t('recent_trackdays')}</CardTitle>
-            <Button asChild variant="outline" size="sm">
+            <CardTitle className="flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-muted-foreground" /> {/* Added CalendarDays icon */}
+              {t('recent_trackdays')}
+            </CardTitle>
+            <Button asChild className="btn-primary-gradient" size="sm"> {/* Changed to gradient button */}
               <Link to="/trackdays">
                 <Plus className="h-4 w-4 mr-2" /> {t('add_trackday')}
               </Link>
@@ -149,8 +152,11 @@ const Dashboard: React.FC = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>{t('upcoming_events')}</CardTitle>
-            <Button asChild variant="outline" size="sm">
+            <CardTitle className="flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-muted-foreground" /> {/* Added CalendarDays icon */}
+              {t('upcoming_events')}
+            </CardTitle>
+            <Button asChild className="btn-primary-gradient" size="sm"> {/* Changed to gradient button */}
               <Link to="/maintenances">
                 <Plus className="h-4 w-4 mr-2" /> {t('add_new_maintenance')}
               </Link>
