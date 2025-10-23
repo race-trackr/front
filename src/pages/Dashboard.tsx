@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar, Car, Wrench } from 'lucide-react';
 import { getTrackdays } from '@/lib/api/trackdays';
-import { getVehicles } => '@/lib/api/vehicles';
+import { getVehicles } from '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
 import { format } from 'date-fns';
 
