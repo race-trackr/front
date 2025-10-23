@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -7,22 +7,26 @@ import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import AppBar from './AppBar'; // Import AppBar
-// Suppression de l'importation de Toaster et useToast
-// import { Toaster } from "@/components/ui/toaster"; 
-// import { useToast } from '@/hooks/use-toast'; 
+import AppBar from './AppBar';
 
 interface LayoutProps {
-  children: ReactNode; // Children will now be the Outlet
+  children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // Initialize isCollapsed from localStorage, default to false if not found
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const storedState = localStorage.getItem('sidebarCollapsed');
+    return storedState ? JSON.parse(storedState) : false;
+  });
   const { t } = useTranslation();
   const location = useLocation();
-  // Suppression de l'utilisation du hook useToast
-  // const { toasts } = useToast(); 
+
+  // Save isCollapsed state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -42,7 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     >
       {/* Desktop Sidebar */}
       <div className={cn(
-        "hidden border-r md:block", // Removed bg-muted/40
+        "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
       )}>
         <div className="flex h-full max-h-screen flex-col gap-2">
@@ -76,17 +80,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Mobile Header (now part of AppBar or removed) and Main Content */}
       <div className="flex flex-col h-full">
         {/* AppBar is now always visible at the top */}
-        <AppBar /> 
+        <AppBar />
 
         {/* Main Content - adjusted padding for fixed AppBar */}
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          <>{children}</> {/* Explicitly wrap children in a fragment */}
+          <>{children}</>
         </main>
       </div>
-      {/* Suppression du rendu conditionnel du Toaster */}
-      {/* {toasts.length > 0 && <Toaster />} */}
-      {/* Sonner est maintenant géré globalement dans App.tsx */}
-      {/* <Sonner /> */}
     </div>
   );
 };
