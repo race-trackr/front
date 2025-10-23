@@ -31,7 +31,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
         isCollapsed ? "justify-center px-3" : "gap-3 px-3",
         isActive
           ? "btn-primary-gradient"
-          : "text-muted-foreground hover:text-primary"
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground" // Ajout de hover:bg-accent et modification de hover:text-primary
       )}
     >
       {icon}
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
   return (
     <div className="flex flex-col h-full">
       {isAuthenticated && (
-        <nav className="flex flex-col items-start text-sm font-medium flex-1 gap-1 px-2"> {/* Ajout de px-2 ici */}
+        <nav className="flex flex-col items-start text-sm font-medium flex-1 gap-1 px-2">
           <NavLink to="/dashboard" icon={<Gauge className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
           <NavLink to="/trackdays" icon={<CalendarDays className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
           <NavLink to="/vehicles" icon={<Car className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
@@ -74,8 +74,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
           <>
-            {/* Masquer ces éléments lorsque la barre latérale est réduite */}
-            {/* LanguageSwitcher and ThemeToggle moved to AppBar */}
             <UserMenu isCollapsed={isCollapsed} />
           </>
         ) : (
