@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import AppBar from './AppBar'; // Import AppBar
 import { Toaster } from "@/components/ui/toaster"; // Import Toaster
 import { Toaster as Sonner } from "@/components/ui/sonner"; // Import Sonner
+import { useToast } from '@/hooks/use-toast'; // Import useToast hook
 
 interface LayoutProps {
   children: ReactNode; // Children will now be the Outlet
@@ -20,6 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useTranslation();
   const location = useLocation();
+  const { toasts } = useToast(); // Utilisation du hook useToast pour obtenir les notifications
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -71,16 +73,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Mobile Header (now part of AppBar or removed) and Main Content */}
-      <div className="flex flex-col h-full"> {/* Ajout de h-full ici */}
+      <div className="flex flex-col h-full">
         {/* AppBar is now always visible at the top */}
         <AppBar /> 
 
         {/* Main Content - adjusted padding for fixed AppBar */}
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6"> {/* Suppression de mt-14 */}
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <>{children}</> {/* Explicitly wrap children in a fragment */}
         </main>
       </div>
-      <Toaster /> {/* Toaster et Sonner sont maintenant dans le Layout */}
+      {toasts.length > 0 && <Toaster />} {/* Rendu conditionnel du Toaster */}
       <Sonner />
     </div>
   );
