@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)"], // Ajout de la police Inter
+        sans: ["var(--font-sans)"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -93,9 +93,7 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
-      boxShadow: {
-        'card-custom': '0 6px 10px -2px rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 -2px 4px -1px rgb(0 0 0 / 0.05)',
-      },
+      // La section boxShadow 'card-custom' est supprimée
     },
   },
   plugins: [require("tailwindcss-animate")],
