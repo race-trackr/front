@@ -1,38 +1,20 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector'; // Import LanguageDetector
-
-import enTranslation from './locales/en/translation.json';
-import frTranslation from './locales/fr/translation.json';
-import itTranslation from './locales/it/translation.json';
-import esTranslation from './locales/es/translation.json';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-http-backend';
 
 i18n
-  .use(LanguageDetector) // Use the language detector
-  .use(initReactI18next)
+  .use(Backend) // Charge les traductions depuis le serveur (dossier public)
+  .use(LanguageDetector) // Détecte la langue de l'utilisateur
+  .use(initReactI18next) // Passe l'instance i18n à react-i18next
   .init({
-    resources: {
-      en: {
-        translation: enTranslation,
-      },
-      fr: {
-        translation: frTranslation,
-      },
-      it: {
-        translation: itTranslation,
-      },
-      es: {
-        translation: esTranslation,
-      },
-    },
-    // lng: 'en', // Remove default language, let the detector handle it
-    fallbackLng: 'en',
-    detection: {
-      order: ['navigator', 'localStorage', 'cookie', 'htmlTag'], // Order of detection methods
-      caches: ['localStorage'], // Cache detected language
-    },
+    fallbackLng: 'en', // Langue de secours si la langue détectée n'est pas disponible
+    debug: true, // Active le mode debug pour voir les messages de i18next dans la console
     interpolation: {
-      escapeValue: false, // react already safes from xss
+      escapeValue: false, // React est déjà protégé contre les attaques XSS
+    },
+    backend: {
+      loadPath: '/locales/{{lng}}/translation.json', // Chemin correct pour charger les fichiers de traduction
     },
   });
 
