@@ -69,7 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
           <>
-            {!isCollapsed && ( {/* Masquer ces éléments lorsque la barre latérale est réduite */}
+            {/* Masquer ces éléments lorsque la barre latérale est réduite */}
+            {!isCollapsed && ( 
               <div className="flex items-center justify-between mb-2 px-2">
                 <LanguageSwitcher />
                 <ThemeToggle />
