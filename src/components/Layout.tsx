@@ -79,7 +79,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <AppBar /> 
 
         {/* Main Content - adjusted padding for fixed AppBar */}
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 pt-14"> {/* Added pt-14 to account for AppBar height */}
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mt-14"> {/* Changed pt-14 to mt-14 to account for AppBar height */}
           {children} {/* Render children (Outlet) here */}
         </main>
       </div>
