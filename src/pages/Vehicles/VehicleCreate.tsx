@@ -27,18 +27,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } => '@/components/ui/textarea';
 import { createVehicle } from '@/lib/api/vehicles';
 import { CreateVehiclePayload } from '@/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
   slug: z.string().min(1, { message: "Le slug du véhicule est requis." }),
-  type: z.enum(['car', 'motorcycle', 'other'], { message: "Le type de véhicule est requis et doit être 'car', 'motorcycle' ou 'other'." }),
-  brand: z.string().min(1, { message: "La marque est requise." }),
-  model: z.string().min(1, { message: "Le modèle est requis." }),
-  licensePlate: z.string().min(1, { message: "La plaque d'immatriculation est requise." }),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
+  type: z.enum(['car', 'motorcycle', 'other'], { message: "Le type de véhicule est requis et doit être 'car', 'motorcycle' ou 'other'." }).optional().or(z.literal('')), // Rendu optionnel
+  brand: z.string().optional().or(z.literal('')), // Rendu optionnel
+  model: z.string().optional().or(z.literal('')), // Rendu optionnel
+  licensePlate: z.string().optional().or(z.literal('')), // Rendu optionnel
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).optional(), // Rendu optionnel
   vin: z.string().max(17, { message: "Le VIN ne peut pas dépasser 17 caractères." }).optional().or(z.literal('')),
   color: z.string().optional().or(z.literal('')),
   weight: z.coerce.number().min(0, { message: "Le poids ne peut pas être négatif." }).optional(),
@@ -50,7 +50,7 @@ const formSchema = z.object({
   tirePressureRear: z.coerce.number().min(0, { message: "La pression des pneus arrière ne peut pas être négative." }).optional(),
   fuelType: z.enum(['gasoline', 'diesel', 'electric', 'hybrid', 'other']).optional().or(z.literal('')),
   transmissionType: z.enum(['manual', 'automatic', 'semi-automatic', 'other']).optional().or(z.literal('')),
-  details: z.string().optional().or(z.literal('')), // Remplacement de 'notes' par 'details'
+  details: z.string().optional().or(z.literal('')),
 });
 
 const VehicleCreate: React.FC = () => {
@@ -63,11 +63,11 @@ const VehicleCreate: React.FC = () => {
     defaultValues: {
       name: '',
       slug: '',
-      type: 'car', // Valeur par défaut
+      type: '', // Valeur par défaut vide pour un champ optionnel
       brand: '',
       model: '',
       licensePlate: '',
-      year: new Date().getFullYear(),
+      year: undefined, // Valeur par défaut undefined pour un champ numérique optionnel
       vin: '',
       color: '',
       weight: undefined,
@@ -107,6 +107,12 @@ const VehicleCreate: React.FC = () => {
       // Convert empty strings to undefined for optional enum fields
       fuelType: values.fuelType === '' ? undefined : values.fuelType,
       transmissionType: values.transmissionType === '' ? undefined : values.transmissionType,
+      // Convert empty strings to undefined for other optional string fields
+      type: values.type === '' ? undefined : values.type,
+      brand: values.brand === '' ? undefined : values.brand,
+      model: values.model === '' ? undefined : values.model,
+      licensePlate: values.licensePlate === '' ? undefined : values.licensePlate,
+      details: values.details === '' ? undefined : values.details,
     };
     createVehicleMutation.mutate(payload);
   };
@@ -160,6 +166,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
                         <SelectItem value="car">{t('type_car')}</SelectItem>
                         <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
@@ -351,6 +358,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
                         <SelectItem value="gasoline">{t('fuel_gasoline')}</SelectItem>
                         <SelectItem value="diesel">{t('fuel_diesel')}</SelectItem>
                         <SelectItem value="electric">{t('fuel_electric')}</SelectItem>
@@ -375,6 +383,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
                         <SelectItem value="manual">{t('transmission_manual')}</SelectItem>
                         <SelectItem value="automatic">{t('transmission_automatic')}</SelectItem>
                         <SelectItem value="semi-automatic">{t('transmission_semi_automatic')}</SelectItem>
@@ -387,7 +396,7 @@ const VehicleCreate: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="details" // Nouveau champ 'details'
+                name="details"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
                     <FormLabel>{t('vehicle_details')}</FormLabel>

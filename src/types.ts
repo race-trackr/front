@@ -1,13 +1,13 @@
 export interface UserVehicle {
   id: string;
   userId: string;
-  name: string; // Nouveau champ
-  slug: string; // Nouveau champ
-  type: 'car' | 'motorcycle' | 'other'; // Nouveau champ avec des types spécifiques
-  brand: string;
-  model: string;
-  licensePlate: string;
-  year: number;
+  name: string;
+  slug: string;
+  type?: 'car' | 'motorcycle' | 'other'; // Rendu optionnel
+  brand?: string; // Rendu optionnel
+  model?: string; // Rendu optionnel
+  year?: number; // Rendu optionnel
+  licensePlate?: string; // Rendu optionnel (gardé le nom existant pour la cohérence)
   vin?: string;
   color?: string;
   weight?: number;
@@ -19,7 +19,7 @@ export interface UserVehicle {
   tirePressureRear?: number;
   fuelType?: 'gasoline' | 'diesel' | 'electric' | 'hybrid' | 'other';
   transmissionType?: 'manual' | 'automatic' | 'semi-automatic' | 'other';
-  details?: string; // Remplacement de 'notes' par 'details'
+  details?: string;
   createdAt: string;
   updatedAt: string;
 }
