@@ -139,5 +139,10 @@
   "upcoming_events": "Événements à venir",
   "no_upcoming_events": "Aucun événement à venir.",
   "my_maintenances": "Mes maintenances",
-  "total_maintenances": "Total des maintenances"
+  "total_maintenances": "Total des maintenances",
+  "select_a_vehicle": "Sélectionnez un véhicule",
+  "loading_vehicles": "Chargement des véhicules...",
+  "create_vehicle": "Créer un véhicule",
+  "track": "Piste",
+  "notes": "Notes"
 }

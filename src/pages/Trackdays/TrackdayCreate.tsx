@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,15 +27,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from '@/components/ui/textarea'; // Import Textarea
 import { PlusCircle } from 'lucide-react';
 import { getVehicles } from '@/lib/api/vehicles';
-import { UserVehicle } from '@/types'; // Import UserVehicle type
+import { UserVehicle, CreateTrackdayPayload } from '@/types'; // Import UserVehicle and CreateTrackdayPayload
 
 const formSchema = z.object({
-  date: z.string().min(1, { message: "La date est requise." }),
-  trackId: z.string().min(1, { message: "La piste est requise." }),
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
-  best_laptime: z.string().optional(),
+  trackId: z.string().min(1, { message: "La piste est requise." }),
+  date: z.string().min(1, { message: "La date est requise." }),
+  weather: z.string().min(1, { message: "La météo est requise." }),
+  airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }),
+  trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }),
+  trackCondition: z.string().min(1, { message: "La condition de la piste est requise." }),
+  note: z.string().optional(),
+  bestLaptime: z.string().optional(), // Renamed from best_laptime
+  totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }),
+  otherDetails: z.string().optional(), // Will be parsed as JSON
 });
 
 const TrackdayCreate: React.FC = () => {
@@ -42,17 +51,24 @@ const TrackdayCreate: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<CreateTrackdayPayload>({ // Use CreateTrackdayPayload
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: '',
-      trackId: '', // Placeholder, will be replaced by actual track selection
       vehicleId: '',
-      best_laptime: '',
+      trackId: '',
+      date: '',
+      weather: '',
+      airTemperature: 0,
+      trackTemperature: 0,
+      trackCondition: '',
+      note: '',
+      bestLaptime: '', // Renamed from best_laptime
+      totalLaps: 0,
+      otherDetails: '',
     },
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicle[]>({ // Use UserVehicle
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicle[]>({
     queryKey: ['vehicles'],
     queryFn: getVehicles,
   });
@@ -64,47 +80,24 @@ const TrackdayCreate: React.FC = () => {
       toast.success(t('trackday_created_successfully'));
       navigate('/trackdays');
     },
-    onError: (error) => {
-      toast.error(t('error_creating_trackday', { message: error.message }));
+    onError: (error: any) => { // Explicitly type error as any for now
+      toast.error(error.response?.data?.message || t('failed_to_create_trackday'));
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    createTrackdayMutation.mutate(values);
+    const payload: CreateTrackdayPayload = {
+      ...values,
+      otherDetails: values.otherDetails ? JSON.parse(values.otherDetails) : null,
+    };
+    createTrackdayMutation.mutate(payload);
   };
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">{t('create_new_trackday')}</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('date')}</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="trackId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('track')}</FormLabel>
-                <FormControl>
-                  {/* This will be replaced with a Select for tracks later */}
-                  <Input {...field} placeholder={t('track_id_placeholder')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
             name="vehicleId"
@@ -135,7 +128,7 @@ const TrackdayCreate: React.FC = () => {
                     ) : (
                       vehicles.map((vehicle) => (
                         <SelectItem key={vehicle.id} value={vehicle.id}>
-                          {vehicle.brand} {vehicle.model} ({vehicle.licensePlate}) {/* Use brand, model, licensePlate */}
+                          {vehicle.brand} {vehicle.model} ({vehicle.licensePlate})
                         </SelectItem>
                       ))
                     )}
@@ -147,7 +140,86 @@ const TrackdayCreate: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="best_laptime"
+            name="trackId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('track')}</FormLabel>
+                <FormControl>
+                  {/* This will be replaced with a Select for tracks later */}
+                  <Input {...field} placeholder={t('track_id_placeholder')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('date')}</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="weather"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('weather')}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="airTemperature"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('air_temperature')}</FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.1" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="trackTemperature"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('track_temperature')}</FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.1" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="trackCondition"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('track_condition')}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bestLaptime" // Renamed field
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('best_laptime')}</FormLabel>
@@ -158,7 +230,47 @@ const TrackdayCreate: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="btn-primary-gradient" disabled={createTrackdayMutation.isPending}>
+          <FormField
+            control={form.control}
+            name="totalLaps"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('total_laps')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="note"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>{t('notes')}</FormLabel>
+                <FormControl>
+                  <Textarea rows={3} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="otherDetails"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>{t('other_details_json')}</FormLabel>
+                <FormControl>
+                  <Textarea rows={3} placeholder='{"tirePressure": "2.0 bar"}' {...field} />
+                </FormControl>
+                <FormDescription>{t('enter_additional_details_json')}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="btn-primary-gradient md:col-span-2" disabled={createTrackdayMutation.isPending}>
             {createTrackdayMutation.isPending ? t('creating') : t('create_trackday')}
           </Button>
         </form>

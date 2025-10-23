@@ -153,5 +153,10 @@
   "no_upcoming_events": "No hay eventos próximos.",
   "add_trackday": "Añadir día de pista",
   "my_maintenances": "Mis mantenimientos",
-  "total_maintenances": "Total de mantenimientos"
+  "total_maintenances": "Total de mantenimientos",
+  "select_a_vehicle": "Selecciona un vehículo",
+  "loading_vehicles": "Cargando vehículos...",
+  "create_vehicle": "Crear vehículo",
+  "track": "Pista",
+  "notes": "Notas"
 }
