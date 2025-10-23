@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-const AppBar = () => {
+const AppBar: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const breadcrumbs = useBreadcrumbs();
@@ -41,7 +41,7 @@ const AppBar = () => {
                 )}
               </BreadcrumbItem>
               {index < breadcrumbs.length - 1 && (
-                <BreadcrumbSeparator className="list-none" /> {/* Ajout de list-none ici */}
+                <BreadcrumbSeparator className="list-none" />
               )}
             </React.Fragment>
           ))}
