@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } => '@/components/ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 import { createVehicle } from '@/lib/api/vehicles';
 import { CreateVehiclePayload } from '@/types';
 
@@ -166,7 +166,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
+                        {/* Removed <SelectItem value="">{t('select_option')}</SelectItem> */}
                         <SelectItem value="car">{t('type_car')}</SelectItem>
                         <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
@@ -358,7 +358,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
+                        {/* Removed <SelectItem value="">{t('select_option')}</SelectItem> */}
                         <SelectItem value="gasoline">{t('fuel_gasoline')}</SelectItem>
                         <SelectItem value="diesel">{t('fuel_diesel')}</SelectItem>
                         <SelectItem value="electric">{t('fuel_electric')}</SelectItem>
@@ -383,7 +383,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">{t('select_option')}</SelectItem> {/* Option vide */}
+                        {/* Removed <SelectItem value="">{t('select_option')}</SelectItem> */}
                         <SelectItem value="manual">{t('transmission_manual')}</SelectItem>
                         <SelectItem value="automatic">{t('transmission_automatic')}</SelectItem>
                         <SelectItem value="semi-automatic">{t('transmission_semi_automatic')}</SelectItem>
