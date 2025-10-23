@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex justify-between items-center">
                     <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
-                    <Link to={`/trackdays/${trackday.id}`}>
+                    <Link to={`/trackdays/edit/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
                     </Link>
                   </li>
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
               </ul>
             )}
             <div className="mt-4 flex justify-center">
-              <Link to="/trackdays/new">
+              <Link to="/trackdays/create">
                 <Button className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600">
                   {t('add_trackday')}
                 </Button>
@@ -149,7 +149,7 @@ const Dashboard: React.FC = () => {
                 {upcomingEvents.map((trackday) => (
                   <li key={trackday.id} className="flex justify-between items-center">
                     <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
-                    <Link to={`/trackdays/${trackday.id}`}>
+                    <Link to={`/trackdays/edit/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
                     </Link>
                   </li>

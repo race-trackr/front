@@ -27,7 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PlusCircle } from 'lucide-react';
-import { getVehicles, Vehicle } from '@/lib/api/vehicles'; // Import getVehicles and Vehicle type
+import { getVehicles } from '@/lib/api/vehicles';
+import { UserVehicle } from '@/types'; // Import UserVehicle type
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "La date est requise." }),
@@ -51,7 +52,7 @@ const TrackdayCreate: React.FC = () => {
     },
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<Vehicle[]>({
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicle[]>({ // Use UserVehicle
     queryKey: ['vehicles'],
     queryFn: getVehicles,
   });
@@ -109,7 +110,7 @@ const TrackdayCreate: React.FC = () => {
             name="vehicleId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicles')}</FormLabel> {/* Label changed to 'Véhicules' */}
+                <FormLabel>{t('vehicles')}</FormLabel>
                 <Select onValueChange={(value) => {
                   if (value === "create-new-vehicle") {
                     navigate('/vehicles/create');
@@ -134,7 +135,7 @@ const TrackdayCreate: React.FC = () => {
                     ) : (
                       vehicles.map((vehicle) => (
                         <SelectItem key={vehicle.id} value={vehicle.id}>
-                          {vehicle.make} {vehicle.model} ({vehicle.license_plate})
+                          {vehicle.brand} {vehicle.model} ({vehicle.licensePlate}) {/* Use brand, model, licensePlate */}
                         </SelectItem>
                       ))
                     )}

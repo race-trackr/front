@@ -60,10 +60,10 @@ const TrackdayList: React.FC = () => {
                 <TableRow key={trackday.id}>
                   <TableCell>{format(new Date(trackday.date), 'PPP')}</TableCell>
                   <TableCell>{trackday.track?.name || trackday.trackId}</TableCell>
-                  <TableCell>{trackday.vehicle?.license_plate || trackday.vehicleId}</TableCell>
-                  <TableCell>{trackday.best_laptime || '-'}</TableCell>
+                  <TableCell>{trackday.vehicle?.licensePlate || trackday.vehicleId}</TableCell> {/* Use licensePlate */}
+                  <TableCell>{trackday.bestLaptime || '-'}</TableCell>
                   <TableCell className="text-right">
-                    <Link to={`/trackdays/${trackday.id}`}>
+                    <Link to={`/trackdays/edit/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
                     </Link>
                   </TableCell>
@@ -73,7 +73,7 @@ const TrackdayList: React.FC = () => {
           </Table>
         </div>
       ) : (
-        <Card className="w-full mx-auto text-center p-6"> {/* Removed max-w-md */}
+        <Card className="w-full mx-auto text-center p-6">
           <CardContent className="flex flex-col items-center justify-center space-y-4">
             <Calendar className="h-12 w-12 text-muted-foreground" />
             <p className="text-muted-foreground">{t('no_trackdays_recorded')}</p>
