@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
 import { Car, Wrench, Users, Gauge, CalendarDays } from 'lucide-react';
 import UserMenu from './UserMenu';
-import { MadeWithDyad } from './made-with-dyad';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +30,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
         isCollapsed ? "justify-center px-3" : "gap-3 px-3",
         isActive
           ? "btn-primary-gradient"
-          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground" // Ajout de hover:bg-accent et modification de hover:text-primary
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
       )}
     >
       {icon}
@@ -80,7 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
           null
         )}
       </div>
-      <MadeWithDyad />
     </div>
   );
 };
