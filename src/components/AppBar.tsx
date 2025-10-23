@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import LanguageSwitcher from './LanguageSwitcher'; // Import LanguageSwitcher
 
 const AppBar: React.FC = () => {
   const { t } = useTranslation();
@@ -47,7 +48,8 @@ const AppBar: React.FC = () => {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto flex items-center space-x-4">
+      <div className="ml-auto flex items-center space-x-2"> {/* Adjusted space-x */}
+        <LanguageSwitcher /> {/* Add LanguageSwitcher here */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
