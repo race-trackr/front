@@ -8,9 +8,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
+import { cn } from '@/lib/utils'; // Import cn for conditional class names
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
+  const currentLanguage = i18n.language; // Get the currently active language
 
   const languages = {
     en: 'English',
@@ -33,7 +35,13 @@ const LanguageSwitcher: React.FC = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {Object.entries(languages).map(([code, name]) => (
-          <DropdownMenuItem key={code} onClick={() => changeLanguage(code)}>
+          <DropdownMenuItem
+            key={code}
+            onClick={() => changeLanguage(code)}
+            className={cn(
+              currentLanguage === code && "bg-accent text-accent-foreground" // Apply accent background if active
+            )}
+          >
             {name}
           </DropdownMenuItem>
         ))}
