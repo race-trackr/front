@@ -1,15 +1,22 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CalendarDays, Car, Users } from 'lucide-react';
+import { CalendarDays, Car, Users, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Dummy data for demonstration
   const trackdays = [{}, {}, {}]; // Replace with actual data from API
   const vehicles = [{}, {}];     // Replace with actual data from API
   const drivers = [{}, {}, {}, {}]; // Replace with actual data from API
+
+  const handleAddTrackday = () => {
+    navigate('/trackdays/new');
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -71,9 +78,12 @@ const Dashboard: React.FC = () => {
           <CardHeader>
             <CardTitle>{t('recent_trackdays')}</CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* Placeholder for recent trackdays list */}
-            <p className="text-muted-foreground">{t('no_recent_trackdays')}</p>
+          <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
+            <CalendarDays className="h-12 w-12 text-muted-foreground" />
+            <p className="text-muted-foreground text-center">{t('no_recent_trackdays')}</p>
+            <Button onClick={handleAddTrackday}>
+              <Plus className="mr-2 h-4 w-4" /> {t('add_trackday')}
+            </Button>
           </CardContent>
         </Card>
 

@@ -143,5 +143,6 @@
   "recent_trackdays": "Recent Trackdays",
   "no_recent_trackdays": "No recent trackdays to display.",
   "upcoming_events": "Upcoming Events",
-  "no_upcoming_events": "No upcoming events."
+  "no_upcoming_events": "No upcoming events.",
+  "add_trackday": "Add Trackday"
 }

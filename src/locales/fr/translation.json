@@ -143,5 +143,6 @@
   "recent_trackdays": "Journées piste récentes",
   "no_recent_trackdays": "Aucune journée piste récente à afficher.",
   "upcoming_events": "Événements à venir",
-  "no_upcoming_events": "Aucun événement à venir."
+  "no_upcoming_events": "Aucun événement à venir.",
+  "add_trackday": "Ajouter une journée piste"
 }
