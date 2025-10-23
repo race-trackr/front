@@ -115,19 +115,12 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <CalendarDays className="h-6 w-6 text-muted-foreground" />
-              <h3 className="text-xl font-semibold">{t('recent_trackdays')}</h3>
-            </div>
-            <Button asChild className="btn-primary-gradient mb-6" size="sm">
-              <Link to="/trackdays">
-                <Plus className="h-4 w-4 mr-2" /> {t('add_trackday')}
-              </Link>
-            </Button>
+            <h3 className="text-xl font-semibold mb-4">{t('recent_trackdays')}</h3>
+            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
             {isLoadingTrackdays ? (
               <div>{t('loading')}...</div>
             ) : recentTrackdays && recentTrackdays.length > 0 ? (
-              <ul className="space-y-4 w-full">
+              <ul className="space-y-4 w-full mb-6">
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex items-center justify-between">
                     <div>
@@ -143,26 +136,24 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground">{t('no_recent_trackdays')}</p>
+              <p className="text-muted-foreground mb-6">{t('no_recent_trackdays')}</p>
             )}
+            <Button asChild className="btn-primary-gradient" size="sm">
+              <Link to="/trackdays">
+                <Plus className="h-4 w-4 mr-2" /> {t('add_trackday')}
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <CalendarDays className="h-6 w-6 text-muted-foreground" />
-              <h3 className="text-xl font-semibold">{t('upcoming_events')}</h3>
-            </div>
-            <Button asChild className="btn-primary-gradient mb-6" size="sm">
-              <Link to="/maintenances">
-                <Plus className="h-4 w-4 mr-2" /> {t('add_new_maintenance')}
-              </Link>
-            </Button>
+            <h3 className="text-xl font-semibold mb-4">{t('upcoming_events')}</h3>
+            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
             {isLoadingMaintenances ? (
               <div>{t('loading')}...</div>
             ) : maintenances && maintenances.length > 0 ? (
-              <ul className="space-y-4 w-full">
+              <ul className="space-y-4 w-full mb-6">
                 {maintenances.map((maintenance) => (
                   <li key={maintenance.id} className="flex items-center justify-between">
                     <div>
@@ -178,8 +169,13 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground">{t('no_upcoming_events')}</p>
+              <p className="text-muted-foreground mb-6">{t('no_upcoming_events')}</p>
             )}
+            <Button asChild className="btn-primary-gradient" size="sm">
+              <Link to="/maintenances">
+                <Plus className="h-4 w-4 mr-2" /> {t('add_new_maintenance')}
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
