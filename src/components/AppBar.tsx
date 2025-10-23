@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/theme-provider"; // Importation du hook useTheme
+import { useTheme } from "@/components/theme-provider";
 import LanguageSwitcher from './LanguageSwitcher';
 
 interface AppBarProps {
@@ -27,7 +27,7 @@ interface AppBarProps {
 
 const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
   const location = useLocation();
-  const { setTheme } = useTheme(); // Utilisation du hook useTheme
+  const { setTheme } = useTheme();
 
   const defaultBreadcrumbs = [
     { label: 'Home', path: '/' },
@@ -67,13 +67,13 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
+            <DropdownMenuItem onClick={() => { console.log('Setting theme to light'); setTheme("light"); }}>
               Light
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
+            <DropdownMenuItem onClick={() => { console.log('Setting theme to dark'); setTheme("dark"); }}>
               Dark
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
+            <DropdownMenuItem onClick={() => { console.log('Setting theme to system'); setTheme("system"); }}>
               System
             </DropdownMenuItem>
           </DropdownMenuContent>
