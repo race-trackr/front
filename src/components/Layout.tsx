@@ -8,6 +8,8 @@ import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar'; // Import AppBar
+import { Toaster } from "@/components/ui/toaster"; // Import Toaster
+import { Toaster as Sonner } from "@/components/ui/sonner"; // Import Sonner
 
 interface LayoutProps {
   children: ReactNode; // Children will now be the Outlet
@@ -78,6 +80,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <>{children}</> {/* Explicitly wrap children in a fragment */}
         </main>
       </div>
+      <Toaster /> {/* Toaster et Sonner sont maintenant dans le Layout */}
+      <Sonner />
     </div>
   );
 };
