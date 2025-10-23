@@ -29,9 +29,9 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-1 transition-all",
+        "flex items-center gap-3 rounded-lg px-3 py-2.5 w-full transition-all", // Modifié py-1 en py-2.5 et ajouté w-full
         isActive
-          ? "btn-primary-gradient" // Use the new utility class
+          ? "btn-primary-gradient"
           : "text-muted-foreground hover:text-primary"
       )}
     >
