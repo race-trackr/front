@@ -8,9 +8,9 @@ import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar'; // Import AppBar
-import { Toaster } from "@/components/ui/toaster"; // Import Toaster
-import { Toaster as Sonner } from "@/components/ui/sonner"; // Import Sonner
-import { useToast } from '@/hooks/use-toast'; // Import useToast hook
+// Suppression de l'importation de Toaster et useToast
+// import { Toaster } from "@/components/ui/toaster"; 
+// import { useToast } from '@/hooks/use-toast'; 
 
 interface LayoutProps {
   children: ReactNode; // Children will now be the Outlet
@@ -21,7 +21,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useTranslation();
   const location = useLocation();
-  const { toasts } = useToast(); // Utilisation du hook useToast pour obtenir les notifications
+  // Suppression de l'utilisation du hook useToast
+  // const { toasts } = useToast(); 
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -82,8 +83,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <>{children}</> {/* Explicitly wrap children in a fragment */}
         </main>
       </div>
-      {toasts.length > 0 && <Toaster />} {/* Rendu conditionnel du Toaster */}
-      <Sonner />
+      {/* Suppression du rendu conditionnel du Toaster */}
+      {/* {toasts.length > 0 && <Toaster />} */}
+      {/* Sonner est maintenant géré globalement dans App.tsx */}
+      {/* <Sonner /> */}
     </div>
   );
 };

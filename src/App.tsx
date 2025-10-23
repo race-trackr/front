@@ -1,5 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster as Sonner } from "@/components/ui/sonner"; // Garde seulement Sonner
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
@@ -161,6 +160,7 @@ const App = () => (
           <TooltipProvider>
             <RouterProvider router={router} />
           </TooltipProvider>
+          <Sonner /> {/* Sonner est maintenant ici, globalement */}
         </AuthProvider>
       </ThemeProvider>
     </I18nextProvider>
