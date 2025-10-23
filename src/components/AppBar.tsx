@@ -20,6 +20,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import LanguageSwitcher from './LanguageSwitcher';
+import { cn } from '@/lib/utils'; // Import cn for conditional class names
 
 interface AppBarProps {
   breadcrumbs?: { label: string; path?: string }[];
@@ -27,7 +28,7 @@ interface AppBarProps {
 
 const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
   const location = useLocation();
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme(); // Get the current theme
 
   const defaultBreadcrumbs = [
     { label: 'Home', path: '/' },
@@ -67,13 +68,22 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => { console.log('Setting theme to light'); setTheme("light"); }}>
+            <DropdownMenuItem 
+              onClick={() => setTheme("light")}
+              className={cn(theme === "light" && "bg-accent text-accent-foreground")}
+            >
               Light
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => { console.log('Setting theme to dark'); setTheme("dark"); }}>
+            <DropdownMenuItem 
+              onClick={() => setTheme("dark")}
+              className={cn(theme === "dark" && "bg-accent text-accent-foreground")}
+            >
               Dark
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => { console.log('Setting theme to system'); setTheme("system"); }}>
+            <DropdownMenuItem 
+              onClick={() => setTheme("system")}
+              className={cn(theme === "system" && "bg-accent text-accent-foreground")}
+            >
               System
             </DropdownMenuItem>
           </DropdownMenuContent>
