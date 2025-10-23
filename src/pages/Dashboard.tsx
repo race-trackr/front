@@ -112,14 +112,16 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-6"> {/* Changed to grid-cols-1 for full width */}
+      <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-muted-foreground" /> {/* Added CalendarDays icon */}
-              {t('recent_trackdays')}
+              <span> {/* Wrapped icon and text in a span */}
+                <CalendarDays className="h-5 w-5 text-muted-foreground" />
+                {t('recent_trackdays')}
+              </span>
             </CardTitle>
-            <Button asChild className="btn-primary-gradient" size="sm"> {/* Changed to gradient button */}
+            <Button asChild className="btn-primary-gradient" size="sm">
               <Link to="/trackdays">
                 <Plus className="h-4 w-4 mr-2" /> {t('add_trackday')}
               </Link>
@@ -153,10 +155,12 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-muted-foreground" /> {/* Added CalendarDays icon */}
-              {t('upcoming_events')}
+              <span> {/* Wrapped icon and text in a span */}
+                <CalendarDays className="h-5 w-5 text-muted-foreground" />
+                {t('upcoming_events')}
+              </span>
             </CardTitle>
-            <Button asChild className="btn-primary-gradient" size="sm"> {/* Changed to gradient button */}
+            <Button asChild className="btn-primary-gradient" size="sm">
               <Link to="/maintenances">
                 <Plus className="h-4 w-4 mr-2" /> {t('add_new_maintenance')}
               </Link>
