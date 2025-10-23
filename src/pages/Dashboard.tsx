@@ -2,56 +2,66 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { CalendarDays, Car, Wrench, Plus } from 'lucide-react';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Car, Wrench } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { getDashboardSummary } from '@/lib/api/dashboard';
 import { getTrackdays } from '@/lib/api/trackdays';
 import { getVehicles } from '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
 import { format } from 'date-fns';
+import { fr, enUS, es, it } from 'date-fns/locale';
 
 const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  const { data: trackdaysData, isLoading: isLoadingTrackdays } = useQuery({
-    queryKey: ['trackdays'],
-    queryFn: getTrackdays,
+  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
+    queryKey: ['dashboardSummary'],
+    queryFn: getDashboardSummary,
   });
 
-  const { data: vehiclesData, isLoading: isLoadingVehicles } = useQuery({
-    queryKey: ['vehicles'],
-    queryFn: getVehicles,
+  const { data: recentTrackdays, isLoading: isLoadingTrackdays } = useQuery({
+    queryKey: ['trackdays', { limit: 3 }],
+    queryFn: () => getTrackdays({ limit: 3 }),
   });
 
-  const { data: maintenancesData, isLoading: isLoadingMaintenances } = useQuery({
-    queryKey: ['maintenances'],
-    queryFn: getMaintenances,
+  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery({
+    queryKey: ['vehicles', { limit: 3 }],
+    queryFn: () => getVehicles({ limit: 3 }),
   });
 
-  const totalTrackdays = trackdaysData?.length || 0;
-  const totalVehicles = vehiclesData?.length || 0;
-  const totalMaintenances = maintenancesData?.length || 0;
+  const { data: maintenances, isLoading: isLoadingMaintenances } = useQuery({
+    queryKey: ['maintenances', { limit: 3 }],
+    queryFn: () => getMaintenances({ limit: 3 }),
+  });
 
-  const recentTrackdays = trackdaysData
-    ? [...trackdaysData]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 3)
-    : [];
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'fr':
+        return fr;
+      case 'es':
+        return es;
+      case 'it':
+        return it;
+      default:
+        return enUS;
+    }
+  };
 
-  const upcomingEvents = trackdaysData
-    ? trackdaysData
-        .filter(td => new Date(td.date) > new Date())
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-        .slice(0, 3)
-    : [];
+  if (isLoadingSummary) {
+    return <div>{t('loading')}...</div>;
+  }
+
+  if (isErrorSummary) {
+    return <div>{t('error_loading_dashboard_summary')}</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -61,10 +71,12 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_trackdays')}</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-md">
+              <CalendarDays className="h-6 w-6" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalTrackdays}</div>
+            <div className="text-2xl font-bold">{summary?.totalTrackdays || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_trackdays')}
             </p>
@@ -73,10 +85,12 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_vehicles')}</CardTitle>
-            <Car className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 bg-green-100 text-green-600 rounded-md">
+              <Car className="h-6 w-6" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalVehicles}</div>
+            <div className="text-2xl font-bold">{summary?.totalVehicles || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_vehicles')}
             </p>
@@ -85,10 +99,12 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_maintenances')}</CardTitle>
-            <Wrench className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 bg-yellow-100 text-yellow-600 rounded-md">
+              <Wrench className="h-6 w-6" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalMaintenances}</div>
+            <div className="text-2xl font-bold">{summary?.totalMaintenances || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_maintenances')}
             </p>
@@ -96,65 +112,71 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
-        {/* Recent Trackdays Card - Moved to the top */}
-        <Card className="w-full">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>{t('recent_trackdays')}</CardTitle>
-              <Calendar className="h-5 w-5 text-muted-foreground" />
-            </div>
-            {/* CardDescription removed as it was redundant with the p tag below */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>{t('recent_trackdays')}</CardTitle>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/trackdays">
+                <Plus className="h-4 w-4 mr-2" /> {t('add_trackday')}
+              </Link>
+            </Button>
           </CardHeader>
           <CardContent>
             {isLoadingTrackdays ? (
-              <div className="text-center text-muted-foreground">Loading recent trackdays...</div>
-            ) : recentTrackdays.length === 0 ? (
-              <p className="text-center text-muted-foreground">{t('no_recent_trackdays')}</p>
-            ) : (
-              <ul className="space-y-2">
+              <div>{t('loading')}...</div>
+            ) : recentTrackdays && recentTrackdays.length > 0 ? (
+              <ul className="space-y-4">
                 {recentTrackdays.map((trackday) => (
-                  <li key={trackday.id} className="flex justify-between items-center">
-                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
-                    <Link to={`/trackdays/edit/${trackday.id}`}>
-                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
-                    </Link>
+                  <li key={trackday.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
+                      </p>
+                    </div>
+                    <Button asChild variant="ghost" size="sm">
+                      <Link to={`/trackdays/${trackday.id}`}>{t('view_edit_details')}</Link>
+                    </Button>
                   </li>
                 ))}
               </ul>
+            ) : (
+              <p className="text-muted-foreground">{t('no_recent_trackdays')}</p>
             )}
-            <div className="mt-4 flex justify-center">
-              <Link to="/trackdays/create">
-                <Button className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600">
-                  {t('add_trackday')}
-                </Button>
-              </Link>
-            </div>
           </CardContent>
         </Card>
 
-        {/* Upcoming Events Card - Moved below Recent Trackdays */}
-        <Card className="w-full">
-          <CardHeader>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>{t('upcoming_events')}</CardTitle>
-            {/* CardDescription removed as it was redundant with the p tag below */}
+            <Button asChild variant="outline" size="sm">
+              <Link to="/maintenances">
+                <Plus className="h-4 w-4 mr-2" /> {t('add_new_maintenance')}
+              </Link>
+            </Button>
           </CardHeader>
           <CardContent>
-            {isLoadingTrackdays ? (
-              <div className="text-center text-muted-foreground">Loading upcoming events...</div>
-            ) : upcomingEvents.length === 0 ? (
-              <p className="text-center text-muted-foreground">{t('no_upcoming_events')}</p>
-            ) : (
-              <ul className="space-y-2">
-                {upcomingEvents.map((trackday) => (
-                  <li key={trackday.id} className="flex justify-between items-center">
-                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track?.name || trackday.trackId}</span>
-                    <Link to={`/trackdays/edit/${trackday.id}`}>
-                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
-                    </Link>
+            {isLoadingMaintenances ? (
+              <div>{t('loading')}...</div>
+            ) : maintenances && maintenances.length > 0 ? (
+              <ul className="space-y-4">
+                {maintenances.map((maintenance) => (
+                  <li key={maintenance.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{maintenance.type} - {maintenance.vehicleId}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })} - {maintenance.cost}€
+                      </p>
+                    </div>
+                    <Button asChild variant="ghost" size="sm">
+                      <Link to={`/maintenances/${maintenance.id}`}>{t('view_edit_details')}</Link>
+                    </Button>
                   </li>
                 ))}
               </ul>
+            ) : (
+              <p className="text-muted-foreground">{t('no_upcoming_events')}</p>
             )}
           </CardContent>
         </Card>
