@@ -1,55 +1,39 @@
+"use client";
+
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { useTranslation } from 'react-i18next';
-import useBreadcrumbs from '@/hooks/useBreadcrumbs';
-import { Button } from './ui/button';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Link } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import LanguageSwitcher from './LanguageSwitcher'; // Import LanguageSwitcher
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import LanguageSwitcher from './LanguageSwitcher';
+import { useTheme } from "@/components/theme-provider"; // Import useTheme
 
 const AppBar: React.FC = () => {
-  const { t } = useTranslation();
-  const location = useLocation();
-  const breadcrumbs = useBreadcrumbs();
-  const { setTheme } = useTheme();
+  const { setTheme } = useTheme(); // Get setTheme function
 
   return (
-    <div className="flex items-center h-16 px-4 border-b bg-background justify-start">
-      <Breadcrumb>
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+      <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
-          {breadcrumbs.map((crumb, index) => (
-            <React.Fragment key={crumb.path}>
-              <BreadcrumbItem>
-                {crumb.path ? (
-                  <BreadcrumbLink href={crumb.path}>
-                    {crumb.label}
-                  </BreadcrumbLink>
-                ) : (
-                  <span className="text-foreground">{crumb.label}</span>
-                )}
-              </BreadcrumbItem>
-              {index < breadcrumbs.length - 1 && (
-                <BreadcrumbSeparator className="list-none" />
-              )}
-            </React.Fragment>
-          ))}
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/">Dashboard</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Overview</BreadcrumbPage>
+          </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto flex items-center space-x-2"> {/* Adjusted space-x */}
-        <LanguageSwitcher /> {/* Add LanguageSwitcher here */}
+      <div className="ml-auto flex items-center space-x-2">
+        <LanguageSwitcher />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -71,7 +55,7 @@ const AppBar: React.FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </header>
   );
 };
 
