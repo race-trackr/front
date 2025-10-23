@@ -20,26 +20,26 @@ const LanguageSwitcher: React.FC = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-8 w-8">
-          <Globe className="h-5 w-5" />
+          <Globe className="h-5 w-5 flex-shrink-0" />
           <span className="sr-only">Change language</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => changeLanguage('en')} className="flex items-center justify-between">
           English
-          {i18n.language === 'en' && <Check className="ml-2 h-5 w-5" />}
+          {i18n.language === 'en' && <Check className="ml-2 h-5 w-5 flex-shrink-0" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeLanguage('fr')} className="flex items-center justify-between">
           Français
-          {i18n.language === 'fr' && <Check className="ml-2 h-5 w-5" />}
+          {i18n.language === 'fr' && <Check className="ml-2 h-5 w-5 flex-shrink-0" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeLanguage('it')} className="flex items-center justify-between">
           Italiano
-          {i18n.language === 'it' && <Check className="ml-2 h-5 w-5" />}
+          {i18n.language === 'it' && <Check className="ml-2 h-5 w-5 flex-shrink-0" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeLanguage('es')} className="flex items-center justify-between">
           Español
-          {i18n.language === 'es' && <Check className="ml-2 h-5 w-5" />}
+          {i18n.language === 'es' && <Check className="ml-2 h-5 w-5 flex-shrink-0" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

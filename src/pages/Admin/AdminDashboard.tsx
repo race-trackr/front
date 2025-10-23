@@ -16,7 +16,7 @@ const AdminDashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('manage_tracks')}</CardTitle>
-            <Flag className="h-5 w-5 text-muted-foreground" />
+            <Flag className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">10</div> {/* Placeholder data */}
@@ -30,7 +30,7 @@ const AdminDashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('manage_countries')}</CardTitle>
-            <Users className="h-5 w-5 text-muted-foreground" />
+            <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">50</div> {/* Placeholder data */}

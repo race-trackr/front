@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_trackdays')}</CardTitle>
-            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+            <CalendarDays className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">5</div>
@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_vehicles')}</CardTitle>
-            <Car className="h-5 w-5 text-muted-foreground" />
+            <Car className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2</div>
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">
               {t('upcoming_maintenances')}
             </CardTitle>
-            <Wrench className="h-5 w-5 text-muted-foreground" />
+            <Wrench className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1</div>
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t('admin_panel')}</CardTitle>
-              <Users className="h-5 w-5 text-muted-foreground" />
+              <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{t('access_admin_tools')}</div>

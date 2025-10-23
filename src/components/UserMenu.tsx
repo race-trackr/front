@@ -32,7 +32,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className={cn("w-full h-auto p-2", isCollapsed ? "justify-center" : "justify-start")}>
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
           </Avatar>
@@ -53,27 +53,27 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/settings" className="flex items-center">
-            <Settings className="mr-2 h-5 w-5" />
+            <Settings className="mr-2 h-5 w-5 flex-shrink-0" />
             <span>{t('settings')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/profile" className="flex items-center">
-            <UserIcon className="mr-2 h-5 w-5" />
+            <UserIcon className="mr-2 h-5 w-5 flex-shrink-0" />
             <span>{t('my_account')}</span>
           </Link>
         </DropdownMenuItem>
         {isFreeTier && (
           <DropdownMenuItem asChild>
             <Link to="/upgrade" className="flex items-center btn-primary-gradient p-2 rounded-md">
-              <Gem className="mr-2 h-5 w-5" />
+              <Gem className="mr-2 h-5 w-5 flex-shrink-0" />
               <span>{t('upgrade_to_pro')}</span>
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="flex items-center text-destructive">
-          <LogOut className="mr-2 h-5 w-5" />
+          <LogOut className="mr-2 h-5 w-5 flex-shrink-0" />
           <span>{t('logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

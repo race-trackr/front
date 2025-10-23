@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               onClick={toggleSidebar}
               className="h-8 w-8"
             >
-              {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+              {isCollapsed ? <ChevronRight className="h-5 w-5 flex-shrink-0" /> : <ChevronLeft className="h-5 w-5 flex-shrink-0" />}
               <span className="sr-only">Toggle sidebar</span>
             </Button>
           </div>
@@ -76,7 +76,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 size="icon"
                 className="shrink-0 md:hidden"
               >
-                <MenuIcon className="h-5 w-5" />
+                <MenuIcon className="h-5 w-5 flex-shrink-0" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
