@@ -25,6 +25,7 @@ import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ErrorPage from './components/ErrorPage'; // Import the new ErrorPage component
 
 const queryClient = new QueryClient();
 
@@ -32,13 +33,16 @@ const routesConfig = [
   {
     path: "/",
     element: <Index />,
+    errorElement: <ErrorPage />, // Add errorElement to the root route
   },
   {
     path: "/auth",
     element: <AuthTabs />,
+    errorElement: <ErrorPage />, // Add errorElement
   },
   {
     element: <ProtectedRoute />, // Parent route for authenticated users
+    errorElement: <ErrorPage />, // Add errorElement to the protected route
     children: [
       {
         path: "/dashboard",
@@ -94,6 +98,7 @@ const routesConfig = [
   },
   {
     element: <ProtectedRoute allowedRoles={['owner']} />, // Parent route for admin users
+    errorElement: <ErrorPage />, // Add errorElement to the admin protected route
     children: [
       {
         path: "/admin",
@@ -135,6 +140,7 @@ const routesConfig = [
   {
     path: "*",
     element: <NotFound />,
+    errorElement: <ErrorPage />, // Add errorElement to the NotFound route as well
   },
 ];
 
