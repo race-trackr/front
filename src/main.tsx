@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
+import './globals.css'; // Correction du chemin d'importation
 import { ThemeProvider } from './components/theme-provider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
