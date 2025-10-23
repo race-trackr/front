@@ -27,10 +27,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from '@/components/ui/textarea'; // Import Textarea
+import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle } from 'lucide-react';
 import { getVehicles } from '@/lib/api/vehicles';
-import { UserVehicle, CreateTrackdayPayload } from '@/types'; // Import UserVehicle and CreateTrackdayPayload
+import { getTracks } from '@/lib/api/tracks'; // Import getTracks
+import { UserVehicle, CreateTrackdayPayload, Track } from '@/types'; // Import Track type
 
 const formSchema = z.object({
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
@@ -41,9 +42,9 @@ const formSchema = z.object({
   trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }),
   trackCondition: z.string().min(1, { message: "La condition de la piste est requise." }),
   note: z.string().optional(),
-  bestLaptime: z.string().optional(), // Renamed from best_laptime
+  bestLaptime: z.string().optional(),
   totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }),
-  otherDetails: z.string().optional(), // Will be parsed as JSON
+  otherDetails: z.string().optional(),
 });
 
 const TrackdayCreate: React.FC = () => {
@@ -51,7 +52,7 @@ const TrackdayCreate: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const form = useForm<CreateTrackdayPayload>({ // Use CreateTrackdayPayload
+  const form = useForm<CreateTrackdayPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       vehicleId: '',
@@ -62,7 +63,7 @@ const TrackdayCreate: React.FC = () => {
       trackTemperature: 0,
       trackCondition: '',
       note: '',
-      bestLaptime: '', // Renamed from best_laptime
+      bestLaptime: '',
       totalLaps: 0,
       otherDetails: '',
     },
@@ -73,6 +74,11 @@ const TrackdayCreate: React.FC = () => {
     queryFn: getVehicles,
   });
 
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<Track[]>({ // Fetch tracks
+    queryKey: ['tracks'],
+    queryFn: getTracks,
+  });
+
   const createTrackdayMutation = useMutation({
     mutationFn: createTrackday,
     onSuccess: () => {
@@ -80,7 +86,7 @@ const TrackdayCreate: React.FC = () => {
       toast.success(t('trackday_created_successfully'));
       navigate('/trackdays');
     },
-    onError: (error: any) => { // Explicitly type error as any for now
+    onError: (error: any) => {
       toast.error(error.response?.data?.message || t('failed_to_create_trackday'));
     },
   });
@@ -144,10 +150,36 @@ const TrackdayCreate: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('track')}</FormLabel>
-                <FormControl>
-                  {/* This will be replaced with a Select for tracks later */}
-                  <Input {...field} placeholder={t('track_id_placeholder')} />
-                </FormControl>
+                <Select onValueChange={(value) => {
+                  if (value === "create-new-track") {
+                    navigate('/tracks/create');
+                  } else {
+                    field.onChange(value);
+                  }
+                }} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('select_a_track')} /> {/* New translation key */}
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {isLoadingTracks ? (
+                      <SelectItem value="loading" disabled>{t('loading_tracks')}</SelectItem> {/* New translation key */}
+                    ) : isErrorTracks || !tracks || tracks.length === 0 ? (
+                      <SelectItem value="create-new-track" className="text-blue-600 cursor-pointer hover:bg-accent">
+                        <div className="flex items-center">
+                          <PlusCircle className="mr-2 h-4 w-4" /> {t('create_track')} {/* New translation key */}
+                        </div>
+                      </SelectItem>
+                    ) : (
+                      tracks.map((track) => (
+                        <SelectItem key={track.id} value={track.id}>
+                          {track.name} ({track.country?.name || t('unknown_country')}) {/* Display track name and country */}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -219,7 +251,7 @@ const TrackdayCreate: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="bestLaptime" // Renamed field
+            name="bestLaptime"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('best_laptime')}</FormLabel>

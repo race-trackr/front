@@ -158,5 +158,9 @@
   "loading_vehicles": "Cargando vehículos...",
   "create_vehicle": "Crear vehículo",
   "track": "Pista",
-  "notes": "Notas"
+  "notes": "Notas",
+  "select_a_track": "Selecciona una pista",
+  "loading_tracks": "Cargando pistas...",
+  "create_track": "Crear pista",
+  "unknown_country": "País desconocido"
 }

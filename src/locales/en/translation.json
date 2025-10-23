@@ -144,5 +144,9 @@
   "loading_vehicles": "Loading vehicles...",
   "create_vehicle": "Create Vehicle",
   "track": "Track",
-  "notes": "Notes"
+  "notes": "Notes",
+  "select_a_track": "Select a track",
+  "loading_tracks": "Loading tracks...",
+  "create_track": "Create Track",
+  "unknown_country": "Unknown Country"
 }
