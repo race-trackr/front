@@ -12,13 +12,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import LanguageSwitcher from './LanguageSwitcher';
-import { useTheme } from "@/components/theme-provider"; // Import useTheme
+import { useTheme } from "@/components/theme-provider";
 
 const AppBar: React.FC = () => {
-  const { setTheme } = useTheme(); // Get setTheme function
+  const { setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 flex py-3 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>
