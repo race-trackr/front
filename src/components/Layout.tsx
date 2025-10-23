@@ -40,7 +40,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
-              !isCollapsed && "px-4 lg:px-6" // Apply padding only when not collapsed
+              isCollapsed ? "px-2" : "px-4 lg:px-6" // Apply px-2 when collapsed, else px-4 lg:px-6
             )}
           >
             <Link
