@@ -6,7 +6,7 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { useTranslation } from 'react-i18next'; // Importation de useTranslation
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 interface AppBarProps {
@@ -16,17 +16,17 @@ interface AppBarProps {
 const AppBar: React.FC<AppBarProps> = ({ isCollapsed }) => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
-  const { t } = useTranslation(); // Utilisation du hook useTranslation
+  const { t } = useTranslation();
 
   return (
-    <div className={cn("flex items-center h-16 px-4 border-b bg-background", isCollapsed ? "justify-center" : "justify-between")}>
+    <div className="flex items-center h-16 px-4 border-b bg-background justify-start"> {/* Changé pour toujours justifier au début (aligner à gauche) */}
       <Breadcrumb>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/">{t('home')}</Link>
+            <Link to="/">{t('home')}</Link> {/* Assurez-vous que la clé 'home' est présente dans vos fichiers de traduction */}
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {/* Only add separator if there are other crumbs after the explicit Home link */}
+        {/* Ajoute un séparateur uniquement s'il y a d'autres miettes après le lien explicite "Home" */}
         {pathnames.length > 0 && <BreadcrumbSeparator />}
         {pathnames.map((name, index) => {
           const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
