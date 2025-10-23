@@ -108,14 +108,3 @@
     @apply from-red-600 to-orange-600;
   }
 }
-
-/* Custom CSS pour activer les transitions pour shadcn/ui TabsContent */
-/* Annule l'attribut `hidden` par défaut qui définit `display: none` */
-div[role="tabpanel"][data-state="inactive"] {
-  display: block !important; /* Garde l'élément dans le DOM */
-  position: absolute !important; /* Le retire du flux pour éviter les décalages de mise en page */
-  width: 100%; /* Maintient la largeur */
-  height: 100%; /* Maintient la hauteur */
-  pointer-events: none !important; /* Le rend non interactif */
-  visibility: hidden !important; /* Le cache visuellement */
-}
