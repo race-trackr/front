@@ -159,12 +159,10 @@ const App = () => (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <AuthProvider>
           <TooltipProvider>
-            <> {/* Utilisation d'un fragment React comme enfant unique */}
-              <RouterProvider router={router} />
-              <Toaster />
-              <Sonner />
-            </>
+            <RouterProvider router={router} /> {/* RouterProvider est maintenant le seul enfant */}
           </TooltipProvider>
+          <Toaster /> {/* Déplacé en dehors du TooltipProvider */}
+          <Sonner /> {/* Déplacé en dehors du TooltipProvider */}
         </AuthProvider>
       </ThemeProvider>
     </I18nextProvider>
