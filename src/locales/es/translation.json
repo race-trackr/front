@@ -134,5 +134,6 @@
   "manage_application_data": "Gestionar datos de toda la aplicación.",
   "or_separator": "O",
   "login_with_google": "Iniciar sesión con Google",
-  "register_with_google": "Registrarse con Google"
+  "register_with_google": "Registrarse con Google",
+  "home": "Inicio"
 }

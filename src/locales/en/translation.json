@@ -134,5 +134,6 @@
   "manage_application_data": "Manage application-wide data.",
   "or_separator": "OR",
   "login_with_google": "Login with Google",
-  "register_with_google": "Sign up with Google"
+  "register_with_google": "Sign up with Google",
+  "home": "Home"
 }

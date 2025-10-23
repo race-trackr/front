@@ -134,5 +134,6 @@
   "manage_application_data": "Gestisci i dati a livello di applicazione.",
   "or_separator": "O",
   "login_with_google": "Accedi con Google",
-  "register_with_google": "Iscriviti con Google"
+  "register_with_google": "Iscriviti con Google",
+  "home": "Home"
 }

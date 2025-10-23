@@ -134,5 +134,6 @@
   "manage_application_data": "Gérer les données de l'application.",
   "or_separator": "OU",
   "login_with_google": "Connexion via Google",
-  "register_with_google": "Inscription via Google"
+  "register_with_google": "Inscription via Google",
+  "home": "Accueil"
 }

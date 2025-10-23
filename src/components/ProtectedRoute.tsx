@@ -10,7 +10,10 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const { isAuthenticated, loading, user } = useAuth();
 
+  console.log('ProtectedRoute state:', { isAuthenticated, loading, user, allowedRoles });
+
   if (loading) {
+    console.log('ProtectedRoute: Loading...');
     return (
       <div className="flex flex-col space-y-3 p-4">
         <Skeleton className="h-[125px] w-[250px] rounded-xl" />
@@ -23,13 +26,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   }
 
   if (!isAuthenticated) {
+    console.log('ProtectedRoute: Not authenticated, redirecting to /auth');
     return <Navigate to="/auth" replace />; // Redirection vers /auth
   }
 
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    console.log('ProtectedRoute: Authenticated but role not allowed, redirecting to /dashboard');
     return <Navigate to="/dashboard" replace />; // Redirect if role not allowed
   }
 
+  console.log('ProtectedRoute: Authenticated and authorized, rendering Outlet');
   return <Outlet />;
 };
 
