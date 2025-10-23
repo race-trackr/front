@@ -69,11 +69,11 @@ const TrackdayView: React.FC = () => {
             <p className="text-lg">{format(new Date(trackday.date), 'PPP', { locale: getLocale() })}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle')}</p>
+            <p className="text-sm font-medium text-muted-foreground">{trackday.vehicle?.name ? t('vehicle') : t('vehicle_id_placeholder')}</p>
             <p className="text-lg">{trackday.vehicle?.name || trackday.vehicleId}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('track')}</p>
+            <p className="text-sm font-medium text-muted-foreground">{trackday.track?.name ? t('track') : t('track_id_placeholder')}</p>
             <p className="text-lg">{trackday.track?.name || trackday.trackId}</p>
           </div>
           <div>
