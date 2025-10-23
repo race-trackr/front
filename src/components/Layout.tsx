@@ -6,17 +6,17 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils'; // Importation de l'utilitaire cn
+import { cn } from '@/lib/utils';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth(); // Garder pour le contenu de la barre latérale, mais pas pour la décision de structure du layout
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useTranslation();
-  const location = useLocation(); // Utilisation de useLocation pour obtenir le chemin actuel
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -25,21 +25,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const sidebarWidthClass = isCollapsed ? 'w-[60px]' : 'w-[280px]';
   const gridColsClass = isCollapsed ? 'md:grid-cols-[60px_1fr]' : 'md:grid-cols-[280px_1fr]';
 
-  // Vérifie si la page actuelle est la page d'authentification
   const isAuthPage = location.pathname === '/auth';
 
-  // Si non authentifié et non en chargement, ne pas rendre la mise en page avec la barre latérale
-  if (!loading && !isAuthenticated) {
-    return (
-      <main className={cn(
-        "flex flex-1 flex-col",
-        isAuthPage ? "p-0 gap-0" : "gap-4 p-4 lg:gap-6 lg:p-6" // Applique le padding conditionnellement
-      )}>
-        {children}
-      </main>
-    );
+  // Si c'est la page d'authentification, rendre uniquement les enfants sans aucune structure de layout.
+  // Le padding pour le contenu principal sera géré par le composant AuthTabs lui-même.
+  if (isAuthPage) {
+    return <main className="flex flex-1 flex-col p-0 gap-0">{children}</main>;
   }
 
+  // Pour toutes les autres pages (tableau de bord, routes protégées), rendre le layout complet.
+  // Les vérifications isAuthenticated et loading sont gérées par Index.tsx et ProtectedRoute.tsx
+  // qui redirigeront si l'utilisateur n'est pas authentifié ou si le chargement est toujours en cours.
   return (
     <div className={`grid min-h-screen w-full ${gridColsClass} lg:${gridColsClass}`}>
       {/* Desktop Sidebar */}
