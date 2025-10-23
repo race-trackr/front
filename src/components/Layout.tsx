@@ -38,14 +38,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}>
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 justify-between">
-            <Link to="/" className="flex items-center gap-2 font-semibold">
+            <Link
+              to="/"
+              className={cn(
+                "flex items-center gap-2 font-semibold",
+                isCollapsed && "hidden" // Hide the entire link when collapsed
+              )}
+            >
               {/* 'R' logo */}
               <span
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
                   "bg-gradient-to-r from-red-500 to-orange-500",
                   !isCollapsed && "mr-2", // Add margin only when not collapsed
-                  isCollapsed && "hidden" // Hide when collapsed
+                  isCollapsed && "hidden" // Hide when collapsed (redundant if parent link is hidden, but good for clarity)
                 )}
               >
                 R
@@ -64,7 +70,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               variant="ghost"
               size="icon"
               onClick={toggleCollapse} // Use toggleCollapse from Zustand
-              className="h-8 w-8"
+              className={cn(
+                "h-8 w-8",
+                isCollapsed && "w-full" // Make it take full width when collapsed
+              )}
             >
               {isCollapsed ? <ChevronRight className="h-5 w-5 flex-shrink-0" /> : <ChevronLeft className="h-5 w-5 flex-shrink-0" />}
               <span className="sr-only">Toggle sidebar</span>
