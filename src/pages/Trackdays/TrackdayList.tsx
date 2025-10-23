@@ -22,7 +22,7 @@ const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
   const { data: trackdays, isLoading, isError } = useQuery({
     queryKey: ['trackdays'],
-    queryFn: getTrackdays,
+    queryFn: () => getTrackdays({ limit: 10 }),
   });
 
   if (isLoading) {

@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { CalendarDays, Car, Wrench, Plus } from 'lucide-react';
+import { CalendarDays, Car, Wrench, Plus, Edit } from 'lucide-react'; // Import Edit icon
 import {
   Card,
   CardContent,
@@ -122,15 +122,18 @@ const Dashboard: React.FC = () => {
             ) : recentTrackdays && recentTrackdays.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
                 {recentTrackdays.map((trackday) => (
-                  <li key={trackday.id} className="flex items-center justify-between">
-                    <div>
+                  <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3"> {/* Added border, rounded-md, p-3 */}
+                    <div className="text-left"> {/* Added text-left for content alignment */}
                       <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
                       </p>
                     </div>
-                    <Button asChild variant="ghost" size="sm">
-                      <Link to={`/trackdays/${trackday.id}`}>{t('view_edit_details')}</Link>
+                    <Button asChild variant="outline" size="icon"> {/* Changed size to icon and removed text */}
+                      <Link to={`/trackdays/edit/${trackday.id}`}>
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">{t('view_edit_details')}</span> {/* Added screen reader text */}
+                      </Link>
                     </Button>
                   </li>
                 ))}
@@ -148,8 +151,8 @@ const Dashboard: React.FC = () => {
 
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
-            <h3 className="text-xl font-semibold mb-4">{t('recent_maintenances')}</h3> {/* Changed title here */}
-            <Wrench className="h-12 w-12 text-muted-foreground mb-6" /> {/* Changed icon here */}
+            <h3 className="text-xl font-semibold mb-4">{t('recent_maintenances')}</h3>
+            <Wrench className="h-12 w-12 text-muted-foreground mb-6" />
             {isLoadingMaintenances ? (
               <div>{t('loading')}...</div>
             ) : maintenances && maintenances.length > 0 ? (
@@ -169,7 +172,7 @@ const Dashboard: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground mb-6">{t('no_recent_maintenances')}</p> {/* Changed text here */}
+              <p className="text-muted-foreground mb-6">{t('no_recent_maintenances')}</p>
             )}
             <Button asChild className="btn-primary-gradient" size="sm">
               <Link to="/maintenances">

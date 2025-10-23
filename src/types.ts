@@ -47,6 +47,8 @@ export interface Trackday {
   totalLaps: number;
   createdAt: string;
   updatedAt: string;
+  vehicle?: UserVehicle;
+  track?: Track;
 }
 
 export type CreateTrackdayPayload = Omit<Trackday, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
