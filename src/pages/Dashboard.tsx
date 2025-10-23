@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar, Car, Wrench } from 'lucide-react';
 import { getTrackdays } from '@/lib/api/trackdays';
-import { getVehicles } from '@/lib/api/vehicles';
+import { getVehicles } => '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
 import { format } from 'date-fns';
 
@@ -96,33 +96,9 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-6"> {/* Changed to grid-cols-1 */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* Recent Trackdays Card - Moved to the top */}
         <Card className="w-full">
-          <CardHeader>
-            <CardTitle>{t('upcoming_events')}</CardTitle>
-            <CardDescription>{t('no_upcoming_events')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoadingTrackdays ? (
-              <div>Loading upcoming events...</div>
-            ) : upcomingEvents.length === 0 ? (
-              <p>{t('no_upcoming_events')}</p>
-            ) : (
-              <ul className="space-y-2">
-                {upcomingEvents.map((trackday) => (
-                  <li key={trackday.id} className="flex justify-between items-center">
-                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
-                    <Link to={`/trackdays/${trackday.id}`}>
-                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="w-full"> {/* Added w-full here for consistency, though grid-cols-1 makes it full width */}
           <CardHeader>
             <CardTitle>{t('recent_trackdays')}</CardTitle>
             <CardDescription>{t('no_recent_trackdays')}</CardDescription>
@@ -146,9 +122,37 @@ const Dashboard: React.FC = () => {
             )}
             <div className="mt-4 text-right">
               <Link to="/trackdays/new">
-                <Button>{t('add_trackday')}</Button>
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700">
+                  {t('add_trackday')}
+                </Button>
               </Link>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Upcoming Events Card - Moved below Recent Trackdays */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>{t('upcoming_events')}</CardTitle>
+            <CardDescription>{t('no_upcoming_events')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isLoadingTrackdays ? (
+              <div>Loading upcoming events...</div>
+            ) : upcomingEvents.length === 0 ? (
+              <p>{t('no_upcoming_events')}</p>
+            ) : (
+              <ul className="space-y-2">
+                {upcomingEvents.map((trackday) => (
+                  <li key={trackday.id} className="flex justify-between items-center">
+                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
+                    <Link to={`/trackdays/${trackday.id}`}>
+                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
       </div>
