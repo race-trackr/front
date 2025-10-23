@@ -175,5 +175,8 @@
   "type_motorcycle": "Motorcycle",
   "type_karting": "Karting",
   "type_other": "Other",
-  "enter_any_details": "Enter any details about the vehicle"
+  "enter_any_details": "Enter any details about the vehicle",
+  "no_best_laptime": "No best laptime",
+  "error": "Error",
+  "oops_something_went_wrong": "Oops! Something went wrong."
 }

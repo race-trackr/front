@@ -190,5 +190,8 @@
   "type_motorcycle": "Moto",
   "type_karting": "Karting",
   "type_other": "Altro",
-  "enter_any_details": "Inserisci i dettagli del veicolo"
+  "enter_any_details": "Inserisci i dettagli del veicolo",
+  "no_best_laptime": "Nessun miglior tempo sul giro",
+  "error": "Errore",
+  "oops_something_went_wrong": "Ops! Qualcosa è andato storto."
 }
