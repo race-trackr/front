@@ -92,7 +92,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    /* Removed: @apply border-border; */
   }
 
   body {
