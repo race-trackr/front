@@ -7,6 +7,7 @@ import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import AppBar from './AppBar'; // Import AppBar
 
 interface LayoutProps {
   children: ReactNode;
@@ -73,32 +74,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {/* Mobile Header and Main Content */}
+      {/* Mobile Header (now part of AppBar or removed) and Main Content */}
       <div className="flex flex-col">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <MenuIcon className="h-5 w-5 flex-shrink-0" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
-              <Link to="/" className="flex items-center gap-2 font-semibold text-primary text-2xl">
-                Race Trackr
-              </Link>
-              <Sidebar isMobile={true} />
-            </SheetContent>
-          </Sheet>
-          <Link to="/" className="text-2xl font-bold text-primary ml-auto">Race Trackr</Link>
-        </header>
+        {/* AppBar is now always visible at the top */}
+        <AppBar /> 
 
-        {/* Main Content */}
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        {/* Main Content - adjusted padding for fixed AppBar */}
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 pt-14"> {/* Added pt-14 to account for AppBar height */}
           {children}
         </main>
       </div>

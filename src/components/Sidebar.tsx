@@ -7,8 +7,6 @@ import { Car, Wrench, Users, Gauge, CalendarDays } from 'lucide-react';
 import UserMenu from './UserMenu';
 import { MadeWithDyad } from './made-with-dyad';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './LanguageSwitcher';
-import ThemeToggle from './ThemeToggle';
 import { cn } from '@/lib/utils';
 
 interface NavLinkProps {
@@ -77,12 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
         {isAuthenticated ? (
           <>
             {/* Masquer ces éléments lorsque la barre latérale est réduite */}
-            {!isCollapsed && ( 
-              <div className="flex items-center justify-between mb-2 px-2">
-                <LanguageSwitcher />
-                <ThemeToggle />
-              </div>
-            )}
+            {/* LanguageSwitcher and ThemeToggle moved to AppBar */}
             <UserMenu isCollapsed={isCollapsed} />
           </>
         ) : (
