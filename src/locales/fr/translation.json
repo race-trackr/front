@@ -137,5 +137,7 @@
   "no_recent_trackdays": "Aucune journée en piste récente à afficher.",
   "add_trackday": "Ajouter une journée en piste",
   "upcoming_events": "Événements à venir",
-  "no_upcoming_events": "Aucun événement à venir."
+  "no_upcoming_events": "Aucun événement à venir.",
+  "my_maintenances": "Mes maintenances",
+  "total_maintenances": "Total des maintenances"
 }

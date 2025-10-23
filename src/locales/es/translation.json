@@ -151,5 +151,7 @@
   "no_recent_trackdays": "No hay días de pista recientes para mostrar.",
   "upcoming_events": "Próximos eventos",
   "no_upcoming_events": "No hay eventos próximos.",
-  "add_trackday": "Añadir día de pista"
+  "add_trackday": "Añadir día de pista",
+  "my_maintenances": "Mis mantenimientos",
+  "total_maintenances": "Total de mantenimientos"
 }

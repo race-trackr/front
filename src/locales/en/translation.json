@@ -137,5 +137,7 @@
   "no_recent_trackdays": "No recent trackdays to display.",
   "add_trackday": "Add Trackday",
   "upcoming_events": "Upcoming Events",
-  "no_upcoming_events": "No upcoming events."
+  "no_upcoming_events": "No upcoming events.",
+  "my_maintenances": "My Maintenances",
+  "total_maintenances": "Total Maintenances"
 }
