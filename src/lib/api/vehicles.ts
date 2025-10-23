@@ -1,8 +1,10 @@
 import apiClient from '../apiClient';
 import { CreateVehiclePayload, UserVehicle } from '@/types';
 
-export const getVehicles = async (): Promise<UserVehicle[]> => {
-  const response = await apiClient.get('/vehicles');
+export const getVehicles = async ({ limit = 10, offset = 0  }): Promise<UserVehicle[]> => {
+  const response = await apiClient.get('/vehicles', {
+    params: { limit, offset },
+  });
   return response.data;
 };
 

@@ -5,8 +5,10 @@ import { Maintenance } from '@/types';
 // For simplicity, using Omit<Maintenance, ...> for now.
 export type CreateMaintenancePayload = Omit<Maintenance, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'vehicle'>;
 
-export const getMaintenances = async (): Promise<Maintenance[]> => {
-  const response = await apiClient.get('/maintenances');
+export const getMaintenances = async ({ limit = 10, offset = 0 }): Promise<Maintenance[]> => {
+  const response = await apiClient.get('/maintenances', {
+    params: { limit, offset },
+  });
   return response.data;
 };
 

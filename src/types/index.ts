@@ -21,7 +21,6 @@ export interface Country {
 export interface UserVehicle {
   id: string;
   userId: string;
-  user?: User;
   brand: string;
   model: string;
   year: number;
@@ -101,4 +100,28 @@ export interface Maintenance {
   otherDetails: Record<string, any> | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DashboardSummary {
+  totalTrackdays: number;
+  totalVehicles: number;
+  totalMaintenances: number;
+  // Add other summary fields as needed
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  username: string;
+  email: string;
+  password: string;
+  countryId: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
 }
