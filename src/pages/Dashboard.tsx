@@ -81,7 +81,10 @@ const Dashboard: React.FC = () => {
           <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
             <CalendarDays className="h-12 w-12 text-muted-foreground" />
             <p className="text-muted-foreground text-center">{t('no_recent_trackdays')}</p>
-            <Button onClick={handleAddTrackday}>
+            <Button 
+              onClick={handleAddTrackday} 
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+            >
               <Plus className="mr-2 h-4 w-4" /> {t('add_trackday')}
             </Button>
           </CardContent>
