@@ -1,54 +1,74 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import useBreadcrumbs from '@/hooks/useBreadcrumbs';
+import { Button } from './ui/button';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
-interface AppBarProps {
-  isCollapsed?: boolean;
-}
-
-const AppBar: React.FC<AppBarProps> = ({ isCollapsed }) => {
-  const location = useLocation();
-  const pathnames = location.pathname.split('/').filter((x) => x);
+const AppBar = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const breadcrumbs = useBreadcrumbs();
+  const { setTheme } = useTheme();
 
   return (
-    <div className="flex items-center h-16 px-4 border-b bg-background justify-start"> {/* Changé pour toujours justifier au début (aligner à gauche) */}
+    <div className="flex items-center h-16 px-4 border-b bg-background justify-start">
       <Breadcrumb>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/">{t('home')}</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        {/* Ajoute un séparateur uniquement s'il y a d'autres miettes après le lien explicite "Home" */}
-        {pathnames.length > 0 && <BreadcrumbSeparator />}
-        {pathnames.map((name, index) => {
-          const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-          const isLast = index === pathnames.length - 1;
-          const translatedName = t(name.toLowerCase()); // Traduire chaque segment du chemin
-
-          return (
-            <React.Fragment key={name}>
+        <BreadcrumbList>
+          {breadcrumbs.map((crumb, index) => (
+            <React.Fragment key={crumb.path}>
               <BreadcrumbItem>
-                {isLast ? (
-                  <span className="text-foreground">{translatedName}</span>
-                ) : (
-                  <BreadcrumbLink asChild>
-                    <Link to={routeTo}>{translatedName}</Link>
+                {crumb.path ? (
+                  <BreadcrumbLink href={crumb.path}>
+                    {crumb.label}
                   </BreadcrumbLink>
+                ) : (
+                  <span className="text-foreground">{crumb.label}</span>
                 )}
               </BreadcrumbItem>
-              {!isLast && <BreadcrumbSeparator />}
+              {index < breadcrumbs.length - 1 && (
+                <BreadcrumbSeparator className="list-none" /> {/* Ajout de list-none ici */}
+              )}
             </React.Fragment>
-          );
-        })}
+          ))}
+        </BreadcrumbList>
       </Breadcrumb>
+      <div className="ml-auto flex items-center space-x-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };
