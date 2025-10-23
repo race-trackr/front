@@ -2,21 +2,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Wrench } from 'lucide-react';
 import { Maintenance } from '@/types';
 import { useTranslation } from 'react-i18next';
+import { getMaintenances } from '@/lib/api/maintenances';
+import { useQuery } from '@tanstack/react-query';
 
 const MaintenanceList: React.FC = () => {
   const { t } = useTranslation();
   // Placeholder for fetching maintenances
-  const maintenances: Maintenance[] = [
-    {
-      id: 'm1', userId: 'user1', vehicleId: 'v1', name: 'Oil Change', type: 'maintenance', date: '2023-09-01', cost: 120.00, mileage: 10000, nextMaintenanceDate: '2024-09-01', nextMaintenanceMileage: 20000, details: 'Standard oil and filter change.', createdAt: '...', updatedAt: '...'
-    },
-    {
-      id: 'm2', userId: 'user1', vehicleId: 'v1', name: 'Brake Pad Replacement', type: 'réparation', date: '2023-08-15', cost: 350.00, mileage: 9500, nextMaintenanceDate: null, nextMaintenanceMileage: null, details: 'Front brake pads replaced.', createdAt: '...', updatedAt: '...'
-    },
-  ];
+  const { data: maintenances, isLoading, isError } = useQuery({
+    queryKey: ['trackday'],
+    queryFn: () => getMaintenances({ limit: 0 }),
+  });
+
+  if (isLoading) {
+    return <div className="text-center">{t('loading_maintenances')}</div>;
+  }
+
+  if (isError) {
+    return <div className="text-center text-red-500">{t('error_loading_maintenances')}</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -30,6 +36,30 @@ const MaintenanceList: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <div className='flex items-center justify-between'>
+              <div className=''>
+                {t('total_maintenances')}
+                <p className="text-2xl font-bold mt-2">{maintenances.length}</p></div>
+              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
+                <Wrench className='h-6 w-6 text-primary' />
+              </span>
+            </div>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
+            <p className="text-2xl font-bold">{maintenances.length}</p>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
+            <p className="text-2xl font-bold">{maintenances.length}</p>
+          </CardHeader>
+        </Card>
         {maintenances.length === 0 ? (
           <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
         ) : (

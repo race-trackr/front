@@ -5,18 +5,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
 import { UserVehicle } from '@/types';
 import { useTranslation } from 'react-i18next';
+import { getVehicles } from '@/lib/api/vehicles';
+import { useQuery } from '@tanstack/react-query';
 
 const VehicleList: React.FC = () => {
   const { t } = useTranslation();
   // Placeholder for fetching vehicles
-  const vehicles: UserVehicle[] = [
-    {
-      id: 'v1', userId: 'user1', name: 'My Race Car', slug: 'my-race-car', brand: 'Porsche', model: '911 GT3', year: 2020, licensePlate: 'RACE001', type: 'voiture', details: 'Track-ready beast.', createdAt: '...', updatedAt: '...'
-    },
-    {
-      id: 'v2', userId: 'user1', name: 'My Race Bike', slug: 'my-race-bike', brand: 'Yamaha', model: 'R1', year: 2022, licensePlate: 'BIKE001', type: 'moto', details: 'Superbike for the track.', createdAt: '...', updatedAt: '...'
-    },
-  ];
+  const { data: vehicles, isLoading, isError } = useQuery({
+    queryKey: ['vehicles'],
+    queryFn: () => getVehicles({ limit: 0 }),
+  });
+
+  if (isLoading) {
+    return <div className="container mx-auto p-4 text-center">{t('loading_vehicles')}</div>;
+  }
+
+  if (isError) {
+    return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_vehicles')}</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -40,7 +46,7 @@ const VehicleList: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{vehicle.brand} {vehicle.model} ({vehicle.year})</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>{t('type')}:</strong> {vehicle.type}</p>
+                <p><strong>{t('type')}:</strong> {t(vehicle.type.toLowerCase())}</p>
                 <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
                   <Link to={`/vehicles/edit/${vehicle.id}`}>{t('view_edit_details')}</Link>

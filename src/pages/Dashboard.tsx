@@ -18,15 +18,6 @@ const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const {
-    data: summary,
-    isLoading: isLoadingSummary,
-    isError: isErrorSummary,
-  } = useQuery({
-    queryKey: ["dashboardSummary"],
-    queryFn: getDashboardSummary,
-  });
-
-  const {
     data: recentTrackdays,
     isLoading: isLoadingTrackdays,
     isError: isErrorTrackdays,
@@ -66,11 +57,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (isLoadingSummary) {
+  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t("loading")}...</div>;
   }
 
-  if (isErrorSummary) {
+  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
     return <div>{t("error_loading_dashboard_summary")}</div>;
   }
 
@@ -90,7 +81,7 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {summary?.totalTrackdays || 0}
+              {recentTrackdays.length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("total_trackdays")}
@@ -107,7 +98,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalVehicles || 0}</div>
+            <div className="text-2xl font-bold">{vehicles.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_vehicles")}
             </p>
@@ -123,7 +114,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{summary?.totalMaintenances || 0}</div>
+            <div className="text-2xl font-bold">{maintenances.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_maintenances")}
             </p>
@@ -145,30 +136,31 @@ const Dashboard: React.FC = () => {
                 {recentTrackdays.map((trackday) => (
                   <li
                     key={trackday.id}
-                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors cursor-pointer"
+                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    {/* Full area link for viewing */}
-                    <Link to={`/trackdays/view/${trackday.id}`} className="absolute inset-0 z-0"></Link>
-                    
-                    <div className="flex-1 text-left z-10">
-                      <p className="font-medium">
-                        {trackday.vehicle?.name || trackday.vehicleId} -
-                        {trackday.track?.name || trackday.trackId}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(trackday.date), "PPP", {
-                          locale: getLocale(),
-                        })}
-                        - {trackday.bestLaptime || t("no_best_laptime")}
-                      </p>
-                    </div>
+                    <Link
+                      to={`/trackdays/${trackday.id}`} className="w-full">
+                      <div className="flex-1 text-left z-10">
+                        <p className="font-medium">
+                          {trackday.vehicle?.name || trackday.vehicleId} -
+                          {trackday.track?.name || trackday.trackId}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(trackday.date), "PPP", {
+                            locale: getLocale(),
+                          })}
+                          - {trackday.bestLaptime || t("no_best_laptime")}
+                        </p>
+                      </div>
+                    </Link>
                     <div className="flex items-center gap-2 z-10">
+
                       {/* Ensure buttons are above the full-area link */}
                       <Button
                         asChild
                         variant="ghost"
                         size="icon"
-                        onClick={(e) => e.stopPropagation()} // Prevent link click when button is clicked
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Link to={`/trackdays/edit/${trackday.id}`}>
                           <Edit className="h-4 w-4" />
@@ -181,7 +173,7 @@ const Dashboard: React.FC = () => {
                         variant="ghost"
                         size="icon"
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent link click when button is clicked
+                          e.stopPropagation();
                           console.log("Delete trackday", trackday.id);
                         }}
                       >
@@ -198,7 +190,7 @@ const Dashboard: React.FC = () => {
               </p>
             )}
             <Button asChild className="btn-primary-gradient" size="sm">
-              <Link to="/trackdays">
+              <Link to="/trackdays/create">
                 <Plus className="h-4 w-4 mr-2" /> {t("add_trackday")}
               </Link>
             </Button>
@@ -216,9 +208,14 @@ const Dashboard: React.FC = () => {
             ) : maintenances && maintenances.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
                 {maintenances.map((maintenance) => (
-                  <li key={maintenance.id} className="flex items-center justify-between">
+                  <li
+                    key={maintenance.id}
+                    className="flex items-center justify-between"
+                  >
                     <div>
-                      <p className="font-medium">{maintenance.type} - {maintenance.vehicleId}</p>
+                      <p className="font-medium">
+                        {maintenance.type} - {maintenance.vehicleId}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(maintenance.date), "PPP", {
                           locale: getLocale(),

@@ -13,6 +13,15 @@ export interface UserVehicle {
   updatedAt: string;
 }
 
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt'>;
 
 export interface Track {
@@ -52,3 +61,22 @@ export interface Trackday {
 }
 
 export type CreateTrackdayPayload = Omit<Trackday, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
+
+export type MaintenanceType = 'maintenance' | 'repair' | 'modification' | 'other';
+
+export interface Maintenance {
+  id: string;
+  userId: string;
+  vehicleId: string;
+  type: MaintenanceType;
+  name: string;
+  details?: string;
+  date: string;
+  mileage: number;
+  cost: number;
+  nextMaintenanceDate?: string;
+  nextMaintenanceMileage?: number;
+  createdAt: string;
+  updatedAt: string;
+  vehicle?: UserVehicle;
+}

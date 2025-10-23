@@ -61,7 +61,7 @@ const routesConfig = [
         handle: { crumb: () => 'Create Trackday' },
       },
       {
-        path: "/trackdays/view/:id", // New route for viewing
+        path: "/trackdays/:id", // New route for viewing
         element: <Layout><TrackdayView /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `View Trackday ${params.id || ''}` },
       },
