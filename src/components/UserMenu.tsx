@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } => 'react-i18next';
 import { cn } from '@/lib/utils';
 
 interface UserMenuProps {
@@ -36,7 +36,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           className={cn(
             "h-auto",
             isCollapsed
-              ? "w-10 h-10 p-0 flex items-center justify-center" // Taille fixe, pas de padding, centrage du contenu
+              ? "w-10 h-10 p-0 flex items-center justify-center gap-0" // Ajout de gap-0
               : "w-full py-2 justify-start px-3"
           )}
         >
