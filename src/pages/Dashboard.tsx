@@ -1,102 +1,154 @@
+"use client";
+
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CalendarDays, Car, Users, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar, Car, Wrench } from 'lucide-react';
+import { getTrackdays } from '@/lib/api/trackdays';
+import { getVehicles } from '@/lib/api/vehicles';
+import { getMaintenances } from '@/lib/api/maintenances';
+import { format } from 'date-fns';
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  // Dummy data for demonstration
-  const trackdays = [{}, {}, {}]; // Replace with actual data from API
-  const vehicles = [{}, {}];     // Replace with actual data from API
-  const drivers = [{}, {}, {}, {}]; // Replace with actual data from API
+  const { data: trackdaysData, isLoading: isLoadingTrackdays } = useQuery({
+    queryKey: ['trackdays'],
+    queryFn: getTrackdays,
+  });
 
-  const handleAddTrackday = () => {
-    navigate('/trackdays/new');
-  };
+  const { data: vehiclesData, isLoading: isLoadingVehicles } = useQuery({
+    queryKey: ['vehicles'],
+    queryFn: getVehicles,
+  });
+
+  const { data: maintenancesData, isLoading: isLoadingMaintenances } = useQuery({
+    queryKey: ['maintenances'],
+    queryFn: getMaintenances,
+  });
+
+  const totalTrackdays = trackdaysData?.length || 0;
+  const totalVehicles = vehiclesData?.length || 0;
+  const totalMaintenances = maintenancesData?.length || 0;
+
+  const recentTrackdays = trackdaysData
+    ? [...trackdaysData]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 3)
+    : [];
+
+  const upcomingEvents = trackdaysData
+    ? trackdaysData
+        .filter(td => new Date(td.date) > new Date())
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        .slice(0, 3)
+    : [];
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Le titre de la page a été retiré */}
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">{t('dashboard')}</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Card 1: My Trackdays */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_trackdays')}</CardTitle>
-            <div className="rounded-md p-2 bg-blue-100">
-              <CalendarDays className="h-4 w-4 text-blue-500" />
-            </div>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{trackdays.length}</div>
+            <div className="text-2xl font-bold">{totalTrackdays}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_trackdays')}
             </p>
           </CardContent>
         </Card>
-
-        {/* Card 2: My Vehicles */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('my_vehicles')}</CardTitle>
-            <div className="rounded-md p-2 bg-green-100">
-              <Car className="h-4 w-4 text-green-500" />
-            </div>
+            <Car className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{vehicles.length}</div>
+            <div className="text-2xl font-bold">{totalVehicles}</div>
             <p className="text-xs text-muted-foreground">
               {t('total_vehicles')}
             </p>
           </CardContent>
         </Card>
-
-        {/* Card 3: My Drivers */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('my_drivers')}</CardTitle>
-            <div className="rounded-md p-2 bg-purple-100">
-              <Users className="h-4 w-4 text-purple-500" />
-            </div>
+            <CardTitle className="text-sm font-medium">{t('my_maintenances')}</CardTitle>
+            <Wrench className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{drivers.length}</div>
+            <div className="text-2xl font-bold">{totalMaintenances}</div>
             <p className="text-xs text-muted-foreground">
-              {t('total_drivers')}
+              {t('total_maintenances')}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent Trackdays Section */}
-      <div className="grid gap-4 md:gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        <Card className="lg:col-span-2 xl:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="w-full"> {/* Added w-full here */}
           <CardHeader>
-            <CardTitle>{t('recent_trackdays')}</CardTitle>
+            <CardTitle>{t('upcoming_events')}</CardTitle>
+            <CardDescription>{t('no_upcoming_events')}</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
-            <CalendarDays className="h-12 w-12 text-muted-foreground" />
-            <p className="text-muted-foreground text-center">{t('no_recent_trackdays')}</p>
-            <Button 
-              onClick={handleAddTrackday} 
-              className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600"
-            >
-              <Plus className="mr-2 h-4 w-4" /> {t('add_trackday')}
-            </Button>
+          <CardContent>
+            {isLoadingTrackdays ? (
+              <div>Loading upcoming events...</div>
+            ) : upcomingEvents.length === 0 ? (
+              <p>{t('no_upcoming_events')}</p>
+            ) : (
+              <ul className="space-y-2">
+                {upcomingEvents.map((trackday) => (
+                  <li key={trackday.id} className="flex justify-between items-center">
+                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
+                    <Link to={`/trackdays/${trackday.id}`}>
+                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('upcoming_events')}</CardTitle>
+            <CardTitle>{t('recent_trackdays')}</CardTitle>
+            <CardDescription>{t('no_recent_trackdays')}</CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Placeholder for upcoming events */}
-            <p className="text-muted-foreground">{t('no_upcoming_events')}</p>
+            {isLoadingTrackdays ? (
+              <div>Loading recent trackdays...</div>
+            ) : recentTrackdays.length === 0 ? (
+              <p>{t('no_recent_trackdays')}</p>
+            ) : (
+              <ul className="space-y-2">
+                {recentTrackdays.map((trackday) => (
+                  <li key={trackday.id} className="flex justify-between items-center">
+                    <span>{format(new Date(trackday.date), 'PPP')} - {trackday.track_id}</span>
+                    <Link to={`/trackdays/${trackday.id}`}>
+                      <Button variant="outline" size="sm">{t('view_edit_details')}</Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-4 text-right">
+              <Link to="/trackdays/new">
+                <Button>{t('add_trackday')}</Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
