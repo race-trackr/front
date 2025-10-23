@@ -51,7 +51,7 @@ const AppBar: React.FC = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-background border-b h-14 flex items-center px-4 lg:px-6">
+    <div className="fixed top-0 right-0 z-50 bg-background border-b h-14 flex items-center px-4 lg:px-6 md:left-[var(--sidebar-width)] transition-[left] duration-300 ease-in-out">
       <div className="flex-1">
         <Breadcrumb>
           <BreadcrumbList>
