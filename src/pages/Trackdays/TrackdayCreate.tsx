@@ -33,7 +33,7 @@ import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { UserVehicle, CreateTrackdayPayload, Track } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
-import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
 const formSchema = z.object({
@@ -45,7 +45,10 @@ const formSchema = z.object({
   trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }),
   trackCondition: z.string().min(1, { message: "La condition de la piste est requise." }),
   note: z.string().optional(),
-  bestLaptime: z.string().optional(),
+  bestLaptime: z.string().optional().refine(
+    (val) => !val || /^(\d{1,2}):([0-5][0-9])\.(\d{3})$/.test(val),
+    { message: "Le meilleur temps au tour doit être au format MM:SS.mmm (ex: 01:23.456)" }
+  ),
   totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }),
 });
 
@@ -250,7 +253,7 @@ const TrackdayCreate: React.FC = () => {
               <FormItem>
                 <FormLabel>{t('best_laptime')}</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="HH:MM:SS.mmm" />
+                  <Input {...field} placeholder="MM:SS.mmm" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

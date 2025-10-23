@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,7 @@ import { CreateTrackdayPayload, Trackday } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
-import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
 const TrackdayEdit: React.FC = () => {
@@ -30,7 +30,10 @@ const TrackdayEdit: React.FC = () => {
     trackTemperature: z.coerce.number().min(-50).max(100),
     trackCondition: z.string().min(1, { message: t('track_condition') }),
     note: z.string().optional(),
-    bestLaptime: z.string().optional(),
+    bestLaptime: z.string().optional().refine(
+      (val) => !val || /^(\d{1,2}):([0-5][0-9])\.(\d{3})$/.test(val),
+      { message: "Le meilleur temps au tour doit être au format MM:SS.mmm (ex: 01:23.456)" }
+    ),
     totalLaps: z.coerce.number().min(0),
   });
 
@@ -65,7 +68,7 @@ const TrackdayEdit: React.FC = () => {
         trackTemperature: 35,
         trackCondition: 'Dry',
         note: 'Great day!',
-        bestLaptime: '1:30.123',
+        bestLaptime: '01:30.123', // Example with new format
         totalLaps: 20,
         createdAt: '2023-10-20T10:00:00Z',
         updatedAt: '2023-10-20T10:00:00Z',
@@ -217,7 +220,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('best_laptime')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 1:30.123" {...field} />
+                      <Input placeholder="MM:SS.mmm" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
