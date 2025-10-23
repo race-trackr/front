@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
-import { Toaster } from '@/components/ui/sonner'; // Changed to sonner Toaster
+import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from './context/AuthContext';
-import Layout from './components/Layout'; // Import Layout
+import Layout from './components/Layout';
 import Index from './pages/Index';
 import AuthTabs from './pages/Auth/AuthTabs';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -29,47 +29,126 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
+const routesConfig = [
+  {
+    path: "/",
+    element: <Index />,
+  },
+  {
+    path: "/auth",
+    element: <AuthTabs />,
+  },
+  {
+    element: <ProtectedRoute />, // Parent route for authenticated users
+    children: [
+      {
+        path: "/dashboard",
+        element: <Layout><Dashboard /></Layout>,
+        handle: { crumb: () => 'Dashboard' },
+      },
+      {
+        path: "/trackdays",
+        element: <Layout><TrackdayList /></Layout>,
+        handle: { crumb: () => 'Trackdays' },
+      },
+      {
+        path: "/trackdays/create",
+        element: <Layout><TrackdayCreate /></Layout>,
+        handle: { crumb: () => 'Create Trackday' },
+      },
+      {
+        path: "/trackdays/edit/:id",
+        element: <Layout><TrackdayEdit /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Trackday ${params.id || ''}` },
+      },
+      {
+        path: "/vehicles",
+        element: <Layout><VehicleList /></Layout>,
+        handle: { crumb: () => 'Vehicles' },
+      },
+      {
+        path: "/vehicles/create",
+        element: <Layout><VehicleCreate /></Layout>,
+        handle: { crumb: () => 'Create Vehicle' },
+      },
+      {
+        path: "/vehicles/edit/:id",
+        element: <Layout><VehicleEdit /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Vehicle ${params.id || ''}` },
+      },
+      {
+        path: "/maintenances",
+        element: <Layout><MaintenanceList /></Layout>,
+        handle: { crumb: () => 'Maintenances' },
+      },
+      {
+        path: "/maintenances/create",
+        element: <Layout><MaintenanceCreate /></Layout>,
+        handle: { crumb: () => 'Create Maintenance' },
+      },
+      {
+        path: "/maintenances/edit/:id",
+        element: <Layout><MaintenanceEdit /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Maintenance ${params.id || ''}` },
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute allowedRoles={['owner']} />, // Parent route for admin users
+    children: [
+      {
+        path: "/admin",
+        element: <Layout><AdminDashboard /></Layout>,
+        handle: { crumb: () => 'Admin Dashboard' },
+      },
+      {
+        path: "/admin/tracks",
+        element: <Layout><AdminTracks /></Layout>,
+        handle: { crumb: () => 'Manage Tracks' },
+      },
+      {
+        path: "/admin/tracks/create",
+        element: <Layout><AdminTracksCreate /></Layout>,
+        handle: { crumb: () => 'Create Track' },
+      },
+      {
+        path: "/admin/tracks/edit/:id",
+        element: <Layout><AdminTracksEdit /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Track ${params.id || ''}` },
+      },
+      {
+        path: "/admin/countries",
+        element: <Layout><AdminCountries /></Layout>,
+        handle: { crumb: () => 'Manage Countries' },
+      },
+      {
+        path: "/admin/countries/create",
+        element: <Layout><AdminCountriesCreate /></Layout>,
+        handle: { crumb: () => 'Create Country' },
+      },
+      {
+        path: "/admin/countries/edit/:id",
+        element: <Layout><AdminCountriesEdit /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Country ${params.id || ''}` },
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+];
+
+const router = createBrowserRouter(routesConfig);
+
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <Router>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<AuthTabs />} />
-              
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} handle={{ crumb: () => 'Dashboard' }} />
-                
-                <Route path="/trackdays" element={<Layout><TrackdayList /></Layout>} handle={{ crumb: () => 'Trackdays' }} />
-                <Route path="/trackdays/create" element={<Layout><TrackdayCreate /></Layout>} handle={{ crumb: () => 'Create Trackday' }} />
-                <Route path="/trackdays/edit/:id" element={<Layout><TrackdayEdit /></Layout>} handle={{ crumb: (data) => `Edit Trackday ${data?.id || ''}` }} />
-
-                <Route path="/vehicles" element={<Layout><VehicleList /></Layout>} handle={{ crumb: () => 'Vehicles' }} />
-                <Route path="/vehicles/create" element={<Layout><VehicleCreate /></Layout>} handle={{ crumb: () => 'Create Vehicle' }} />
-                <Route path="/vehicles/edit/:id" element={<Layout><VehicleEdit /></Layout>} handle={{ crumb: (data) => `Edit Vehicle ${data?.id || ''}` }} />
-
-                <Route path="/maintenances" element={<Layout><MaintenanceList /></Layout>} handle={{ crumb: () => 'Maintenances' }} />
-                <Route path="/maintenances/create" element={<Layout><MaintenanceCreate /></Layout>} handle={{ crumb: () => 'Create Maintenance' }} />
-                <Route path="/maintenances/edit/:id" element={<Layout><MaintenanceEdit /></Layout>} handle={{ crumb: (data) => `Edit Maintenance ${data?.id || ''}` }} />
-              </Route>
-
-              <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
-                <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} handle={{ crumb: () => 'Admin Dashboard' }} />
-                <Route path="/admin/tracks" element={<Layout><AdminTracks /></Layout>} handle={{ crumb: () => 'Manage Tracks' }} />
-                <Route path="/admin/tracks/create" element={<Layout><AdminTracksCreate /></Layout>} handle={{ crumb: () => 'Create Track' }} />
-                <Route path="/admin/tracks/edit/:id" element={<Layout><AdminTracksEdit /></Layout>} handle={{ crumb: (data) => `Edit Track ${data?.id || ''}` }} />
-                <Route path="/admin/countries" element={<Layout><AdminCountries /></Layout>} handle={{ crumb: () => 'Manage Countries' }} />
-                <Route path="/admin/countries/create" element={<Layout><AdminCountriesCreate /></Layout>} handle={{ crumb: () => 'Create Country' }} />
-                <Route path="/admin/countries/edit/:id" element={<Layout><AdminCountriesEdit /></Layout>} handle={{ crumb: (data) => `Edit Country ${data?.id || ''}` }} />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-          </AuthProvider>
-        </Router>
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
