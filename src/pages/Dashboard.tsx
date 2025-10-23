@@ -96,8 +96,8 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="w-full"> {/* Added w-full here */}
+      <div className="grid grid-cols-1 gap-6"> {/* Changed to grid-cols-1 */}
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>{t('upcoming_events')}</CardTitle>
             <CardDescription>{t('no_upcoming_events')}</CardDescription>
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full"> {/* Added w-full here for consistency, though grid-cols-1 makes it full width */}
           <CardHeader>
             <CardTitle>{t('recent_trackdays')}</CardTitle>
             <CardDescription>{t('no_recent_trackdays')}</CardDescription>
