@@ -131,5 +131,8 @@
   "maintenance_cost_per_month": "Costo manutenzione al mese",
   "cost_currency": "Costo (€)",
   "admin_dashboard": "Cruscotto Amministratore",
-  "manage_application_data": "Gestisci i dati a livello di applicazione."
+  "manage_application_data": "Gestisci i dati a livello di applicazione.",
+  "or_separator": "O",
+  "login_with_google": "Accedi con Google",
+  "register_with_google": "Iscriviti con Google"
 }

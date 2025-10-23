@@ -2,13 +2,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Removed Link import
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Separator } from '@/components/ui/separator'; // Import Separator
+import GoogleIcon from '@/components/GoogleIcon'; // Import GoogleIcon
 import { LoginPayload } from '@/types';
 import { useTranslation } from 'react-i18next';
 
@@ -81,12 +83,15 @@ const Login: React.FC = () => {
             </Button>
           </form>
         </Form>
-        <div className="mt-4 text-center text-sm">
-          {t('dont_have_account')}{' '}
-          <Link to="/auth?tab=register" className="underline">
-            {t('sign_up')}
-          </Link>
+        <div className="relative flex justify-center text-xs uppercase mt-6 mb-4">
+          <Separator className="absolute inset-0 flex items-center">
+            <span className="bg-background px-2 text-muted-foreground">{t('or_separator')}</span>
+          </Separator>
         </div>
+        <Button variant="outline" className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+          <GoogleIcon />
+          {t('login_with_google')}
+        </Button>
       </CardContent>
     </Card>
   );

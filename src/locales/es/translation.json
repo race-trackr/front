@@ -131,5 +131,8 @@
   "maintenance_cost_per_month": "Costo de mantenimiento por mes",
   "cost_currency": "Costo (€)",
   "admin_dashboard": "Panel de control de administrador",
-  "manage_application_data": "Gestionar datos de toda la aplicación."
+  "manage_application_data": "Gestionar datos de toda la aplicación.",
+  "or_separator": "O",
+  "login_with_google": "Iniciar sesión con Google",
+  "register_with_google": "Registrarse con Google"
 }

@@ -131,5 +131,8 @@
   "maintenance_cost_per_month": "Maintenance cost per month",
   "cost_currency": "Cost (€)",
   "admin_dashboard": "Admin Dashboard",
-  "manage_application_data": "Manage application-wide data."
+  "manage_application_data": "Manage application-wide data.",
+  "or_separator": "OR",
+  "login_with_google": "Login with Google",
+  "register_with_google": "Sign up with Google"
 }
