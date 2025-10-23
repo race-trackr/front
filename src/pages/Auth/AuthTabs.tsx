@@ -15,7 +15,7 @@ const AuthTabs: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen bg-background">
       <Tabs defaultValue={defaultTab} onValueChange={handleTabChange} className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">{t('login')}</TabsTrigger>

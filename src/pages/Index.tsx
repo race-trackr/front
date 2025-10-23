@@ -19,7 +19,7 @@ const Index: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col space-y-3 p-4">
           <Skeleton className="h-[125px] w-[250px] rounded-xl" />
           <div className="space-y-2">
