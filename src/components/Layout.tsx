@@ -13,7 +13,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth(); // Garder pour le contenu de la barre latérale, mais pas pour la décision de structure du layout
+  const { isAuthenticated, loading } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useTranslation();
   const location = useLocation();
@@ -22,24 +22,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const sidebarWidthClass = isCollapsed ? 'w-[60px]' : 'w-[280px]';
-  const gridColsClass = isCollapsed ? 'md:grid-cols-[60px_1fr]' : 'md:grid-cols-[280px_1fr]';
+  const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
 
   const isAuthPage = location.pathname === '/auth';
 
-  // Si c'est la page d'authentification, rendre uniquement les enfants sans aucune structure de layout.
-  // Le padding pour le contenu principal sera géré par le composant AuthTabs lui-même.
   if (isAuthPage) {
     return <main className="flex flex-1 flex-col p-0 gap-0">{children}</main>;
   }
 
-  // Pour toutes les autres pages (tableau de bord, routes protégées), rendre le layout complet.
-  // Les vérifications isAuthenticated et loading sont gérées par Index.tsx et ProtectedRoute.tsx
-  // qui redirigeront si l'utilisateur n'est pas authentifié ou si le chargement est toujours en cours.
   return (
-    <div className={`grid min-h-screen w-full ${gridColsClass} lg:${gridColsClass}`}>
+    <div
+      className={cn(
+        `grid min-h-screen w-full`,
+        `md:grid-cols-[var(--sidebar-width)_1fr]`,
+        `lg:grid-cols-[var(--sidebar-width)_1fr]`,
+        `transition-[grid-template-columns] duration-300 ease-in-out`
+      )}
+      style={{ '--sidebar-width': dynamicSidebarWidth } as React.CSSProperties}
+    >
       {/* Desktop Sidebar */}
-      <div className={`hidden border-r bg-muted/40 md:block ${sidebarWidthClass} transition-all duration-300 ease-in-out`}>
+      <div className={cn(
+        "hidden border-r bg-muted/40 md:block",
+        "transition-all duration-300 ease-in-out"
+      )}>
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 justify-between">
             <Link to="/" className="flex items-center gap-2 font-semibold">
@@ -61,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {/* Mobile Header and Sidebar */}
+      {/* Mobile Header and Main Content */}
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
           <Sheet>
