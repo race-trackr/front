@@ -155,19 +155,7 @@ const router = createBrowserRouter([
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <I18nextProvider i18n={i18n}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <> {/* ThemeProvider doit avoir un seul enfant, donc nous utilisons un fragment ici */}
-          <AuthProvider>
-            <TooltipProvider>
-              <RouterProvider router={router} />
-            </TooltipProvider>
-          </AuthProvider>
-          <Toaster />
-          <Sonner />
-        </>
-      </ThemeProvider>
-    </I18nextProvider>
+    <RouterProvider router={router} />
   </QueryClientProvider>
 );
 
