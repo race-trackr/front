@@ -24,7 +24,7 @@ const MaintenanceList: React.FC = () => {
         <h1 className="text-3xl font-bold">{t('your_maintenances')}</h1>
         <Button asChild className="btn-primary-gradient">
           <Link to="/maintenances/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_maintenance')}
+            <PlusCircle className="mr-2 h-5 w-5" /> {t('add_new_maintenance')}
           </Link>
         </Button>
       </div>

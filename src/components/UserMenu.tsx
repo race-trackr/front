@@ -53,27 +53,27 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/settings" className="flex items-center">
-            <Settings className="mr-2 h-4 w-4" />
+            <Settings className="mr-2 h-5 w-5" />
             <span>{t('settings')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/profile" className="flex items-center">
-            <UserIcon className="mr-2 h-4 w-4" />
+            <UserIcon className="mr-2 h-5 w-5" />
             <span>{t('my_account')}</span>
           </Link>
         </DropdownMenuItem>
         {isFreeTier && (
           <DropdownMenuItem asChild>
             <Link to="/upgrade" className="flex items-center btn-primary-gradient p-2 rounded-md">
-              <Gem className="mr-2 h-4 w-4" />
+              <Gem className="mr-2 h-5 w-5" />
               <span>{t('upgrade_to_pro')}</span>
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="flex items-center text-destructive">
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className="mr-2 h-5 w-5" />
           <span>{t('logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -24,7 +24,7 @@ const AdminCountries: React.FC = () => {
         <h1 className="text-3xl font-bold">{t('manage_countries')}</h1>
         <Button asChild className="btn-primary-gradient">
           <Link to="/admin/countries/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_country')}
+            <PlusCircle className="mr-2 h-5 w-5" /> {t('add_new_country')}
           </Link>
         </Button>
       </div>

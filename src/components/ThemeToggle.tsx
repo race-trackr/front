@@ -24,15 +24,15 @@ const ThemeToggle: React.FC = () => {
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme('light')} className="flex items-center justify-between">
           Light
-          {theme === 'light' && <Check className="ml-2 h-4 w-4" />}
+          {theme === 'light' && <Check className="ml-2 h-5 w-5" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')} className="flex items-center justify-between">
           Dark
-          {theme === 'dark' && <Check className="ml-2 h-4 w-4" />}
+          {theme === 'dark' && <Check className="ml-2 h-5 w-5" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')} className="flex items-center justify-between">
           System
-          {theme === 'system' && <Check className="ml-2 h-4 w-4" />}
+          {theme === 'system' && <Check className="ml-2 h-5 w-5" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

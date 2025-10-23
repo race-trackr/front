@@ -24,7 +24,7 @@ const VehicleList: React.FC = () => {
         <h1 className="text-3xl font-bold">{t('your_vehicles')}</h1>
         <Button asChild className="btn-primary-gradient">
           <Link to="/vehicles/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> {t('add_new_vehicle')}
+            <PlusCircle className="mr-2 h-5 w-5" /> {t('add_new_vehicle')}
           </Link>
         </Button>
       </div>

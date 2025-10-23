@@ -57,12 +57,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
     <div className="flex flex-col h-full">
       {isAuthenticated && (
         <nav className="flex flex-col items-start px-2 text-sm font-medium lg:px-4 flex-1 gap-1">
-          <NavLink to="/dashboard" icon={<Gauge className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
-          <NavLink to="/trackdays" icon={<CalendarDays className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
-          <NavLink to="/vehicles" icon={<Car className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
-          <NavLink to="/maintenances" icon={<Wrench className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('maintenances')}</NavLink>
+          <NavLink to="/dashboard" icon={<Gauge className="h-5 w-5" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
+          <NavLink to="/trackdays" icon={<CalendarDays className="h-5 w-5" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
+          <NavLink to="/vehicles" icon={<Car className="h-5 w-5" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
+          <NavLink to="/maintenances" icon={<Wrench className="h-5 w-5" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('maintenances')}</NavLink>
           {user?.role === 'owner' && (
-            <NavLink to="/admin" icon={<Users className="h-4 w-4" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('admin')}</NavLink>
+            <NavLink to="/admin" icon={<Users className="h-5 w-5" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('admin')}</NavLink>
           )}
         </nav>
       )}

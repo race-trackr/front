@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               onClick={toggleSidebar}
               className="h-8 w-8"
             >
-              {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+              {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
               <span className="sr-only">Toggle sidebar</span>
             </Button>
           </div>
