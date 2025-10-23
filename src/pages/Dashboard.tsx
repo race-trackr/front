@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { CalendarDays, Car, Wrench, Plus, Edit } from 'lucide-react'; // Import Edit icon
+import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from 'lucide-react'; // Import Edit and Trash icons
 import {
   Card,
   CardContent,
@@ -122,19 +122,25 @@ const Dashboard: React.FC = () => {
             ) : recentTrackdays && recentTrackdays.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
                 {recentTrackdays.map((trackday) => (
-                  <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3"> {/* Added border, rounded-md, p-3 */}
-                    <div className="text-left"> {/* Added text-left for content alignment */}
+                  <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3">
+                    <div className="text-left">
                       <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
                       </p>
                     </div>
-                    <Button asChild variant="outline" size="icon"> {/* Changed size to icon and removed text */}
-                      <Link to={`/trackdays/edit/${trackday.id}`}>
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">{t('view_edit_details')}</span> {/* Added screen reader text */}
-                      </Link>
-                    </Button>
+                    <div className="flex items-center gap-2"> {/* Grouping buttons */}
+                      <Button asChild variant="ghost" size="icon"> {/* Changed variant to ghost */}
+                        <Link to={`/trackdays/edit/${trackday.id}`}>
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">{t('view_edit_details')}</span>
+                        </Link>
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => console.log('Delete trackday', trackday.id)}> {/* New delete button */}
+                        <Trash className="h-4 w-4 text-destructive" />
+                        <span className="sr-only">{t('delete_trackday')}</span>
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
