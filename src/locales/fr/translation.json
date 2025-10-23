@@ -148,5 +148,9 @@
   "select_a_track": "Sélectionnez une piste",
   "loading_tracks": "Chargement des pistes...",
   "create_track": "Créer une piste",
-  "unknown_country": "Pays inconnu"
+  "unknown_country": "Pays inconnu",
+  "select_option": "Sélectionner une option...",
+  "search_option": "Rechercher une option...",
+  "no_option_found": "Aucune option trouvée.",
+  "create_new": "Créer nouveau"
 }

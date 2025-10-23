@@ -30,8 +30,9 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle } from 'lucide-react';
 import { getVehicles } from '@/lib/api/vehicles';
-import { getTracks } from '@/lib/api/tracks'; // Import getTracks
-import { UserVehicle, CreateTrackdayPayload, Track } from '@/types'; // Import Track type
+import { getTracks } from '@/lib/api/tracks';
+import { UserVehicle, CreateTrackdayPayload, Track } from '@/types';
+import { Combobox } from '@/components/ui/combobox'; // Import Combobox
 
 const formSchema = z.object({
   vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
@@ -74,7 +75,7 @@ const TrackdayCreate: React.FC = () => {
     queryFn: getVehicles,
   });
 
-  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<Track[]>({ // Fetch tracks
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<Track[]>({
     queryKey: ['tracks'],
     queryFn: getTracks,
   });
@@ -98,6 +99,13 @@ const TrackdayCreate: React.FC = () => {
     };
     createTrackdayMutation.mutate(payload);
   };
+
+  const trackOptions = React.useMemo(() => {
+    return tracks?.map(track => ({
+      value: track.id,
+      label: `${track.name} (${track.country?.name || t('unknown_country')})`
+    })) || [];
+  }, [tracks, t]);
 
   return (
     <div className="container mx-auto p-4">
@@ -150,36 +158,18 @@ const TrackdayCreate: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('track')}</FormLabel>
-                <Select onValueChange={(value) => {
-                  if (value === "create-new-track") {
-                    navigate('/tracks/create');
-                  } else {
-                    field.onChange(value);
-                  }
-                }} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_a_track')} /> {/* New translation key */}
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {isLoadingTracks ? (
-                      <SelectItem value="loading" disabled>{t('loading_tracks')}</SelectItem> {/* New translation key */}
-                    ) : isErrorTracks || !tracks || tracks.length === 0 ? (
-                      <SelectItem value="create-new-track" className="text-blue-600 cursor-pointer hover:bg-accent">
-                        <div className="flex items-center">
-                          <PlusCircle className="mr-2 h-4 w-4" /> {t('create_track')} {/* New translation key */}
-                        </div>
-                      </SelectItem>
-                    ) : (
-                      tracks.map((track) => (
-                        <SelectItem key={track.id} value={track.id}>
-                          {track.name} ({track.country?.name || t('unknown_country')}) {/* Display track name and country */}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Combobox
+                    options={trackOptions}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder={t('select_a_track')}
+                    emptyMessage={t('no_track_found')}
+                    disabled={isLoadingTracks}
+                    onCreateNew={() => navigate('/tracks/create')}
+                    createNewLabel={t('create_track')}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

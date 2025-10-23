@@ -34,7 +34,6 @@ export interface UserVehicle {
   lastServiceMileage: number;
   purchaseDate: string;
   purchasePrice: number;
-  otherDetails: Record<string, any> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -49,7 +48,6 @@ export interface Track {
   layoutImageUrl?: string;
   websiteUrl?: string;
   timezone: string;
-  otherDetails: Record<string, any> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -70,7 +68,6 @@ export interface Trackday {
   note?: string;
   bestLaptime?: string;
   totalLaps: number;
-  otherDetails: Record<string, any> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -86,7 +83,6 @@ export interface CreateTrackdayPayload {
   note?: string;
   bestLaptime?: string;
   totalLaps: number;
-  otherDetails?: Record<string, any> | null;
 }
 
 export interface Maintenance {
@@ -100,7 +96,6 @@ export interface Maintenance {
   mileage: number;
   cost: number;
   notes?: string;
-  otherDetails: Record<string, any> | null;
   createdAt: string;
   updatedAt: string;
 }

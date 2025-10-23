@@ -162,5 +162,9 @@
   "select_a_track": "Seleziona una pista",
   "loading_tracks": "Caricamento piste...",
   "create_track": "Crea pista",
-  "unknown_country": "Paese sconosciuto"
+  "unknown_country": "Paese sconosciuto",
+  "select_option": "Seleziona opzione...",
+  "search_option": "Cerca opzione...",
+  "no_option_found": "Nessuna opzione trovata.",
+  "create_new": "Crea nuovo"
 }
