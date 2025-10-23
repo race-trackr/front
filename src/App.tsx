@@ -157,12 +157,15 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <I18nextProvider i18n={i18n}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <AuthProvider>
-          {/* TooltipProvider a été temporairement retiré pour le débogage */}
-          <RouterProvider router={router} />
-          <Toaster />
+        <> {/* Utilisation d'un fragment comme enfant unique du ThemeProvider */}
+          <AuthProvider>
+            <TooltipProvider> {/* TooltipProvider enveloppe RouterProvider */}
+              <RouterProvider router={router} />
+            </TooltipProvider>
+          </AuthProvider>
+          <Toaster /> {/* Toaster et Sonner sont des frères de AuthProvider dans le fragment */}
           <Sonner />
-        </AuthProvider>
+        </>
       </ThemeProvider>
     </I18nextProvider>
   </QueryClientProvider>
