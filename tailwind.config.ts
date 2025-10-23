@@ -91,7 +91,8 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       boxShadow: {
-        'card-custom': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 -2px 4px -1px rgb(0 0 0 / 0.05)',
+        // Adjusted the first shadow for a slightly stronger bottom effect
+        'card-custom': '0 6px 10px -2px rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 -2px 4px -1px rgb(0 0 0 / 0.05)',
       },
     },
   },
