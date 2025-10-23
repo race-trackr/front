@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom'; // Import Outlet
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import AppBar from './AppBar'; // Import AppBar
 
 interface LayoutProps {
-  children: ReactNode;
+  children: ReactNode; // Children will now be the Outlet
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -25,11 +25,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
 
-  const isAuthPage = location.pathname === '/auth';
-
-  if (isAuthPage) {
-    return <main className="flex flex-1 flex-col p-0 gap-0">{children}</main>;
-  }
+  // The isAuthPage check is no longer needed here as /auth is a top-level route
+  // if (isAuthPage) {
+  //   return <main className="flex flex-1 flex-col p-0 gap-0">{children}</main>;
+  // }
 
   return (
     <div
@@ -81,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Main Content - adjusted padding for fixed AppBar */}
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 pt-14"> {/* Added pt-14 to account for AppBar height */}
-          {children}
+          {children} {/* Render children (Outlet) here */}
         </main>
       </div>
     </div>
