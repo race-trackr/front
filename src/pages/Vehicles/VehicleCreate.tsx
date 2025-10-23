@@ -134,7 +134,7 @@ const VehicleCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">{t('select_option')}</SelectItem>
+                        {/* Removed <SelectItem value="">{t('select_option')}</SelectItem> */}
                         <SelectItem value="car">{t('type_car')}</SelectItem>
                         <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
