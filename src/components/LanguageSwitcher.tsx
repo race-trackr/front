@@ -12,6 +12,13 @@ import { Globe } from 'lucide-react';
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
 
+  const languages = {
+    en: 'English',
+    fr: 'Français',
+    it: 'Italiano',
+    es: 'Español',
+  };
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
@@ -25,12 +32,11 @@ const LanguageSwitcher: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeLanguage('en')}>
-          English
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('fr')}>
-          Français
-        </DropdownMenuItem>
+        {Object.entries(languages).map(([code, name]) => (
+          <DropdownMenuItem key={code} onClick={() => changeLanguage(code)}>
+            {name}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
