@@ -1,11 +1,12 @@
 import React, { ReactNode, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils'; // Importation de l'utilitaire cn
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,7 +15,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
+  const location = useLocation(); // Utilisation de useLocation pour obtenir le chemin actuel
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -23,9 +25,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const sidebarWidthClass = isCollapsed ? 'w-[60px]' : 'w-[280px]';
   const gridColsClass = isCollapsed ? 'md:grid-cols-[60px_1fr]' : 'md:grid-cols-[280px_1fr]';
 
-  // If not authenticated and not loading, don't render the sidebar layout
+  // Vérifie si la page actuelle est la page d'authentification
+  const isAuthPage = location.pathname === '/auth';
+
+  // Si non authentifié et non en chargement, ne pas rendre la mise en page avec la barre latérale
   if (!loading && !isAuthenticated) {
-    return <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">{children}</main>;
+    return (
+      <main className={cn(
+        "flex flex-1 flex-col",
+        isAuthPage ? "p-0 gap-0" : "gap-4 p-4 lg:gap-6 lg:p-6" // Applique le padding conditionnellement
+      )}>
+        {children}
+      </main>
+    );
   }
 
   return (
