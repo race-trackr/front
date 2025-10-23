@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils'; // Import cn utility
 
 interface UserMenuProps {
   isCollapsed: boolean;
@@ -30,7 +31,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="w-full justify-start h-auto p-2">
+        <Button variant="ghost" className={cn("w-full h-auto p-2", isCollapsed ? "justify-center" : "justify-start")}>
           <Avatar className="h-8 w-8">
             <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>

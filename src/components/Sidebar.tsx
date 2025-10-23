@@ -29,7 +29,8 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2.5 w-full transition-all", // Modifié py-1 en py-2.5 et ajouté w-full
+        "flex items-center rounded-lg py-2.5 w-full transition-all",
+        isCollapsed ? "justify-center px-2" : "gap-3 px-3", // Ajusté pour l'état réduit
         isActive
           ? "btn-primary-gradient"
           : "text-muted-foreground hover:text-primary"
@@ -68,10 +69,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
       <div className="mt-auto p-2 border-t">
         {isAuthenticated ? (
           <>
-            <div className="flex items-center justify-between mb-2 px-2">
-              <LanguageSwitcher />
-              <ThemeToggle />
-            </div>
+            {!isCollapsed && ( {/* Masquer ces éléments lorsque la barre latérale est réduite */}
+              <div className="flex items-center justify-between mb-2 px-2">
+                <LanguageSwitcher />
+                <ThemeToggle />
+              </div>
+            )}
             <UserMenu isCollapsed={isCollapsed} />
           </>
         ) : (
