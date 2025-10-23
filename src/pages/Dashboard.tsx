@@ -22,22 +22,17 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
-    queryKey: ['dashboardSummary'],
-    queryFn: getDashboardSummary,
-  });
-
-  const { data: recentTrackdays, isLoading: isLoadingTrackdays } = useQuery({
+  const { data: recentTrackdays, isLoading: isLoadingTrackdays, isError: isErrorTrackdays } = useQuery({
     queryKey: ['trackdays', { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery({
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery({
     queryKey: ['vehicles', { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances } = useQuery({
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery({
     queryKey: ['maintenances', { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
@@ -55,11 +50,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (isLoadingSummary) {
+  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t('loading')}...</div>;
   }
 
-  if (isErrorSummary) {
+  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
     return <div>{t('error_loading_dashboard_summary')}</div>;
   }
 
@@ -124,19 +119,19 @@ const Dashboard: React.FC = () => {
                 {recentTrackdays.map((trackday) => (
                   <li key={trackday.id} className="flex items-center justify-between border rounded-md p-3">
                     <div className="text-left">
-                      <p className="font-medium">{trackday.vehicleId} - {trackday.trackId}</p>
+                      <p className="font-medium">{trackday.vehicle?.name} - {trackday.track?.name}</p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(trackday.date), 'PPP', { locale: getLocale() })} - {trackday.bestLaptime || t('no_best_laptime')}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2"> {/* Grouping buttons */}
-                      <Button asChild variant="ghost" size="icon"> {/* Changed variant to ghost */}
+                    <div className="flex items-center gap-2">
+                      <Button asChild variant="ghost" size="icon">
                         <Link to={`/trackdays/edit/${trackday.id}`}>
                           <Edit className="h-4 w-4" />
                           <span className="sr-only">{t('view_edit_details')}</span>
                         </Link>
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => console.log('Delete trackday', trackday.id)}> {/* New delete button */}
+                      <Button variant="ghost" size="icon" onClick={() => console.log('Delete trackday', trackday.id)}>
                         <Trash className="h-4 w-4 text-destructive" />
                         <span className="sr-only">{t('delete_trackday')}</span>
                       </Button>
