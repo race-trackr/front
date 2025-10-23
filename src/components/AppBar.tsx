@@ -1,35 +1,59 @@
 "use client";
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Sun, Moon } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+} from "@/components/ui/dropdown-menu";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/components/theme-provider"; // Importation du hook useTheme
 import LanguageSwitcher from './LanguageSwitcher';
-import { useTheme } from "@/components/theme-provider";
 
-const AppBar: React.FC = () => {
-  const { setTheme } = useTheme();
+interface AppBarProps {
+  breadcrumbs?: { label: string; path?: string }[];
+}
+
+const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
+  const location = useLocation();
+  const { setTheme } = useTheme(); // Utilisation du hook useTheme
+
+  const defaultBreadcrumbs = [
+    { label: 'Home', path: '/' },
+    { label: 'Dashboard', path: '/dashboard' },
+  ];
+
+  const currentBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
 
   return (
-    <header className="sticky top-0 z-30 flex py-3 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:bg-transparent sm:px-6">
-      <Breadcrumb className="hidden md:flex">
+    <div className="flex h-16 items-center px-4 border-b">
+      <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Overview</BreadcrumbPage>
-          </BreadcrumbItem>
+          {currentBreadcrumbs.map((crumb, index) => (
+            <React.Fragment key={index}>
+              <BreadcrumbItem>
+                {crumb.path && index < currentBreadcrumbs.length - 1 ? (
+                  <BreadcrumbLink asChild>
+                    <Link to={crumb.path}>{crumb.label}</Link>
+                  </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                )}
+              </BreadcrumbItem>
+              {index < currentBreadcrumbs.length - 1 && <BreadcrumbSeparator />}
+            </React.Fragment>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
       <div className="ml-auto flex items-center space-x-2">
@@ -55,7 +79,7 @@ const AppBar: React.FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </header>
+    </div>
   );
 };
 
