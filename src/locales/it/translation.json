@@ -188,6 +188,7 @@
   "select_vehicle_type": "Seleziona il tipo de veicolo",
   "type_car": "Auto",
   "type_motorcycle": "Moto",
+  "type_karting": "Karting",
   "type_other": "Altro",
   "enter_any_details": "Inserisci i dettagli del veicolo"
 }
