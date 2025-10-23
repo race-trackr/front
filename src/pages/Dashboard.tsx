@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
             <p className="text-muted-foreground text-center">{t('no_recent_trackdays')}</p>
             <Button 
               onClick={handleAddTrackday} 
-              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+              className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600"
             >
               <Plus className="mr-2 h-4 w-4" /> {t('add_trackday')}
             </Button>
