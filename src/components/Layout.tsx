@@ -71,12 +71,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Mobile Header (now part of AppBar or removed) and Main Content */}
-      <div className="flex flex-col">
+      <div className="flex flex-col h-full"> {/* Ajout de h-full ici */}
         {/* AppBar is now always visible at the top */}
         <AppBar /> 
 
         {/* Main Content - adjusted padding for fixed AppBar */}
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mt-14"> {/* Changed pt-14 to mt-14 to account for AppBar height */}
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6"> {/* Suppression de mt-14 */}
           <>{children}</> {/* Explicitly wrap children in a fragment */}
         </main>
       </div>

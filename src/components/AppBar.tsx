@@ -23,7 +23,7 @@ const AppBar: React.FC<AppBarProps> = ({ isCollapsed }) => {
       <Breadcrumb>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/">{t('home')}</Link> {/* Assurez-vous que la clé 'home' est présente dans vos fichiers de traduction */}
+            <Link to="/">{t('home')}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {/* Ajoute un séparateur uniquement s'il y a d'autres miettes après le lien explicite "Home" */}
