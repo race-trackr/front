@@ -1,5 +1,5 @@
-import React, { ReactNode, useState, useEffect } from 'react';
-import { Link, useLocation, Outlet } from 'react-router-dom';
+import React, { ReactNode } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar';
+import { useSidebarStore } from '@/store/sidebarStore'; // Import the Zustand store
 
 interface LayoutProps {
   children: ReactNode;
@@ -15,22 +16,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  // Initialize isCollapsed from localStorage, default to false if not found
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    const storedState = localStorage.getItem('sidebarCollapsed');
-    return storedState ? JSON.parse(storedState) : false;
-  });
+  const { isCollapsed, toggleCollapse } = useSidebarStore(); // Use the Zustand store
   const { t } = useTranslation();
-  const location = useLocation();
-
-  // Save isCollapsed state to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
-  }, [isCollapsed]);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
 
@@ -64,7 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleSidebar}
+              onClick={toggleCollapse} // Use toggleCollapse from Zustand
               className="h-8 w-8"
             >
               {isCollapsed ? <ChevronRight className="h-5 w-5 flex-shrink-0" /> : <ChevronLeft className="h-5 w-5 flex-shrink-0" />}
