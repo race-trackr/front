@@ -19,10 +19,20 @@ const AuthTabs: React.FC = () => {
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="register">Register</TabsTrigger>
         </TabsList>
-        <TabsContent value="login" className="transition-all duration-300 ease-in-out data-[state=inactive]:opacity-0 data-[state=inactive]:scale-95 data-[state=inactive]:translate-y-2 data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0">
+        <TabsContent 
+          value="login" 
+          className="transition-all duration-300 ease-in-out 
+                     data-[state=inactive]:opacity-0 data-[state=inactive]:scale-90 data-[state=inactive]:-translate-y-4 
+                     data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0"
+        >
           <Login />
         </TabsContent>
-        <TabsContent value="register" className="transition-all duration-300 ease-in-out data-[state=inactive]:opacity-0 data-[state=inactive]:scale-95 data-[state=inactive]:translate-y-2 data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0">
+        <TabsContent 
+          value="register" 
+          className="transition-all duration-300 ease-in-out 
+                     data-[state=inactive]:opacity-0 data-[state=inactive]:scale-90 data-[state=inactive]:-translate-y-4 
+                     data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0"
+        >
           <Register />
         </TabsContent>
       </Tabs>
