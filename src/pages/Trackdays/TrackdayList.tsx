@@ -13,9 +13,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Calendar } from 'lucide-react'; // Import Calendar icon
 import { getTrackdays } from '@/lib/api/trackdays';
 import { format } from 'date-fns';
+import { Card, CardContent } from "@/components/ui/card"; // Import Card components
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -34,8 +35,7 @@ const TrackdayList: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between mb-6">
-        {/* <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1> */}
+      <div className="flex items-center justify-end mb-6"> {/* Changed justify-between to justify-end */}
         <Button asChild className="btn-primary-gradient">
           <Link to="/trackdays/create">
             <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_trackday')}
@@ -73,7 +73,12 @@ const TrackdayList: React.FC = () => {
           </Table>
         </div>
       ) : (
-        <p className="text-center text-muted-foreground">{t('no_trackdays_recorded')}</p>
+        <Card className="w-full max-w-md mx-auto text-center p-6"> {/* Centered Card for empty state */}
+          <CardContent className="flex flex-col items-center justify-center space-y-4">
+            <Calendar className="h-12 w-12 text-muted-foreground" /> {/* Calendar icon */}
+            <p className="text-muted-foreground">{t('no_trackdays_recorded')}</p>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
