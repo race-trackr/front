@@ -37,7 +37,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         "transition-all duration-300 ease-in-out"
       )}>
         <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 justify-between">
+          <div
+            className={cn(
+              "flex h-14 items-center border-b justify-between lg:h-[60px]",
+              !isCollapsed && "px-4 lg:px-6" // Apply padding only when not collapsed
+            )}
+          >
             <Link
               to="/"
               className={cn(
@@ -51,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
                   "bg-gradient-to-r from-red-500 to-orange-500",
                   !isCollapsed && "mr-2", // Add margin only when not collapsed
-                  isCollapsed && "hidden" // Hide when collapsed (redundant if parent link is hidden, but good for clarity)
+                  isCollapsed && "hidden" // Hide when collapsed
                 )}
               >
                 R
