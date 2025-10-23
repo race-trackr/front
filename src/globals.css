@@ -49,6 +49,8 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --font-sans: "Inter", sans-serif; /* Nouvelle variable pour la police */
   }
 
   .dark {
@@ -96,7 +98,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans; /* Application de la nouvelle police */
   }
 }
 
