@@ -36,9 +36,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
             <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
             <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
           </Avatar>
-          {!isCollapsed && (
-            <span className="ml-3 text-sm font-medium truncate">{user?.username || t("guest")}</span>
-          )}
+          <span
+            className={cn(
+              "ml-3 text-sm font-medium truncate overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+              isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100"
+            )}
+          >
+            {user?.username || t("guest")}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

@@ -37,7 +37,14 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       )}
     >
       {icon}
-      {!isCollapsed && children}
+      <span
+        className={cn(
+          "overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+          isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100"
+        )}
+      >
+        {children}
+      </span>
     </Link>
   );
 
