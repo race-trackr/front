@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { Link, useLocation, Outlet } from 'react-router-dom'; // Import Outlet
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -24,11 +24,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
-
-  // The isAuthPage check is no longer needed here as /auth is a top-level route
-  // if (isAuthPage) {
-  //   return <main className="flex flex-1 flex-col p-0 gap-0">{children}</main>;
-  // }
 
   return (
     <div
@@ -80,7 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Main Content - adjusted padding for fixed AppBar */}
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mt-14"> {/* Changed pt-14 to mt-14 to account for AppBar height */}
-          {children} {/* Render children (Outlet) here */}
+          <>{children}</> {/* Explicitly wrap children in a fragment */}
         </main>
       </div>
     </div>
