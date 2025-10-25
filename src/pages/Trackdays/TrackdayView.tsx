@@ -104,7 +104,7 @@ const TrackdayView: React.FC = () => {
   }
 
   const formattedDate = format(new Date(trackday.date), 'PPP', { locale: getLocale() });
-  const averageLapTime = calculateAverageLapTime(trackday.chronos);
+  const averageLapTime = calculateAverageLapTime(trackday.chronos) || trackday.bestLapTime;
 
   return (
     <div className="container mx-auto p-4 space-y-6">
