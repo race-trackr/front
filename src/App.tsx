@@ -27,6 +27,9 @@ import AdminTracksEdit from './pages/Admin/AdminTracksEdit';
 import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
+import Settings from './pages/Settings'; // Import Settings
+import Profile from './pages/Profile'; // Import Profile
+import Upgrade from './pages/Upgrade'; // Import Upgrade
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 
@@ -111,6 +114,21 @@ const routesConfig = [
         path: "/maintenances/edit/:id",
         element: <Layout><MaintenanceEdit /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Maintenance ${params.id || ''}` },
+      },
+      {
+        path: "/settings", // New route for Settings
+        element: <Layout><Settings /></Layout>,
+        handle: { crumb: () => 'Settings' },
+      },
+      {
+        path: "/profile", // New route for Profile
+        element: <Layout><Profile /></Layout>,
+        handle: { crumb: () => 'My Account' },
+      },
+      {
+        path: "/upgrade", // New route for Upgrade
+        element: <Layout><Upgrade /></Layout>,
+        handle: { crumb: () => 'Upgrade' },
       },
     ],
   },

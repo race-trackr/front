@@ -342,5 +342,12 @@
   "confirm_delete_maintenance_title": "Confirmar eliminación",
   "confirm_delete_maintenance_description": "¿Estás seguro de que quieres eliminar este registro de mantenimiento? Esta acción no se puede deshacer.",
   "next_due": "Próximo vencimiento",
-  "view_maintenance": "Ver mantenimiento #{{id}}"
+  "view_maintenance": "Ver mantenimiento #{{id}}",
+  "general_settings": "Configuración general",
+  "settings_page_description": "Gestiona la configuración de tu aplicación aquí.",
+  "profile_information": "Información de perfil",
+  "role": "Rol",
+  "unlock_pro_features": "¡Desbloquea las funciones Pro!",
+  "upgrade_description": "Actualiza a nuestro plan Pro para obtener acceso a funciones avanzadas, almacenamiento ilimitado y soporte prioritario.",
+  "get_pro_now": "Obtener Pro ahora"
 }

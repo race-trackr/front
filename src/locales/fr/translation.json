@@ -322,5 +322,12 @@
   "confirm_delete_maintenance_title": "Confirm Deletion",
   "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone.",
   "next_due": "Next Due",
-  "view_maintenance": "View Maintenance #{{id}}"
+  "view_maintenance": "View Maintenance #{{id}}",
+  "general_settings": "Paramètres généraux",
+  "settings_page_description": "Gérez les paramètres de votre application ici.",
+  "profile_information": "Informations de profil",
+  "role": "Rôle",
+  "unlock_pro_features": "Débloquez les fonctionnalités Pro !",
+  "upgrade_description": "Passez à notre plan Pro pour accéder à des fonctionnalités avancées, un stockage illimité et un support prioritaire.",
+  "get_pro_now": "Obtenez Pro maintenant"
 }
