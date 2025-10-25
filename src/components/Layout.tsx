@@ -12,7 +12,7 @@ import { useSidebarStore } from '@/store/sidebarStore';
 import useBreadcrumbs from '@/hooks/useBreadcrumbs'; // Import the useBreadcrumbs hook
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: ReactNode; // Made children optional
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -94,7 +94,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <AppBar breadcrumbs={crumbs} /> {/* Pass dynamic breadcrumbs to AppBar */}
 
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background overflow-y-auto">
-          <>{children}</>
+          <Outlet /> {/* Render nested routes here */}
         </main>
       </div>
     </div>

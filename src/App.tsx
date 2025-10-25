@@ -76,201 +76,236 @@ const App: React.FC = () => {
       errorElement: <ErrorPage />,
     },
     {
-      element: <ProtectedRoute />,
+      element: <ProtectedRoute />, // ProtectedRoute acts as a guard
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "/dashboard",
-          element: <Layout><Dashboard /></Layout>,
-          handle: { crumb: () => t('Dashboard') },
-        },
-        {
-          path: "/trackdays",
-          element: <Layout><TrackdayList /></Layout>,
-          handle: { crumb: () => t('trackdays') },
-        },
-        {
-          path: "/trackdays/create",
-          element: <Layout><TrackdayCreate /></Layout>,
-          handle: { crumb: () => t('create_new_trackday') },
-        },
-        {
-          path: "/trackdays/:id",
-          element: <Layout><TrackdayView /></Layout>,
-          loader: async ({ params }) => {
-            const trackday = await getTrackdayById(params.id!);
-            return { trackday };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const trackday = data?.trackday as TrackDayType;
-              return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/trackdays/edit/:id",
-          element: <Layout><TrackdayEdit /></Layout>,
-          loader: async ({ params }) => {
-            const trackday = await getTrackdayById(params.id!);
-            return { trackday };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const trackday = data?.trackday as TrackDayType;
-              return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/vehicles",
-          element: <Layout><VehicleList /></Layout>,
-          handle: { crumb: () => t('vehicles') },
-        },
-        {
-          path: "/vehicles/create",
-          element: <Layout><VehicleCreate /></Layout>,
-          handle: { crumb: () => t('create_new_vehicle') },
-        },
-        {
-          path: "/vehicles/:id",
-          element: <Layout><VehicleView /></Layout>,
-          loader: async ({ params }) => {
-            const vehicle = await getVehicleById(Number(params.id!));
-            return { vehicle };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const vehicle = data?.vehicle as UserVehicleType;
-              return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/vehicles/edit/:id",
-          element: <Layout><VehicleEdit /></Layout>,
-          loader: async ({ params }) => {
-            const vehicle = await getVehicleById(Number(params.id!));
-            return { vehicle };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const vehicle = data?.vehicle as UserVehicleType;
-              return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/maintenances",
-          element: <Layout><MaintenanceList /></Layout>,
-          handle: { crumb: () => t('maintenances') },
-        },
-        {
-          path: "/maintenances/create",
-          element: <Layout><MaintenanceCreate /></Layout>,
-          handle: { crumb: () => t('create_new_maintenance') },
-        },
-        {
-          path: "/maintenances/:id",
-          element: <Layout><MaintenanceView /></Layout>,
-          loader: async ({ params }) => {
-            const maintenance = await getMaintenanceById(Number(params.id!));
-            return { maintenance };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const maintenance = data?.maintenance as MaintenanceRecordType;
-              return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/maintenances/edit/:id",
-          element: <Layout><MaintenanceEdit /></Layout>,
-          loader: async ({ params }) => {
-            const maintenance = await getMaintenanceById(Number(params.id!));
-            return { maintenance };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const maintenance = data?.maintenance as MaintenanceRecordType;
-              return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/settings",
-          element: <Layout><Settings /></Layout>,
-          handle: { crumb: () => t('settings') },
-        },
-        {
-          path: "/profile",
-          element: <Layout><Profile /></Layout>,
-          handle: { crumb: () => t('my_account') },
-        },
-        {
-          path: "/upgrade",
-          element: <Layout><Upgrade /></Layout>,
-          handle: { crumb: () => t('upgrade_to_pro') },
+          element: <Layout />, // Layout wraps the Outlet for all its children
+          children: [
+            {
+              path: "/dashboard",
+              element: <Dashboard />,
+              handle: { crumb: () => t('Dashboard') },
+            },
+            {
+              path: "/trackdays",
+              handle: { crumb: () => t('trackdays') },
+              children: [
+                {
+                  index: true,
+                  element: <TrackdayList />,
+                },
+                {
+                  path: "create",
+                  element: <TrackdayCreate />,
+                  handle: { crumb: () => t('create_new_trackday') },
+                },
+                {
+                  path: ":id",
+                  element: <TrackdayView />,
+                  loader: async ({ params }) => {
+                    const trackday = await getTrackdayById(params.id!);
+                    return { trackday };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const trackday = data?.trackday as TrackDayType;
+                      return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+                {
+                  path: "edit/:id",
+                  element: <TrackdayEdit />,
+                  loader: async ({ params }) => {
+                    const trackday = await getTrackdayById(params.id!);
+                    return { trackday };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const trackday = data?.trackday as TrackDayType;
+                      return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+              ],
+            },
+            {
+              path: "/vehicles",
+              handle: { crumb: () => t('vehicles') },
+              children: [
+                {
+                  index: true,
+                  element: <VehicleList />,
+                },
+                {
+                  path: "create",
+                  element: <VehicleCreate />,
+                  handle: { crumb: () => t('create_new_vehicle') },
+                },
+                {
+                  path: ":id",
+                  element: <VehicleView />,
+                  loader: async ({ params }) => {
+                    const vehicle = await getVehicleById(Number(params.id!));
+                    return { vehicle };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const vehicle = data?.vehicle as UserVehicleType;
+                      return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+                {
+                  path: "edit/:id",
+                  element: <VehicleEdit />,
+                  loader: async ({ params }) => {
+                    const vehicle = await getVehicleById(Number(params.id!));
+                    return { vehicle };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const vehicle = data?.vehicle as UserVehicleType;
+                      return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+              ],
+            },
+            {
+              path: "/maintenances",
+              handle: { crumb: () => t('maintenances') },
+              children: [
+                {
+                  index: true,
+                  element: <MaintenanceList />,
+                },
+                {
+                  path: "create",
+                  element: <MaintenanceCreate />,
+                  handle: { crumb: () => t('create_new_maintenance') },
+                },
+                {
+                  path: ":id",
+                  element: <MaintenanceView />,
+                  loader: async ({ params }) => {
+                    const maintenance = await getMaintenanceById(Number(params.id!));
+                    return { maintenance };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const maintenance = data?.maintenance as MaintenanceRecordType;
+                      return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+                {
+                  path: "edit/:id",
+                  element: <MaintenanceEdit />,
+                  loader: async ({ params }) => {
+                    const maintenance = await getMaintenanceById(Number(params.id!));
+                    return { maintenance };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const maintenance = data?.maintenance as MaintenanceRecordType;
+                      return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+              ],
+            },
+            {
+              path: "/settings",
+              element: <Settings />,
+              handle: { crumb: () => t('settings') },
+            },
+            {
+              path: "/profile",
+              element: <Profile />,
+              handle: { crumb: () => t('my_account') },
+            },
+            {
+              path: "/upgrade",
+              element: <Upgrade />,
+              handle: { crumb: () => t('upgrade_to_pro') },
+            },
+          ],
         },
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin']} />,
+      element: <ProtectedRoute allowedRoles={['admin']} />, // Admin ProtectedRoute acts as a guard
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "/admin",
-          element: <Layout><AdminDashboard /></Layout>,
-          handle: { crumb: () => t('admin') },
-        },
-        {
-          path: "/admin/tracks",
-          element: <Layout><AdminTracks /></Layout>,
-          handle: { crumb: () => t('manage_tracks') },
-        },
-        {
-          path: "/admin/tracks/create",
-          element: <Layout><AdminTracksCreate /></Layout>,
-          handle: { crumb: () => t('create_new_track') },
-        },
-        {
-          path: "/admin/tracks/edit/:id",
-          element: <Layout><AdminTracksEdit /></Layout>,
-          loader: async ({ params }) => {
-            const response = await apiClient.get(`/tracks/${params.id!}`);
-            return { track: response.data };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const track = data?.track as TrackType;
-              return track ? t('edit_track_name', { name: track.name }) : t('edit_track', { id: data?.params?.id || '' });
-            }
-          },
-        },
-        {
-          path: "/admin/countries",
-          element: <Layout><AdminCountries /></Layout>,
-          handle: { crumb: () => t('manage_countries') },
-        },
-        {
-          path: "/admin/countries/create",
-          element: <Layout><AdminCountriesCreate /></Layout>,
-          handle: { crumb: () => t('create_new_country') },
-        },
-        {
-          path: "/admin/countries/edit/:id",
-          element: <Layout><AdminCountriesEdit /></Layout>,
-          loader: async ({ params }) => {
-            const response = await apiClient.get(`/countries/${params.id!}`);
-            return { country: response.data };
-          },
-          handle: {
-            crumb: ({ data }: RouteMatchWithData) => {
-              const country = data?.country as CountryType;
-              return country ? t('edit_country_name', { name: country.name }) : t('edit_country', { id: data?.params?.id || '' });
-            }
-          },
+          element: <Layout />, // Layout wraps the Outlet for all its admin children
+          children: [
+            {
+              path: "/admin",
+              element: <AdminDashboard />,
+              handle: { crumb: () => t('admin') },
+            },
+            {
+              path: "/admin/tracks",
+              handle: { crumb: () => t('manage_tracks') },
+              children: [
+                {
+                  index: true,
+                  element: <AdminTracks />,
+                },
+                {
+                  path: "create",
+                  element: <AdminTracksCreate />,
+                  handle: { crumb: () => t('create_new_track') },
+                },
+                {
+                  path: "edit/:id",
+                  element: <AdminTracksEdit />,
+                  loader: async ({ params }) => {
+                    const response = await apiClient.get(`/tracks/${params.id!}`);
+                    return { track: response.data };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const track = data?.track as TrackType;
+                      return track ? t('edit_track_name', { name: track.name }) : t('edit_track', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+              ],
+            },
+            {
+              path: "/admin/countries",
+              handle: { crumb: () => t('manage_countries') },
+              children: [
+                {
+                  index: true,
+                  element: <AdminCountries />,
+                },
+                {
+                  path: "create",
+                  element: <AdminCountriesCreate />,
+                  handle: { crumb: () => t('create_new_country') },
+                },
+                {
+                  path: "edit/:id",
+                  element: <AdminCountriesEdit />,
+                  loader: async ({ params }) => {
+                    const response = await apiClient.get(`/countries/${params.id!}`);
+                    return { country: response.data };
+                  },
+                  handle: {
+                    crumb: ({ data }: RouteMatchWithData) => {
+                      const country = data?.country as CountryType;
+                      return country ? t('edit_country_name', { name: country.name }) : t('edit_country', { id: data?.params?.id || '' });
+                    }
+                  },
+                },
+              ],
+            },
+          ],
         },
       ],
     },
