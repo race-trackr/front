@@ -35,6 +35,7 @@ import { UserVehicleType, CreateTrackdayPayload, TrackType, WeatherCondition, Tr
 import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
+import apiClient from '@/lib/apiClient'; // Added apiClient import
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(), // Changed to userVehicleId and nullable
@@ -105,6 +106,12 @@ const TrackdayCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateTrackdayPayload = {
       ...values,
+      // Ensure required fields are explicitly handled if Zod's infer makes them optional
+      userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
+      trackId: values.trackId, // trackId is required by schema and payload
+      date: values.date, // date is required by schema and payload
+      weather: values.weather, // weather is required by schema and payload
+      trackCondition: values.trackCondition, // trackCondition is required by schema and payload
       airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
       trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
       notes: values.notes === '' ? null : values.notes,

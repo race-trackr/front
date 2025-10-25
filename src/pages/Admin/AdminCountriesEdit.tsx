@@ -95,7 +95,15 @@ const AdminCountriesEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateCountryMutation.mutate(values);
+    const payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'> = {
+      ...values,
+      // Ensure required fields are explicitly handled if Zod's infer makes them optional
+      name: values.name,
+      iso: values.iso,
+      timezone: values.timezone,
+      capital: values.capital,
+    };
+    updateCountryMutation.mutate(payload);
   };
 
   const handleDelete = () => {

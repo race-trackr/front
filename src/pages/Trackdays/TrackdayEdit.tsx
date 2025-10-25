@@ -28,6 +28,7 @@ import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { Combobox } from '@/components/ui/combobox';
 import { PlusCircle } from 'lucide-react';
+import { toast } from 'sonner'; // Added toast import
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(), // Changed to userVehicleId and nullable
@@ -137,6 +138,12 @@ const TrackdayEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: UpdateTrackdayPayload = {
       ...values,
+      // Ensure required fields are explicitly handled if Zod's infer makes them optional
+      userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
+      trackId: values.trackId, // trackId is required by schema and payload
+      date: values.date, // date is required by schema and payload
+      weather: values.weather, // weather is required by schema and payload
+      trackCondition: values.trackCondition, // trackCondition is required by schema and payload
       airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
       trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
       notes: values.notes === '' ? null : values.notes,

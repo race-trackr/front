@@ -83,6 +83,11 @@ const MaintenanceCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateMaintenancePayload = {
       ...values,
+      // Ensure required fields are explicitly handled if Zod's infer makes them optional
+      userVehicleId: values.userVehicleId, // userVehicleId is required by schema and payload
+      type: values.type,                   // type is required by schema and payload
+      date: values.date,                   // date is required by schema and payload
+      description: values.description,     // description is required by schema and payload
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,

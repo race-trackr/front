@@ -79,8 +79,13 @@ const AdminTracksCreate: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload = {
+    const payload: Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'> = {
       ...values,
+      // Ensure required fields are explicitly handled if Zod's infer makes them optional
+      name: values.name,
+      countryId: values.countryId,
+      length: values.length,
+      city: values.city,
       address: values.address === '' ? null : values.address,
       website: values.website === '' ? null : values.website,
     };
