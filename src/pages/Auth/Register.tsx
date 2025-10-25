@@ -39,7 +39,6 @@ const Register: React.FC = () => {
     },
   });
 
-  // Fetch countries using react-query
   const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
     queryKey: ['countries'],
     queryFn: async () => {
@@ -53,7 +52,6 @@ const Register: React.FC = () => {
       await authRegister(values);
       navigate('/auth?tab=login', { replace: true });
     } catch (error) {
-      // Error handled by AuthContext and toast
     }
   };
 

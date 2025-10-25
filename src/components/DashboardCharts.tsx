@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const trackdayData = [
   { name: 'Jan', trackdays: 4 },
@@ -33,7 +33,7 @@ const maintenanceData = [
 ];
 
 const DashboardCharts: React.FC = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>

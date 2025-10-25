@@ -32,7 +32,7 @@ import { toast } from 'sonner';
 import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 
-const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
+const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),

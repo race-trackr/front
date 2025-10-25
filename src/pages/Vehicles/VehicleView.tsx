@@ -2,25 +2,25 @@
 
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'; // Import useMutation and useQueryClient
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles'; // Import deleteVehicle
+import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
-import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react'; // Add Trash2 icon
+import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react';
 import { UserVehicleType, MaintenanceRecordType } from '@/types';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'; // Import ConfirmDeleteDialog
-import { toast } from 'sonner'; // Import toast
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { toast } from 'sonner';
 
 const VehicleView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const vehicleId = Number(id);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient(); // Initialize queryClient
+  const queryClient = useQueryClient();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
@@ -104,7 +104,6 @@ const VehicleView: React.FC = () => {
         </div>
       </div>
 
-      {/* Vehicle Details Card */}
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{t('vehicle_details')}</CardTitle>
@@ -145,7 +144,6 @@ const VehicleView: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Maintenance History Card */}
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{t('maintenance_history')}</CardTitle>
@@ -160,7 +158,7 @@ const VehicleView: React.FC = () => {
               {maintenances.map((maintenance) => (
                 <li key={maintenance.id} className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0">
                   <div>
-                    <p className="font-medium">{maintenance.name}</p> {/* Changed from description to name */}
+                    <p className="font-medium">{maintenance.name}</p>
                     <p className="text-sm text-muted-foreground">
                       {t(`maintenance_type_${maintenance.type}`)} - {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
                     </p>

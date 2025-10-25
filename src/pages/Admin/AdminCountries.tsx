@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { CountryType } from '@/types'; // Changed Country to CountryType
+import { CountryType } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/apiClient';

@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {
   const location = useLocation();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   useEffect(() => {
     console.error(

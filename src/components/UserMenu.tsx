@@ -22,7 +22,7 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
-  const isFreeTier = true; // Placeholder: Replace with actual logic to check user's subscription status
+  const isFreeTier = true;
 
   const handleLogout = () => {
     logout();

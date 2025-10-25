@@ -19,7 +19,7 @@ import VehicleView from './pages/Vehicles/VehicleView';
 import MaintenanceList from './pages/Maintenances/MaintenanceList';
 import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate';
 import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit';
-import MaintenanceView from './pages/Maintenances/MaintenanceView'; // Import MaintenanceView
+import MaintenanceView from './pages/Maintenances/MaintenanceView';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import AdminTracks from './pages/Admin/AdminTracks';
 import AdminTracksCreate from './pages/Admin/AdminTracksCreate';
@@ -27,9 +27,9 @@ import AdminTracksEdit from './pages/Admin/AdminTracksEdit';
 import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
-import Settings from './pages/Settings'; // Import Settings
-import Profile from './pages/Profile'; // Import Profile
-import Upgrade from './pages/Upgrade'; // Import Upgrade
+import Settings from './pages/Settings';
+import Profile from './pages/Profile';
+import Upgrade from './pages/Upgrade';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 
@@ -106,7 +106,7 @@ const routesConfig = [
         handle: { crumb: () => 'Create Maintenance' },
       },
       {
-        path: "/maintenances/:id", // New route for MaintenanceView
+        path: "/maintenances/:id",
         element: <Layout><MaintenanceView /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `View Maintenance ${params.id || ''}` },
       },
@@ -116,24 +116,24 @@ const routesConfig = [
         handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Maintenance ${params.id || ''}` },
       },
       {
-        path: "/settings", // New route for Settings
+        path: "/settings",
         element: <Layout><Settings /></Layout>,
         handle: { crumb: () => 'Settings' },
       },
       {
-        path: "/profile", // New route for Profile
+        path: "/profile",
         element: <Layout><Profile /></Layout>,
         handle: { crumb: () => 'My Account' },
       },
       {
-        path: "/upgrade", // New route for Upgrade
+        path: "/upgrade",
         element: <Layout><Upgrade /></Layout>,
         handle: { crumb: () => 'Upgrade' },
       },
     ],
   },
   {
-    element: <ProtectedRoute allowedRoles={['admin']} />, // Changed 'owner' to 'admin'
+    element: <ProtectedRoute allowedRoles={['admin']} />,
     errorElement: <ErrorPage />,
     children: [
       {

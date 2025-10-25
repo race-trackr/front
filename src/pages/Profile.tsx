@@ -27,7 +27,6 @@ const Profile: React.FC = () => {
               <p className="text-sm text-muted-foreground capitalize">{t('role')}: {user?.role || t('not_specified')}</p>
             </div>
           </div>
-          {/* Add more profile details or edit forms here */}
         </CardContent>
       </Card>
     </div>

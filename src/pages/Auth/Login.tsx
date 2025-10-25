@@ -39,7 +39,6 @@ const Login: React.FC = () => {
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error(error);
-      // Error handled by AuthContext and toast
     }
   };
 

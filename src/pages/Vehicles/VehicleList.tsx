@@ -9,7 +9,6 @@ import { deleteVehicle, getVehicles } from '@/lib/api/vehicles';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-// Removed import for dangerButtonClasses
 
 const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {

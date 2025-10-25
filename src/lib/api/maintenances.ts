@@ -4,7 +4,7 @@ import { MaintenanceRecordType, CreateMaintenancePayload, UpdateMaintenancePaylo
 interface GetMaintenancesParams {
   limit?: number;
   offset?: number;
-  userVehicleId?: number; // Added userVehicleId for filtering
+  userVehicleId?: number;
 }
 
 export const getMaintenances = async (params?: GetMaintenancesParams): Promise<MaintenanceRecordType[]> => {

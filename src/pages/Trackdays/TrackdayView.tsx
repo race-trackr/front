@@ -134,18 +134,15 @@ const TrackdayView: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Informations Card (full width on small screens, 2/3 on large) */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>{t('trackday_details')}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Date */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('date')}</p>
               <p className="text-lg">{formattedDate}</p>
             </div>
-            {/* Vehicle */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('vehicle')}</p>
               <p className="text-lg">
@@ -155,7 +152,6 @@ const TrackdayView: React.FC = () => {
                 <p className="text-xs text-muted-foreground">{trackday.vehicle.licensePlate}</p>
               )}
             </div>
-            {/* Track */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('track')}</p>
               <p className="text-lg">{trackday.track?.name || trackday.trackId}</p>
@@ -163,41 +159,34 @@ const TrackdayView: React.FC = () => {
                 <p className="text-xs text-muted-foreground">{trackday.track.city}, {trackday.track.country?.name || t('unknown_country')}</p>
               )}
             </div>
-            {/* Weather */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
               <p className="text-lg">{t(`weather_${trackday.weather}`)}</p>
             </div>
-            {/* Air Temperature */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
               <p className="text-lg">
                 {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
               </p>
             </div>
-            {/* Track Temperature */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
               <p className="text-lg">
                 {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
               </p>
             </div>
-            {/* Track Condition */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
               <p className="text-lg">{t(`track_condition_${trackday.trackCondition}`)}</p>
             </div>
-            {/* Total Laps */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>
               <p className="text-lg">{trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}</p>
             </div>
-            {/* Total Distance */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('total_distance')}</p>
               <p className="text-lg">{trackday.totalDistance ? `${trackday.totalDistance} km` : t('not_specified')}</p>
             </div>
-            {/* Average Laptime */}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('average_laptime')}</p>
               <p className="text-lg">{averageLapTime || t('not_available')}</p>
@@ -205,7 +194,6 @@ const TrackdayView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Best Lap Time Card (1/3 width on large screens) */}
         <Card className="bg-primary/10 dark:bg-primary/20 text-primary-foreground dark:text-primary-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">{t('best_laptime')}</CardTitle>
@@ -218,7 +206,6 @@ const TrackdayView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Notes Card (full width) */}
         {trackday.notes && (
           <Card className="lg:col-span-3">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -231,7 +218,6 @@ const TrackdayView: React.FC = () => {
           </Card>
         )}
 
-        {/* All Chronos Card (full width) */}
         <Card className="lg:col-span-3">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('chronos')}</CardTitle>

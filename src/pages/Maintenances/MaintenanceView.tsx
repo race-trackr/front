@@ -34,7 +34,7 @@ const MaintenanceView: React.FC = () => {
     mutationFn: () => deleteMaintenance(maintenanceId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] }); // Invalidate related vehicle maintenances
+      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] });
       toast.success(t('maintenance_deleted_successfully'));
       navigate('/maintenances');
     },
@@ -77,7 +77,6 @@ const MaintenanceView: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      {/* Page Header with Title and Action Buttons */}
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
@@ -110,7 +109,6 @@ const MaintenanceView: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {/* Main Maintenance Info Card (Date, Cost, Mileage) */}
         <Card className="lg:col-span-1 xl:col-span-1">
           <CardHeader>
             <CardTitle>{t('maintenance_details')}</CardTitle>
@@ -135,7 +133,6 @@ const MaintenanceView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Vehicle Information Card */}
         <Card className="lg:col-span-1 xl:col-span-1">
           <CardHeader>
             <CardTitle>{t('vehicle')}</CardTitle>
@@ -162,7 +159,6 @@ const MaintenanceView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Next Due Card */}
         <Card className="lg:col-span-1 xl:col-span-1">
           <CardHeader>
             <CardTitle>{t('next_due')}</CardTitle>
@@ -181,14 +177,13 @@ const MaintenanceView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Details Card (full width on smaller screens, spans 2 on larger) */}
-        {maintenance.details && ( // Only render if details exist
+        {maintenance.details && (
           <Card className="lg:col-span-2 xl:col-span-3">
             <CardHeader>
-              <CardTitle>{t('details')}</CardTitle> {/* Changed title */}
+              <CardTitle>{t('details')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-lg">{maintenance.details}</p> {/* Changed from description to details */}
+              <p className="text-lg">{maintenance.details}</p>
             </CardContent>
           </Card>
         )}

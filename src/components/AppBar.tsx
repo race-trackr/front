@@ -21,7 +21,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import LanguageSwitcher from './LanguageSwitcher';
 import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 interface AppBarProps {
   breadcrumbs?: { label: string; path?: string }[];
@@ -30,11 +30,11 @@ interface AppBarProps {
 const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const defaultBreadcrumbs = [
-    { label: t('Home'), path: '/' }, // Use t() for translation
-    { label: t('Dashboard'), path: '/dashboard' }, // Use t() for translation
+    { label: t('Home'), path: '/' },
+    { label: t('Dashboard'), path: '/dashboard' },
   ];
 
   const currentBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;

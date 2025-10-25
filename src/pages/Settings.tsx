@@ -14,7 +14,6 @@ const Settings: React.FC = () => {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">{t('settings_page_description')}</p>
-          {/* Add settings forms/components here */}
         </CardContent>
       </Card>
     </div>

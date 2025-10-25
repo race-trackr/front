@@ -12,7 +12,7 @@ const Index: React.FC = () => {
       if (isAuthenticated) {
         navigate('/dashboard', { replace: true });
       } else {
-        navigate('/auth', { replace: true }); // Redirect to /auth
+        navigate('/auth', { replace: true });
       }
     }
   }, [isAuthenticated, loading, navigate]);
@@ -31,7 +31,7 @@ const Index: React.FC = () => {
     );
   }
 
-  return null; // Will redirect before rendering anything
+  return null;
 };
 
 export default Index;

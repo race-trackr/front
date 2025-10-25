@@ -14,10 +14,10 @@ export interface CountryType {
 export interface UserType {
   id: number;
   email: string;
-  password?: string; // Password should not be exposed in client-side UserType, making it optional
+  password?: string;
   fullName: string;
   avatar: string | null;
-  role: 'user' | 'admin'; // Changed from isAdmin to role
+  role: 'user' | 'admin';
   createdAt: string;
   updatedAt: string;
   trackDays?: TrackDayType[];
@@ -42,11 +42,11 @@ export interface TrackType {
 
 export type WeatherCondition = 'clear' | 'cloudy' | 'rainy';
 export type TrackCondition = 'wet' | 'dry' | 'moist';
-export type VehicleType = 'car' | 'moto' | 'karting' | 'other'; // Changed 'motorcycle' to 'moto'
-export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other'; // Updated enum
+export type VehicleType = 'car' | 'moto' | 'karting' | 'other';
+export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other';
 
 export interface TrackDayType {
-  id: string; // Keeping as string as per user's definition
+  id: string;
   userId: number;
   trackId: number;
   userVehicleId: number | null;
@@ -59,7 +59,7 @@ export interface TrackDayType {
   bestLapTime: string | null;
   totalLaps: number | null;
   totalDistance: number | null;
-  chronos: string[] | null; // Changed to array of strings
+  chronos: string[] | null;
   createdAt: string;
   updatedAt: string;
   user?: UserType;
@@ -75,9 +75,9 @@ export interface UserVehicleType {
   year: number;
   type: VehicleType;
   image: string | null;
-  licensePlate?: string | null; // Added back as it was in previous UserVehicle
-  details?: string | null; // Added back as it was in previous UserVehicle
-  slug: string; // Added back as it was in previous UserVehicle
+  licensePlate?: string | null;
+  details?: string | null;
+  slug: string;
   createdAt: string;
   updatedAt: string;
   user?: UserType;
@@ -89,10 +89,10 @@ export interface MaintenanceRecordType {
   id: number;
   userId: number;
   userVehicleId: number;
-  name: string; // Added 'name' property
+  name: string;
   type: MaintenanceRecordTypeType;
   date: string;
-  details?: string | null; // Changed from 'description' to 'details' and made optional
+  details?: string | null;
   cost: number | null;
   mileage: number | null;
   nextDueDate: string | null;
@@ -103,7 +103,6 @@ export interface MaintenanceRecordType {
   vehicle?: UserVehicleType;
 }
 
-// Payloads for API requests
 export type CreateVehiclePayload = Omit<UserVehicleType, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt' | 'user' | 'trackDays' | 'maintenances'>;
 export type UpdateVehiclePayload = Partial<CreateVehiclePayload>;
 
@@ -117,7 +116,6 @@ export interface DashboardSummary {
   totalTrackdays: number;
   totalVehicles: number;
   totalMaintenances: number;
-  // Add other summary fields as needed
 }
 
 export interface LoginPayload {
@@ -126,10 +124,10 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  fullName: string; // Changed from username
+  fullName: string;
   email: string;
   password: string;
-  countryId: number; // Changed from string
+  countryId: number;
 }
 
 export interface AuthResponse {

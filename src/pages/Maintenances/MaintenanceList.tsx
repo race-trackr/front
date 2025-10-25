@@ -11,8 +11,8 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { cn } from '@/lib/utils'; // Import cn for conditional class names
-import MaintenanceCostChart from '@/components/MaintenanceCostChart'; // Import the new chart component
+import { cn } from '@/lib/utils';
+import MaintenanceCostChart from '@/components/MaintenanceCostChart';
 
 const MaintenanceList: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -125,7 +125,6 @@ const MaintenanceList: React.FC = () => {
         </Card>
       </div>
 
-      {/* Maintenance Cost Chart */}
       {maintenances && <MaintenanceCostChart maintenances={maintenances} />}
 
       <div className="grid grid-cols-1 gap-6">

@@ -60,7 +60,6 @@ const AdminCountriesCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'> = {
       ...values,
-      // Ensure required fields are explicitly handled if Zod's infer makes them optional
       name: values.name,
       iso: values.iso,
       timezone: values.timezone,

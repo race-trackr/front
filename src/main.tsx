@@ -9,9 +9,9 @@ import { ThemeProvider } from './components/theme-provider';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider 
-      attribute="class" // Indique explicitement à next-themes d'utiliser l'attribut 'class'
+      attribute="class"
       defaultTheme="system" 
-      enableSystem // Active explicitement la détection du thème système
+      enableSystem
       storageKey="vite-ui-theme"
     >
       <App />

@@ -38,7 +38,7 @@ import { format } from 'date-fns';
 import apiClient from '@/lib/apiClient';
 import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 
-const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
+const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),

@@ -41,8 +41,8 @@ const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenance
 
     maintenances.forEach(m => {
       const date = new Date(m.date);
-      const sortKey = format(date, 'yyyy-MM'); // e.g., "2023-01" for sorting
-      const displayDate = format(date, 'MMM yyyy', { locale: getLocale() }); // e.g., "Jan 2023" for display
+      const sortKey = format(date, 'yyyy-MM');
+      const displayDate = format(date, 'MMM yyyy', { locale: getLocale() });
 
       if (!monthlyCosts[sortKey]) {
         monthlyCosts[sortKey] = { displayDate, cost: 0 };
@@ -50,7 +50,6 @@ const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenance
       monthlyCosts[sortKey].cost += m.cost || 0;
     });
 
-    // Convert to array and sort by date
     const sortedData = Object.keys(monthlyCosts)
       .sort()
       .map(key => ({

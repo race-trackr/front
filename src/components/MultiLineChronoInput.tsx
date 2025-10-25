@@ -13,7 +13,7 @@ interface MultiLineChronoInputProps {
   className?: string;
 }
 
-const chronoRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
+const chronoRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
 
 const MultiLineChronoInput: React.FC<MultiLineChronoInputProps> = ({
   value,
@@ -37,7 +37,7 @@ const MultiLineChronoInput: React.FC<MultiLineChronoInputProps> = ({
 
   const removeChrono = (index: number) => {
     const newChronos = chronos.filter((_, i) => i !== index);
-    onChange(newChronos.length > 0 ? newChronos : null); // Set to null if empty
+    onChange(newChronos.length > 0 ? newChronos : null);
   };
 
   return (

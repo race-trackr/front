@@ -188,7 +188,6 @@ const Dashboard: React.FC = () => {
                     </Link>
                     <div className="flex items-center gap-2 z-10">
 
-                      {/* Ensure buttons are above the full-area link */}
                       <Button
                         asChild
                         variant="ghost"
@@ -247,7 +246,7 @@ const Dashboard: React.FC = () => {
                     key={maintenance.id}
                     className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    <Link to={`/maintenances/${maintenance.id}`} className="w-full"> {/* Link to view page */}
+                    <Link to={`/maintenances/${maintenance.id}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
                           {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : maintenance.userVehicleId}
@@ -267,7 +266,6 @@ const Dashboard: React.FC = () => {
                           <span className="sr-only">{t("view_edit_details")}</span>
                         </Link>
                       </Button>
-                      {/* Delete button can be added here if needed, similar to trackdays */}
                     </div>
                   </li>
                 ))}

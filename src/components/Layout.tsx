@@ -8,7 +8,7 @@ import Sidebar from './Sidebar';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar';
-import { useSidebarStore } from '@/store/sidebarStore'; // Import the Zustand store
+import { useSidebarStore } from '@/store/sidebarStore';
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,7 +16,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  const { isCollapsed, toggleCollapse } = useSidebarStore(); // Use the Zustand store
+  const { isCollapsed, toggleCollapse } = useSidebarStore();
   const { t } = useTranslation();
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
@@ -31,7 +31,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
       style={{ '--sidebar-width': dynamicSidebarWidth } as React.CSSProperties}
     >
-      {/* Desktop Sidebar */}
       <div className={cn(
         "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
@@ -40,28 +39,26 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
-              isCollapsed ? "px-2" : "px-4 lg:px-6" // Apply px-2 when collapsed, else px-4 lg:px-6
+              isCollapsed ? "px-2" : "px-4 lg:px-6"
             )}
           >
             <Link
               to="/"
               className={cn(
                 "flex items-center gap-2 font-semibold",
-                isCollapsed && "hidden" // Hide the entire link when collapsed
+                isCollapsed && "hidden"
               )}
             >
-              {/* 'R' logo */}
               <span
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
                   "bg-gradient-to-r from-red-500 to-orange-500",
-                  !isCollapsed && "mr-2", // Add margin only when not collapsed
-                  isCollapsed && "hidden" // Hide when collapsed
+                  !isCollapsed && "mr-2",
+                  isCollapsed && "hidden"
                 )}
               >
                 R
               </span>
-              {/* Race Trackr text */}
               <span
                 className={cn(
                   "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
@@ -74,10 +71,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleCollapse} // Use toggleCollapse from Zustand
+              onClick={toggleCollapse}
               className={cn(
                 "h-8 w-8",
-                isCollapsed && "w-full" // Make it take full width when collapsed
+                isCollapsed && "w-full"
               )}
             >
               {isCollapsed ? <ChevronRight className="h-5 w-5 flex-shrink-0" /> : <ChevronLeft className="h-5 w-5 flex-shrink-0" />}
@@ -90,12 +87,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {/* Mobile Header (now part of AppBar or removed) and Main Content */}
       <div className="flex flex-col h-full">
-        {/* AppBar is now always visible at the top */}
         <AppBar />
 
-        {/* Main Content - adjusted padding for fixed AppBar */}
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background">
           <>{children}</>
         </main>

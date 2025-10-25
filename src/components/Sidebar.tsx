@@ -26,10 +26,10 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center rounded-lg py-2.5 w-full transition-colors duration-300 ease-in-out", // Added transition-colors for smooth background/text changes
+        "flex items-center rounded-lg py-2.5 w-full transition-colors duration-300 ease-in-out",
         isCollapsed ? "justify-center px-3" : "gap-3 px-3",
         isActive
-          ? "bg-primary text-primary-foreground" // Use solid primary color for active state
+          ? "bg-primary text-primary-foreground"
           : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
       )}
     >
@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
           <NavLink to="/trackdays" icon={<CalendarDays className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
           <NavLink to="/vehicles" icon={<Car className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
           <NavLink to="/maintenances" icon={<Wrench className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('maintenances')}</NavLink>
-          {user?.role === 'admin' && ( // Changed user?.isAdmin to user?.role === 'admin'
+          {user?.role === 'admin' && (
             <NavLink to="/admin" icon={<Users className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('admin')}</NavLink>
           )}
         </nav>

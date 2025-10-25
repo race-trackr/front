@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { TrackType } from '@/types'; // Changed Track to TrackType
+import { TrackType } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/apiClient';
@@ -49,7 +49,6 @@ const AdminTracks: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-2">
                 <p><strong>{t('length')}:</strong> {track.length} km</p>
-                {/* Removed 'turns' as it's not in the new TrackType */}
                 <Button asChild variant="outline" className="mt-4 w-full">
                   <Link to={`/admin/tracks/edit/${track.id}`}>{t('view_edit_details')}</Link>
                 </Button>

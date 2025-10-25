@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import apiClient from '@/lib/apiClient';
 import { UserType, LoginPayload, RegisterPayload, AuthResponse } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
-import i18n from '@/i18n'; // Import i18n instance for translations
+import i18n from '@/i18n';
 
 interface AuthState {
   user: UserType | null;
@@ -13,7 +13,7 @@ interface AuthState {
   login: (credentials: LoginPayload) => Promise<void>;
   register: (userData: RegisterPayload) => Promise<void>;
   logout: () => void;
-  initializeAuth: () => Promise<void>; // New function to initialize auth state
+  initializeAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,11 +22,11 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      loading: true, // Initial loading state
+      loading: true,
 
       initializeAuth: async () => {
         set({ loading: true });
-        const storedToken = get().token; // Get token from persisted state
+        const storedToken = get().token;
         if (storedToken) {
           apiClient.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
           try {
@@ -35,7 +35,6 @@ export const useAuthStore = create<AuthState>()(
           } catch (error: any) {
             console.error('AuthStore: /auth/me error', error);
             set({ user: null, token: null, isAuthenticated: false, loading: false });
-            showError(error.response?.data?.message || i18n.t('session_expired'));
             delete apiClient.defaults.headers.common['Authorization'];
           }
         } else {
@@ -82,22 +81,18 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage', // name of the item in localStorage
-      storage: createJSONStorage(() => localStorage), // use localStorage
-      partialize: (state) => ({ token: state.token }), // Only persist the token
+      name: 'auth-storage',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ token: state.token }),
       onRehydrateStorage: (state) => {
-        // This function runs when the store is rehydrated from storage
         if (state?.token) {
           apiClient.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
         }
-        // Return a function that will be called after rehydration
         return (state, error) => {
           if (error) {
             console.error('Failed to rehydrate auth store', error);
-            // Clear any corrupted state
             state?.logout();
           } else if (state) {
-            // After rehydration, initialize auth state (fetch user details)
             state.initializeAuth();
           }
         };

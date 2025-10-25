@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, ReactNode } from 'react';
-import { useAuthStore } from '@/store/authStore'; // Import the Zustand store
+import { useAuthStore } from '@/store/authStore';
 import { UserType, LoginPayload, RegisterPayload } from '@/types';
 
 interface AuthContextType {
@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { user, token, isAuthenticated, login, register, logout, loading, initializeAuth } = useAuthStore();
 
   useEffect(() => {
-    // Initialize auth state when the AuthProvider mounts
     initializeAuth();
   }, [initializeAuth]);
 

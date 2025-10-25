@@ -38,7 +38,7 @@ const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la maintenance est requis." }),
   type: z.enum(['maintenance', 'repair', 'modification', 'other'], { message: "Le type de maintenance est requis." }),
   date: z.string().min(1, { message: "La date est requise." }),
-  details: z.string().nullable().optional(), // Changed from 'description' to 'details' and made optional
+  details: z.string().nullable().optional(),
   cost: z.coerce.number().min(0, { message: "Le coût ne peut pas être négatif." }).nullable().optional(),
   mileage: z.coerce.number().min(0, { message: "Le kilométrage ne peut pas être négatif." }).nullable().optional(),
   nextDueDate: z.string().nullable().optional(),
@@ -59,7 +59,7 @@ const MaintenanceCreate: React.FC = () => {
       name: '',
       type: 'maintenance',
       date: format(new Date(), 'yyyy-MM-dd'),
-      details: null, // Changed from 'description' to 'details'
+      details: null,
       cost: null,
       mileage: null,
       nextDueDate: null,
@@ -92,7 +92,7 @@ const MaintenanceCreate: React.FC = () => {
       name: values.name,
       type: values.type,
       date: values.date,
-      details: values.details === '' ? null : values.details, // Changed from 'description' to 'details'
+      details: values.details === '' ? null : values.details,
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
@@ -205,12 +205,12 @@ const MaintenanceCreate: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="details" // Changed from 'description' to 'details'
+                name="details"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('details')}</FormLabel> {/* Changed label */}
+                    <FormLabel>{t('details')}</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} /> {/* Changed placeholder */}
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

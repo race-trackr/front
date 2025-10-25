@@ -73,7 +73,6 @@ const VehicleCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateVehiclePayload = {
       ...values,
-      // Ensure required fields are explicitly handled if Zod's infer makes them optional
       brand: values.brand,
       model: values.model,
       year: values.year,

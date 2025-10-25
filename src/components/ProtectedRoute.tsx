@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface ProtectedRouteProps {
-  allowedRoles?: ('admin' | 'user')[]; // 'owner' is now 'admin' based on isAdmin
+  allowedRoles?: ('admin' | 'user')[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
@@ -27,15 +27,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   if (!isAuthenticated) {
     console.log('ProtectedRoute: Not authenticated, redirecting to /auth');
-    return <Navigate to="/auth" replace />; // Redirection vers /auth
+    return <Navigate to="/auth" replace />;
   }
 
-  // Check roles if provided
   if (allowedRoles && user) {
-    const userRole = user.role; // Use user.role directly
+    const userRole = user.role;
     if (!allowedRoles.includes(userRole)) {
       console.log('ProtectedRoute: Authenticated but role not allowed, redirecting to /dashboard');
-      return <Navigate to="/dashboard" replace />; // Redirect if role not allowed
+      return <Navigate to="/dashboard" replace />;
     }
   }
 

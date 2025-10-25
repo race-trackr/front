@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
-// Removed import for dangerButtonClasses
 
 interface ConfirmDeleteDialogProps {
   isOpen: boolean;
