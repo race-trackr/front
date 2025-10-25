@@ -251,7 +251,6 @@
   "loading_maintenances": "Chargement des maintenances...",
   "error_loading_maintenances": "Erreur lors du chargement des maintenances.",
   "maintenance_created_successfully": "Maintenance créée avec succès !",
-  "failed_to_create_maintenance": "Échec de la création de la maintenance.",
   "description": "Description",
   "enter_description": "Entrez la description",
   "next_due_date": "Prochaine date d'échéance",
@@ -288,5 +287,9 @@
   "chrono_format_error": "Le temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)",
   "enter_multiple_lap_times": "Entrez plusieurs temps au tour pour cette journée.",
   "view_details": "Voir les détails",
-  "delete_vehicle_button": "Supprimer le véhicule"
+  "delete_vehicle_button": "Supprimer le véhicule",
+  "confirm_delete_vehicle_title": "Confirmer la suppression",
+  "confirm_delete_vehicle_description": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.",
+  "cancel": "Annuler",
+  "delete": "Supprimer"
 }

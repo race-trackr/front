@@ -303,5 +303,9 @@
   "chrono_format_error": "Le temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)",
   "enter_multiple_lap_times": "Entrez plusieurs temps au tour pour cette journée.",
   "view_details": "Voir les détails",
-  "delete_vehicle_button": "Supprimer le véhicule"
+  "delete_vehicle_button": "Supprimer le véhicule",
+  "confirm_delete_vehicle_title": "Conferma eliminazione",
+  "confirm_delete_vehicle_description": "Sei sicuro di voler eliminare questo veicolo? Questa azione non può essere annullata.",
+  "cancel": "Annulla",
+  "delete": "Elimina"
 }

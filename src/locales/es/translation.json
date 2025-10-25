@@ -286,7 +286,7 @@
   "confirm_delete_maintenance": "¿Estás seguro de que quieres eliminar este registro de mantenimiento?",
   "maintenance_deleted_successfully": "¡Mantenimiento eliminado con éxito!",
   "failed_to_delete_maintenance": "Error al eliminar el mantenimiento.",
-  "total_distance": "Distanza total",
+  "total_distance": "Distanza totale",
   "chronos": "Cronos",
   "enter_chronos_data": "Introduce los datos de cronos",
   "select_track_condition": "Selecciona la condición de la pista",
@@ -303,5 +303,9 @@
   "chrono_format_error": "El tiempo de vuelta debe estar en formato MM.SS.mmm (ej., 01.23.456)",
   "enter_multiple_lap_times": "Introduce varios tiempos de vuelta para este día.",
   "view_details": "Ver detalles",
-  "delete_vehicle_button": "Eliminar vehículo"
+  "delete_vehicle_button": "Eliminar vehículo",
+  "confirm_delete_vehicle_title": "Confirmar eliminación",
+  "confirm_delete_vehicle_description": "¿Estás seguro de que quieres eliminar este vehículo? Esta acción no se puede deshacer.",
+  "cancel": "Cancelar",
+  "delete": "Eliminar"
 }

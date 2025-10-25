@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { deleteVehicle, getVehicles } from '@/lib/api/vehicles';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'; // Import the new dialog component
 
 const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
@@ -26,6 +27,9 @@ const VehicleList: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [vehicleToDelete, setVehicleToDelete] = React.useState<number | null>(null);
+
   const { data: vehicles, isLoading, isError } = useQuery<UserVehicleType[]>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
@@ -36,15 +40,24 @@ const VehicleList: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
       toast.success(t('vehicle_deleted_successfully'));
+      setIsDeleteDialogOpen(false);
+      setVehicleToDelete(null);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || t('failed_to_delete_vehicle'));
+      setIsDeleteDialogOpen(false);
+      setVehicleToDelete(null);
     },
   });
 
-  const handleDelete = (id: number) => {
-    if (window.confirm(t('confirm_delete_vehicle'))) {
-      deleteVehicleMutation.mutate(id);
+  const handleDeleteClick = (id: number) => {
+    setVehicleToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (vehicleToDelete !== null) {
+      deleteVehicleMutation.mutate(vehicleToDelete);
     }
   };
 
@@ -104,7 +117,7 @@ const VehicleList: React.FC = () => {
                 <Button
                   variant="destructive"
                   size="icon"
-                  onClick={() => handleDelete(vehicle.id)}
+                  onClick={() => handleDeleteClick(vehicle.id)}
                   disabled={deleteVehicleMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -115,6 +128,17 @@ const VehicleList: React.FC = () => {
           ))
         )}
       </div>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_vehicle_title')}
+        description={t('confirm_delete_vehicle_description')}
+        confirmButtonText={t('delete_vehicle_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteVehicleMutation.isPending}
+      />
     </div>
   );
 };

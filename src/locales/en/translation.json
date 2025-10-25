@@ -287,5 +287,7 @@
   "chrono_format_error": "Lap time must be in MM.SS.mmm format (e.g., 01.23.456)",
   "enter_multiple_lap_times": "Enter multiple lap times for this trackday.",
   "view_details": "View Details",
-  "delete_vehicle_button": "Delete Vehicle"
+  "delete_vehicle_button": "Delete Vehicle",
+  "confirm_delete_vehicle_title": "Confirm Deletion",
+  "confirm_delete_vehicle_description": "Are you sure you want to delete this vehicle? This action cannot be undone."
 }
