@@ -9,7 +9,7 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getMaintenanceById, deleteMaintenance } from '@/lib/api/maintenances';
-import { ArrowLeft, Edit, Trash2, Wrench, CalendarDays, GaugeCircle, DollarSign } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, Wrench, CalendarDays, GaugeCircle, DollarSign, Car, BookText } from 'lucide-react';
 import { MaintenanceRecordType } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
@@ -77,11 +77,18 @@ const MaintenanceView: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      {/* Page Header with Title and Action Buttons */}
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{maintenance.name}</h1>
+        <div className="flex flex-col items-center flex-grow mx-4">
+          <div className="flex items-center gap-2">
+            <Wrench className="h-7 w-7 text-primary" />
+            <h1 className="text-3xl font-bold">{maintenance.name}</h1>
+          </div>
+          <p className="text-lg text-muted-foreground">{t(`maintenance_type_${maintenance.type}`)}</p>
+        </div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
             <Link to={`/maintenances/edit/${maintenance.id}`}>
@@ -102,74 +109,65 @@ const MaintenanceView: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Main Details Card */}
-        <Card className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        {/* Main Maintenance Info Card (Date, Cost, Mileage) */}
+        <Card className="lg:col-span-1 xl:col-span-1">
           <CardHeader>
             <CardTitle>{t('maintenance_details')}</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('maintenance_name')}</p>
-              <p className="text-lg">{maintenance.name}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('vehicle')}</p>
-              <p className="text-lg">
-                {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : t('not_specified_vehicle')}
-              </p>
-              {maintenance.vehicle?.licensePlate && (
-                <p className="text-xs text-muted-foreground">{maintenance.vehicle.licensePlate}</p>
-              )}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('type')}</p>
-              <p className="text-lg">{t(`maintenance_type_${maintenance.type}`)}</p>
-            </div>
+          <CardContent className="space-y-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('date')}</p>
               <p className="text-lg">{formattedDate}</p>
             </div>
-            <div className="md:col-span-2">
-              <p className="text-sm font-medium text-muted-foreground">{t('description')}</p>
-              <p className="text-lg">{maintenance.description}</p>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('cost')}</p>
+              <p className="text-lg">
+                {maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('mileage')}</p>
+              <p className="text-lg">
+                {maintenance.mileage !== null ? `${maintenance.mileage} km` : t('not_specified')}
+              </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 gap-4">
-          <Card className="bg-primary/10 dark:bg-primary/20 text-primary-foreground dark:text-primary-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-primary">{t('cost')}</CardTitle>
-              <DollarSign className="h-5 w-5 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">
-                {maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t('mileage')}</CardTitle>
-              <GaugeCircle className="h-5 w-5 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {maintenance.mileage !== null ? `${maintenance.mileage} km` : t('not_specified')}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Next Due Card (full width) */}
-        <Card className="lg:col-span-3">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('next_due')}</CardTitle>
-            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+        {/* Vehicle Information Card */}
+        <Card className="lg:col-span-1 xl:col-span-1">
+          <CardHeader>
+            <CardTitle>{t('vehicle')}</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-4">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_brand')}</p>
+              <p className="text-lg">
+                {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : t('not_specified_vehicle')}
+              </p>
+            </div>
+            {maintenance.vehicle?.licensePlate && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{t('license_plate')}</p>
+                <p className="text-lg">{maintenance.vehicle.licensePlate}</p>
+              </div>
+            )}
+            {maintenance.vehicle?.year && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{t('vehicle_year')}</p>
+                <p className="text-lg">{maintenance.vehicle.year}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Next Due Card */}
+        <Card className="lg:col-span-1 xl:col-span-1">
+          <CardHeader>
+            <CardTitle>{t('next_due')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('next_due_date')}</p>
               <p className="text-lg">{formattedNextDueDate}</p>
@@ -180,6 +178,16 @@ const MaintenanceView: React.FC = () => {
                 {maintenance.nextDueMileage !== null ? `${maintenance.nextDueMileage} km` : t('not_specified')}
               </p>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Description Card (full width on smaller screens, spans 2 on larger) */}
+        <Card className="lg:col-span-2 xl:col-span-3">
+          <CardHeader>
+            <CardTitle>{t('description')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg">{maintenance.description}</p>
           </CardContent>
         </Card>
       </div>
