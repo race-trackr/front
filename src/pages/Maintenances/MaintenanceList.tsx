@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react'; // Import DollarSign and CalendarDays
+import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react';
 import { MaintenanceRecordType } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances';
@@ -98,9 +98,9 @@ const MaintenanceList: React.FC = () => {
         </Card>
         <Card>
           <CardHeader>
-            <div className='flex items-center justify-between'> {/* Added flex container */}
+            <div className='flex items-center justify-between'>
               <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
-              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'> {/* Icon for Total Cost */}
+              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
                 <DollarSign className='h-6 w-6 text-primary' />
               </span>
             </div>
@@ -111,9 +111,9 @@ const MaintenanceList: React.FC = () => {
         </Card>
         <Card>
           <CardHeader>
-            <div className='flex items-center justify-between'> {/* Added flex container */}
+            <div className='flex items-center justify-between'>
               <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
-              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'> {/* Icon for Upcoming Maintenances */}
+              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
                 <CalendarDays className='h-6 w-6 text-primary' />
               </span>
             </div>
@@ -129,10 +129,13 @@ const MaintenanceList: React.FC = () => {
           <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
         ) : (
           maintenances?.map((maintenance) => (
-            <Card key={maintenance.id} className="flex flex-col">
+            <Card 
+              key={maintenance.id} 
+              className="flex flex-col transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary" // Added hover effects
+            >
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
                 <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center gap-4 flex-1 pr-4"> {/* Combined icon, title, subtitle */}
+                  <div className="flex items-center gap-4 flex-1 pr-4">
                     <div className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-md font-bold text-white flex-shrink-0",
                       "bg-gradient-to-r from-red-500 to-orange-500"
@@ -144,11 +147,11 @@ const MaintenanceList: React.FC = () => {
                       <p className="text-sm text-muted-foreground">{t(`maintenance_type_${maintenance.type}`)}</p>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-2"> {/* Date and Cost */}
+                  <div className="flex flex-col items-end gap-2">
                     <p className="text-sm font-medium">{format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
                     <p className="text-lg font-bold">{maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}</p>
                   </div>
-                  <div className="flex items-center gap-2 ml-4"> {/* Buttons aligned right */}
+                  <div className="flex items-center gap-2 ml-4">
                     <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
                       <Link to={`/maintenances/edit/${maintenance.id}`}>
                         <Edit className="h-4 w-4" />
