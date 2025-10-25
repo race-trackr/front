@@ -405,5 +405,9 @@
   "email_notifications": "Notificaciones por correo electrónico",
   "receive_email_updates": "Recibe actualizaciones por correo electrónico sobre tu cuenta y actividades.",
   "push_notifications": "Notificaciones push",
-  "receive_push_updates": "Recibe notificaciones push en tu dispositivo."
+  "receive_push_updates": "Recibe notificaciones push en tu dispositivo.",
+  "marketing_emails": "Correos electrónicos de marketing",
+  "receive_marketing_emails": "Recibe correos electrónicos sobre nuevos productos, funciones y ofertas especiales.",
+  "security_emails": "Correos electrónicos de seguridad",
+  "receive_security_emails": "Recibe alertas de seguridad y notificaciones importantes de la cuenta."
 }

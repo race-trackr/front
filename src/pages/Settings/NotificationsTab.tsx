@@ -26,6 +26,24 @@ const NotificationsTab: React.FC = () => {
           <Switch id="email-notifications" defaultChecked />
         </div>
         <div className="flex items-center justify-between">
+          <Label htmlFor="marketing-emails" className="flex flex-col space-y-1">
+            <span>{t('marketing_emails')}</span>
+            <span className="font-normal leading-snug text-muted-foreground">
+              {t('receive_marketing_emails')}
+            </span>
+          </Label>
+          <Switch id="marketing-emails" />
+        </div>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="security-emails" className="flex flex-col space-y-1">
+            <span>{t('security_emails')}</span>
+            <span className="font-normal leading-snug text-muted-foreground">
+              {t('receive_security_emails')}
+            </span>
+          </Label>
+          <Switch id="security-emails" defaultChecked />
+        </div>
+        <div className="flex items-center justify-between">
           <Label htmlFor="push-notifications" className="flex flex-col space-y-1">
             <span>{t('push_notifications')}</span>
             <span className="font-normal leading-snug text-muted-foreground">
