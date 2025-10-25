@@ -291,5 +291,6 @@
   "confirm_delete_vehicle_title": "Confirmer la suppression",
   "confirm_delete_vehicle_description": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.",
   "cancel": "Annuler",
-  "delete": "Supprimer"
+  "delete": "Supprimer",
+  "auth_page_description": "Suivez facilement vos journées de course, véhicules et dossiers d'entretien."
 }

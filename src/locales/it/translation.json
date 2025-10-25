@@ -211,8 +211,8 @@
   "color": "Colore",
   "engine_type": "Tipo di motore",
   "transmission_type": "Tipo di trasmissione",
-  "purchase_date": "Data di acquisto",
-  "purchase_price": "Prezzo di acquisto",
+  "purchase_date": "Data de compra",
+  "purchase_price": "Prezzo de compra",
   "details": "Dettagli",
   "other_details": "Altri dettagli",
   "enter_vin": "Inserisci il VIN",
@@ -307,5 +307,6 @@
   "confirm_delete_vehicle_title": "Conferma eliminazione",
   "confirm_delete_vehicle_description": "Sei sicuro di voler eliminare questo veicolo? Questa azione non può essere annullata.",
   "cancel": "Annulla",
-  "delete": "Elimina"
+  "delete": "Elimina",
+  "auth_page_description": "Tieni traccia facilmente delle tue giornate in pista, veicoli e registri di manutenzione."
 }
