@@ -286,5 +286,7 @@
   "add_lap_time": "Ajouter un temps au tour",
   "remove_lap_time": "Supprimer le temps au tour",
   "chrono_format_error": "Le temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)",
-  "enter_multiple_lap_times": "Entrez plusieurs temps au tour pour cette journée."
+  "enter_multiple_lap_times": "Entrez plusieurs temps au tour pour cette journée.",
+  "view_details": "Voir les détails",
+  "delete_vehicle_button": "Supprimer le véhicule"
 }

@@ -301,5 +301,7 @@
   "add_lap_time": "Añadir tiempo de vuelta",
   "remove_lap_time": "Eliminar tiempo de vuelta",
   "chrono_format_error": "El tiempo de vuelta debe estar en formato MM.SS.mmm (ej., 01.23.456)",
-  "enter_multiple_lap_times": "Introduce varios tiempos de vuelta para este día."
+  "enter_multiple_lap_times": "Introduce varios tiempos de vuelta para este día.",
+  "view_details": "Ver detalles",
+  "delete_vehicle_button": "Eliminar vehículo"
 }

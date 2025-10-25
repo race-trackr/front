@@ -286,5 +286,7 @@
   "add_lap_time": "Add Lap Time",
   "remove_lap_time": "Remove Lap Time",
   "chrono_format_error": "Lap time must be in MM.SS.mmm format (e.g., 01.23.456)",
-  "enter_multiple_lap_times": "Enter multiple lap times for this trackday."
+  "enter_multiple_lap_times": "Enter multiple lap times for this trackday.",
+  "view_details": "View Details",
+  "delete_vehicle_button": "Delete Vehicle"
 }
