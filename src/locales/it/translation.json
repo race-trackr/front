@@ -317,5 +317,10 @@
   "delete_trackday_button": "Elimina giornata in pista",
   "confirm_delete_trackday_title": "Conferma eliminazione",
   "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può essere annullata.",
-  "not_specified_vehicle": "Veicolo non specificato"
+  "not_specified_vehicle": "Veicolo non specificato",
+  "session_of_date": "Sessione del {{date}}",
+  "stats": "Statistiche",
+  "average_laptime": "Tempo medio sul giro",
+  "not_available": "N/D",
+  "best_lap": "Miglior giro"
 }

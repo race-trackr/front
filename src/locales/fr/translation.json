@@ -301,5 +301,10 @@
   "delete_trackday_button": "Supprimer la journée piste",
   "confirm_delete_trackday_title": "Confirmer la suppression",
   "confirm_delete_trackday_description": "Êtes-vous sûr de vouloir supprimer cette journée piste ? Cette action est irréversible.",
-  "not_specified_vehicle": "Véhicule non spécifié"
+  "not_specified_vehicle": "Véhicule non spécifié",
+  "session_of_date": "Session du {{date}}",
+  "stats": "Statistiques",
+  "average_laptime": "Temps au tour moyen",
+  "not_available": "N/A",
+  "best_lap": "Meilleur tour"
 }

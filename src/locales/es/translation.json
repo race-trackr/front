@@ -97,7 +97,7 @@
   "total_countries_in_system": "Total de países en el sistema.",
   "go_to_countries": "Ir a países",
   "add_new_country": "Añadir nuevo país",
-  "no_countries_added": "Aún no hay países añadidos.",
+  "no_countries_added": "Aún no hay países añadidas.",
   "timezone": "Zona horaria",
   "create_new_country": "Crear nuevo país",
   "country_details": "Detalles del país",
@@ -321,5 +321,10 @@
   "delete_trackday_button": "Eliminar día de pista",
   "confirm_delete_trackday_title": "Confirmar eliminación",
   "confirm_delete_trackday_description": "¿Estás seguro de que quieres eliminar este día de pista? Esta acción no se puede deshacer.",
-  "not_specified_vehicle": "Vehículo no especificado"
+  "not_specified_vehicle": "Vehículo no especificado",
+  "session_of_date": "Sesión del {{date}}",
+  "stats": "Estadísticas",
+  "average_laptime": "Tiempo medio de vuelta",
+  "not_available": "N/D",
+  "best_lap": "Mejor vuelta"
 }

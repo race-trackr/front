@@ -2,26 +2,53 @@
 
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getTrackdayById } from '@/lib/api/trackdays';
-import { ArrowLeft, Edit } from 'lucide-react';
-import { TrackDayType } from '@/types'; // Changed Trackday to TrackDayType
+import { getTrackdayById, deleteTrackday } from '@/lib/api/trackdays';
+import { ArrowLeft, Edit, Trash2, Clock, Gauge, Car, Flag, Cloud, Thermometer, Droplet, BookText, ListOrdered, CalendarDays } from 'lucide-react';
+import { TrackDayType } from '@/types';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const TrackdayView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({ // Changed Trackday to TrackDayType
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+
+  const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({
     queryKey: ['trackday', id],
     queryFn: () => getTrackdayById(id!),
     enabled: !!id,
   });
+
+  const deleteTrackdayMutation = useMutation({
+    mutationFn: () => deleteTrackday(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trackdays'] });
+      toast.success(t('trackday_deleted_successfully'));
+      navigate('/trackdays');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
+    },
+  });
+
+  const handleDeleteClick = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteTrackdayMutation.mutate();
+  };
 
   const getLocale = () => {
     switch (i18n.language) {
@@ -36,6 +63,38 @@ const TrackdayView: React.FC = () => {
     }
   };
 
+  const calculateAverageLapTime = (chronos: string[] | null): string | null => {
+    if (!chronos || chronos.length === 0) return null;
+
+    let totalMilliseconds = 0;
+    let validChronosCount = 0;
+
+    chronos.forEach(chrono => {
+      const parts = chrono.split('.');
+      if (parts.length === 3) {
+        const minutes = parseInt(parts[0], 10);
+        const seconds = parseInt(parts[1], 10);
+        const milliseconds = parseInt(parts[2], 10);
+
+        if (!isNaN(minutes) && !isNaN(seconds) && !isNaN(milliseconds)) {
+          totalMilliseconds += (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+          validChronosCount++;
+        }
+      }
+    });
+
+    if (validChronosCount === 0) return null;
+
+    const averageMilliseconds = totalMilliseconds / validChronosCount;
+
+    const avgMinutes = Math.floor(averageMilliseconds / (60 * 1000));
+    const remainingMillisecondsAfterMinutes = averageMilliseconds % (60 * 1000);
+    const avgSeconds = Math.floor(remainingMillisecondsAfterMinutes / 1000);
+    const avgMilliseconds = Math.floor(remainingMillisecondsAfterMinutes % 1000);
+
+    return `${String(avgMinutes).padStart(2, '0')}.${String(avgSeconds).padStart(2, '0')}.${String(avgMilliseconds).padStart(3, '0')}`;
+  };
+
   if (isLoading) {
     return <div className="container mx-auto p-4 text-center">{t('loading_trackday')}</div>;
   }
@@ -44,85 +103,203 @@ const TrackdayView: React.FC = () => {
     return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_trackday')}</div>;
   }
 
+  const formattedDate = format(new Date(trackday.date), 'PPP', { locale: getLocale() });
+  const averageLapTime = calculateAverageLapTime(trackday.chronos);
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('view_trackday', { id: trackday.id })}</h1>
+        <h1 className="text-3xl font-bold">{t('session_of_date', { date: formattedDate })}</h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => navigate('/trackdays')}>
             <ArrowLeft className="mr-2 h-4 w-4" /> {t('back_to_trackdays')}
           </Button>
-          <Button asChild className="btn-primary-gradient">
+          <Button asChild variant="outline" size="icon">
             <Link to={`/trackdays/edit/${trackday.id}`}>
-              <Edit className="mr-2 h-4 w-4" /> {t('edit_trackday_button')}
+              <Edit className="h-4 w-4" />
+              <span className="sr-only">{t('edit_trackday_button')}</span>
             </Link>
+          </Button>
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={handleDeleteClick}
+            disabled={deleteTrackdayMutation.isPending}
+            className="btn-danger"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
           </Button>
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('trackday_details')}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('date')}</p>
-            <p className="text-lg">{format(new Date(trackday.date), 'PPP', { locale: getLocale() })}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{trackday.vehicle?.brand ? t('vehicle') : t('vehicle_id_placeholder')}</p>
-            <p className="text-lg">{trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{trackday.track?.name ? t('track') : t('track_id_placeholder')}</p>
-            <p className="text-lg">{trackday.track?.name || trackday.trackId}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
-            <p className="text-lg">{t(`weather_${trackday.weather}`)}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
-            <p className="text-lg">{trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
-            <p className="text-lg">{trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
-            <p className="text-lg">{t(`track_condition_${trackday.trackCondition}`)}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('best_laptime')}</p>
-            <p className="text-lg">{trackday.bestLapTime || t('no_best_laptime')}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>
-            <p className="text-lg">{trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('total_distance')}</p>
-            <p className="text-lg">{trackday.totalDistance !== null ? `${trackday.totalDistance} km` : t('not_specified')}</p>
-          </div>
-          {trackday.chronos && trackday.chronos.length > 0 && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('chronos')}</p>
-              <ul className="list-disc list-inside text-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Date Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('date')}</CardTitle>
+            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{formattedDate}</div>
+          </CardContent>
+        </Card>
+
+        {/* Vehicle Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('vehicle')}</CardTitle>
+            <Car className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : t('not_specified_vehicle')}
+            </div>
+            {trackday.vehicle?.licensePlate && (
+              <p className="text-xs text-muted-foreground">{trackday.vehicle.licensePlate}</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Track Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('track')}</CardTitle>
+            <Flag className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{trackday.track?.name || trackday.trackId}</div>
+            {trackday.track?.city && (
+              <p className="text-xs text-muted-foreground">{trackday.track.city}, {trackday.track.country?.name || t('unknown_country')}</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Weather Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('weather')}</CardTitle>
+            <Cloud className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{t(`weather_${trackday.weather}`)}</div>
+          </CardContent>
+        </Card>
+
+        {/* Air Temperature Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('air_temperature')}</CardTitle>
+            <Thermometer className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Track Temperature Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('track_temperature')}</CardTitle>
+            <Thermometer className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Track Condition Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('track_condition')}</CardTitle>
+            <Droplet className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{t(`track_condition_${trackday.trackCondition}`)}</div>
+          </CardContent>
+        </Card>
+
+        {/* Best Lap Time Card */}
+        <Card className="bg-primary/10 dark:bg-primary/20 text-primary-foreground dark:text-primary-foreground">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-primary">{t('best_laptime')}</CardTitle>
+            <Clock className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-primary">
+              {trackday.bestLapTime || t('no_best_laptime')}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Stats Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('stats')}</CardTitle>
+            <Gauge className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold mb-2">
+              {t('total_laps')}: {trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}
+            </div>
+            <div className="text-2xl font-bold">
+              {t('average_laptime')}: {averageLapTime || t('not_available')}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Notes Card (full width) */}
+        {trackday.notes && (
+          <Card className="lg:col-span-3">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{t('notes')}</CardTitle>
+              <BookText className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg">{trackday.notes}</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* All Chronos Card (full width) */}
+        {trackday.chronos && trackday.chronos.length > 0 && (
+          <Card className="lg:col-span-3">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{t('chronos')}</CardTitle>
+              <ListOrdered className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2">
                 {trackday.chronos.map((chrono, index) => (
-                  <li key={index}>{chrono}</li>
+                  <li key={index} className="flex items-center justify-between text-lg">
+                    <span>{chrono}</span>
+                    {chrono === trackday.bestLapTime && (
+                      <Badge variant="secondary" className="bg-primary text-primary-foreground">
+                        {t('best_lap')}
+                      </Badge>
+                    )}
+                  </li>
                 ))}
               </ul>
-            </div>
-          )}
-          {trackday.notes && (
-            <div className="md:col-span-2">
-              <p className="text-sm font-medium text-muted-foreground">{t('notes')}</p>
-              <p className="text-lg">{trackday.notes}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_trackday_title')}
+        description={t('confirm_delete_trackday_description')}
+        confirmButtonText={t('delete_trackday_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteTrackdayMutation.isPending}
+      />
     </div>
   );
 };

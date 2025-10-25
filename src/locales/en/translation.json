@@ -301,5 +301,10 @@
   "delete_trackday_button": "Delete Trackday",
   "confirm_delete_trackday_title": "Confirm Deletion",
   "confirm_delete_trackday_description": "Are you sure you want to delete this trackday? This action cannot be undone.",
-  "not_specified_vehicle": "Vehicle not specified"
+  "not_specified_vehicle": "Vehicle not specified",
+  "session_of_date": "Session of {{date}}",
+  "stats": "Stats",
+  "average_laptime": "Average Laptime",
+  "not_available": "N/A",
+  "best_lap": "Best Lap"
 }
