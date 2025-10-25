@@ -9,8 +9,9 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getVehicleById } from '@/lib/api/vehicles';
-import { ArrowLeft, Edit } from 'lucide-react';
-import { UserVehicleType } from '@/types';
+import { getMaintenances } from '@/lib/api/maintenances'; // Import getMaintenances
+import { ArrowLeft, Edit, Wrench, PlusCircle } from 'lucide-react'; // Add Wrench and PlusCircle icons
+import { UserVehicleType, MaintenanceRecordType } from '@/types'; // Import MaintenanceRecordType
 
 const VehicleView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,12 @@ const VehicleView: React.FC = () => {
   const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
+    enabled: !!vehicleId && !isNaN(vehicleId),
+  });
+
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery<MaintenanceRecordType[]>({
+    queryKey: ['vehicleMaintenances', vehicleId],
+    queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
@@ -61,7 +68,8 @@ const VehicleView: React.FC = () => {
         </div>
       </div>
 
-      <Card>
+      {/* Vehicle Details Card */}
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>{t('vehicle_details')}</CardTitle>
         </CardHeader>
@@ -83,10 +91,6 @@ const VehicleView: React.FC = () => {
             <p className="text-lg">{t(`type_${vehicle.type.toLowerCase()}`)}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_slug')}</p>
-            <p className="text-lg">{vehicle.slug}</p>
-          </div>
-          <div>
             <p className="text-sm font-medium text-muted-foreground">{t('vehicle_license_plate')}</p>
             <p className="text-lg">{vehicle.licensePlate || t('not_specified')}</p>
           </div>
@@ -100,6 +104,55 @@ const VehicleView: React.FC = () => {
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">{t('details')}</p>
               <p className="text-lg">{vehicle.details}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Maintenance History Card */}
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>{t('maintenance_history')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoadingMaintenances ? (
+            <div className="text-center">{t('loading_vehicle_maintenances')}</div>
+          ) : isErrorMaintenances ? (
+            <div className="text-center text-red-500">{t('error_loading_vehicle_maintenances')}</div>
+          ) : maintenances && maintenances.length > 0 ? (
+            <ul className="space-y-4">
+              {maintenances.map((maintenance) => (
+                <li key={maintenance.id} className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0">
+                  <div>
+                    <p className="font-medium">{maintenance.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t(`maintenance_type_${maintenance.type}`)} - {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
+                    </p>
+                  </div>
+                  <Button asChild variant="outline" size="sm">
+                    <Link to={`/maintenances/edit/${maintenance.id}`}>
+                      {t('view_edit_details')}
+                    </Link>
+                  </Button>
+                </li>
+              ))}
+              <div className="pt-4">
+                <Button asChild className="btn-primary-gradient w-full">
+                  <Link to={`/maintenances/create?vehicleId=${vehicle.id}`}>
+                    <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_maintenance')}
+                  </Link>
+                </Button>
+              </div>
+            </ul>
+          ) : (
+            <div className="flex flex-col items-center justify-center p-6 text-center">
+              <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground mb-4">{t('no_maintenance_records')}</p>
+              <Button asChild className="btn-primary-gradient">
+                <Link to={`/maintenances/create?vehicleId=${vehicle.id}`}>
+                  <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_maintenance')}
+                </Link>
+              </Button>
             </div>
           )}
         </CardContent>

@@ -308,5 +308,10 @@
   "not_available": "N/A",
   "best_lap": "Best Lap",
   "no_chronos_recorded": "No chronos recorded for this trackday.",
-  "back": "Back"
+  "back": "Back",
+  "maintenance_history": "Maintenance History",
+  "no_maintenance_records": "No maintenance records found for this vehicle.",
+  "add_maintenance": "Add Maintenance",
+  "loading_vehicle_maintenances": "Loading vehicle maintenances...",
+  "error_loading_vehicle_maintenances": "Error loading vehicle maintenances."
 }

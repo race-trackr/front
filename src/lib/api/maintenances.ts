@@ -1,9 +1,15 @@
 import apiClient from '@/lib/apiClient';
 import { MaintenanceRecordType, CreateMaintenancePayload, UpdateMaintenancePayload } from '@/types';
 
-export const getMaintenances = async ({ limit = 10, offset = 0 }): Promise<MaintenanceRecordType[]> => {
+interface GetMaintenancesParams {
+  limit?: number;
+  offset?: number;
+  userVehicleId?: number; // Added userVehicleId for filtering
+}
+
+export const getMaintenances = async (params?: GetMaintenancesParams): Promise<MaintenanceRecordType[]> => {
   const response = await apiClient.get('/maintenances', {
-    params: { limit, offset },
+    params: params,
   });
   return response.data;
 };

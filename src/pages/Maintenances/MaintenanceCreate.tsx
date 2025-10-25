@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
@@ -48,11 +48,13 @@ const MaintenanceCreate: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams(); // Use useSearchParams
+  const preselectedVehicleId = searchParams.get('vehicleId'); // Get vehicleId from URL
 
   const form = useForm<CreateMaintenancePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userVehicleId: 0,
+      userVehicleId: preselectedVehicleId ? Number(preselectedVehicleId) : 0, // Set default if present
       type: 'service',
       date: format(new Date(), 'yyyy-MM-dd'),
       description: '',
@@ -72,6 +74,7 @@ const MaintenanceCreate: React.FC = () => {
     mutationFn: createMaintenance,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] });
+      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] }); // Invalidate vehicle specific maintenances
       toast.success(t('maintenance_created_successfully'));
       navigate('/maintenances');
     },

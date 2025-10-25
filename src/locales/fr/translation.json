@@ -308,5 +308,10 @@
   "not_available": "N/A",
   "best_lap": "Meilleur tour",
   "no_chronos_recorded": "Aucun chrono enregistré pour cette journée piste.",
-  "back": "Retour"
+  "back": "Retour",
+  "maintenance_history": "Historique des maintenances",
+  "no_maintenance_records": "Aucun enregistrement de maintenance trouvé pour ce véhicule.",
+  "add_maintenance": "Ajouter une maintenance",
+  "loading_vehicle_maintenances": "Chargement des maintenances du véhicule...",
+  "error_loading_vehicle_maintenances": "Erreur lors du chargement des maintenances du véhicule."
 }
