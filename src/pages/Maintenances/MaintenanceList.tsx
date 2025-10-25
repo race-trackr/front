@@ -121,7 +121,7 @@ const MaintenanceList: React.FC = () => {
             <Card key={maintenance.id} className="flex flex-col">
               {/* The entire card is now a link to the view page */}
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
-                <div className="flex justify-between items-start w-full"> {/* Flex container for content and buttons */}
+                <div className="flex justify-between items-center w-full"> {/* Changed items-start to items-center */}
                   <div className="flex-1 pr-4"> {/* Content area */}
                     <CardTitle className="text-lg mb-2">{maintenance.name}</CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">For Vehicle ID: {maintenance.userVehicleId}</p>
