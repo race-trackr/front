@@ -31,6 +31,7 @@ import apiClient from '@/lib/apiClient';
 import { CountryType, UserType } from '@/types';
 import { useAuthStore } from '@/store/authStore';
 import { Separator } from '@/components/ui/separator';
+import { PasswordInput } from '@/components/PasswordInput'; // Import the new PasswordInput component
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Le nom complet doit contenir au moins 2 caractères." }),
@@ -230,7 +231,7 @@ const UserProfileForm: React.FC = () => {
                 <FormItem>
                   <FormLabel>{t('current_password')}</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} value={field.value || ''} />
+                    <PasswordInput {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,7 +245,7 @@ const UserProfileForm: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('new_password')}</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} value={field.value || ''} />
+                      <PasswordInput {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -257,7 +258,7 @@ const UserProfileForm: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('confirm_new_password')}</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} value={field.value || ''} />
+                      <PasswordInput {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

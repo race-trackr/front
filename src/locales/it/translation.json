@@ -288,7 +288,7 @@
   "failed_to_update_maintenance": "Errore nell'aggiornamento della manutenzione.",
   "confirm_delete_maintenance": "Sei sicuro di voler eliminare questo record di manutenzione?",
   "maintenance_deleted_successfully": "Manutenzione eliminata con successo!",
-  "failed_to_delete_maintenance": "Errore nell'eliminazione della manutenzione.",
+  "failed_to_delete_maintenance": "Erro nell'eliminazione della manutenzione.",
   "total_distance": "Distanza totale",
   "chronos": "Cronos",
   "enter_chronos_data": "Inserisci i dati dei cronos",
@@ -364,5 +364,7 @@
   "new_password": "Nuova password",
   "confirm_new_password": "Conferma nuova password",
   "password_updated_successfully": "Password aggiornata con successo!",
-  "failed_to_update_password": "Impossibile aggiornare la password."
+  "failed_to_update_password": "Impossibile aggiornare la password.",
+  "show_password": "Mostra password",
+  "hide_password": "Nascondi password"
 }

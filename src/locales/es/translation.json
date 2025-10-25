@@ -364,5 +364,7 @@
   "new_password": "Nueva contraseña",
   "confirm_new_password": "Confirmar nueva contraseña",
   "password_updated_successfully": "¡Contraseña actualizada con éxito!",
-  "failed_to_update_password": "Error al actualizar la contraseña."
+  "failed_to_update_password": "Error al actualizar la contraseña.",
+  "show_password": "Mostrar contraseña",
+  "hide_password": "Ocultar contraseña"
 }

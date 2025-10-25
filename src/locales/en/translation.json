@@ -344,5 +344,7 @@
   "new_password": "New Password",
   "confirm_new_password": "Confirm New Password",
   "password_updated_successfully": "Password updated successfully!",
-  "failed_to_update_password": "Failed to update password."
+  "failed_to_update_password": "Failed to update password.",
+  "show_password": "Show password",
+  "hide_password": "Hide password"
 }
