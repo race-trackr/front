@@ -70,7 +70,7 @@ const MaintenanceList: React.FC = () => {
           maintenances?.map((maintenance) => (
             <Card key={maintenance.id}>
               <CardHeader>
-                <CardTitle>{maintenance.description}</CardTitle> {/* Changed from name to description */}
+                <CardTitle>{maintenance.name}</CardTitle> {/* Changed from description to name */}
                 <p className="text-sm text-muted-foreground">For Vehicle ID: {maintenance.userVehicleId}</p> {/* Changed from vehicleId to userVehicleId */}
               </CardHeader>
               <CardContent className="space-y-2">

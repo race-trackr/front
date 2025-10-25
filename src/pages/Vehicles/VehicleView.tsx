@@ -160,7 +160,7 @@ const VehicleView: React.FC = () => {
               {maintenances.map((maintenance) => (
                 <li key={maintenance.id} className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0">
                   <div>
-                    <p className="font-medium">{maintenance.description}</p>
+                    <p className="font-medium">{maintenance.name}</p> {/* Changed from description to name */}
                     <p className="text-sm text-muted-foreground">
                       {t(`maintenance_type_${maintenance.type}`)} - {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
                     </p>

@@ -89,6 +89,7 @@ export interface MaintenanceRecordType {
   id: number;
   userId: number;
   userVehicleId: number;
+  name: string; // Added 'name' property
   type: MaintenanceRecordTypeType;
   date: string;
   description: string;

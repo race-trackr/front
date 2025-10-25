@@ -35,6 +35,7 @@ import { PlusCircle } from 'lucide-react';
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
+  name: z.string().min(1, { message: "Le nom de la maintenance est requis." }), // Added name field
   type: z.enum(['repair', 'service', 'modification'], { message: "Le type de maintenance est requis." }),
   date: z.string().min(1, { message: "La date est requise." }),
   description: z.string().min(1, { message: "La description est requise." }),
@@ -55,6 +56,7 @@ const MaintenanceEdit: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       userVehicleId: 0,
+      name: '', // Default value for new name field
       type: 'service',
       date: format(new Date(), 'yyyy-MM-dd'),
       description: '',
@@ -80,6 +82,7 @@ const MaintenanceEdit: React.FC = () => {
     if (maintenance) {
       form.reset({
         userVehicleId: maintenance.userVehicleId,
+        name: maintenance.name, // Reset with name from fetched data
         type: maintenance.type,
         date: maintenance.date,
         description: maintenance.description,
@@ -119,6 +122,7 @@ const MaintenanceEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: UpdateMaintenancePayload = {
       ...values,
+      name: values.name, // Include name in payload
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
@@ -185,6 +189,19 @@ const MaintenanceEdit: React.FC = () => {
                         )}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name" // New name field
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('maintenance_name')}<span className="text-destructive">*</span></FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_maintenance_name')} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -35,6 +35,7 @@ import { PlusCircle } from 'lucide-react';
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
+  name: z.string().min(1, { message: "Le nom de la maintenance est requis." }), // Added name field
   type: z.enum(['repair', 'service', 'modification'], { message: "Le type de maintenance est requis." }),
   date: z.string().min(1, { message: "La date est requise." }),
   description: z.string().min(1, { message: "La description est requise." }),
@@ -55,6 +56,7 @@ const MaintenanceCreate: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       userVehicleId: preselectedVehicleId ? Number(preselectedVehicleId) : 0,
+      name: '', // Default value for new name field
       type: 'service',
       date: format(new Date(), 'yyyy-MM-dd'),
       description: '',
@@ -87,6 +89,7 @@ const MaintenanceCreate: React.FC = () => {
     const payload: CreateMaintenancePayload = {
       ...values,
       userVehicleId: values.userVehicleId,
+      name: values.name, // Include name in payload
       type: values.type,
       date: values.date,
       description: values.description,
@@ -142,6 +145,19 @@ const MaintenanceCreate: React.FC = () => {
                         )}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name" // New name field
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('maintenance_name')}<span className="text-destructive">*</span></FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_maintenance_name')} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

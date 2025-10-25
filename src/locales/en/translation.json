@@ -313,5 +313,7 @@
   "no_maintenance_records": "No maintenance records found for this vehicle.",
   "add_maintenance": "Add Maintenance",
   "loading_vehicle_maintenances": "Loading vehicle maintenances...",
-  "error_loading_vehicle_maintenances": "Error loading vehicle maintenances."
+  "error_loading_vehicle_maintenances": "Error loading vehicle maintenances.",
+  "maintenance_name": "Maintenance Name",
+  "enter_maintenance_name": "Enter maintenance name"
 }
