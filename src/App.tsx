@@ -76,179 +76,174 @@ const App: React.FC = () => {
       errorElement: <ErrorPage />,
     },
     {
-      element: <ProtectedRoute />, // ProtectedRoute acts as a guard
+      element: <ProtectedRoute><Layout /></ProtectedRoute>, // Layout now wraps the Outlet for all protected children
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />, // Layout wraps the Outlet for all its children
+          path: "/dashboard",
+          element: <Dashboard />,
+          handle: { crumb: () => t('Dashboard') },
+        },
+        {
+          path: "/trackdays",
+          handle: { crumb: () => t('trackdays') },
           children: [
             {
-              path: "/dashboard",
-              element: <Dashboard />,
-              handle: { crumb: () => t('Dashboard') },
+              index: true,
+              element: <TrackdayList />,
             },
             {
-              path: "/trackdays",
-              handle: { crumb: () => t('trackdays') },
-              children: [
-                {
-                  index: true,
-                  element: <TrackdayList />,
-                },
-                {
-                  path: "create",
-                  element: <TrackdayCreate />,
-                  handle: { crumb: () => t('create_new_trackday') },
-                },
-                {
-                  path: ":id",
-                  element: <TrackdayView />,
-                  loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
-                    return { trackday };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-                {
-                  path: "edit/:id",
-                  element: <TrackdayEdit />,
-                  loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
-                    return { trackday };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-              ],
+              path: "create",
+              element: <TrackdayCreate />,
+              handle: { crumb: () => t('create_new_trackday') },
             },
             {
-              path: "/vehicles",
-              handle: { crumb: () => t('vehicles') },
-              children: [
-                {
-                  index: true,
-                  element: <VehicleList />,
-                },
-                {
-                  path: "create",
-                  element: <VehicleCreate />,
-                  handle: { crumb: () => t('create_new_vehicle') },
-                },
-                {
-                  path: ":id",
-                  element: <VehicleView />,
-                  loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!));
-                    return { vehicle };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-                {
-                  path: "edit/:id",
-                  element: <VehicleEdit />,
-                  loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!));
-                    return { vehicle };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-              ],
+              path: ":id",
+              element: <TrackdayView />,
+              loader: async ({ params }) => {
+                const trackday = await getTrackdayById(params.id!);
+                return { trackday };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const trackday = data?.trackday as TrackDayType;
+                  return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
+                }
+              },
             },
             {
-              path: "/maintenances",
-              handle: { crumb: () => t('maintenances') },
-              children: [
-                {
-                  index: true,
-                  element: <MaintenanceList />,
-                },
-                {
-                  path: "create",
-                  element: <MaintenanceCreate />,
-                  handle: { crumb: () => t('create_new_maintenance') },
-                },
-                {
-                  path: ":id",
-                  element: <MaintenanceView />,
-                  loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!));
-                    return { maintenance };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const maintenance = data?.maintenance as MaintenanceRecordType;
-                      return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-                {
-                  path: "edit/:id",
-                  element: <MaintenanceEdit />,
-                  loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!));
-                    return { maintenance };
-                  },
-                  handle: {
-                    crumb: ({ data }: RouteMatchWithData) => {
-                      const maintenance = data?.maintenance as MaintenanceRecordType;
-                      return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
-                    }
-                  },
-                },
-              ],
-            },
-            {
-              path: "/settings",
-              element: <Settings />,
-              handle: { crumb: () => t('settings') },
-            },
-            {
-              path: "/profile",
-              element: <Profile />,
-              handle: { crumb: () => t('my_account') },
-            },
-            {
-              path: "/upgrade",
-              element: <Upgrade />,
-              handle: { crumb: () => t('upgrade_to_pro') },
+              path: "edit/:id",
+              element: <TrackdayEdit />,
+              loader: async ({ params }) => {
+                const trackday = await getTrackdayById(params.id!);
+                return { trackday };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const trackday = data?.trackday as TrackDayType;
+                  return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
+                }
+              },
             },
           ],
+        },
+        {
+          path: "/vehicles",
+          handle: { crumb: () => t('vehicles') },
+          children: [
+            {
+              index: true,
+              element: <VehicleList />,
+            },
+            {
+              path: "create",
+              element: <VehicleCreate />,
+              handle: { crumb: () => t('create_new_vehicle') },
+            },
+            {
+              path: ":id",
+              element: <VehicleView />,
+              loader: async ({ params }) => {
+                const vehicle = await getVehicleById(Number(params.id!));
+                return { vehicle };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const vehicle = data?.vehicle as UserVehicleType;
+                  return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
+                }
+              },
+            },
+            {
+              path: "edit/:id",
+              element: <VehicleEdit />,
+              loader: async ({ params }) => {
+                const vehicle = await getVehicleById(Number(params.id!));
+                return { vehicle };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const vehicle = data?.vehicle as UserVehicleType;
+                  return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
+                }
+              },
+            },
+          ],
+        },
+        {
+          path: "/maintenances",
+          handle: { crumb: () => t('maintenances') },
+          children: [
+            {
+              index: true,
+              element: <MaintenanceList />,
+            },
+            {
+              path: "create",
+              element: <MaintenanceCreate />,
+              handle: { crumb: () => t('create_new_maintenance') },
+            },
+            {
+              path: ":id",
+              element: <MaintenanceView />,
+              loader: async ({ params }) => {
+                const maintenance = await getMaintenanceById(Number(params.id!));
+                return { maintenance };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const maintenance = data?.maintenance as MaintenanceRecordType;
+                  return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
+                }
+              },
+            },
+            {
+              path: "edit/:id",
+              element: <MaintenanceEdit />,
+              loader: async ({ params }) => {
+                const maintenance = await getMaintenanceById(Number(params.id!));
+                return { maintenance };
+              },
+              handle: {
+                crumb: ({ data }: RouteMatchWithData) => {
+                  const maintenance = data?.maintenance as MaintenanceRecordType;
+                  return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
+                }
+              },
+            },
+          ],
+        },
+        {
+          path: "/settings",
+          element: <Settings />,
+          handle: { crumb: () => t('settings') },
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+          handle: { crumb: () => t('my_account') },
+        },
+        {
+          path: "/upgrade",
+          element: <Upgrade />,
+          handle: { crumb: () => t('upgrade_to_pro') },
         },
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin']} />, // Admin ProtectedRoute acts as a guard
+      element: <ProtectedRoute allowedRoles={['admin']}><Layout /></ProtectedRoute>, // Admin ProtectedRoute also renders Layout
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />, // Layout wraps the Outlet for all its admin children
+          path: "/admin", // This is the parent for admin section
+          handle: { crumb: () => t('admin') },
           children: [
             {
-              path: "/admin",
+              index: true, // This makes /admin render AdminDashboard
               element: <AdminDashboard />,
-              handle: { crumb: () => t('admin') },
             },
             {
-              path: "/admin/tracks",
+              path: "tracks", // This becomes /admin/tracks
               handle: { crumb: () => t('manage_tracks') },
               children: [
                 {
@@ -277,7 +272,7 @@ const App: React.FC = () => {
               ],
             },
             {
-              path: "/admin/countries",
+              path: "countries", // This becomes /admin/countries
               handle: { crumb: () => t('manage_countries') },
               children: [
                 {
