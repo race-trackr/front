@@ -121,37 +121,40 @@ const MaintenanceList: React.FC = () => {
             <Card key={maintenance.id} className="flex flex-col">
               {/* The entire card is now a link to the view page */}
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
-                <CardTitle className="text-lg mb-2">{maintenance.name}</CardTitle>
-                <p className="text-sm text-muted-foreground mb-4">For Vehicle ID: {maintenance.userVehicleId}</p>
-                <div className="space-y-2">
-                  <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p>
-                  <p><strong>{t('date')}:</strong> {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
-                  <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
-                  <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
-                  {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {format(new Date(maintenance.nextDueDate), 'PPP', { locale: getLocale() })}</p>}
-                  {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
-                </div>
-                {/* Buttons moved inside CardContent, aligned right */}
-                <div className="flex justify-end items-center gap-2 pt-4">
-                  <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
-                    <Link to={`/maintenances/edit/${maintenance.id}`}>
-                      <Edit className="h-4 w-4" />
-                      <span className="sr-only">{t('edit_maintenance_button')}</span>
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent navigation when deleting
-                      handleDeleteClick(maintenance.id);
-                    }}
-                    disabled={deleteMaintenanceMutation.isPending}
-                    className="btn-danger"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}</span>
-                  </Button>
+                <div className="flex justify-between items-start w-full"> {/* Flex container for content and buttons */}
+                  <div className="flex-1 pr-4"> {/* Content area */}
+                    <CardTitle className="text-lg mb-2">{maintenance.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground mb-4">For Vehicle ID: {maintenance.userVehicleId}</p>
+                    <div className="space-y-2">
+                      <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p>
+                      <p><strong>{t('date')}:</strong> {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
+                      <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
+                      <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
+                      {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {format(new Date(maintenance.nextDueDate), 'PPP', { locale: getLocale() })}</p>}
+                      {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2"> {/* Buttons aligned right */}
+                    <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
+                      <Link to={`/maintenances/edit/${maintenance.id}`}>
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">{t('edit_maintenance_button')}</span>
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent navigation when deleting
+                        handleDeleteClick(maintenance.id);
+                      }}
+                      disabled={deleteMaintenanceMutation.isPending}
+                      className="btn-danger"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}</span>
+                    </Button>
+                  </div>
                 </div>
               </Link>
             </Card>
