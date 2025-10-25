@@ -50,7 +50,7 @@ const TrackdayList: React.FC = () => {
     queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: 0, // Fetch all for client-side filtering/display
-      searchTerm: debouncedSearch || undefined,
+      searchTerm: debouncedSearch || undefined, // Corrected to searchTerm
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
