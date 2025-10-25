@@ -335,5 +335,7 @@
   "loading_vehicle_maintenances": "Cargando mantenimientos del vehículo...",
   "error_loading_vehicle_maintenances": "Error al cargar los mantenimientos del vehículo.",
   "maintenance_name": "Nombre del mantenimiento",
-  "enter_maintenance_name": "Introduce el nombre del mantenimiento"
+  "enter_maintenance_name": "Introduce el nombre del mantenimiento",
+  "maintenance_type_maintenance": "Mantenimiento",
+  "maintenance_type_other": "Otro"
 }

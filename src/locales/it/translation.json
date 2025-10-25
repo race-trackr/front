@@ -209,8 +209,8 @@
   "not_specified": "Non specificato",
   "vin": "VIN",
   "color": "Colore",
-  "engine_type": "Tipo di motore",
-  "transmission_type": "Tipo di trasmissione",
+  "engine_type": "Tipo de motore",
+  "transmission_type": "Tipo de trasmissione",
   "purchase_date": "Data de compra",
   "purchase_price": "Prezzo de compra",
   "details": "Dettagli",
@@ -330,5 +330,7 @@
   "loading_vehicle_maintenances": "Chargement des maintenances du véhicule...",
   "error_loading_vehicle_maintenances": "Erreur lors du chargement des maintenances du véhicule.",
   "maintenance_name": "Nom de la maintenance",
-  "enter_maintenance_name": "Entrez le nom de la maintenance"
+  "enter_maintenance_name": "Entrez le nom de la maintenance",
+  "maintenance_type_maintenance": "Manutenzione",
+  "maintenance_type_other": "Altro"
 }

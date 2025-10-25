@@ -36,7 +36,7 @@ import { PlusCircle } from 'lucide-react';
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
   name: z.string().min(1, { message: "Le nom de la maintenance est requis." }), // Added name field
-  type: z.enum(['repair', 'service', 'modification'], { message: "Le type de maintenance est requis." }),
+  type: z.enum(['maintenance', 'repair', 'modification', 'other'], { message: "Le type de maintenance est requis." }), // Updated enum
   date: z.string().min(1, { message: "La date est requise." }),
   description: z.string().min(1, { message: "La description est requise." }),
   cost: z.coerce.number().min(0, { message: "Le coût ne peut pas être négatif." }).nullable().optional(),
@@ -57,7 +57,7 @@ const MaintenanceCreate: React.FC = () => {
     defaultValues: {
       userVehicleId: preselectedVehicleId ? Number(preselectedVehicleId) : 0,
       name: '', // Default value for new name field
-      type: 'service',
+      type: 'maintenance', // Changed default to 'maintenance'
       date: format(new Date(), 'yyyy-MM-dd'),
       description: '',
       cost: null,
@@ -175,9 +175,10 @@ const MaintenanceCreate: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="maintenance">{t('maintenance_type_maintenance')}</SelectItem>
                         <SelectItem value="repair">{t('maintenance_type_repair')}</SelectItem>
-                        <SelectItem value="service">{t('maintenance_type_service')}</SelectItem>
                         <SelectItem value="modification">{t('maintenance_type_modification')}</SelectItem>
+                        <SelectItem value="other">{t('maintenance_type_other')}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

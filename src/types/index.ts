@@ -43,7 +43,7 @@ export interface TrackType {
 export type WeatherCondition = 'clear' | 'cloudy' | 'rainy';
 export type TrackCondition = 'wet' | 'dry' | 'moist';
 export type VehicleType = 'car' | 'moto' | 'karting' | 'other'; // Changed 'motorcycle' to 'moto'
-export type MaintenanceRecordTypeType = 'repair' | 'service' | 'modification'; // Renamed to avoid conflict with interface name
+export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other'; // Updated enum
 
 export interface TrackDayType {
   id: string; // Keeping as string as per user's definition

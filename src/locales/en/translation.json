@@ -315,5 +315,7 @@
   "loading_vehicle_maintenances": "Loading vehicle maintenances...",
   "error_loading_vehicle_maintenances": "Error loading vehicle maintenances.",
   "maintenance_name": "Maintenance Name",
-  "enter_maintenance_name": "Enter maintenance name"
+  "enter_maintenance_name": "Enter maintenance name",
+  "maintenance_type_maintenance": "Maintenance",
+  "maintenance_type_other": "Other"
 }
