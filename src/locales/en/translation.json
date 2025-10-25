@@ -347,5 +347,5 @@
   "failed_to_update_password": "Failed to update password.",
   "show_password": "Show password",
   "hide_password": "Hide password",
-  "no_track_found": "No track found."
+  "loading": "Loading"
 }
