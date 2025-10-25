@@ -24,7 +24,7 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({ tabs, defaultValue, classNa
           <TabsTrigger
             key={tab.value}
             value={tab.value}
-            className="w-full justify-start px-4 py-2 data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            className="w-full justify-start px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
           >
             {tab.label}
           </TabsTrigger>
