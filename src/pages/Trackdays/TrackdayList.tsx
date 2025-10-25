@@ -31,8 +31,8 @@ import { TrackDayType, UserVehicleType, TrackType } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
-import useDebounce from '@/hooks/useDebounce'; // Import the useDebounce hook
-// import { DatePicker } from '@/components/ui/date-picker'; // Removed DatePicker import
+import useDebounce from '@/hooks/useDebounce';
+import { Combobox } from '@/components/ui/combobox'; // Import Combobox
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -43,23 +43,17 @@ const TrackdayList: React.FC = () => {
 
   const [filterVehicleId, setFilterVehicleId] = React.useState<number | undefined>(undefined);
   const [filterTrackId, setFilterTrackId] = React.useState<number | undefined>(undefined);
-  // Removed startDate and endDate state
-  // const [startDate, setStartDate] = React.useState<Date | undefined>(undefined);
-  // const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
   const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }], // Removed startDate and endDate from queryKey
+    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: 0,
       searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
-      // Removed startDate and endDate from queryFn
-      // startDate: startDate ? format(startDate, 'yyyy-MM-dd') : undefined,
-      // endDate: endDate ? format(endDate, 'yyyy-MM-dd') : undefined,
     }),
   });
 
@@ -98,6 +92,14 @@ const TrackdayList: React.FC = () => {
       deleteTrackdayMutation.mutate(trackdayToDelete);
     }
   };
+
+  const trackOptions = React.useMemo(() => {
+    const options = tracks?.map(track => ({
+      value: track.id.toString(),
+      label: `${track.name} (${track.city})`
+    })) || [];
+    return [{ value: 'all', label: t('all_tracks') }, ...options];
+  }, [tracks, t]);
 
   if (isError) {
     return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_trackdays')}</div>;
@@ -141,42 +143,15 @@ const TrackdayList: React.FC = () => {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
+        <Combobox
+          options={trackOptions}
           value={filterTrackId?.toString() || 'all'}
-        >
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder={t('filter_by_track')} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t('all_tracks')}</SelectItem>
-            {tracks?.map((track) => (
-              <SelectItem key={track.id} value={track.id.toString()}>
-                {track.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Removed Date Range Filter */}
-      {/*
-      <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
-        <span className="text-sm font-medium text-muted-foreground">{t('filter_by_date_range')}:</span>
-        <DatePicker
-          value={startDate}
-          onChange={setStartDate}
-          placeholder={t('pick_start_date')}
-          className="w-full md:w-[180px]"
-        />
-        <DatePicker
-          value={endDate}
-          onChange={setEndDate}
-          placeholder={t('pick_end_date')}
+          onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
+          placeholder={t('filter_by_track')}
+          emptyMessage={t('no_track_found')}
           className="w-full md:w-[180px]"
         />
       </div>
-      */}
 
       {isLoading || isLoadingVehicles || isLoadingTracks ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
