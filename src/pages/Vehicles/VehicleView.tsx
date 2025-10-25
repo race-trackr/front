@@ -2,22 +2,27 @@
 
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'; // Import useMutation and useQueryClient
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getVehicleById } from '@/lib/api/vehicles';
-import { getMaintenances } from '@/lib/api/maintenances'; // Import getMaintenances
-import { ArrowLeft, Edit, Wrench, PlusCircle } from 'lucide-react'; // Add Wrench and PlusCircle icons
-import { UserVehicleType, MaintenanceRecordType } from '@/types'; // Import MaintenanceRecordType
+import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles'; // Import deleteVehicle
+import { getMaintenances } from '@/lib/api/maintenances';
+import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react'; // Add Trash2 icon
+import { UserVehicleType, MaintenanceRecordType } from '@/types';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'; // Import ConfirmDeleteDialog
+import { toast } from 'sonner'; // Import toast
 
 const VehicleView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const vehicleId = Number(id); // Convert id to number
+  const vehicleId = Number(id);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient(); // Initialize queryClient
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({
     queryKey: ['vehicle', vehicleId],
@@ -30,6 +35,26 @@ const VehicleView: React.FC = () => {
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
+
+  const deleteVehicleMutation = useMutation({
+    mutationFn: () => deleteVehicle(vehicleId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+      toast.success(t('vehicle_deleted_successfully'));
+      navigate('/vehicles');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_vehicle'));
+    },
+  });
+
+  const handleDeleteClick = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteVehicleMutation.mutate();
+  };
 
   const getLocale = () => {
     switch (i18n.language) {
@@ -59,11 +84,24 @@ const VehicleView: React.FC = () => {
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
         <h1 className="text-3xl font-bold">{`${vehicle.brand} ${vehicle.model}`}</h1>
-        <Button asChild className="btn-primary-gradient">
-          <Link to={`/vehicles/edit/${vehicle.id}`}>
-            <Edit className="mr-2 h-4 w-4" /> {t('edit_vehicle_button')}
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" size="icon">
+            <Link to={`/vehicles/edit/${vehicle.id}`}>
+              <Edit className="h-4 w-4" />
+              <span className="sr-only">{t('edit_vehicle_button')}</span>
+            </Link>
+          </Button>
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={handleDeleteClick}
+            disabled={deleteVehicleMutation.isPending}
+            className="btn-danger"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
+          </Button>
+        </div>
       </div>
 
       {/* Vehicle Details Card */}
@@ -155,6 +193,17 @@ const VehicleView: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_vehicle_title')}
+        description={t('confirm_delete_vehicle_description')}
+        confirmButtonText={t('delete_vehicle_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteVehicleMutation.isPending}
+      />
     </div>
   );
 };
