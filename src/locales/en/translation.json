@@ -338,5 +338,11 @@
   "saving_profile": "Saving Profile...",
   "profile_updated_successfully": "Profile updated successfully!",
   "failed_to_update_profile": "Failed to update profile.",
-  "email_cannot_be_changed": "Email cannot be changed."
+  "email_cannot_be_changed": "Email cannot be changed.",
+  "change_password": "Change Password",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "confirm_new_password": "Confirm New Password",
+  "password_updated_successfully": "Password updated successfully!",
+  "failed_to_update_password": "Failed to update password."
 }

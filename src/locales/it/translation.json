@@ -358,5 +358,11 @@
   "saving_profile": "Salvataggio profilo...",
   "profile_updated_successfully": "Profilo aggiornato con successo!",
   "failed_to_update_profile": "Impossibile aggiornare il profilo.",
-  "email_cannot_be_changed": "L'email non può essere modificata."
+  "email_cannot_be_changed": "L'email non può essere modificata.",
+  "change_password": "Cambia password",
+  "current_password": "Password attuale",
+  "new_password": "Nuova password",
+  "confirm_new_password": "Conferma nuova password",
+  "password_updated_successfully": "Password aggiornata con successo!",
+  "failed_to_update_password": "Impossibile aggiornare la password."
 }

@@ -30,14 +30,43 @@ import { useAuth } from '@/hooks/useAuth';
 import apiClient from '@/lib/apiClient';
 import { CountryType, UserType } from '@/types';
 import { useAuthStore } from '@/store/authStore';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Le nom complet doit contenir au moins 2 caractères." }),
   email: z.string().email({ message: "Adresse email invalide." }),
   countryId: z.coerce.number().min(1, { message: "Le pays est requis." }),
+  currentPassword: z.string().optional(),
+  newPassword: z.string().optional(),
+  confirmNewPassword: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.newPassword && data.newPassword.length < 6) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_small,
+      minimum: 6,
+      type: "string",
+      inclusive: true,
+      message: "Le nouveau mot de passe doit contenir au moins 6 caractères.",
+      path: ["newPassword"],
+    });
+  }
+  if (data.newPassword && !data.currentPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Le mot de passe actuel est requis pour changer le mot de passe.",
+      path: ["currentPassword"],
+    });
+  }
+  if (data.newPassword && data.newPassword !== data.confirmNewPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Les nouveaux mots de passe ne correspondent pas.",
+      path: ["confirmNewPassword"],
+    });
+  }
 });
 
-export type UserProfileFormValues = z.infer<typeof formSchema>; // Exported the type
+export type UserProfileFormValues = z.infer<typeof formSchema>;
 
 const UserProfileForm: React.FC = () => {
   const { t } = useTranslation();
@@ -51,6 +80,9 @@ const UserProfileForm: React.FC = () => {
       fullName: user?.fullName || '',
       email: user?.email || '',
       countryId: user?.countryId || 0,
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
     },
   });
 
@@ -68,19 +100,22 @@ const UserProfileForm: React.FC = () => {
         fullName: user.fullName,
         email: user.email,
         countryId: user.countryId,
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
       });
     }
   }, [user, form]);
 
   const updateUserProfileMutation = useMutation({
-    mutationFn: async (payload: UserProfileFormValues) => {
+    mutationFn: async (payload: { fullName: string; email: string; countryId: number }) => {
       if (!user?.id) throw new Error("User ID is missing.");
       const response = await apiClient.put(`/users/${user.id}`, payload);
       return response.data;
     },
     onSuccess: (updatedUser: UserType) => {
       queryClient.invalidateQueries({ queryKey: ['user', user?.id] });
-      setUserInStore(updatedUser); // Update user in Zustand store
+      setUserInStore(updatedUser);
       toast.success(t('profile_updated_successfully'));
     },
     onError: (error: any) => {
@@ -88,9 +123,41 @@ const UserProfileForm: React.FC = () => {
     },
   });
 
-  const onSubmit = (values: UserProfileFormValues) => {
-    updateUserProfileMutation.mutate(values);
+  const updatePasswordMutation = useMutation({
+    mutationFn: async (payload: { currentPassword: string; newPassword: string }) => {
+      if (!user?.id) throw new Error("User ID is missing.");
+      const response = await apiClient.put(`/users/${user.id}/password`, payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success(t('password_updated_successfully'));
+      form.resetField('currentPassword');
+      form.resetField('newPassword');
+      form.resetField('confirmNewPassword');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_update_password'));
+    },
+  });
+
+  const onSubmit = async (values: UserProfileFormValues) => {
+    const profilePayload = {
+      fullName: values.fullName,
+      email: values.email,
+      countryId: values.countryId,
+    };
+    await updateUserProfileMutation.mutateAsync(profilePayload);
+
+    if (values.newPassword) {
+      const passwordPayload = {
+        currentPassword: values.currentPassword!,
+        newPassword: values.newPassword,
+      };
+      await updatePasswordMutation.mutateAsync(passwordPayload);
+    }
   };
+
+  const isSubmitting = updateUserProfileMutation.isPending || updatePasswordMutation.isPending;
 
   return (
     <Card className="w-full">
@@ -120,9 +187,8 @@ const UserProfileForm: React.FC = () => {
                 <FormItem>
                   <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} placeholder="m@example.com" disabled />
+                    <Input type="email" {...field} placeholder="m@example.com" />
                   </FormControl>
-                  <FormDescription>{t('email_cannot_be_changed')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -133,7 +199,7 @@ const UserProfileForm: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || updateUserProfileMutation.isPending}>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || isSubmitting}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
@@ -151,9 +217,57 @@ const UserProfileForm: React.FC = () => {
                 </FormItem>
               )}
             />
+
+            <div className="md:col-span-2">
+              <Separator className="my-6" />
+              <h3 className="text-lg font-semibold mb-4">{t('change_password')}</h3>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="currentPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('current_password')}</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} value={field.value || ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('new_password')}</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} value={field.value || ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmNewPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('confirm_new_password')}</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} value={field.value || ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <div className="flex justify-end mt-4 md:col-span-2">
-              <Button type="submit" className="btn-primary-gradient" disabled={updateUserProfileMutation.isPending}>
-                {updateUserProfileMutation.isPending ? t('saving_profile') : t('update_profile')}
+              <Button type="submit" className="btn-primary-gradient" disabled={isSubmitting}>
+                {isSubmitting ? t('saving_profile') : t('update_profile')}
               </Button>
             </div>
           </form>
