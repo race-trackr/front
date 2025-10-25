@@ -63,6 +63,18 @@ const TrackdayView: React.FC = () => {
     }
   };
 
+  const getFormattedDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const currentLang = i18n.language;
+    let formatString = 'dd/MM/yyyy';
+
+    if (currentLang === 'en') {
+      formatString = 'yyyy-MM-dd';
+    }
+
+    return format(date, formatString, { locale: getLocale() });
+  };
+
   const calculateAverageLapTime = (chronos: string[] | null): string | null => {
     if (!chronos || chronos.length === 0) return null;
 
@@ -103,7 +115,7 @@ const TrackdayView: React.FC = () => {
     return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_trackday')}</div>;
   }
 
-  const formattedDate = format(new Date(trackday.date), 'PPP', { locale: getLocale() });
+  const formattedDate = getFormattedDate(trackday.date);
   const averageLapTime = calculateAverageLapTime(trackday.chronos) || trackday.bestLapTime;
 
   return (
