@@ -31,7 +31,6 @@ const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenance
       case 'es':
         return es;
       case 'it':
-        return it;
       default:
         return enUS;
     }
@@ -74,7 +73,7 @@ const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenance
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value: number) => `${value.toFixed(2)}€`} />
+              <Tooltip formatter={(value: any) => (typeof value === 'number' ? `${value.toFixed(2)}€` : value)} />
               <Legend />
               <Line type="monotone" dataKey="cost" stroke="#82ca9d" name={t('total_cost')} activeDot={{ r: 8 }} />
             </LineChart>
