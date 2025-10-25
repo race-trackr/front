@@ -266,7 +266,7 @@
   "loading_maintenances": "Loading manutenzioni...",
   "error_loading_maintenances": "Error loading manutenzioni.",
   "maintenance_created_successfully": "Manutenzione creata con successo!",
-  "enter_details": "Enter details",
+  "enter_details": "Inserisci i dettagli",
   "next_due_date": "Next Due Date",
   "pick_next_due_date": "Pick next due date",
   "optional_next_due_date": "Optional next due date for maintenance.",

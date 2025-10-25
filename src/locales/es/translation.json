@@ -271,7 +271,7 @@
   "loading_maintenances": "Loading mantenimientos...",
   "error_loading_maintenances": "Error loading mantenimientos.",
   "maintenance_created_successfully": "¡Mantenimiento creado con éxito!",
-  "enter_details": "Introduce la descripción",
+  "enter_details": "Introduce los detalles",
   "next_due_date": "Próxima fecha de vencimiento",
   "pick_next_due_date": "Selecciona la próxima fecha de vencimiento",
   "optional_next_due_date": "Próxima fecha de vencimiento opcional para el mantenimiento.",
