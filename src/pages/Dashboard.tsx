@@ -108,7 +108,7 @@ const Dashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">
               {t("my_trackdays")}
             </CardTitle>
-            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-md">
+            <div className="p-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300 rounded-md">
               <CalendarDays className="h-6 w-6" />
             </div>
           </CardHeader>
@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">
               {t("my_vehicles")}
             </CardTitle>
-            <div className="p-2 bg-green-100 text-green-600 rounded-md">
+            <div className="p-2 bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300 rounded-md">
               <Car className="h-6 w-6" />
             </div>
           </CardHeader>
@@ -142,7 +142,7 @@ const Dashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">
               {t("my_maintenances")}
             </CardTitle>
-            <div className="p-2 bg-yellow-100 text-yellow-600 rounded-md">
+            <div className="p-2 bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300 rounded-md">
               <Wrench className="h-6 w-6" />
             </div>
           </CardHeader>
