@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
       )}>
-        <div className="flex min-h-svh flex-col"> {/* Changed h-full to min-h-svh */}
+        <div className="flex flex-col h-full">
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
