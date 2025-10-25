@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div
       className={cn(
-        `grid h-screen w-full`, /* Changed min-h-screen to h-screen */
+        `grid h-screen w-full`,
         `md:grid-cols-[var(--sidebar-width)_1fr]`,
         `lg:grid-cols-[var(--sidebar-width)_1fr]`,
         `transition-[grid-template-columns] duration-300 ease-in-out`
@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
       )}>
-        <div className="flex h-full max-h-screen flex-col gap-2">
+        <div className="flex h-full flex-col gap-2"> {/* Removed max-h-screen as h-full is sufficient */}
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
