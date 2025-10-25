@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import apiClient from '@/lib/apiClient';
 import { CountryType } from '@/types';
+import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du pays est requis." }),
@@ -185,7 +186,7 @@ const AdminCountriesEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending} className={dangerButtonClasses}>
                     {deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}
                   </Button>
                   <Button type="submit" className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>

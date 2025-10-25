@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
 
 interface ConfirmDeleteDialogProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={onConfirm} disabled={isConfirming} className="bg-red-600 hover:bg-red-700 text-white">
+            <Button variant="destructive" onClick={onConfirm} disabled={isConfirming} className={dangerButtonClasses}>
               {isConfirming ? t('deleting') : (confirmButtonText || t('delete'))}
             </Button>
           </AlertDialogAction>

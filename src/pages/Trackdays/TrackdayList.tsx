@@ -33,6 +33,7 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDebounce from '@/hooks/useDebounce';
 import { Combobox } from '@/components/ui/combobox'; // Import Combobox
+import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -209,7 +210,7 @@ const TrackdayList: React.FC = () => {
                   size="icon"
                   onClick={() => handleDeleteClick(trackday.id)}
                   disabled={deleteTrackdayMutation.isPending}
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className={dangerButtonClasses}
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
