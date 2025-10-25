@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Car, Bike, MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
+import { PlusCircle, Car, Bike, Edit, Trash2, Eye } from 'lucide-react';
 import { UserVehicleType } from '@/types/index';
 import { useTranslation } from 'react-i18next';
 import { deleteVehicle, getVehicles } from '@/lib/api/vehicles';
@@ -13,7 +13,7 @@ const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
     case 'car':
       return <Car className="h-5 w-5 text-muted-foreground" />;
-    case 'moto': // Changed from 'motorcycle' to 'moto'
+    case 'moto':
       return <Bike className="h-5 w-5 text-muted-foreground" />;
     case 'karting':
       return <Car className="h-5 w-5 text-muted-foreground" />;
@@ -89,24 +89,26 @@ const VehicleList: React.FC = () => {
                 )}
               </CardContent>
               <div className="p-4 border-t flex justify-between gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1">
+                <Button asChild variant="outline" size="icon">
                   <Link to={`/vehicles/${vehicle.id}`}>
-                    <Eye className="h-4 w-4 mr-2" /> {t('view_details')}
+                    <Eye className="h-4 w-4" />
+                    <span className="sr-only">{t('view_details')}</span>
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="sm" className="flex-1">
+                <Button asChild variant="outline" size="icon">
                   <Link to={`/vehicles/edit/${vehicle.id}`}>
-                    <Edit className="h-4 w-4 mr-2" /> {t('edit_vehicle_button')}
+                    <Edit className="h-4 w-4" />
+                    <span className="sr-only">{t('edit_vehicle_button')}</span>
                   </Link>
                 </Button>
                 <Button
                   variant="destructive"
-                  size="sm"
-                  className="flex-1"
+                  size="icon"
                   onClick={() => handleDelete(vehicle.id)}
                   disabled={deleteVehicleMutation.isPending}
                 >
-                  <Trash2 className="h-4 w-4 mr-2" /> {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}
+                  <Trash2 className="h-4 w-4" />
+                  <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
                 </Button>
               </div>
             </Card>
