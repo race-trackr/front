@@ -10,12 +10,12 @@ const Upgrade: React.FC = () => {
 
   const plans = [
     {
-      nameKey: 'plan_free_name',
-      priceKey: 'plan_free_price',
+      nameKey: 'plan_starter_name',
+      priceKey: 'plan_starter_price',
       featuresKeys: [
-        'feature_trackdays_5',
-        'feature_vehicles_1',
-        'feature_maintenance_10',
+        'feature_trackdays_10',
+        'feature_vehicles_2',
+        'feature_maintenance_20',
         'feature_basic_analytics',
       ],
       buttonTextKey: 'get_started',
@@ -49,6 +49,23 @@ const Upgrade: React.FC = () => {
       buttonTextKey: 'contact_sales',
       link: '#',
     },
+    {
+      nameKey: 'plan_enterprise_name',
+      priceKey: 'plan_enterprise_price',
+      featuresKeys: [
+        'feature_trackdays_unlimited',
+        'feature_vehicles_unlimited',
+        'feature_maintenance_unlimited',
+        'feature_advanced_analytics',
+        'feature_24_7_support',
+        'feature_custom_branding',
+        'feature_dedicated_support',
+        'feature_custom_integrations',
+        'feature_on_premise_deployment',
+      ],
+      buttonTextKey: 'contact_sales',
+      link: '#',
+    },
   ];
 
   return (
@@ -60,7 +77,7 @@ const Upgrade: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {plans.map((plan, index) => (
           <SubscriptionCard key={index} plan={plan} />
         ))}
