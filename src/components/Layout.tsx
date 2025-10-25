@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div
       className={cn(
-        `grid min-h-screen w-full`,
+        `grid h-screen w-full`, /* Changed min-h-screen to h-screen */
         `md:grid-cols-[var(--sidebar-width)_1fr]`,
         `lg:grid-cols-[var(--sidebar-width)_1fr]`,
         `transition-[grid-template-columns] duration-300 ease-in-out`
