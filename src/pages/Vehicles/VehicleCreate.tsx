@@ -32,7 +32,7 @@ import { CreateVehiclePayload } from '@/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  type: z.enum(['car', 'motorcycle', 'karting', 'other']).optional().or(z.literal('')),
+  type: z.enum(['car', 'bike', 'karting', 'other']).optional().or(z.literal('')),
   brand: z.string().optional().or(z.literal('')),
   model: z.string().optional().or(z.literal('')),
   licensePlate: z.string().optional().or(z.literal('')),
@@ -121,7 +121,7 @@ const VehicleCreate: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
+                        <SelectItem value="bike">{t('type_bike')}</SelectItem>
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>

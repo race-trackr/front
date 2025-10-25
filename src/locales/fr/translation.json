@@ -172,7 +172,7 @@
   "vehicle_type": "Type de véhicule",
   "select_vehicle_type": "Sélectionnez le type de véhicule",
   "type_car": "Voiture",
-  "type_motorcycle": "Moto",
+  "type_bike": "Moto",
   "type_karting": "Karting",
   "type_other": "Autre",
   "enter_any_details": "Entrez les détails du véhicule",
@@ -185,9 +185,5 @@
   "error_loading_trackday": "Erreur lors du chargement des détails de la journée piste.",
   "view_trackday": "Voir la journée piste #{{id}}",
   "back_to_trackdays": "Retour aux journées piste",
-  "edit_trackday_button": "Modifier la journée piste",
-  "bike": "Moto",
-  "car": "Voiture",
-  "karting": "Karting",
-  "other": "Autre"
+  "edit_trackday_button": "Modifier la journée piste"
 }

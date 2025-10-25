@@ -3,12 +3,12 @@ export interface UserVehicle {
   userId: string;
   name: string;
   slug: string;
-  type?: string; // Rendu optionnel et de type string
-  brand?: string; // Rendu optionnel
-  model?: string; // Rendu optionnel
-  year?: number; // Rendu optionnel
-  licensePlate?: string; // Rendu optionnel (conservé licensePlate pour la cohérence)
-  details?: string; // Rendu optionnel
+  type?: 'car' | 'bike' | 'karting' | 'other'; // Updated to 'bike'
+  brand?: string;
+  model?: string;
+  year?: number;
+  licensePlate?: string;
+  details?: string;
   createdAt: string;
   updatedAt: string;
 }
