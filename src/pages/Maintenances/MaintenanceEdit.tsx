@@ -31,7 +31,8 @@ import { format } from 'date-fns';
 import { CreateMaintenancePayload, MaintenanceRecordTypeType, UserVehicleType, UpdateMaintenancePayload, MaintenanceRecordType } from '@/types';
 import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Trash2, ArrowLeft } from 'lucide-react';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
@@ -51,6 +52,8 @@ const MaintenanceEdit: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const form = useForm<CreateMaintenancePayload>({
     resolver: zodResolver(formSchema),
@@ -132,10 +135,12 @@ const MaintenanceEdit: React.FC = () => {
     updateMaintenanceMutation.mutate(payload);
   };
 
-  const handleDelete = () => {
-    if (window.confirm(t('confirm_delete_maintenance'))) {
-      deleteMaintenanceMutation.mutate();
-    }
+  const handleDeleteClick = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteMaintenanceMutation.mutate();
   };
 
   if (isLoading) {
@@ -147,196 +152,212 @@ const MaintenanceEdit: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('edit_maintenance', { id: maintenance.id })}</h1>
-      <Card>
-        <CardHeader><CardTitle>{t('maintenance_details')}</CardTitle></CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="userVehicleId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
-                    <Select onValueChange={(value) => {
-                      if (value === "create-new-vehicle") {
-                        navigate('/vehicles/create');
-                      } else {
-                        field.onChange(Number(value));
-                      }
-                    }} value={field.value.toString()}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('select_a_vehicle')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {isLoadingVehicles ? (
-                          <SelectItem value="loading" disabled>{t('loading_vehicles')}</SelectItem>
-                        ) : isErrorVehicles || !vehicles || vehicles.length === 0 ? (
-                          <SelectItem value="create-new-vehicle" className="text-blue-600 cursor-pointer hover:bg-accent">
-                            <div className="flex items-center">
-                              <PlusCircle className="mr-2 h-4 w-4" /> {t('create_vehicle')}
-                            </div>
-                          </SelectItem>
-                        ) : (
-                          vehicles.map((vehicle) => (
-                            <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                              {vehicle.brand} {vehicle.model} ({vehicle.licensePlate || t('not_specified')})
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('maintenance_name')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_maintenance_name')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('type')}<span className="text-destructive">*</span></FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('select_maintenance_type')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="maintenance">{t('maintenance_type_maintenance')}</SelectItem>
-                        <SelectItem value="repair">{t('maintenance_type_repair')}</SelectItem>
-                        <SelectItem value="modification">{t('maintenance_type_modification')}</SelectItem>
-                        <SelectItem value="other">{t('maintenance_type_other')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        value={field.value ? new Date(field.value) : undefined}
-                        onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
-                        disabled={field.disabled}
-                        placeholder={t('pick_a_date')}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="details" // Changed from 'description' to 'details'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('details')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="cost"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('cost')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.01" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_cost')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="mileage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('mileage')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_mileage')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="nextDueDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>{t('next_due_date')}</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        value={field.value ? new Date(field.value) : undefined}
-                        onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : null)}
-                        disabled={field.disabled}
-                        placeholder={t('pick_next_due_date')}
-                      />
-                    </FormControl>
-                    <FormDescription>{t('optional_next_due_date')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="nextDueMileage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('next_due_mileage')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_next_due_mileage')} />
-                    </FormControl>
-                    <FormDescription>{t('optional_next_due_mileage')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-between mt-4 md:col-span-2">
-                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-                  {t('cancel')}
-                </Button>
-                <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending} className="btn-danger">
-                    {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
-                  </Button>
-                  <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>
-                    {updateMaintenanceMutation.isPending ? t('saving') : t('save_changes')}
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+    <div className="container mx-auto p-4 space-y-6">
+      <div className="flex items-center justify-between mb-6">
+        <Button variant="outline" onClick={() => navigate(-1)}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
+        </Button>
+        <h1 className="text-3xl font-bold">{t('edit_maintenance', { id: maintenance.id })}</h1>
+        <Button
+          variant="destructive"
+          onClick={handleDeleteClick}
+          disabled={deleteMaintenanceMutation.isPending}
+          className="btn-danger"
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
+        </Button>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="userVehicleId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
+                <Select onValueChange={(value) => {
+                  if (value === "create-new-vehicle") {
+                    navigate('/vehicles/create');
+                  } else {
+                    field.onChange(Number(value));
+                  }
+                }} value={field.value.toString()}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('select_a_vehicle')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {isLoadingVehicles ? (
+                      <SelectItem value="loading" disabled>{t('loading_vehicles')}</SelectItem>
+                    ) : isErrorVehicles || !vehicles || vehicles.length === 0 ? (
+                      <SelectItem value="create-new-vehicle" className="text-blue-600 cursor-pointer hover:bg-accent">
+                        <div className="flex items-center">
+                          <PlusCircle className="mr-2 h-4 w-4" /> {t('create_vehicle')}
+                        </div>
+                      </SelectItem>
+                    ) : (
+                      vehicles.map((vehicle) => (
+                        <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                          {vehicle.brand} {vehicle.model} ({vehicle.licensePlate || t('not_specified')})
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('maintenance_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_maintenance_name')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('type')}<span className="text-destructive">*</span></FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('select_maintenance_type')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="maintenance">{t('maintenance_type_maintenance')}</SelectItem>
+                    <SelectItem value="repair">{t('maintenance_type_repair')}</SelectItem>
+                    <SelectItem value="modification">{t('maintenance_type_modification')}</SelectItem>
+                    <SelectItem value="other">{t('maintenance_type_other')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <DatePicker
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                    disabled={field.disabled}
+                    placeholder={t('pick_a_date')}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="details"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('details')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_details')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="cost"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('cost')}</FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.01" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_cost')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="mileage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('mileage')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_mileage')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextDueDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t('next_due_date')}</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : null)}
+                    disabled={field.disabled}
+                    placeholder={t('pick_next_due_date')}
+                  />
+                </FormControl>
+                <FormDescription>{t('optional_next_due_date')}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextDueMileage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('next_due_mileage')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_next_due_mileage')} />
+                </FormControl>
+                <FormDescription>{t('optional_next_due_mileage')}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between mt-4 md:col-span-2">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+              {t('cancel')}
+            </Button>
+            <Button type="submit" className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>
+              {updateMaintenanceMutation.isPending ? t('saving') : t('save_changes')}
+            </Button>
+          </div>
+        </form>
+      </Form>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_maintenance_title')}
+        description={t('confirm_delete_maintenance_description')}
+        confirmButtonText={t('delete_maintenance_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteMaintenanceMutation.isPending}
+      />
     </div>
   );
 };
