@@ -307,5 +307,6 @@
   "average_laptime": "Average Laptime",
   "not_available": "N/A",
   "best_lap": "Best Lap",
-  "no_chronos_recorded": "No chronos recorded for this trackday."
+  "no_chronos_recorded": "No chronos recorded for this trackday.",
+  "back": "Back"
 }

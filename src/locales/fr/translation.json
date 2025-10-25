@@ -307,5 +307,6 @@
   "average_laptime": "Temps au tour moyen",
   "not_available": "N/A",
   "best_lap": "Meilleur tour",
-  "no_chronos_recorded": "Aucun chrono enregistré pour cette journée piste."
+  "no_chronos_recorded": "Aucun chrono enregistré pour cette journée piste.",
+  "back": "Retour"
 }

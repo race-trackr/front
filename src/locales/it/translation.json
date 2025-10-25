@@ -322,5 +322,6 @@
   "average_laptime": "Tempo medio sul giro",
   "not_available": "N/D",
   "best_lap": "Miglior giro",
-  "no_chronos_recorded": "Nessun crono registrato per questa giornata in pista."
+  "no_chronos_recorded": "Nessun crono registrato per questa giornata in pista.",
+  "back": "Indietro"
 }

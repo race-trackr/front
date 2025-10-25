@@ -111,8 +111,8 @@ const TrackdayView: React.FC = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">{t('session_of_date', { date: formattedDate })}</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate('/trackdays')}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> {t('back_to_trackdays')}
+          <Button variant="outline" onClick={() => navigate(-1)}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
           </Button>
           <Button asChild variant="outline" size="icon">
             <Link to={`/trackdays/edit/${trackday.id}`}>
