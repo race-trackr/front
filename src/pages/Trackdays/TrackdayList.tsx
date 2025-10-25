@@ -32,27 +32,32 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDebounce from '@/hooks/useDebounce'; // Import the useDebounce hook
+import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const [inputValue, setInputValue] = React.useState(''); // State for the input field
-  const debouncedSearch = useDebounce(inputValue, 500); // Debounced search term with 500ms delay
+  const [inputValue, setInputValue] = React.useState('');
+  const debouncedSearch = useDebounce(inputValue, 500);
 
   const [filterVehicleId, setFilterVehicleId] = React.useState<number | undefined>(undefined);
   const [filterTrackId, setFilterTrackId] = React.useState<number | undefined>(undefined);
+  const [startDate, setStartDate] = React.useState<Date | undefined>(undefined); // New state for start date
+  const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);     // New state for end date
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
   const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }],
+    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId, startDate: startDate?.toISOString(), endDate: endDate?.toISOString() }],
     queryFn: () => getTrackdays({
-      limit: 0, // Fetch all for client-side filtering/display
-      searchTerm: debouncedSearch || undefined, // Corrected to searchTerm
+      limit: 0,
+      searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
+      startDate: startDate ? format(startDate, 'yyyy-MM-dd') : undefined, // Format date for API
+      endDate: endDate ? format(endDate, 'yyyy-MM-dd') : undefined,     // Format date for API
     }),
   });
 
@@ -113,8 +118,8 @@ const TrackdayList: React.FC = () => {
           <Input
             type="text"
             placeholder={t('search_trackdays')}
-            value={inputValue} // Use inputValue for the input field
-            onChange={(e) => setInputValue(e.target.value)} // Update inputValue on change
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             className="pl-8 w-full"
           />
         </div>
@@ -150,6 +155,23 @@ const TrackdayList: React.FC = () => {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* Date Range Filter */}
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+        <span className="text-sm font-medium text-muted-foreground">{t('filter_by_date_range')}:</span>
+        <DatePicker
+          value={startDate}
+          onChange={setStartDate}
+          placeholder={t('pick_start_date')}
+          className="w-full md:w-[180px]"
+        />
+        <DatePicker
+          value={endDate}
+          onChange={setEndDate}
+          placeholder={t('pick_end_date')}
+          className="w-full md:w-[180px]"
+        />
       </div>
 
       {isLoading || isLoadingVehicles || isLoadingTracks ? (
