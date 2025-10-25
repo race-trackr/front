@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar';
 import { useSidebarStore } from '@/store/sidebarStore';
+import useBreadcrumbs from '@/hooks/useBreadcrumbs'; // Import the useBreadcrumbs hook
 
 interface LayoutProps {
   children: ReactNode;
@@ -18,6 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const { isCollapsed, toggleCollapse } = useSidebarStore();
   const { t } = useTranslation();
+  const crumbs = useBreadcrumbs(); // Get dynamic breadcrumbs
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
 
@@ -88,8 +90,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      <div className="flex flex-col min-h-svh"> {/* Changed h-full to min-h-svh */}
-        <AppBar />
+      <div className="flex flex-col min-h-svh">
+        <AppBar breadcrumbs={crumbs} /> {/* Pass dynamic breadcrumbs to AppBar */}
 
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background overflow-y-auto">
           <>{children}</>
