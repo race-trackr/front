@@ -329,5 +329,7 @@
   "role": "Role",
   "unlock_pro_features": "Unlock Pro Features!",
   "upgrade_description": "Upgrade to our Pro plan to get access to advanced features, unlimited storage, and priority support.",
-  "get_pro_now": "Get Pro Now"
+  "get_pro_now": "Get Pro Now",
+  "maintenance_cost_over_time": "Maintenance Cost Over Time",
+  "no_maintenance_data_for_chart": "No maintenance data available to display the chart."
 }

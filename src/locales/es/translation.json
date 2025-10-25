@@ -268,8 +268,8 @@
   "error_loading_admin_dashboard": "Error al cargar el panel de control del administrador.",
   "total_cost": "Costo total",
   "upcoming_maintenances": "Próximos mantenimientos",
-  "loading_maintenances": "Loading mantenimientos...",
-  "error_loading_maintenances": "Error loading mantenimientos.",
+  "loading_maintenances": "Cargando mantenimientos...",
+  "error_loading_maintenances": "Error al cargar mantenimientos.",
   "maintenance_created_successfully": "¡Mantenimiento creado con éxito!",
   "enter_details": "Introduce los detalles",
   "next_due_date": "Próxima fecha de vencimiento",
@@ -349,5 +349,7 @@
   "role": "Rol",
   "unlock_pro_features": "¡Desbloquea las funciones Pro!",
   "upgrade_description": "Actualiza a nuestro plan Pro para obtener acceso a funciones avanzadas, almacenamiento ilimitado y soporte prioritario.",
-  "get_pro_now": "Obtener Pro ahora"
+  "get_pro_now": "Obtener Pro ahora",
+  "maintenance_cost_over_time": "Costo de mantenimiento a lo largo del tiempo",
+  "no_maintenance_data_for_chart": "No hay datos de mantenimiento disponibles para mostrar el gráfico."
 }

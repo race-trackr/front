@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { cn } from '@/lib/utils'; // Import cn for conditional class names
+import MaintenanceCostChart from '@/components/MaintenanceCostChart'; // Import the new chart component
 
 const MaintenanceList: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -83,7 +84,7 @@ const MaintenanceList: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader>
             <div className='flex items-center justify-between'>
@@ -123,6 +124,9 @@ const MaintenanceList: React.FC = () => {
           </CardHeader>
         </Card>
       </div>
+
+      {/* Maintenance Cost Chart */}
+      {maintenances && <MaintenanceCostChart maintenances={maintenances} />}
 
       <div className="grid grid-cols-1 gap-6">
         {maintenances && maintenances.length === 0 ? (
