@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from "lucide-react";
@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
@@ -187,19 +188,19 @@ const Dashboard: React.FC = () => {
                       </div>
                     </Link>
                     <div className="flex items-center gap-2 z-10">
-
+                      {/* Removed nested Link, now the button directly navigates */}
                       <Button
-                        asChild
                         variant="ghost"
                         size="icon"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent the outer Link from triggering
+                          navigate(`/trackdays/edit/${trackday.id}`);
+                        }}
                       >
-                        <Link to={`/trackdays/edit/${trackday.id}`}>
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">
-                            {t("view_edit_details")}
-                          </span>
-                        </Link>
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">
+                          {t("view_edit_details")}
+                        </span>
                       </Button>
                       <Button
                         variant="destructive"
@@ -260,11 +261,17 @@ const Dashboard: React.FC = () => {
                       </div>
                     </Link>
                     <div className="flex items-center gap-2 z-10">
-                      <Button asChild variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
-                        <Link to={`/maintenances/edit/${maintenance.id}`}>
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">{t("view_edit_details")}</span>
-                        </Link>
+                      {/* Removed nested Link, now the button directly navigates */}
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent the outer Link from triggering
+                          navigate(`/maintenances/edit/${maintenance.id}`);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">{t("view_edit_details")}</span>
                       </Button>
                     </div>
                   </li>

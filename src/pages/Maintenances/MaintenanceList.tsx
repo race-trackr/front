@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react';
@@ -17,6 +17,7 @@ import MaintenanceCostChart from '@/components/MaintenanceCostChart';
 const MaintenanceList: React.FC = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
@@ -154,12 +155,18 @@ const MaintenanceList: React.FC = () => {
                     <p className="text-sm font-medium">{format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
                     <p className="text-lg font-bold">{maintenance.cost !== null ? `${Number(maintenance.cost).toFixed(2)}€` : t('not_specified')}</p>
                   </div>
+                  {/* Removed nested Link, now the button directly navigates */}
                   <div className="flex items-center gap-2 ml-4">
-                    <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
-                      <Link to={`/maintenances/edit/${maintenance.id}`}>
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">{t('edit_maintenance_button')}</span>
-                      </Link>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent the outer Link from triggering
+                        navigate(`/maintenances/edit/${maintenance.id}`);
+                      }}
+                    >
+                      <Edit className="h-4 w-4" />
+                      <span className="sr-only">{t('edit_maintenance_button')}</span>
                     </Button>
                     <Button
                       variant="destructive"
