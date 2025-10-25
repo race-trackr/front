@@ -10,7 +10,7 @@ const NotificationsTab: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Card>
+    <Card className="bg-transparent shadow-none border-none">
       <CardHeader>
         <CardTitle>{t('notifications')}</CardTitle>
         <CardDescription>{t('manage_notification_preferences')}</CardDescription>
