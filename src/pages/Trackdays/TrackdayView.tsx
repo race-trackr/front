@@ -232,13 +232,13 @@ const TrackdayView: React.FC = () => {
         )}
 
         {/* All Chronos Card (full width) */}
-        {trackday.chronos && trackday.chronos.length > 0 && (
-          <Card className="lg:col-span-3">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t('chronos')}</CardTitle>
-              <ListOrdered className="h-5 w-5 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
+        <Card className="lg:col-span-3">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('chronos')}</CardTitle>
+            <ListOrdered className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {trackday.chronos && trackday.chronos.length > 0 ? (
               <ul className="space-y-2">
                 {trackday.chronos.map((chrono, index) => (
                   <li key={index} className="flex items-center justify-between text-lg">
@@ -251,9 +251,11 @@ const TrackdayView: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <p className="text-muted-foreground">{t('no_chronos_recorded')}</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <ConfirmDeleteDialog

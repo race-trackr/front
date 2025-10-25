@@ -326,5 +326,6 @@
   "stats": "Estadísticas",
   "average_laptime": "Tiempo medio de vuelta",
   "not_available": "N/D",
-  "best_lap": "Mejor vuelta"
+  "best_lap": "Mejor vuelta",
+  "no_chronos_recorded": "No hay cronos registrados para este día de pista."
 }
