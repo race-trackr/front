@@ -59,7 +59,7 @@ export interface TrackDayType {
   bestLapTime: string | null;
   totalLaps: number | null;
   totalDistance: number | null;
-  chronos: string[] | null;
+  chronos: { lapTime: string; isBest: boolean }[] | null; // CHANGED: Now an array of objects
   createdAt: string;
   updatedAt: string;
   user?: UserType;

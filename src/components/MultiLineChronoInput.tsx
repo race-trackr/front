@@ -5,9 +5,14 @@ import { Plus, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
+interface ChronoEntry {
+  lapTime: string;
+  isBest: boolean;
+}
+
 interface MultiLineChronoInputProps {
-  value?: string[] | null;
-  onChange: (value: string[] | null) => void;
+  value?: ChronoEntry[] | null; // Changed type to ChronoEntry[]
+  onChange: (value: ChronoEntry[] | null) => void; // Changed type to ChronoEntry[]
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -25,14 +30,14 @@ const MultiLineChronoInput: React.FC<MultiLineChronoInputProps> = ({
   const { t } = useTranslation();
   const chronos = value || [];
 
-  const handleChronoChange = (index: number, newChrono: string) => {
+  const handleChronoChange = (index: number, newLapTime: string) => {
     const newChronos = [...chronos];
-    newChronos[index] = newChrono;
+    newChronos[index] = { lapTime: newLapTime, isBest: false }; // isBest defaults to false
     onChange(newChronos);
   };
 
   const addChrono = () => {
-    onChange([...chronos, '']);
+    onChange([...chronos, { lapTime: '', isBest: false }]); // Add new chrono as an object
   };
 
   const removeChrono = (index: number) => {
@@ -42,16 +47,16 @@ const MultiLineChronoInput: React.FC<MultiLineChronoInputProps> = ({
 
   return (
     <div className={cn("space-y-2", className)}>
-      {chronos.map((chrono, index) => (
+      {chronos.map((chronoEntry, index) => (
         <div key={index} className="flex items-center gap-2">
           <Input
             type="text"
-            value={chrono}
+            value={chronoEntry.lapTime} // Access lapTime property
             onChange={(e) => handleChronoChange(index, e.target.value)}
             placeholder={placeholder || t('enter_lap_time')}
             disabled={disabled}
             className={cn(
-              !chronoRegex.test(chrono) && chrono !== '' && 'border-destructive focus-visible:ring-destructive'
+              !chronoRegex.test(chronoEntry.lapTime) && chronoEntry.lapTime !== '' && 'border-destructive focus-visible:ring-destructive'
             )}
           />
           <Button

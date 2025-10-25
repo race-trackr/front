@@ -75,15 +75,15 @@ const TrackdayView: React.FC = () => {
     return format(date, formatString, { locale: getLocale() });
   };
 
-  const calculateAverageLapTime = (chronos: string[] | null): string | null => {
+  const calculateAverageLapTime = (chronos: { lapTime: string; isBest: boolean }[] | null): string | null => {
     if (!chronos || chronos.length === 0) return null;
 
     let totalMilliseconds = 0;
     let validChronosCount = 0;
 
-    chronos.forEach(chrono => {
-      if (typeof chrono === 'string') {
-        const parts = chrono.split('.');
+    chronos.forEach(chronoEntry => {
+      if (typeof chronoEntry.lapTime === 'string') {
+        const parts = chronoEntry.lapTime.split('.');
         if (parts.length === 3) {
           const minutes = parseInt(parts[0], 10);
           const seconds = parseInt(parts[1], 10);
@@ -240,10 +240,10 @@ const TrackdayView: React.FC = () => {
           <CardContent>
             {trackday.chronos && trackday.chronos.length > 0 ? (
               <ul className="space-y-2">
-                {trackday.chronos.map((chrono, index) => (
+                {trackday.chronos.map((chronoEntry, index) => (
                   <li key={index} className="flex items-center justify-between text-lg">
-                    <span>{chrono}</span>
-                    {chrono === trackday.bestLapTime && (
+                    <span>{chronoEntry.lapTime}</span>
+                    {chronoEntry.isBest && (
                       <Badge variant="secondary" className="bg-primary text-primary-foreground">
                         {t('best_lap')}
                       </Badge>

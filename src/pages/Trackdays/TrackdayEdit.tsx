@@ -49,10 +49,13 @@ const formSchema = z.object({
   ).nullable().optional(),
   totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }).nullable().optional(),
   totalDistance: z.coerce.number().min(0, { message: "La distance totale ne peut pas être négative." }).nullable().optional(),
-  chronos: z.array(z.string().refine(
-    (val) => chronoFormatRegex.test(val),
-    { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
-  )).nullable().optional(),
+  chronos: z.array(z.object({
+    lapTime: z.string().refine(
+      (val) => val === '' || chronoFormatRegex.test(val), // Allow empty string OR match regex
+      { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
+    ),
+    isBest: z.boolean(),
+  })).nullable().optional(),
 });
 
 const TrackdayEdit: React.FC = () => {
@@ -145,6 +148,11 @@ const TrackdayEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const filteredChronos: ({ lapTime: string; isBest: boolean }[] | null) =
+      values.chronos
+        ?.filter((c): c is { lapTime: string; isBest: boolean } => c.lapTime !== '')
+        .map(c => ({ lapTime: c.lapTime, isBest: c.isBest })) || null;
+
     const payload: UpdateTrackdayPayload = {
       ...values,
       userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
@@ -158,7 +166,7 @@ const TrackdayEdit: React.FC = () => {
       bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
       totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
       totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
-      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null,
+      chronos: filteredChronos && filteredChronos.length > 0 ? filteredChronos : null,
     };
     updateTrackdayMutation.mutate(payload);
   };
