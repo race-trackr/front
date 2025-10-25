@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col"> {/* Removed h-full */}
+    <div className="flex flex-col h-full"> {/* Remise de h-full ici */}
       {isAuthenticated && (
         <nav className="flex flex-col items-start text-sm font-medium flex-1 gap-1 px-2">
           <NavLink to="/dashboard" icon={<Gauge className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('dashboard')}</NavLink>
