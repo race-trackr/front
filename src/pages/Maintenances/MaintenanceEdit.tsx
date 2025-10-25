@@ -160,12 +160,13 @@ const MaintenanceEdit: React.FC = () => {
         <h1 className="text-3xl font-bold">{t('edit_maintenance', { id: maintenance.id })}</h1>
         <Button
           variant="destructive"
+          size="icon"
           onClick={handleDeleteClick}
           disabled={deleteMaintenanceMutation.isPending}
           className="btn-danger"
         >
-          <Trash2 className="mr-2 h-4 w-4" />
-          {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}</span>
         </Button>
       </div>
 
