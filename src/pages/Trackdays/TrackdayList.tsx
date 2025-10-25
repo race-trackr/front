@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import {
@@ -37,6 +37,7 @@ import { Combobox } from '@/components/ui/combobox';
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [inputValue, setInputValue] = React.useState('');
   const debouncedSearch = useDebounce(inputValue, 500);
@@ -106,7 +107,7 @@ const TrackdayList: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container mx-auto space-y-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1>
         <Button asChild className="btn-primary-gradient">
