@@ -27,10 +27,10 @@ const useBreadcrumbs = (): Breadcrumb[] => {
 
   // Add a "Home" crumb at the beginning if not already present
   if (crumbs.length > 0 && crumbs[0].path !== '/') {
-    crumbs.unshift({ path: '/', label: t('home') });
+    crumbs.unshift({ path: '/', label: t('Home') });
   } else if (crumbs.length === 0) {
     // If no crumbs are found (e.g., on the root path), just add Home
-    crumbs.push({ path: '/', label: t('home') });
+    crumbs.push({ path: '/', label: t('Home') });
   }
 
   return crumbs;
