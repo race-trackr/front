@@ -367,5 +367,5 @@
   "failed_to_update_password": "Error al actualizar la contraseña.",
   "show_password": "Mostrar contraseña",
   "hide_password": "Ocultar contraseña",
-  "loading": "Cargando"
+  "no_track_found": "Nessuna pista trovata."
 }
