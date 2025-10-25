@@ -33,7 +33,6 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDebounce from '@/hooks/useDebounce';
 import { Combobox } from '@/components/ui/combobox';
-// Removed import for dangerButtonClasses
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -97,7 +96,7 @@ const TrackdayList: React.FC = () => {
   const trackOptions = React.useMemo(() => {
     const options = tracks?.map(track => ({
       value: track.id.toString(),
-      label: track.name // Changed to only show track name
+      label: track.name
     })) || [];
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
@@ -192,19 +191,7 @@ const TrackdayList: React.FC = () => {
                 <p><strong>{t('total_laps')}:</strong> {trackday.totalLaps || t('not_specified')}</p>
                 <p><strong>{t('total_distance')}:</strong> {trackday.totalDistance ? `${trackday.totalDistance} km` : t('not_specified')}</p>
               </CardContent>
-              <div className="p-4 border-t flex justify-between gap-2">
-                <Button asChild variant="outline" size="icon">
-                  <Link to={`/trackdays/${trackday.id}`}>
-                    <Eye className="h-4 w-4" />
-                    <span className="sr-only">{t('view_details')}</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link to={`/trackdays/edit/${trackday.id}`}>
-                    <Edit className="h-4 w-4" />
-                    <span className="sr-only">{t('edit_trackday_button')}</span>
-                  </Link>
-                </Button>
+              <div className="p-4 border-t flex items-center justify-between gap-2">
                 <Button
                   variant="destructive"
                   size="icon"
@@ -215,6 +202,20 @@ const TrackdayList: React.FC = () => {
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
                 </Button>
+                <div className="flex gap-2">
+                  <Button asChild variant="outline" size="icon">
+                    <Link to={`/trackdays/${trackday.id}`}>
+                      <Eye className="h-4 w-4" />
+                      <span className="sr-only">{t('view_details')}</span>
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="icon">
+                    <Link to={`/trackdays/edit/${trackday.id}`}>
+                      <Edit className="h-4 w-4" />
+                      <span className="sr-only">{t('edit_trackday_button')}</span>
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}
