@@ -35,7 +35,7 @@
   "create_new_vehicle": "Créer un nouveau véhicule",
   "vehicle_details": "Détails du véhicule",
   "save_vehicle": "Enregistrer le véhicule",
-  "edit_vehicle": "Modifier le véhicule {{name}}",
+  "edit_vehicle": "Modifier le véhicule #{{id}}",
   "delete_vehicle": "Supprimer le véhicule",
   "create_new_maintenance": "Créer une nouvelle maintenance",
   "maintenance_record_details": "Détails du relevé de maintenance",
@@ -389,5 +389,12 @@
   "marketing_emails": "E-mails marketing",
   "receive_marketing_emails": "Recevez des e-mails sur les nouveaux produits, fonctionnalités et offres spéciales.",
   "security_emails": "E-mails de sécurité",
-  "receive_security_emails": "Recevez des alertes de sécurité et des notifications importantes concernant votre compte."
+  "receive_security_emails": "Recevez des alertes de sécurité et des notifications importantes concernant votre compte.",
+  "edit_session_of_date": "Modifier la session du {{date}}",
+  "view_vehicle_name": "Voir le véhicule {{brand}} {{model}}",
+  "edit_vehicle_name": "Modifier le véhicule {{brand}} {{model}}",
+  "view_maintenance_name_date": "Voir la maintenance {{name}} ({{date}})",
+  "edit_maintenance_name_date": "Modifier la maintenance {{name}} ({{date}})",
+  "edit_track_name": "Modifier la piste {{name}}",
+  "edit_country_name": "Modifier le pays {{name}}"
 }

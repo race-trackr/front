@@ -32,24 +32,37 @@ import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
+import { fr, enUS, es, it } from 'date-fns/locale';
+import apiClient from '@/lib/apiClient';
+import { getTrackdayById } from '@/lib/api/trackdays';
+import { getVehicleById } from '@/lib/api/vehicles';
+import { getMaintenanceById } from '@/lib/api/maintenances';
+import { TrackDayType, UserVehicleType, MaintenanceRecordType, TrackType, CountryType } from '@/types';
 
 const queryClient = new QueryClient();
 
-// Wrapper component to provide t() to route handles
-const RouteHandleWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { t } = useTranslation();
-  // This component doesn't render anything itself, it just makes `t` available
-  // to the route handles via closure if they are defined within this scope.
-  // However, `createBrowserRouter` is called outside of React component tree,
-  // so we need to pass `t` directly to the handle functions.
-  // The `useBreadcrumbs` hook already uses `useTranslation` internally,
-  // so we just need to ensure the strings passed to `crumb` are translation keys.
-  return <>{children}</>;
-};
+interface RouteMatchWithData {
+  params: { [key: string]: string | undefined };
+  data?: any; // This will hold the loader's return value
+}
 
 const App: React.FC = () => {
-  const { t } = useTranslation(); // Get t() here to use in route definitions
+  const { t, i18n } = useTranslation();
+
+  const getLocale = (lang: string) => {
+    switch (lang) {
+      case 'fr':
+        return fr;
+      case 'es':
+        return es;
+      case 'it':
+        return it;
+      default:
+        return enUS;
+    }
+  };
 
   const routesConfig = [
     {
@@ -84,12 +97,30 @@ const App: React.FC = () => {
         {
           path: "/trackdays/:id",
           element: <Layout><TrackdayView /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('view_trackday', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const trackday = await getTrackdayById(params.id!);
+            return { trackday };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const trackday = data?.trackday as TrackDayType;
+              return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/trackdays/edit/:id",
           element: <Layout><TrackdayEdit /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('edit_trackday', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const trackday = await getTrackdayById(params.id!);
+            return { trackday };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const trackday = data?.trackday as TrackDayType;
+              return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/vehicles",
@@ -104,12 +135,30 @@ const App: React.FC = () => {
         {
           path: "/vehicles/:id",
           element: <Layout><VehicleView /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('view_vehicle', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const vehicle = await getVehicleById(Number(params.id!));
+            return { vehicle };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const vehicle = data?.vehicle as UserVehicleType;
+              return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/vehicles/edit/:id",
           element: <Layout><VehicleEdit /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('edit_vehicle', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const vehicle = await getVehicleById(Number(params.id!));
+            return { vehicle };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const vehicle = data?.vehicle as UserVehicleType;
+              return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/maintenances",
@@ -124,12 +173,30 @@ const App: React.FC = () => {
         {
           path: "/maintenances/:id",
           element: <Layout><MaintenanceView /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('view_maintenance', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const maintenance = await getMaintenanceById(Number(params.id!));
+            return { maintenance };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const maintenance = data?.maintenance as MaintenanceRecordType;
+              return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/maintenances/edit/:id",
           element: <Layout><MaintenanceEdit /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('edit_maintenance', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const maintenance = await getMaintenanceById(Number(params.id!));
+            return { maintenance };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const maintenance = data?.maintenance as MaintenanceRecordType;
+              return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/settings",
@@ -155,7 +222,7 @@ const App: React.FC = () => {
         {
           path: "/admin",
           element: <Layout><AdminDashboard /></Layout>,
-          handle: { crumb: () => t('admin_dashboard') },
+          handle: { crumb: () => t('admin') },
         },
         {
           path: "/admin/tracks",
@@ -170,7 +237,16 @@ const App: React.FC = () => {
         {
           path: "/admin/tracks/edit/:id",
           element: <Layout><AdminTracksEdit /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('edit_track', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const response = await apiClient.get(`/tracks/${params.id!}`);
+            return { track: response.data };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const track = data?.track as TrackType;
+              return track ? t('edit_track_name', { name: track.name }) : t('edit_track', { id: data?.params?.id || '' });
+            }
+          },
         },
         {
           path: "/admin/countries",
@@ -185,7 +261,16 @@ const App: React.FC = () => {
         {
           path: "/admin/countries/edit/:id",
           element: <Layout><AdminCountriesEdit /></Layout>,
-          handle: { crumb: ({ params }: { params: { id?: string } }) => t('edit_country', { id: params.id || '' }) },
+          loader: async ({ params }) => {
+            const response = await apiClient.get(`/countries/${params.id!}`);
+            return { country: response.data };
+          },
+          handle: {
+            crumb: ({ data }: RouteMatchWithData) => {
+              const country = data?.country as CountryType;
+              return country ? t('edit_country_name', { name: country.name }) : t('edit_country', { id: data?.params?.id || '' });
+            }
+          },
         },
       ],
     },

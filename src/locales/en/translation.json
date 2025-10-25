@@ -35,7 +35,7 @@
   "create_new_vehicle": "Create New Vehicle",
   "vehicle_details": "Vehicle Details",
   "save_vehicle": "Save Vehicle",
-  "edit_vehicle": "Edit Vehicle {{name}}",
+  "edit_vehicle": "Edit Vehicle #{{id}}",
   "delete_vehicle": "Delete Vehicle",
   "create_new_maintenance": "Create New Maintenance",
   "maintenance_record_details": "Maintenance Record Details",
@@ -188,7 +188,7 @@
   "edit_trackday_button": "Edit Trackday",
   "loading_vehicle": "Loading vehicle...",
   "error_loading_vehicle": "Error loading vehicle details.",
-  "view_vehicle": "View Vehicle {{name}}",
+  "view_vehicle": "View Vehicle #{{id}}",
   "back_to_vehicles": "Back to Vehicles",
   "edit_vehicle_button": "Edit Vehicle",
   "not_specified": "Not specified",
@@ -389,5 +389,12 @@
   "marketing_emails": "Marketing Emails",
   "receive_marketing_emails": "Receive emails about new products, features, and special offers.",
   "security_emails": "Security Emails",
-  "receive_security_emails": "Receive security alerts and important account notifications."
+  "receive_security_emails": "Receive security alerts and important account notifications.",
+  "edit_session_of_date": "Edit session of {{date}}",
+  "view_vehicle_name": "View vehicle {{brand}} {{model}}",
+  "edit_vehicle_name": "Edit vehicle {{brand}} {{model}}",
+  "view_maintenance_name_date": "View maintenance {{name}} ({{date}})",
+  "edit_maintenance_name_date": "Edit maintenance {{name}} ({{date}})",
+  "edit_track_name": "Edit track {{name}}",
+  "edit_country_name": "Edit country {{name}}"
 }

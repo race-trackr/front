@@ -118,7 +118,7 @@
   "create_new_vehicle": "Crea nuovo veicolo",
   "vehicle_details": "Dettagli veicolo",
   "save_vehicle": "Salva veicolo",
-  "edit_vehicle": "Modifica veicolo {{name}}",
+  "edit_vehicle": "Modifica veicolo #{{id}}",
   "delete_vehicle": "Elimina veicolo",
   "your_maintenances": "Le tue manutenzioni",
   "add_new_maintenance": "Aggiungi nuova manutenzione",
@@ -209,7 +209,7 @@
   "edit_trackday_button": "Modifica giornata in pista",
   "loading_vehicle": "Caricamento veicolo...",
   "error_loading_vehicle": "Errore nel caricamento dei dettagli del veicolo.",
-  "view_vehicle": "Visualizza veicolo {{name}}",
+  "view_vehicle": "Visualizza veicolo #{{id}}",
   "back_to_vehicles": "Torna ai veicoli",
   "edit_vehicle_button": "Modifica veicolo",
   "not_specified": "Non specificato",
@@ -410,5 +410,12 @@
   "marketing_emails": "Email di marketing",
   "receive_marketing_emails": "Ricevi email su nuovi prodotti, funzionalità e offerte speciali.",
   "security_emails": "Email di sicurezza",
-  "receive_security_emails": "Ricevi avvisi di sicurezza e notifiche importanti sull'account."
+  "receive_security_emails": "Ricevi avvisi di sicurezza e notifiche importanti sull'account.",
+  "edit_session_of_date": "Modifica sessione del {{date}}",
+  "view_vehicle_name": "Visualizza veicolo {{brand}} {{model}}",
+  "edit_vehicle_name": "Modifica veicolo {{brand}} {{model}}",
+  "view_maintenance_name_date": "Visualizza manutenzione {{name}} ({{date}})",
+  "edit_maintenance_name_date": "Modifica manutenzione {{name}} ({{date}})",
+  "edit_track_name": "Modifica pista {{name}}",
+  "edit_country_name": "Modifica paese {{name}}"
 }
