@@ -82,15 +82,17 @@ const TrackdayView: React.FC = () => {
     let validChronosCount = 0;
 
     chronos.forEach(chrono => {
-      const parts = chrono.split('.');
-      if (parts.length === 3) {
-        const minutes = parseInt(parts[0], 10);
-        const seconds = parseInt(parts[1], 10);
-        const milliseconds = parseInt(parts[2], 10);
+      if (typeof chrono === 'string') {
+        const parts = chrono.split('.');
+        if (parts.length === 3) {
+          const minutes = parseInt(parts[0], 10);
+          const seconds = parseInt(parts[1], 10);
+          const milliseconds = parseInt(parts[2], 10);
 
-        if (!isNaN(minutes) && !isNaN(seconds) && !isNaN(milliseconds)) {
-          totalMilliseconds += (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
-          validChronosCount++;
+          if (!isNaN(minutes) && !isNaN(seconds) && !isNaN(milliseconds)) {
+            totalMilliseconds += (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+            validChronosCount++;
+          }
         }
       }
     });
