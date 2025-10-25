@@ -3,20 +3,28 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { Country } from '@/types';
+import { CountryType } from '@/types'; // Changed Country to CountryType
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import apiClient from '@/lib/apiClient';
 
 const AdminCountries: React.FC = () => {
   const { t } = useTranslation();
-  // Placeholder for fetching countries
-  const countries: Country[] = [
-    {
-      id: 'c1', name: 'Germany', slug: 'germany', iso: 'DE', timezone: 'CET', capital: 'Berlin', createdAt: '...', updatedAt: '...'
+  const { data: countries, isLoading, isError } = useQuery<CountryType[]>({
+    queryKey: ['countries'],
+    queryFn: async () => {
+      const response = await apiClient.get('/countries');
+      return response.data;
     },
-    {
-      id: 'c2', name: 'Belgium', slug: 'belgium', iso: 'BE', timezone: 'CET', capital: 'Brussels', createdAt: '...', updatedAt: '...'
-    },
-  ];
+  });
+
+  if (isLoading) {
+    return <div className="space-y-6">{t('loading_countries')}</div>;
+  }
+
+  if (isError) {
+    return <div className="space-y-6 text-red-500">{t('error_loading_countries')}</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -30,10 +38,10 @@ const AdminCountries: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {countries.length === 0 ? (
+        {countries && countries.length === 0 ? (
           <p className="text-muted-foreground">{t('no_countries_added')}</p>
         ) : (
-          countries.map((country) => (
+          countries?.map((country) => (
             <Card key={country.id}>
               <CardHeader>
                 <CardTitle>{country.name}</CardTitle>

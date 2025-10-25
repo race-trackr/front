@@ -17,10 +17,11 @@ import { PlusCircle, Calendar } from 'lucide-react';
 import { getTrackdays } from '@/lib/api/trackdays';
 import { format } from 'date-fns';
 import { Card, CardContent } from "@/components/ui/card";
+import { TrackDayType } from '@/types'; // Changed Trackday to TrackDayType
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
-  const { data: trackdays, isLoading, isError } = useQuery({
+  const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({ // Changed Trackday to TrackDayType
     queryKey: ['trackdays'],
     queryFn: () => getTrackdays({ limit: 10 }),
   });
@@ -60,8 +61,8 @@ const TrackdayList: React.FC = () => {
                 <TableRow key={trackday.id}>
                   <TableCell>{format(new Date(trackday.date), 'PPP')}</TableCell>
                   <TableCell>{trackday.track?.name || trackday.trackId}</TableCell>
-                  <TableCell>{trackday.vehicle?.licensePlate || trackday.vehicleId}</TableCell> {/* Use licensePlate */}
-                  <TableCell>{trackday.bestLaptime || '-'}</TableCell>
+                  <TableCell>{trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId}</TableCell> {/* Adjusted vehicle display */}
+                  <TableCell>{trackday.bestLapTime || '-'}</TableCell> {/* Changed to bestLapTime */}
                   <TableCell className="text-right">
                     <Link to={`/trackdays/edit/${trackday.id}`}>
                       <Button variant="outline" size="sm">{t('view_edit_details')}</Button>

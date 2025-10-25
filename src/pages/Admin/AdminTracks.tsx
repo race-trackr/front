@@ -3,20 +3,28 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { Track } from '@/types';
+import { TrackType } from '@/types'; // Changed Track to TrackType
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import apiClient from '@/lib/apiClient';
 
 const AdminTracks: React.FC = () => {
   const { t } = useTranslation();
-  // Placeholder for fetching tracks
-  const tracks: Track[] = [
-    {
-      id: 't1', name: 'Nürburgring Nordschleife', slug: 'nurburgring', city: 'Nürburg', countryId: 'c1', address: '...', width: 10, length: 20.8, turn: 73, maxDb: 100, details: '...', bestLaptime: '...', bestLaptimePilote: '...', createdAt: '...', updatedAt: '...'
+  const { data: tracks, isLoading, isError } = useQuery<TrackType[]>({
+    queryKey: ['tracks'],
+    queryFn: async () => {
+      const response = await apiClient.get('/tracks');
+      return response.data;
     },
-    {
-      id: 't2', name: 'Spa-Francorchamps', slug: 'spa-francorchamps', city: 'Spa', countryId: 'c2', address: '...', width: 12, length: 7.004, turn: 19, maxDb: 100, details: '...', bestLaptime: '...', bestLaptimePilote: '...', createdAt: '...', updatedAt: '...'
-    },
-  ];
+  });
+
+  if (isLoading) {
+    return <div className="space-y-6">{t('loading_tracks')}</div>;
+  }
+
+  if (isError) {
+    return <div className="space-y-6 text-red-500">{t('error_loading_tracks')}</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -30,10 +38,10 @@ const AdminTracks: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tracks.length === 0 ? (
+        {tracks && tracks.length === 0 ? (
           <p className="text-muted-foreground">{t('no_tracks_added')}</p>
         ) : (
-          tracks.map((track) => (
+          tracks?.map((track) => (
             <Card key={track.id}>
               <CardHeader>
                 <CardTitle>{track.name}</CardTitle>
@@ -41,7 +49,7 @@ const AdminTracks: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-2">
                 <p><strong>{t('length')}:</strong> {track.length} km</p>
-                <p><strong>{t('turns')}:</strong> {track.turn}</p>
+                {/* Removed 'turns' as it's not in the new TrackType */}
                 <Button asChild variant="outline" className="mt-4 w-full">
                   <Link to={`/admin/tracks/edit/${track.id}`}>{t('view_edit_details')}</Link>
                 </Button>

@@ -1,38 +1,187 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import apiClient from '@/lib/apiClient';
+import { CountryType } from '@/types';
+
+const formSchema = z.object({
+  name: z.string().min(1, { message: "Le nom du pays est requis." }),
+  iso: z.string().length(2, { message: "Le code ISO doit contenir 2 caractères." }),
+  timezone: z.string().min(1, { message: "Le fuseau horaire est requis." }),
+  capital: z.string().min(1, { message: "La capitale est requise." }),
+});
 
 const AdminCountriesEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const countryId = Number(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const handleSubmit = () => {
-    // Simulate API call
-    console.log(`Updating country ${id}...`);
-    navigate('/admin/countries');
+  const queryClient = useQueryClient();
+
+  const form = useForm<Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      iso: '',
+      timezone: '',
+      capital: '',
+    },
+  });
+
+  const { data: country, isLoading, isError } = useQuery<CountryType>({
+    queryKey: ['country', countryId],
+    queryFn: async () => {
+      const response = await apiClient.get(`/countries/${countryId}`);
+      return response.data;
+    },
+    enabled: !!countryId && !isNaN(countryId),
+  });
+
+  useEffect(() => {
+    if (country) {
+      form.reset({
+        name: country.name,
+        iso: country.iso,
+        timezone: country.timezone,
+        capital: country.capital,
+      });
+    }
+  }, [country, form]);
+
+  const updateCountryMutation = useMutation({
+    mutationFn: async (payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>) => {
+      const response = await apiClient.put(`/countries/${countryId}`, payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['country', countryId] });
+      queryClient.invalidateQueries({ queryKey: ['countries'] });
+      toast.success(t('country_updated_successfully'));
+      navigate('/admin/countries');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_update_country'));
+    },
+  });
+
+  const deleteCountryMutation = useMutation({
+    mutationFn: async () => {
+      await apiClient.delete(`/countries/${countryId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['countries'] });
+      toast.success(t('country_deleted_successfully'));
+      navigate('/admin/countries');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_country'));
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    updateCountryMutation.mutate(values);
   };
+
   const handleDelete = () => {
-    // Simulate API call
-    console.log(`Deleting country ${id}...`);
-    navigate('/admin/countries');
+    if (window.confirm(t('confirm_delete_country'))) {
+      deleteCountryMutation.mutate();
+    }
   };
+
+  if (isLoading) {
+    return <div className="space-y-6">{t('loading_country')}</div>;
+  }
+
+  if (isError || !country) {
+    return <div className="space-y-6 text-red-500">{t('error_loading_country')}</div>;
+  }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('edit_country', { id })}</h1>
+      <h1 className="text-3xl font-bold">{t('edit_country', { id: country.id })}</h1>
       <Card>
         <CardHeader><CardTitle>{t('country_details')}</CardTitle></CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            This is a placeholder for the Country edit form.
-            It would use `react-hook-form` and shadcn/ui components.
-          </p>
-          <div className="flex justify-between mt-4">
-            <Button onClick={handleSubmit} className="btn-primary-gradient">{t('save_changes')}</Button>
-            <Button variant="destructive" onClick={handleDelete}>{t('delete_country')}</Button>
-          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('country_name')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_country_name')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="iso"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('country_iso')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g., US, FR" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timezone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('timezone')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g., CET, EST" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="capital"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('capital')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_capital')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex justify-between mt-4 md:col-span-2">
+                <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>
+                  {updateCountryMutation.isPending ? t('saving') : t('save_changes')}
+                </Button>
+                <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending}>
+                  {deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

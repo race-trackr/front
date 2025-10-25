@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { UserVehicle } from '@/types/index'; // Updated import
+import { UserVehicleType } from '@/types/index'; // Updated import
 import { useTranslation } from 'react-i18next';
 import { getVehicles } from '@/lib/api/vehicles';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 const VehicleList: React.FC = () => {
   const { t } = useTranslation();
   // Placeholder for fetching vehicles
-  const { data: vehicles, isLoading, isError } = useQuery({
+  const { data: vehicles, isLoading, isError } = useQuery<UserVehicleType[]>({ // Changed UserVehicle to UserVehicleType
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
@@ -42,8 +42,8 @@ const VehicleList: React.FC = () => {
           vehicles?.map((vehicle) => (
             <Card key={vehicle.id}>
               <CardHeader>
-                <CardTitle>{vehicle.name}</CardTitle>
-                <p className="text-sm text-muted-foreground">{vehicle.brand} {vehicle.model} ({vehicle.year})</p>
+                <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle> {/* Adjusted to brand and model */}
+                <p className="text-sm text-muted-foreground">({vehicle.year})</p>
               </CardHeader>
               <CardContent className="space-y-2">
                 <p><strong>{t('type')}:</strong> {t(`type_${vehicle.type.toLowerCase()}`)}</p>

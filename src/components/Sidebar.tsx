@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isCollapsed = false }) => {
           <NavLink to="/trackdays" icon={<CalendarDays className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('trackdays')}</NavLink>
           <NavLink to="/vehicles" icon={<Car className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('vehicles')}</NavLink>
           <NavLink to="/maintenances" icon={<Wrench className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('maintenances')}</NavLink>
-          {user?.role === 'owner' && (
+          {user?.isAdmin && ( // Changed user?.role === 'owner' to user?.isAdmin
             <NavLink to="/admin" icon={<Users className="h-5 w-5 flex-shrink-0" />} isMobile={isMobile} isCollapsed={isCollapsed}>{t('admin')}</NavLink>
           )}
         </nav>

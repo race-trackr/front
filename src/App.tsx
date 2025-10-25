@@ -15,7 +15,7 @@ import TrackdayView from './pages/Trackdays/TrackdayView';
 import VehicleList from './pages/Vehicles/VehicleList';
 import VehicleCreate from './pages/Vehicles/VehicleCreate';
 import VehicleEdit from './pages/Vehicles/VehicleEdit';
-import VehicleView from './pages/Vehicles/VehicleView'; // Import the new VehicleView component
+import VehicleView from './pages/Vehicles/VehicleView';
 import MaintenanceList from './pages/Maintenances/MaintenanceList';
 import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate';
 import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit';
@@ -82,12 +82,12 @@ const routesConfig = [
         handle: { crumb: () => 'Create Vehicle' },
       },
       {
-        path: "/vehicles/:id", // New route for viewing a vehicle
+        path: "/vehicles/:id",
         element: <Layout><VehicleView /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `View Vehicle ${params.id || ''}` },
       },
       {
-        path: "/vehicles/edit/:id", // Existing route, now points to the updated component
+        path: "/vehicles/edit/:id",
         element: <Layout><VehicleEdit /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Vehicle ${params.id || ''}` },
       },
@@ -109,7 +109,7 @@ const routesConfig = [
     ],
   },
   {
-    element: <ProtectedRoute allowedRoles={['owner']} />,
+    element: <ProtectedRoute allowedRoles={['admin']} />, // Changed 'owner' to 'admin'
     errorElement: <ErrorPage />,
     children: [
       {

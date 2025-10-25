@@ -1,32 +1,28 @@
 import apiClient from '@/lib/apiClient';
-import { Maintenance } from '@/types';
+import { MaintenanceRecordType, CreateMaintenancePayload, UpdateMaintenancePayload } from '@/types';
 
-// Assuming a CreateMaintenancePayload type would be similar to Maintenance but without id, userId, vehicleId, timestamps
-// For simplicity, using Omit<Maintenance, ...> for now.
-export type CreateMaintenancePayload = Omit<Maintenance, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'vehicle'>;
-
-export const getMaintenances = async ({ limit = 10, offset = 0 }): Promise<Maintenance[]> => {
+export const getMaintenances = async ({ limit = 10, offset = 0 }): Promise<MaintenanceRecordType[]> => {
   const response = await apiClient.get('/maintenances', {
     params: { limit, offset },
   });
   return response.data;
 };
 
-export const getMaintenanceById = async (id: string): Promise<Maintenance> => {
+export const getMaintenanceById = async (id: number): Promise<MaintenanceRecordType> => {
   const response = await apiClient.get(`/maintenances/${id}`);
   return response.data;
 };
 
-export const createMaintenance = async (payload: CreateMaintenancePayload): Promise<Maintenance> => {
+export const createMaintenance = async (payload: CreateMaintenancePayload): Promise<MaintenanceRecordType> => {
   const response = await apiClient.post('/maintenances', payload);
   return response.data;
 };
 
-export const updateMaintenance = async (id: string, payload: CreateMaintenancePayload): Promise<Maintenance> => {
+export const updateMaintenance = async (id: number, payload: UpdateMaintenancePayload): Promise<MaintenanceRecordType> => {
   const response = await apiClient.put(`/maintenances/${id}`, payload);
   return response.data;
 };
 
-export const deleteMaintenance = async (id: string): Promise<void> => {
+export const deleteMaintenance = async (id: number): Promise<void> => {
   await apiClient.delete(`/maintenances/${id}`);
 };

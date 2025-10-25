@@ -13,6 +13,7 @@ import { getVehicles } from "@/lib/api/vehicles";
 import { getMaintenances } from "@/lib/api/maintenances";
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
+import { TrackDayType, UserVehicleType, MaintenanceRecordType } from '@/types'; // Updated types
 
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -21,7 +22,7 @@ const Dashboard: React.FC = () => {
     data: recentTrackdays,
     isLoading: isLoadingTrackdays,
     isError: isErrorTrackdays,
-  } = useQuery({
+  } = useQuery<TrackDayType[]>({ // Changed Trackday to TrackDayType
     queryKey: ["trackdays", { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
@@ -30,7 +31,7 @@ const Dashboard: React.FC = () => {
     data: vehicles,
     isLoading: isLoadingVehicles,
     isError: isErrorVehicles,
-  } = useQuery({
+  } = useQuery<UserVehicleType[]>({ // Changed UserVehicle to UserVehicleType
     queryKey: ["vehicles", { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
@@ -39,7 +40,7 @@ const Dashboard: React.FC = () => {
     data: maintenances,
     isLoading: isLoadingMaintenances,
     isError: isErrorMaintenances,
-  } = useQuery({
+  } = useQuery<MaintenanceRecordType[]>({ // Changed Maintenance to MaintenanceRecordType
     queryKey: ["maintenances", { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
@@ -142,14 +143,14 @@ const Dashboard: React.FC = () => {
                       to={`/trackdays/${trackday.id}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
-                          {trackday.vehicle?.name || trackday.vehicleId} -
+                          {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId} -
                           {trackday.track?.name || trackday.trackId}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {format(new Date(trackday.date), "PPP", {
                             locale: getLocale(),
                           })}
-                          - {trackday.bestLaptime || t("no_best_laptime")}
+                          - {trackday.bestLapTime || t("no_best_laptime")}
                         </p>
                       </div>
                     </Link>
@@ -214,7 +215,7 @@ const Dashboard: React.FC = () => {
                   >
                     <div>
                       <p className="font-medium">
-                        {maintenance.type} - {maintenance.vehicleId}
+                        {maintenance.type} - {maintenance.userVehicleId}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(maintenance.date), "PPP", {
@@ -224,7 +225,7 @@ const Dashboard: React.FC = () => {
                       </p>
                     </div>
                     <Button asChild variant="ghost" size="sm">
-                      <Link to={`/maintenances/${maintenance.id}`}>
+                      <Link to={`/maintenances/edit/${maintenance.id}`}> {/* Changed to edit route */}
                         {t("view_edit_details")}
                       </Link>
                     </Button>
@@ -237,7 +238,7 @@ const Dashboard: React.FC = () => {
               </p>
             )}
             <Button asChild className="btn-primary-gradient" size="sm">
-              <Link to="/maintenances">
+              <Link to="/maintenances/create">
                 <Plus className="h-4 w-4 mr-2" /> {t("add_new_maintenance")}
               </Link>
             </Button>

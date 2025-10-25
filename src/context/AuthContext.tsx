@@ -1,9 +1,9 @@
 import React, { createContext, useEffect, ReactNode } from 'react';
 import { useAuthStore } from '@/store/authStore'; // Import the Zustand store
-import { User, LoginPayload, RegisterPayload } from '@/types';
+import { UserType, LoginPayload, RegisterPayload } from '@/types';
 
 interface AuthContextType {
-  user: User | null;
+  user: UserType | null;
   token: string | null;
   isAuthenticated: boolean;
   login: (credentials: LoginPayload) => Promise<void>;

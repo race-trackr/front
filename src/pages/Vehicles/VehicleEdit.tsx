@@ -29,17 +29,17 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, UserVehicle } from '@/types/index';
+import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index'; // Updated types
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  type: z.enum(['car', 'bike', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
-  brand: z.string().nullable().optional(),
-  model: z.string().nullable().optional(),
+  brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
+  model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
+  type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
+  image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
   details: z.string().nullable().optional(),
 });
 
@@ -53,17 +53,17 @@ const VehicleEdit: React.FC = () => {
   const form = useForm<CreateVehiclePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      brand: '',
+      model: '',
+      year: new Date().getFullYear(),
       type: 'car',
-      brand: null,
-      model: null,
+      image: null,
       licensePlate: null,
-      year: null,
       details: null,
     },
   });
 
-  const { data: vehicle, isLoading, isError } = useQuery<UserVehicle>({
+  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({ // Changed UserVehicle to UserVehicleType
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
     enabled: !!vehicleId && !isNaN(vehicleId),
@@ -72,19 +72,19 @@ const VehicleEdit: React.FC = () => {
   useEffect(() => {
     if (vehicle) {
       form.reset({
-        name: vehicle.name,
+        brand: vehicle.brand,
+        model: vehicle.model,
+        year: vehicle.year,
         type: vehicle.type,
-        brand: vehicle.brand || null,
-        model: vehicle.model || null,
+        image: vehicle.image || null,
         licensePlate: vehicle.licensePlate || null,
-        year: vehicle.year || null,
         details: vehicle.details || null,
       });
     }
   }, [vehicle, form]);
 
   const updateVehicleMutation = useMutation({
-    mutationFn: (payload: Partial<CreateVehiclePayload>) => updateVehicle(vehicleId, payload),
+    mutationFn: (payload: UpdateVehiclePayload) => updateVehicle(vehicleId, payload), // Changed CreateVehiclePayload to UpdateVehiclePayload
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicle', vehicleId] });
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
@@ -109,14 +109,11 @@ const VehicleEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: Partial<CreateVehiclePayload> = {
+    const payload: UpdateVehiclePayload = { // Changed CreateVehiclePayload to UpdateVehiclePayload
       ...values,
-      // Convert empty strings to null for optional string fields, and ensure year is null if undefined
-      brand: values.brand === '' ? null : values.brand,
-      model: values.model === '' ? null : values.model,
+      image: values.image === '' ? null : values.image,
       licensePlate: values.licensePlate === '' ? null : values.licensePlate,
       details: values.details === '' ? null : values.details,
-      year: values.year === undefined ? null : values.year,
     };
     updateVehicleMutation.mutate(payload);
   };
@@ -137,7 +134,7 @@ const VehicleEdit: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { name: vehicle.name })}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1> {/* Adjusted name display */}
       <Card>
         <CardHeader>
           <CardTitle>{t('vehicle_details')}</CardTitle>
@@ -147,12 +144,38 @@ const VehicleEdit: React.FC = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="name"
+                name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_name')}</FormLabel>
+                    <FormLabel>{t('vehicle_brand')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_vehicle_name')} />
+                      <Input {...field} placeholder={t('enter_brand')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="model"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('vehicle_model')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder={t('enter_model')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="year"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('vehicle_year')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -172,37 +195,11 @@ const VehicleEdit: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="bike">{t('type_bike')}</SelectItem>
+                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="brand"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('vehicle_brand')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_brand')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="model"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('vehicle_model')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_model')} />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -222,12 +219,12 @@ const VehicleEdit: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="year"
+                name="image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_year')}</FormLabel>
+                    <FormLabel>{t('vehicle_image_url')}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_image_url')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

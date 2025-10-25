@@ -10,13 +10,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getTrackdayById } from '@/lib/api/trackdays';
 import { ArrowLeft, Edit } from 'lucide-react';
+import { TrackDayType } from '@/types'; // Changed Trackday to TrackDayType
 
 const TrackdayView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const { data: trackday, isLoading, isError } = useQuery({
+  const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({ // Changed Trackday to TrackDayType
     queryKey: ['trackday', id],
     queryFn: () => getTrackdayById(id!),
     enabled: !!id,
@@ -69,8 +70,8 @@ const TrackdayView: React.FC = () => {
             <p className="text-lg">{format(new Date(trackday.date), 'PPP', { locale: getLocale() })}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{trackday.vehicle?.name ? t('vehicle') : t('vehicle_id_placeholder')}</p>
-            <p className="text-lg">{trackday.vehicle?.name || trackday.vehicleId}</p>
+            <p className="text-sm font-medium text-muted-foreground">{trackday.vehicle?.brand ? t('vehicle') : t('vehicle_id_placeholder')}</p>
+            <p className="text-lg">{trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{trackday.track?.name ? t('track') : t('track_id_placeholder')}</p>
@@ -82,28 +83,38 @@ const TrackdayView: React.FC = () => {
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
-            <p className="text-lg">{trackday.airTemperature}°C</p>
+            <p className="text-lg">{trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
-            <p className="text-lg">{trackday.trackTemperature}°C</p>
+            <p className="text-lg">{trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
-            <p className="text-lg">{trackday.trackCondition}</p>
+            <p className="text-lg">{t(`track_condition_${trackday.trackCondition}`)}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('best_laptime')}</p>
-            <p className="text-lg">{trackday.bestLaptime || t('no_best_laptime')}</p>
+            <p className="text-lg">{trackday.bestLapTime || t('no_best_laptime')}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>
-            <p className="text-lg">{trackday.totalLaps}</p>
+            <p className="text-lg">{trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}</p>
           </div>
-          {trackday.note && (
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">{t('total_distance')}</p>
+            <p className="text-lg">{trackday.totalDistance !== null ? `${trackday.totalDistance} km` : t('not_specified')}</p>
+          </div>
+          {trackday.chronos && (
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('chronos')}</p>
+              <p className="text-lg">{trackday.chronos}</p>
+            </div>
+          )}
+          {trackday.notes && (
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">{t('notes')}</p>
-              <p className="text-lg">{trackday.note}</p>
+              <p className="text-lg">{trackday.notes}</p>
             </div>
           )}
         </CardContent>

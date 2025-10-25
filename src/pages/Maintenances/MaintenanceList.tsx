@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Wrench } from 'lucide-react';
-import { Maintenance } from '@/types';
+import { MaintenanceRecordType } from '@/types'; // Changed Maintenance to MaintenanceRecordType
 import { useTranslation } from 'react-i18next';
 import { getMaintenances } from '@/lib/api/maintenances';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ const MaintenanceList: React.FC = () => {
   const { t } = useTranslation();
   // Placeholder for fetching maintenances
   const { data: maintenances, isLoading, isError } = useQuery({
-    queryKey: ['trackday'],
+    queryKey: ['maintenances'], // Changed queryKey to 'maintenances'
     queryFn: () => getMaintenances({ limit: 0 }),
   });
 
@@ -41,7 +41,7 @@ const MaintenanceList: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div className=''>
                 {t('total_maintenances')}
-                <p className="text-2xl font-bold mt-2">{maintenances.length}</p></div>
+                <p className="text-2xl font-bold mt-2">{maintenances?.length || 0}</p></div>
               <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
                 <Wrench className='h-6 w-6 text-primary' />
               </span>
@@ -51,29 +51,35 @@ const MaintenanceList: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
-            <p className="text-2xl font-bold">{maintenances.length}</p>
+            <p className="text-2xl font-bold">
+              {maintenances?.reduce((sum, m) => sum + (m.cost || 0), 0).toFixed(2)}€
+            </p>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
-            <p className="text-2xl font-bold">{maintenances.length}</p>
+            <p className="text-2xl font-bold">
+              {maintenances?.filter(m => m.nextDueDate && new Date(m.nextDueDate) > new Date()).length || 0}
+            </p>
           </CardHeader>
         </Card>
-        {maintenances.length === 0 ? (
+        {maintenances && maintenances.length === 0 ? (
           <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
         ) : (
-          maintenances.map((maintenance) => (
+          maintenances?.map((maintenance) => (
             <Card key={maintenance.id}>
               <CardHeader>
-                <CardTitle>{maintenance.name}</CardTitle>
-                <p className="text-sm text-muted-foreground">For Vehicle ID: {maintenance.vehicleId}</p>
+                <CardTitle>{maintenance.description}</CardTitle> {/* Changed from name to description */}
+                <p className="text-sm text-muted-foreground">For Vehicle ID: {maintenance.userVehicleId}</p> {/* Changed from vehicleId to userVehicleId */}
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>{t('type')}:</strong> {maintenance.type}</p>
+                <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p> {/* Using new type translation */}
                 <p><strong>{t('date')}:</strong> {new Date(maintenance.date).toLocaleDateString()}</p>
-                <p><strong>{t('cost')}:</strong> ${maintenance.cost.toFixed(2)}</p>
-                <p><strong>{t('mileage')}:</strong> {maintenance.mileage} km</p>
+                <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
+                <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
+                {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {new Date(maintenance.nextDueDate).toLocaleDateString()}</p>}
+                {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
                 <Button asChild variant="outline" className="mt-4 w-full">
                   <Link to={`/maintenances/edit/${maintenance.id}`}>{t('view_edit_details')}</Link>
                 </Button>

@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from 'react-i18next'; // Correction ici
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 interface UserMenuProps {
@@ -41,8 +41,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           )}
         >
           <Avatar className="h-8 w-8 flex-shrink-0 flex items-center justify-center">
-            <AvatarImage src="/placeholder-user.jpg" alt={user?.username || t("user")} />
-            <AvatarFallback>{user?.username ? user.username.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
+            <AvatarImage src="/placeholder-user.jpg" alt={user?.fullName || t("user")} />
+            <AvatarFallback>{user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
           </Avatar>
           <span
             className={cn(
@@ -50,14 +50,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
               isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100 ml-3"
             )}
           >
-            {user?.username || t("guest")}
+            {user?.fullName || t("guest")}
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.username || t("guest")}</p>
+            <p className="text-sm font-medium leading-none">{user?.fullName || t("guest")}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email || "guest@example.com"}
             </p>

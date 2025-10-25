@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate } from 'react-router-dom'; // Removed Link import
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,9 +10,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator'; // Import Separator
-import GoogleIcon from '@/components/GoogleIcon'; // Import GoogleIcon
-import { RegisterPayload, Country } from '@/types';
+import { Separator } from '@/components/ui/separator';
+import GoogleIcon from '@/components/GoogleIcon';
+import { RegisterPayload, CountryType } from '@/types'; // Changed Country to CountryType
 import apiClient from '@/lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -23,24 +23,24 @@ const Register: React.FC = () => {
   const { t } = useTranslation();
 
   const formSchema = z.object({
-    username: z.string().min(2, { message: t('username_min_length') }),
+    fullName: z.string().min(2, { message: t('username_min_length') }), // Changed from username
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(6, { message: t('password_min_length') }),
-    countryId: z.string().min(1, { message: t('country_required') }),
+    countryId: z.coerce.number().min(1, { message: t('country_required') }), // Changed to number
   });
 
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      fullName: '', // Changed from username
       email: '',
       password: '',
-      countryId: '',
+      countryId: 0, // Default to 0 for number type
     },
   });
 
   // Fetch countries using react-query
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<Country[]>({
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({ // Changed Country to CountryType
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
@@ -68,10 +68,10 @@ const Register: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
             <FormField
               control={form.control}
-              name="username"
+              name="fullName" // Changed from username
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('username')}</FormLabel>
+                  <FormLabel>{t('username')}</FormLabel> {/* Keeping translation key as 'username' for now */}
                   <FormControl>
                     <Input placeholder="JohnDoe" {...field} />
                   </FormControl>
@@ -111,7 +111,7 @@ const Register: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('country')}</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCountries || isErrorCountries || authLoading}>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || authLoading}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
@@ -119,7 +119,7 @@ const Register: React.FC = () => {
                     </FormControl>
                     <SelectContent>
                       {countries?.map((country) => (
-                        <SelectItem key={country.id} value={country.id}>
+                        <SelectItem key={country.id} value={country.id.toString()}>
                           {country.name}
                         </SelectItem>
                       ))}

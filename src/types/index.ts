@@ -1,103 +1,116 @@
 "use client";
 
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  countryId?: string;
-  country?: Country;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Country {
-  id: string;
-  name: string;
-  timezone: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface UserVehicle {
+export interface CountryType {
   id: number;
-  userId: number;
   name: string;
   slug: string;
-  type: 'bike' | 'car' | 'karting' | 'other';
-  brand?: string | null;
-  model?: string | null;
-  year?: number | null;
-  licensePlate?: string | null;
-  details?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt'>;
-
-export interface Track {
-  id: string;
-  name: string;
-  countryId: string;
-  country?: Country;
-  length: number; // in meters
-  turns: number;
-  layoutImageUrl?: string;
-  websiteUrl?: string;
+  iso: string;
   timezone: string;
-  otherDetails: Record<string, any> | null;
+  capital: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Trackday {
-  id: string;
-  userId: string;
-  user?: User;
-  vehicleId: number; // Updated to number
-  vehicle?: UserVehicle;
-  trackId: string;
-  track?: Track;
-  date: string;
-  weather: string;
-  airTemperature: number;
-  trackTemperature: number;
-  trackCondition: string;
-  note?: string;
-  bestLaptime?: string;
-  totalLaps: number;
+export interface UserType {
+  id: number;
+  email: string;
+  password?: string; // Password should not be exposed in client-side UserType, making it optional
+  fullName: string;
+  avatar: string | null;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
+  trackDays?: TrackDayType[];
+  vehicles?: UserVehicleType[];
+  maintenances?: MaintenanceRecordType[];
 }
 
-export interface CreateTrackdayPayload {
-  vehicleId: number; // Updated to number
-  trackId: string;
-  date: string;
-  weather: string;
-  airTemperature: number;
-  trackTemperature: number;
-  trackCondition: string;
-  note?: string;
-  bestLaptime?: string;
-  totalLaps: number;
-}
-
-export interface Maintenance {
-  id: string;
-  userId: string;
-  user?: User;
-  vehicleId: number; // Updated to number
-  vehicle?: UserVehicle;
-  type: string;
-  date: string;
-  mileage: number;
-  cost: number;
-  notes?: string;
-  otherDetails: Record<string, any> | null;
+export interface TrackType {
+  id: number;
+  name: string;
+  slug: string;
+  countryId: number;
+  length: number;
+  address: string | null;
+  city: string;
+  website: string | null;
   createdAt: string;
   updatedAt: string;
+  country?: CountryType;
+  trackDays?: TrackDayType[];
 }
+
+export type WeatherCondition = 'clear' | 'cloudy' | 'rainy';
+export type TrackCondition = 'wet' | 'dry' | 'moist';
+export type VehicleType = 'car' | 'motorcycle' | 'karting' | 'other'; // Added karting and other for consistency
+export type MaintenanceRecordTypeType = 'repair' | 'service' | 'modification'; // Renamed to avoid conflict with interface name
+
+export interface TrackDayType {
+  id: string; // Keeping as string as per user's definition
+  userId: number;
+  trackId: number;
+  userVehicleId: number | null;
+  date: string;
+  weather: WeatherCondition;
+  airTemperature: number | null;
+  trackTemperature: number | null;
+  trackCondition: TrackCondition;
+  notes: string | null;
+  bestLapTime: string | null;
+  totalLaps: number | null;
+  totalDistance: number | null;
+  chronos: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user?: UserType;
+  track?: TrackType;
+  vehicle?: UserVehicleType;
+}
+
+export interface UserVehicleType {
+  id: number;
+  userId: number;
+  brand: string;
+  model: string;
+  year: number;
+  type: VehicleType;
+  image: string | null;
+  licensePlate?: string | null; // Added back as it was in previous UserVehicle
+  details?: string | null; // Added back as it was in previous UserVehicle
+  slug: string; // Added back as it was in previous UserVehicle
+  createdAt: string;
+  updatedAt: string;
+  user?: UserType;
+  trackDays?: TrackDayType[];
+  maintenances?: MaintenanceRecordType[];
+}
+
+export interface MaintenanceRecordType {
+  id: number;
+  userId: number;
+  userVehicleId: number;
+  type: MaintenanceRecordTypeType;
+  date: string;
+  description: string;
+  cost: number | null;
+  mileage: number | null;
+  nextDueDate: string | null;
+  nextDueMileage: number | null;
+  createdAt: string;
+  updatedAt: string;
+  user?: UserType;
+  vehicle?: UserVehicleType;
+}
+
+// Payloads for API requests
+export type CreateVehiclePayload = Omit<UserVehicleType, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt' | 'user' | 'trackDays' | 'maintenances'>;
+export type UpdateVehiclePayload = Partial<CreateVehiclePayload>;
+
+export type CreateTrackdayPayload = Omit<TrackDayType, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'track' | 'vehicle'>;
+export type UpdateTrackdayPayload = Partial<CreateTrackdayPayload>;
+
+export type CreateMaintenancePayload = Omit<MaintenanceRecordType, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'vehicle'>;
+export type UpdateMaintenancePayload = Partial<CreateMaintenancePayload>;
 
 export interface DashboardSummary {
   totalTrackdays: number;
@@ -112,13 +125,13 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  username: string;
+  fullName: string; // Changed from username
   email: string;
   password: string;
-  countryId: string;
+  countryId: number; // Changed from string
 }
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  user: UserType;
 }

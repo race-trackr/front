@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import apiClient from '@/lib/apiClient';
-import { User, LoginPayload, RegisterPayload, AuthResponse } from '@/types';
+import { UserType, LoginPayload, RegisterPayload, AuthResponse } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import i18n from '@/i18n'; // Import i18n instance for translations
 
 interface AuthState {
-  user: User | null;
+  user: UserType | null;
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;

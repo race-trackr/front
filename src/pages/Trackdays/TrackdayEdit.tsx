@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { CreateTrackdayPayload, Trackday } from '@/types';
+import { TrackDayType, UpdateTrackdayPayload, WeatherCondition, TrackCondition, UserVehicleType, TrackType } from '@/types'; // Updated types
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
@@ -22,99 +22,156 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getTrackdayById, updateTrackday, deleteTrackday } from '@/lib/api/trackdays';
+import { getVehicles } from '@/lib/api/vehicles';
+import { getTracks } from '@/lib/api/tracks';
+import { Combobox } from '@/components/ui/combobox';
+import { PlusCircle } from 'lucide-react';
+
+const formSchema = z.object({
+  userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(), // Changed to userVehicleId and nullable
+  trackId: z.coerce.number().min(1, { message: "La piste est requise." }), // Changed to number
+  date: z.string().min(1, { message: "La date est requise." }),
+  weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
+  airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }).nullable().optional(),
+  trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }).nullable().optional(),
+  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }), // Changed to enum
+  notes: z.string().nullable().optional(), // Changed to notes and nullable
+  bestLapTime: z.string().optional().refine( // Changed to bestLapTime
+    (val) => !val || /^(\d{1,2}):([0-5][0-9])\.(\d{3})$/.test(val),
+    { message: "Le meilleur temps au tour doit être au format MM:SS.mmm (ex: 01:23.456)" }
+  ).nullable().optional(),
+  totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }).nullable().optional(),
+  totalDistance: z.coerce.number().min(0, { message: "La distance totale ne peut pas être négative." }).nullable().optional(), // New field
+  chronos: z.string().nullable().optional(), // New field
+});
 
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const formSchema = z.object({
-    vehicleId: z.coerce.number().min(1, { message: t('vehicle_id_placeholder') }),
-    trackId: z.string().min(1, { message: t('track_id_placeholder') }),
-    date: z.string().min(1, { message: t('date') }),
-    weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
-    airTemperature: z.coerce.number().min(-50).max(50),
-    trackTemperature: z.coerce.number().min(-50).max(100),
-    trackCondition: z.string().min(1, { message: t('track_condition') }),
-    note: z.string().optional(),
-    bestLaptime: z.string().optional().refine(
-      (val) => !val || /^(\d{1,2}):([0-5][0-9])\.(\d{3})$/.test(val),
-      { message: "Le meilleur temps au tour doit être au format MM:SS.mmm (ex: 01:23.456)" }
-    ),
-    totalLaps: z.coerce.number().min(0),
-  });
-
-  const form = useForm<CreateTrackdayPayload>({
+  const form = useForm<UpdateTrackdayPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vehicleId: 0, // Default to 0 or a suitable placeholder for number
-      trackId: '',
+      userVehicleId: null,
+      trackId: 0,
       date: '',
-      weather: 'clear', // Valeur par défaut pour le sélecteur
-      airTemperature: 0,
-      trackTemperature: 0,
-      trackCondition: '',
-      note: '',
-      bestLaptime: '',
-      totalLaps: 0,
+      weather: 'clear',
+      airTemperature: null,
+      trackTemperature: null,
+      trackCondition: 'dry',
+      notes: null,
+      bestLapTime: null,
+      totalLaps: null,
+      totalDistance: null,
+      chronos: null,
+    },
+  });
+
+  const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({
+    queryKey: ['trackday', id],
+    queryFn: () => getTrackdayById(id!),
+    enabled: !!id,
+  });
+
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
+    queryKey: ['vehicles'],
+    queryFn: () => getVehicles({ limit: 0 }),
+  });
+
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<TrackType[]>({
+    queryKey: ['tracks'],
+    queryFn: async () => {
+      const response = await apiClient.get('/tracks');
+      return response.data;
     },
   });
 
   useEffect(() => {
-    if (id) {
-      // In a real app, fetch trackday data by ID
-      // For now, simulate fetching
-      const fetchedTrackday: Trackday = {
-        id: id,
-        userId: 'user1',
-        vehicleId: 1, // Example with number
-        trackId: 't1',
-        date: '2023-10-26',
-        weather: 'clear', // Exemple avec la nouvelle option
-        airTemperature: 25,
-        trackTemperature: 35,
-        trackCondition: 'Dry',
-        note: 'Great day!',
-        bestLaptime: '01:30.123',
-        totalLaps: 20,
-        createdAt: '2023-10-20T10:00:00Z',
-        updatedAt: '2023-10-20T10:00:00Z',
-      };
-
+    if (trackday) {
       form.reset({
-        ...fetchedTrackday,
-        date: fetchedTrackday.date.split('T')[0], // Format date for input type="date"
+        userVehicleId: trackday.userVehicleId || null,
+        trackId: trackday.trackId,
+        date: trackday.date,
+        weather: trackday.weather,
+        airTemperature: trackday.airTemperature || null,
+        trackTemperature: trackday.trackTemperature || null,
+        trackCondition: trackday.trackCondition,
+        notes: trackday.notes || null,
+        bestLapTime: trackday.bestLapTime || null,
+        totalLaps: trackday.totalLaps || null,
+        totalDistance: trackday.totalDistance || null,
+        chronos: trackday.chronos || null,
       });
     }
-  }, [id, form]);
+  }, [trackday, form]);
 
-  const onSubmit = async (values: CreateTrackdayPayload) => {
-    try {
-      const payload = {
-        ...values,
-      };
-      await apiClient.put(`/trackdays/${id}`, payload); // Use PUT for updates
-      showSuccess(t('trackday_updated_successfully'));
+  const updateTrackdayMutation = useMutation({
+    mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(id!, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trackday', id] });
+      queryClient.invalidateQueries({ queryKey: ['trackdays'] });
+      toast.success(t('trackday_updated_successfully'));
+      navigate(`/trackdays/${id}`);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_update_trackday'));
+    },
+  });
+
+  const deleteTrackdayMutation = useMutation({
+    mutationFn: () => deleteTrackday(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trackdays'] });
+      toast.success(t('trackday_deleted_successfully'));
       navigate('/trackdays');
-    } catch (error: any) {
-      showError(error.response?.data?.message || t('failed_to_update_trackday'));
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const payload: UpdateTrackdayPayload = {
+      ...values,
+      airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
+      trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
+      notes: values.notes === '' ? null : values.notes,
+      bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
+      totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
+      totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
+      chronos: values.chronos === '' ? null : values.chronos,
+    };
+    updateTrackdayMutation.mutate(payload);
+  };
+
+  const onDelete = () => {
+    if (window.confirm(t('confirm_delete_trackday'))) {
+      deleteTrackdayMutation.mutate();
     }
   };
 
-  const onDelete = async () => {
-    if (!window.confirm(t('confirm_delete_trackday'))) return;
-    try {
-      await apiClient.delete(`/trackdays/${id}`);
-      showSuccess(t('trackday_deleted_successfully'));
-      navigate('/trackdays');
-    } catch (error: any) {
-      showError(error.response?.data?.message || t('failed_to_delete_trackday'));
-    }
-  };
+  const trackOptions = React.useMemo(() => {
+    return tracks?.map(track => ({
+      value: track.id.toString(),
+      label: `${track.name} (${track.country?.name || t('unknown_country')})`
+    })) || [];
+  }, [tracks, t]);
+
+  if (isLoading) {
+    return <div className="space-y-6">{t('loading_trackday')}</div>;
+  }
+
+  if (isError || !trackday) {
+    return <div className="space-y-6 text-red-500">{t('error_loading_trackday')}</div>;
+  }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('edit_trackday', { id })}</h1>
+      <h1 className="text-3xl font-bold">{t('edit_trackday', { id: trackday.id })}</h1>
       <Card>
         <CardHeader>
           <CardTitle>{t('trackday_details')}</CardTitle>
@@ -124,14 +181,40 @@ const TrackdayEdit: React.FC = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="vehicleId"
+                name="userVehicleId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_id_placeholder')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value.toString()} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormDescription>In a real app, this would be a select dropdown.</FormDescription>
+                    <FormLabel>{t('vehicle')}</FormLabel>
+                    <Select onValueChange={(value) => {
+                      if (value === "create-new-vehicle") {
+                        navigate('/vehicles/create');
+                      } else {
+                        field.onChange(Number(value));
+                      }
+                    }} value={field.value?.toString() || ''}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_a_vehicle')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoadingVehicles ? (
+                          <SelectItem value="loading" disabled>{t('loading_vehicles')}</SelectItem>
+                        ) : isErrorVehicles || !vehicles || vehicles.length === 0 ? (
+                          <SelectItem value="create-new-vehicle" className="text-blue-600 cursor-pointer hover:bg-accent">
+                            <div className="flex items-center">
+                              <PlusCircle className="mr-2 h-4 w-4" /> {t('create_vehicle')}
+                            </div>
+                          </SelectItem>
+                        ) : (
+                          vehicles.map((vehicle) => (
+                            <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                              {vehicle.brand} {vehicle.model} ({vehicle.licensePlate || t('not_specified')})
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -141,11 +224,19 @@ const TrackdayEdit: React.FC = () => {
                 name="trackId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('track_id_placeholder')}</FormLabel>
+                    <FormLabel>{t('track')}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Combobox
+                        options={trackOptions}
+                        value={field.value.toString()}
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        placeholder={t('select_a_track')}
+                        emptyMessage={t('no_track_found')}
+                        disabled={isLoadingTracks}
+                        onCreateNew={() => navigate('/admin/tracks/create')}
+                        createNewLabel={t('create_track')}
+                      />
                     </FormControl>
-                    <FormDescription>In a real app, this would be a select dropdown.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -197,7 +288,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('air_temperature')}</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.1" {...field} />
+                      <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -210,7 +301,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('track_temperature')}</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.1" {...field} />
+                      <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -222,21 +313,30 @@ const TrackdayEdit: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('track_condition')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_track_condition')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="wet">{t('track_condition_wet')}</SelectItem>
+                        <SelectItem value="dry">{t('track_condition_dry')}</SelectItem>
+                        <SelectItem value="moist">{t('track_condition_moist')}</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name="bestLaptime"
+                name="bestLapTime"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('best_laptime')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="MM:SS.mmm" {...field} />
+                      <Input placeholder="MM:SS.mmm" {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -249,7 +349,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('total_laps')}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input type="number" {...field} value={field.value === null ? '' : field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -257,23 +357,49 @@ const TrackdayEdit: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="note"
+                name="totalDistance"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('total_distance')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="chronos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('chronos')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_chronos_data')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="notes"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
                     <FormLabel>{t('notes')}</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} />
+                      <Textarea rows={3} {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <div className="flex justify-between w-full md:col-span-2">
-                <Button type="submit" className="btn-primary-gradient" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? t('saving') : t('save_changes')}
+                <Button type="submit" className="btn-primary-gradient" disabled={updateTrackdayMutation.isPending}>
+                  {updateTrackdayMutation.isPending ? t('saving') : t('save_changes')}
                 </Button>
-                <Button type="button" variant="destructive" onClick={onDelete}>
-                  {t('delete_trackday')}
+                <Button type="button" variant="destructive" onClick={onDelete} disabled={deleteTrackdayMutation.isPending}>
+                  {deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}
                 </Button>
               </div>
             </form>
