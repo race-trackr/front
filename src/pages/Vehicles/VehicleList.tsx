@@ -13,12 +13,12 @@ const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
     case 'car':
       return <Car className="h-5 w-5 text-muted-foreground" />;
-    case 'motorcycle':
+    case 'moto': // Changed from 'motorcycle' to 'moto'
       return <Bike className="h-5 w-5 text-muted-foreground" />;
     case 'karting':
-      return <Car className="h-5 w-5 text-muted-foreground" />; // Changed to Car icon
+      return <Car className="h-5 w-5 text-muted-foreground" />;
     default:
-      return <Car className="h-5 w-5 text-muted-foreground" />; // Changed to Car icon
+      return <Car className="h-5 w-5 text-muted-foreground" />;
   }
 };
 
@@ -67,7 +67,7 @@ const VehicleList: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {vehicles && vehicles.length === 0 ? (
           <p className="text-muted-foreground">{t('no_vehicles_added')}</p>
         ) : (

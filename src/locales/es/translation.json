@@ -187,7 +187,7 @@
   "vehicle_type": "Tipo de vehículo",
   "select_vehicle_type": "Selecciona el tipo de vehículo",
   "type_car": "Coche",
-  "type_bike": "Moto",
+  "type_moto": "Moto",
   "type_karting": "Karting",
   "type_other": "Otro",
   "enter_any_details": "Introduce cualquier detalle sobre el vehículo",

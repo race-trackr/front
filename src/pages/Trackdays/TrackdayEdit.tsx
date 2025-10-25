@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { TrackDayType, UpdateTrackdayPayload, WeatherCondition, TrackCondition, UserVehicleType, TrackType } from '@/types'; // Updated types
+import { TrackDayType, UpdateTrackdayPayload, WeatherCondition, TrackCondition, UserVehicleType, TrackType } from '@/types';
 import { showSuccess, showError } from '@/utils/toast';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
@@ -28,8 +28,8 @@ import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { Combobox } from '@/components/ui/combobox';
 import { PlusCircle } from 'lucide-react';
-import { toast } from 'sonner'; // Added toast import
-import MultiLineChronoInput from '@/components/MultiLineChronoInput'; // Import new component
+import { toast } from 'sonner';
+import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 
 const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
 
@@ -51,7 +51,7 @@ const formSchema = z.object({
   chronos: z.array(z.string().refine(
     (val) => chronoFormatRegex.test(val),
     { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
-  )).nullable().optional(), // Changed to array of strings
+  )).nullable().optional(),
 });
 
 const TrackdayEdit: React.FC = () => {
@@ -74,7 +74,7 @@ const TrackdayEdit: React.FC = () => {
       bestLapTime: null,
       totalLaps: null,
       totalDistance: null,
-      chronos: null, // Default to null for array
+      chronos: null,
     },
   });
 
@@ -111,7 +111,7 @@ const TrackdayEdit: React.FC = () => {
         bestLapTime: trackday.bestLapTime || null,
         totalLaps: trackday.totalLaps || null,
         totalDistance: trackday.totalDistance || null,
-        chronos: trackday.chronos && trackday.chronos.length > 0 ? trackday.chronos : null, // Ensure it's an array or null
+        chronos: trackday.chronos && trackday.chronos.length > 0 ? trackday.chronos : null,
       });
     }
   }, [trackday, form]);
@@ -155,7 +155,7 @@ const TrackdayEdit: React.FC = () => {
       bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
       totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
       totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
-      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null, // Filter empty strings and set to null if empty
+      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null,
     };
     updateTrackdayMutation.mutate(payload);
   };

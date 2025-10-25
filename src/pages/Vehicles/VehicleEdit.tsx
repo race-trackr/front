@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index'; // Updated types
+import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
@@ -37,7 +37,7 @@ const formSchema = z.object({
   brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
   model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
   year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
-  type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
+  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
   image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
@@ -63,7 +63,7 @@ const VehicleEdit: React.FC = () => {
     },
   });
 
-  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({ // Changed UserVehicle to UserVehicleType
+  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
     enabled: !!vehicleId && !isNaN(vehicleId),
@@ -84,7 +84,7 @@ const VehicleEdit: React.FC = () => {
   }, [vehicle, form]);
 
   const updateVehicleMutation = useMutation({
-    mutationFn: (payload: UpdateVehiclePayload) => updateVehicle(vehicleId, payload), // Changed CreateVehiclePayload to UpdateVehiclePayload
+    mutationFn: (payload: UpdateVehiclePayload) => updateVehicle(vehicleId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicle', vehicleId] });
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
@@ -109,7 +109,7 @@ const VehicleEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: UpdateVehiclePayload = { // Changed CreateVehiclePayload to UpdateVehiclePayload
+    const payload: UpdateVehiclePayload = {
       ...values,
       image: values.image === '' ? null : values.image,
       licensePlate: values.licensePlate === '' ? null : values.licensePlate,
@@ -134,7 +134,7 @@ const VehicleEdit: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1> {/* Adjusted name display */}
+      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1>
       <Card>
         <CardHeader>
           <CardTitle>{t('vehicle_details')}</CardTitle>
@@ -195,7 +195,7 @@ const VehicleEdit: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
+                        <SelectItem value="moto">{t('type_moto')}</SelectItem> {/* Changed to type_moto */}
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>

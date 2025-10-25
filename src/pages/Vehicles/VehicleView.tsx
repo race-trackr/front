@@ -4,13 +4,13 @@ import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
+import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getVehicleById } from '@/lib/api/vehicles';
 import { ArrowLeft, Edit } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import { UserVehicleType } from '@/types'; // Changed UserVehicle to UserVehicleType
+import { UserVehicleType } from '@/types';
 
 const VehicleView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +18,7 @@ const VehicleView: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({ // Changed UserVehicle to UserVehicleType
+  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
     enabled: !!vehicleId && !isNaN(vehicleId),
@@ -48,7 +48,7 @@ const VehicleView: React.FC = () => {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('view_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1> {/* Adjusted name display */}
+        <h1 className="text-3xl font-bold">{t('view_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => navigate('/vehicles')}>
             <ArrowLeft className="mr-2 h-4 w-4" /> {t('back_to_vehicles')}

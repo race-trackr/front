@@ -28,13 +28,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { createVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, VehicleType } from '@/types'; // Updated VehicleType
+import { CreateVehiclePayload, VehicleType } from '@/types';
 
 const formSchema = z.object({
   brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
   model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
   year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
-  type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
+  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
   image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
@@ -148,7 +148,7 @@ const VehicleCreate: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
+                        <SelectItem value="moto">{t('type_moto')}</SelectItem> {/* Changed to type_moto */}
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>

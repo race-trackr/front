@@ -31,12 +31,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle } from 'lucide-react';
 import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
-import { UserVehicleType, CreateTrackdayPayload, TrackType, WeatherCondition, TrackCondition } from '@/types'; // Updated types
+import { UserVehicleType, CreateTrackdayPayload, TrackType, WeatherCondition, TrackCondition } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
-import apiClient from '@/lib/apiClient'; // Added apiClient import
-import MultiLineChronoInput from '@/components/MultiLineChronoInput'; // Import new component
+import apiClient from '@/lib/apiClient';
+import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 
 const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
 
@@ -58,7 +58,7 @@ const formSchema = z.object({
   chronos: z.array(z.string().refine(
     (val) => chronoFormatRegex.test(val),
     { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
-  )).nullable().optional(), // Changed to array of strings
+  )).nullable().optional(),
 });
 
 const TrackdayCreate: React.FC = () => {
@@ -80,7 +80,7 @@ const TrackdayCreate: React.FC = () => {
       bestLapTime: null,
       totalLaps: null,
       totalDistance: null,
-      chronos: null, // Default to null for array
+      chronos: null,
     },
   });
 
@@ -123,7 +123,7 @@ const TrackdayCreate: React.FC = () => {
       bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
       totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
       totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
-      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null, // Filter empty strings and set to null if empty
+      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null,
     };
     createTrackdayMutation.mutate(payload);
   };
