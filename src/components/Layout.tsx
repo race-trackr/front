@@ -35,11 +35,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
       )}>
-        <div className="flex h-full flex-col gap-2"> {/* Removed max-h-screen as h-full is sufficient */}
+        <div className="flex h-full flex-col"> {/* Removed gap-2 here */}
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
-              isCollapsed ? "px-2" : "px-4 lg:px-6"
+              isCollapsed ? "px-2" : "px-4 lg:px-6",
+              "mb-2" // Added margin-bottom for spacing
             )}
           >
             <Link
