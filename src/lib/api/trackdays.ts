@@ -7,8 +7,9 @@ interface GetTrackdaysParams {
   searchTerm?: string;
   vehicleId?: number;
   trackId?: number;
-  startDate?: string; // New parameter for start date
-  endDate?: string;   // New parameter for end date
+  // Removed startDate and endDate
+  // startDate?: string;
+  // endDate?: string;
 }
 
 export const getTrackdays = async (params?: GetTrackdaysParams): Promise<TrackDayType[]> => {

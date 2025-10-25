@@ -317,8 +317,5 @@
   "delete_trackday_button": "Elimina giornata in pista",
   "confirm_delete_trackday_title": "Conferma eliminazione",
   "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può essere annullata.",
-  "not_specified_vehicle": "Veicolo non specificato",
-  "filter_by_date_range": "Filtra per intervallo di date",
-  "pick_start_date": "Seleziona data di inizio",
-  "pick_end_date": "Seleziona data di fine"
+  "not_specified_vehicle": "Veicolo non specificato"
 }
