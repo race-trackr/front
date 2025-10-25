@@ -123,7 +123,7 @@ const MaintenanceView: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('cost')}</p>
               <p className="text-lg">
-                {maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}
+                {maintenance.cost !== null ? `${Number(maintenance.cost).toFixed(2)}€` : t('not_specified')}
               </p>
             </div>
             <div>

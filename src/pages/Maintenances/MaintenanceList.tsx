@@ -105,7 +105,7 @@ const MaintenanceList: React.FC = () => {
               </span>
             </div>
             <p className="text-2xl font-bold">
-              {maintenances?.reduce((sum, m) => sum + (m.cost || 0), 0).toFixed(2)}€
+              {maintenances?.reduce((sum, m) => sum + (Number(m.cost) || 0), 0).toFixed(2)}€
             </p>
           </CardHeader>
         </Card>
@@ -131,7 +131,7 @@ const MaintenanceList: React.FC = () => {
           maintenances?.map((maintenance) => (
             <Card 
               key={maintenance.id} 
-              className="flex flex-col transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary" // Added hover effects
+              className="flex flex-col transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary"
             >
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
                 <div className="flex justify-between items-center w-full">
@@ -149,7 +149,7 @@ const MaintenanceList: React.FC = () => {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <p className="text-sm font-medium">{format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
-                    <p className="text-lg font-bold">{maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}</p>
+                    <p className="text-lg font-bold">{maintenance.cost !== null ? `${Number(maintenance.cost).toFixed(2)}€` : t('not_specified')}</p>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
                     <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
