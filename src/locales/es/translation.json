@@ -268,8 +268,8 @@
   "error_loading_admin_dashboard": "Error al cargar el panel de control del administrador.",
   "total_cost": "Costo total",
   "upcoming_maintenances": "Próximos mantenimientos",
-  "loading_maintenances": "Cargando mantenimientos...",
-  "error_loading_maintenances": "Error al cargar los mantenimientos.",
+  "loading_maintenances": "Loading mantenimientos...",
+  "error_loading_maintenances": "Error loading mantenimientos.",
   "maintenance_created_successfully": "¡Mantenimiento creado con éxito!",
   "description": "Descripción",
   "enter_description": "Introduce la descripción",
@@ -341,5 +341,7 @@
   "edit_maintenance_button": "Editar mantenimiento",
   "delete_maintenance_button": "Eliminar mantenimiento",
   "confirm_delete_maintenance_title": "Confirmar eliminación",
-  "confirm_delete_maintenance_description": "¿Estás seguro de que quieres eliminar este registro de mantenimiento? Esta acción no se puede deshacer."
+  "confirm_delete_maintenance_description": "¿Estás seguro de que quieres eliminar este registro de mantenimiento? Esta acción no se puede deshacer.",
+  "next_due": "Próximo vencimiento",
+  "view_maintenance": "Ver mantenimiento #{{id}}"
 }

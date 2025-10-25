@@ -245,24 +245,30 @@ const Dashboard: React.FC = () => {
                 {maintenances.map((maintenance) => (
                   <li
                     key={maintenance.id}
-                    className="flex items-center justify-between"
+                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    <div>
-                      <p className="font-medium">
-                        {maintenance.type} - {maintenance.userVehicleId}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(maintenance.date), "PPP", {
-                          locale: getLocale(),
-                        })}
-                        - {maintenance.cost}€
-                      </p>
+                    <Link to={`/maintenances/${maintenance.id}`} className="w-full"> {/* Link to view page */}
+                      <div className="flex-1 text-left z-10">
+                        <p className="font-medium">
+                          {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : maintenance.userVehicleId}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(maintenance.date), "PPP", {
+                            locale: getLocale(),
+                          })}
+                          - {maintenance.cost}€
+                        </p>
+                      </div>
+                    </Link>
+                    <div className="flex items-center gap-2 z-10">
+                      <Button asChild variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
+                        <Link to={`/maintenances/edit/${maintenance.id}`}>
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">{t("view_edit_details")}</span>
+                        </Link>
+                      </Button>
+                      {/* Delete button can be added here if needed, similar to trackdays */}
                     </div>
-                    <Button asChild variant="ghost" size="sm">
-                      <Link to={`/maintenances/edit/${maintenance.id}`}>
-                        {t("view_edit_details")}
-                      </Link>
-                    </Button>
                   </li>
                 ))}
               </ul>

@@ -19,6 +19,7 @@ import VehicleView from './pages/Vehicles/VehicleView';
 import MaintenanceList from './pages/Maintenances/MaintenanceList';
 import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate';
 import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit';
+import MaintenanceView from './pages/Maintenances/MaintenanceView'; // Import MaintenanceView
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import AdminTracks from './pages/Admin/AdminTracks';
 import AdminTracksCreate from './pages/Admin/AdminTracksCreate';
@@ -100,6 +101,11 @@ const routesConfig = [
         path: "/maintenances/create",
         element: <Layout><MaintenanceCreate /></Layout>,
         handle: { crumb: () => 'Create Maintenance' },
+      },
+      {
+        path: "/maintenances/:id", // New route for MaintenanceView
+        element: <Layout><MaintenanceView /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `View Maintenance ${params.id || ''}` },
       },
       {
         path: "/maintenances/edit/:id",

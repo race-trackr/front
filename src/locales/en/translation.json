@@ -321,5 +321,7 @@
   "edit_maintenance_button": "Edit Maintenance",
   "delete_maintenance_button": "Delete Maintenance",
   "confirm_delete_maintenance_title": "Confirm Deletion",
-  "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone."
+  "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone.",
+  "next_due": "Next Due",
+  "view_maintenance": "View Maintenance #{{id}}"
 }
