@@ -59,7 +59,7 @@ export interface TrackDayType {
   bestLapTime: string | null;
   totalLaps: number | null;
   totalDistance: number | null;
-  chronos: string | null;
+  chronos: string[] | null; // Changed to array of strings
   createdAt: string;
   updatedAt: string;
   user?: UserType;

@@ -259,7 +259,7 @@
   "optional_next_due_date": "Prochaine date d'échéance facultative pour la maintenance.",
   "next_due_mileage": "Prochain kilométrage d'échéance",
   "enter_next_due_mileage": "Entrez le prochain kilométrage d'échéance",
-  "optional_next_due_mileage": "Prochain kilométrage d'échéance facultatif pour la maintenance.",
+  "optional_next_due_mileage": "Prochain kilométrage d'échéance facultative pour la maintenance.",
   "select_maintenance_type": "Sélectionnez le type de maintenance",
   "maintenance_type_repair": "Réparation",
   "maintenance_type_service": "Service",
@@ -281,5 +281,10 @@
   "vehicle_image": "Image du véhicule",
   "vehicle_image_url": "URL de l'image du véhicule",
   "enter_image_url": "Entrez l'URL de l'image",
-  "type_motorcycle": "Moto"
+  "type_motorcycle": "Moto",
+  "enter_lap_time": "Entrez un temps au tour (MM.SS.mmm)",
+  "add_lap_time": "Ajouter un temps au tour",
+  "remove_lap_time": "Supprimer le temps au tour",
+  "chrono_format_error": "Le temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)",
+  "enter_multiple_lap_times": "Entrez plusieurs temps au tour pour cette journée."
 }

@@ -29,23 +29,29 @@ import { getTracks } from '@/lib/api/tracks';
 import { Combobox } from '@/components/ui/combobox';
 import { PlusCircle } from 'lucide-react';
 import { toast } from 'sonner'; // Added toast import
+import MultiLineChronoInput from '@/components/MultiLineChronoInput'; // Import new component
+
+const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
 
 const formSchema = z.object({
-  userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(), // Changed to userVehicleId and nullable
-  trackId: z.coerce.number().min(1, { message: "La piste est requise." }), // Changed to number
+  userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),
+  trackId: z.coerce.number().min(1, { message: "La piste est requise." }),
   date: z.string().min(1, { message: "La date est requise." }),
   weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
   airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }).nullable().optional(),
   trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }).nullable().optional(),
-  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }), // Changed to enum
-  notes: z.string().nullable().optional(), // Changed to notes and nullable
-  bestLapTime: z.string().optional().refine( // Changed to bestLapTime
-    (val) => !val || /^(\d{1,2}):([0-5][0-9])\.(\d{3})$/.test(val),
-    { message: "Le meilleur temps au tour doit être au format MM:SS.mmm (ex: 01:23.456)" }
+  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }),
+  notes: z.string().nullable().optional(),
+  bestLapTime: z.string().optional().refine(
+    (val) => !val || chronoFormatRegex.test(val),
+    { message: "Le meilleur temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)" }
   ).nullable().optional(),
   totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }).nullable().optional(),
-  totalDistance: z.coerce.number().min(0, { message: "La distance totale ne peut pas être négative." }).nullable().optional(), // New field
-  chronos: z.string().nullable().optional(), // New field
+  totalDistance: z.coerce.number().min(0, { message: "La distance totale ne peut pas être négative." }).nullable().optional(),
+  chronos: z.array(z.string().refine(
+    (val) => chronoFormatRegex.test(val),
+    { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
+  )).nullable().optional(), // Changed to array of strings
 });
 
 const TrackdayEdit: React.FC = () => {
@@ -68,7 +74,7 @@ const TrackdayEdit: React.FC = () => {
       bestLapTime: null,
       totalLaps: null,
       totalDistance: null,
-      chronos: null,
+      chronos: null, // Default to null for array
     },
   });
 
@@ -105,7 +111,7 @@ const TrackdayEdit: React.FC = () => {
         bestLapTime: trackday.bestLapTime || null,
         totalLaps: trackday.totalLaps || null,
         totalDistance: trackday.totalDistance || null,
-        chronos: trackday.chronos || null,
+        chronos: trackday.chronos && trackday.chronos.length > 0 ? trackday.chronos : null, // Ensure it's an array or null
       });
     }
   }, [trackday, form]);
@@ -138,19 +144,18 @@ const TrackdayEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: UpdateTrackdayPayload = {
       ...values,
-      // Ensure required fields are explicitly handled if Zod's infer makes them optional
       userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
-      trackId: values.trackId, // trackId is required by schema and payload
-      date: values.date, // date is required by schema and payload
-      weather: values.weather, // weather is required by schema and payload
-      trackCondition: values.trackCondition, // trackCondition is required by schema and payload
+      trackId: values.trackId,
+      date: values.date,
+      weather: values.weather,
+      trackCondition: values.trackCondition,
       airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
       trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
       notes: values.notes === '' ? null : values.notes,
       bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
       totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
       totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
-      chronos: values.chronos === '' ? null : values.chronos,
+      chronos: values.chronos && values.chronos.length > 0 ? values.chronos.filter(c => c !== '') : null, // Filter empty strings and set to null if empty
     };
     updateTrackdayMutation.mutate(payload);
   };
@@ -343,7 +348,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('best_laptime')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="MM:SS.mmm" {...field} value={field.value || ''} />
+                      <Input placeholder="MM.SS.mmm" {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -382,8 +387,14 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('chronos')}</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_chronos_data')} />
+                      <MultiLineChronoInput
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder={t('enter_lap_time')}
+                        disabled={field.disabled}
+                      />
                     </FormControl>
+                    <FormDescription>{t('enter_multiple_lap_times')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

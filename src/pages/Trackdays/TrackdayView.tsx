@@ -105,10 +105,14 @@ const TrackdayView: React.FC = () => {
             <p className="text-sm font-medium text-muted-foreground">{t('total_distance')}</p>
             <p className="text-lg">{trackday.totalDistance !== null ? `${trackday.totalDistance} km` : t('not_specified')}</p>
           </div>
-          {trackday.chronos && (
+          {trackday.chronos && trackday.chronos.length > 0 && (
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('chronos')}</p>
-              <p className="text-lg">{trackday.chronos}</p>
+              <ul className="list-disc list-inside text-lg">
+                {trackday.chronos.map((chrono, index) => (
+                  <li key={index}>{chrono}</li>
+                ))}
+              </ul>
             </div>
           )}
           {trackday.notes && (

@@ -296,5 +296,10 @@
   "vehicle_image": "Immagine veicolo",
   "vehicle_image_url": "URL immagine veicolo",
   "enter_image_url": "Inserisci URL immagine",
-  "type_motorcycle": "Motocicletta"
+  "type_motorcycle": "Motocicletta",
+  "enter_lap_time": "Inserisci un tempo sul giro (MM.SS.mmm)",
+  "add_lap_time": "Aggiungi tempo sul giro",
+  "remove_lap_time": "Rimuovi tempo sul giro",
+  "chrono_format_error": "Il tempo sul giro deve essere nel formato MM.SS.mmm (es: 01.23.456)",
+  "enter_multiple_lap_times": "Inserisci più tempi sul giro per questa giornata."
 }
