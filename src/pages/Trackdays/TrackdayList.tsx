@@ -98,57 +98,58 @@ const TrackdayList: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold">{t('your_trackdays')}</h1>
-        <div className="flex items-center gap-4 w-full md:w-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder={t('search_trackdays')}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8"
-            />
-          </div>
-          <Select
-            onValueChange={(value) => setFilterVehicleId(value === 'all' ? undefined : Number(value))}
-            value={filterVehicleId?.toString() || 'all'}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={t('filter_by_vehicle')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('all_vehicles')}</SelectItem>
-              {vehicles?.map((vehicle) => (
-                <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                  {vehicle.brand} {vehicle.model}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
-            value={filterTrackId?.toString() || 'all'}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={t('filter_by_track')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('all_tracks')}</SelectItem>
-              {tracks?.map((track) => (
-                <SelectItem key={track.id} value={track.id.toString()}>
-                  {track.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button asChild className="btn-primary-gradient">
-            <Link to="/trackdays/create">
-              <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_trackday')}
-            </Link>
-          </Button>
+        <Button asChild className="btn-primary-gradient">
+          <Link to="/trackdays/create">
+            <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_trackday')}
+          </Link>
+        </Button>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder={t('search_trackdays')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8 w-full"
+          />
         </div>
+        <Select
+          onValueChange={(value) => setFilterVehicleId(value === 'all' ? undefined : Number(value))}
+          value={filterVehicleId?.toString() || 'all'}
+        >
+          <SelectTrigger className="w-full md:w-[180px]">
+            <SelectValue placeholder={t('filter_by_vehicle')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all_vehicles')}</SelectItem>
+            {vehicles?.map((vehicle) => (
+              <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                {vehicle.brand} {vehicle.model}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
+          value={filterTrackId?.toString() || 'all'}
+        >
+          <SelectTrigger className="w-full md:w-[180px]">
+            <SelectValue placeholder={t('filter_by_track')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all_tracks')}</SelectItem>
+            {tracks?.map((track) => (
+              <SelectItem key={track.id} value={track.id.toString()}>
+                {track.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {trackdays && trackdays.length > 0 ? (
