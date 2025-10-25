@@ -30,6 +30,7 @@ import {
 import { TrackDayType, UserVehicleType, TrackType } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton component
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -87,10 +88,6 @@ const TrackdayList: React.FC = () => {
       deleteTrackdayMutation.mutate(trackdayToDelete);
     }
   };
-
-  if (isLoading || isLoadingVehicles || isLoadingTracks) {
-    return <div className="container mx-auto p-4 text-center">{t('loading_trackdays')}</div>;
-  }
 
   if (isError) {
     return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_trackdays')}</div>;
@@ -152,7 +149,28 @@ const TrackdayList: React.FC = () => {
         </Select>
       </div>
 
-      {trackdays && trackdays.length > 0 ? (
+      {isLoading || isLoadingVehicles || isLoadingTracks ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Card key={index} className="flex flex-col">
+              <CardHeader>
+                <Skeleton className="h-6 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+              </CardHeader>
+              <CardContent className="flex-grow space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+              </CardContent>
+              <div className="p-4 border-t flex justify-between gap-2">
+                <Skeleton className="h-8 w-8 rounded-md" />
+                <Skeleton className="h-8 w-8 rounded-md" />
+                <Skeleton className="h-8 w-8 rounded-md" />
+              </div>
+            </Card>
+          ))}
+        </div>
+      ) : trackdays && trackdays.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {trackdays.map((trackday) => (
             <Card key={trackday.id} className="flex flex-col">
