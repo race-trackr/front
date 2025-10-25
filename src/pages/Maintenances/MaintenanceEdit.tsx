@@ -32,7 +32,7 @@ import { CreateMaintenancePayload, MaintenanceRecordTypeType, UserVehicleType, U
 import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
 import { PlusCircle } from 'lucide-react';
-import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
+// Removed import for dangerButtonClasses
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
@@ -307,7 +307,7 @@ const MaintenanceEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending} className={dangerButtonClasses}>
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending} className="btn-danger">
                     {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
                   </Button>
                   <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>

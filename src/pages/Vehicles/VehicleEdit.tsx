@@ -32,7 +32,7 @@ import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles
 import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
-import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
+// Removed import for dangerButtonClasses
 
 const formSchema = z.object({
   brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
@@ -249,7 +249,7 @@ const VehicleEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending} className={dangerButtonClasses}>
+                  <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending} className="btn-danger">
                     {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle')}
                   </Button>
                   <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>

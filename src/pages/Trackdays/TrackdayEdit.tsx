@@ -31,7 +31,7 @@ import { PlusCircle, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
+// Removed import for dangerButtonClasses
 
 const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
 
@@ -195,7 +195,7 @@ const TrackdayEdit: React.FC = () => {
           variant="destructive"
           onClick={handleDeleteClick}
           disabled={deleteTrackdayMutation.isPending}
-          className={dangerButtonClasses}
+          className="btn-danger"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           {deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}

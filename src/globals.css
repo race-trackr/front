@@ -105,4 +105,8 @@
   .toast-loading {
     @apply bg-blue-500 text-white dark:bg-blue-600 dark:text-white;
   }
+  /* Custom danger button style */
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white;
+  }
 }

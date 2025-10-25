@@ -9,7 +9,7 @@ import { deleteVehicle, getVehicles } from '@/lib/api/vehicles';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { dangerButtonClasses } from '@/lib/utils'; // Import dangerButtonClasses
+// Removed import for dangerButtonClasses
 
 const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
@@ -120,7 +120,7 @@ const VehicleList: React.FC = () => {
                   size="icon"
                   onClick={() => handleDeleteClick(vehicle.id)}
                   disabled={deleteVehicleMutation.isPending}
-                  className={dangerButtonClasses}
+                  className="btn-danger"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
