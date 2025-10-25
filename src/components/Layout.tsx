@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         "hidden border-r md:block",
         "transition-all duration-300 ease-in-out"
       )}>
-        <div className="flex min-h-svh flex-col"> {/* Changed h-full to min-h-svh */}
+        <div className="flex h-full flex-col"> {/* Changed min-h-svh to h-full */}
           <div
             className={cn(
               "flex h-14 items-center border-b justify-between lg:h-[60px]",
@@ -88,7 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      <div className="flex flex-col min-h-svh"> {/* Changed h-full to min-h-svh */}
+      <div className="flex flex-col h-full"> {/* Changed min-h-svh to h-full */}
         <AppBar />
 
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background overflow-y-auto">
