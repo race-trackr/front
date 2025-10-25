@@ -253,9 +253,9 @@ const MaintenanceEdit: React.FC = () => {
                 name="details" // Changed from 'description' to 'details'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('details')}</FormLabel> {/* Changed label */}
+                    <FormLabel>{t('details')}</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} /> {/* Changed placeholder */}
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
