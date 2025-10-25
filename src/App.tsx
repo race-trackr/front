@@ -11,10 +11,11 @@ import NotFound from './pages/NotFound';
 import TrackdayList from './pages/Trackdays/TrackdayList';
 import TrackdayCreate from './pages/Trackdays/TrackdayCreate';
 import TrackdayEdit from './pages/Trackdays/TrackdayEdit';
-import TrackdayView from './pages/Trackdays/TrackdayView'; // Import the new TrackdayView component
+import TrackdayView from './pages/Trackdays/TrackdayView';
 import VehicleList from './pages/Vehicles/VehicleList';
 import VehicleCreate from './pages/Vehicles/VehicleCreate';
 import VehicleEdit from './pages/Vehicles/VehicleEdit';
+import VehicleView from './pages/Vehicles/VehicleView'; // Import the new VehicleView component
 import MaintenanceList from './pages/Maintenances/MaintenanceList';
 import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate';
 import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit';
@@ -61,7 +62,7 @@ const routesConfig = [
         handle: { crumb: () => 'Create Trackday' },
       },
       {
-        path: "/trackdays/:id", // New route for viewing
+        path: "/trackdays/:id",
         element: <Layout><TrackdayView /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `View Trackday ${params.id || ''}` },
       },
@@ -81,7 +82,12 @@ const routesConfig = [
         handle: { crumb: () => 'Create Vehicle' },
       },
       {
-        path: "/vehicles/edit/:id",
+        path: "/vehicles/:id", // New route for viewing a vehicle
+        element: <Layout><VehicleView /></Layout>,
+        handle: { crumb: ({ params }: { params: { id?: string } }) => `View Vehicle ${params.id || ''}` },
+      },
+      {
+        path: "/vehicles/edit/:id", // Existing route, now points to the updated component
         element: <Layout><VehicleEdit /></Layout>,
         handle: { crumb: ({ params }: { params: { id?: string } }) => `Edit Vehicle ${params.id || ''}` },
       },

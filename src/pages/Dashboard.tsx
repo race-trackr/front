@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {recentTrackdays.length || 0}
+              {recentTrackdays?.length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("total_trackdays")}
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{vehicles.length || 0}</div>
+            <div className="text-2xl font-bold">{vehicles?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_vehicles")}
             </p>
@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{maintenances.length || 0}</div>
+            <div className="text-2xl font-bold">{maintenances?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_maintenances")}
             </p>

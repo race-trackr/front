@@ -21,22 +21,27 @@ export interface Country {
 export interface UserVehicle {
   id: string;
   userId: string;
-  brand: string;
-  model: string;
-  year: number;
-  licensePlate: string;
-  vin: string;
-  color: string;
-  engineType: string;
-  transmissionType: string;
-  mileage: number;
-  lastServiceMileage: number;
-  purchaseDate: string;
-  purchasePrice: number;
-  otherDetails: Record<string, any> | null;
+  name: string; // Added from src/types.ts
+  type?: 'car' | 'bike' | 'karting' | 'other'; // Added from src/types.ts
+  brand?: string;
+  model?: string;
+  year?: number;
+  licensePlate?: string;
+  vin?: string; // Made optional
+  color?: string; // Made optional
+  engineType?: string; // Made optional
+  transmissionType?: string; // Made optional
+  mileage?: number; // Made optional
+  lastServiceMileage?: number; // Made optional
+  purchaseDate?: string; // Made optional
+  purchasePrice?: number; // Made optional
+  details?: string; // Added from src/types.ts
+  otherDetails?: Record<string, any> | null; // Made optional
   createdAt: string;
   updatedAt: string;
 }
+
+export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
 
 export interface Track {
   id: string;

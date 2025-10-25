@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { UserVehicle } from '@/types';
+import { UserVehicle } from '@/types/index'; // Updated import
 import { useTranslation } from 'react-i18next';
 import { getVehicles } from '@/lib/api/vehicles';
 import { useQuery } from '@tanstack/react-query';
@@ -36,10 +36,10 @@ const VehicleList: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vehicles.length === 0 ? (
+        {vehicles && vehicles.length === 0 ? (
           <p className="text-muted-foreground">{t('no_vehicles_added')}</p>
         ) : (
-          vehicles.map((vehicle) => (
+          vehicles?.map((vehicle) => (
             <Card key={vehicle.id}>
               <CardHeader>
                 <CardTitle>{vehicle.name}</CardTitle>
@@ -49,7 +49,7 @@ const VehicleList: React.FC = () => {
                 <p><strong>{t('type')}:</strong> {t(`type_${vehicle.type?.toLowerCase()}`)}</p>
                 <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/vehicles/edit/${vehicle.id}`}>{t('view_edit_details')}</Link>
+                  <Link to={`/vehicles/${vehicle.id}`}>{t('view_edit_details')}</Link>
                 </Button>
               </CardContent>
             </Card>
