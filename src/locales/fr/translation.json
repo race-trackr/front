@@ -331,5 +331,12 @@
   "upgrade_description": "Passez à notre plan Pro pour accéder à des fonctionnalités avancées, un stockage illimité et un support prioritaire.",
   "get_pro_now": "Obtenez Pro maintenant",
   "maintenance_cost_over_time": "Coût des maintenances au fil du temps",
-  "no_maintenance_data_for_chart": "Aucune donnée de maintenance disponible pour afficher le graphique."
+  "no_maintenance_data_for_chart": "Aucune donnée de maintenance disponible pour afficher le graphique.",
+  "full_name": "Nom complet",
+  "enter_full_name": "Entrez votre nom complet",
+  "update_profile": "Mettre à jour le profil",
+  "saving_profile": "Sauvegarde du profil...",
+  "profile_updated_successfully": "Profil mis à jour avec succès !",
+  "failed_to_update_profile": "Échec de la mise à jour du profil.",
+  "email_cannot_be_changed": "L'email ne peut pas être modifié."
 }

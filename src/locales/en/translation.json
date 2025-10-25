@@ -331,5 +331,12 @@
   "upgrade_description": "Upgrade to our Pro plan to get access to advanced features, unlimited storage, and priority support.",
   "get_pro_now": "Get Pro Now",
   "maintenance_cost_over_time": "Maintenance Cost Over Time",
-  "no_maintenance_data_for_chart": "No maintenance data available to display the chart."
+  "no_maintenance_data_for_chart": "No maintenance data available to display the chart.",
+  "full_name": "Full Name",
+  "enter_full_name": "Enter your full name",
+  "update_profile": "Update Profile",
+  "saving_profile": "Saving Profile...",
+  "profile_updated_successfully": "Profile updated successfully!",
+  "failed_to_update_profile": "Failed to update profile.",
+  "email_cannot_be_changed": "Email cannot be changed."
 }

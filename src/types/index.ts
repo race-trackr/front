@@ -18,6 +18,7 @@ export interface UserType {
   fullName: string;
   avatar: string | null;
   role: 'user' | 'admin';
+  countryId: number; // Added countryId
   createdAt: string;
   updatedAt: string;
   trackDays?: TrackDayType[];
@@ -59,7 +60,7 @@ export interface TrackDayType {
   bestLapTime: string | null;
   totalLaps: number | null;
   totalDistance: number | null;
-  chronos: { lapTime: string; isBest: boolean }[] | null; // CHANGED: Now an array of objects
+  chronos: { lapTime: string; isBest: boolean }[] | null;
   createdAt: string;
   updatedAt: string;
   user?: UserType;

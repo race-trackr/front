@@ -13,8 +13,8 @@
   "upgrade_to_pro": "Actualizar a Pro",
   "logout": "Cerrar sesión",
   "email": "Correo electrónico",
-  "password": "Contraseña",
   "invalid_email": "Dirección de correo electrónico no válida.",
+  "password": "Contraseña",
   "password_min_length": "La contraseña debe tener al menos 6 caracteres.",
   "logging_in": "Iniciando sesión...",
   "login_failed": "Error al iniciar sesión.",
@@ -123,7 +123,7 @@
   "add_new_maintenance": "Añadir nuevo mantenimiento",
   "no_maintenances_recorded": "Aún no hay mantenimientos registrados. ¡Empieza añadiendo uno!",
   "cost": "Costo",
-  "mileage": "Kilometraje",
+  "mileage": "Kilometrajes",
   "create_new_maintenance": "Crear nuevo mantenimiento",
   "maintenance_record_details": "Detalles del registro de mantenimiento",
   "save_maintenance": "Guardar mantenimiento",
@@ -351,5 +351,12 @@
   "upgrade_description": "Actualiza a nuestro plan Pro para obtener acceso a funciones avanzadas, almacenamiento ilimitado y soporte prioritario.",
   "get_pro_now": "Obtener Pro ahora",
   "maintenance_cost_over_time": "Costo de mantenimiento a lo largo del tiempo",
-  "no_maintenance_data_for_chart": "No hay datos de mantenimiento disponibles para mostrar el gráfico."
+  "no_maintenance_data_for_chart": "No hay datos de mantenimiento disponibles para mostrar el gráfico.",
+  "full_name": "Nombre completo",
+  "enter_full_name": "Introduce tu nombre completo",
+  "update_profile": "Actualizar perfil",
+  "saving_profile": "Guardando perfil...",
+  "profile_updated_successfully": "¡Perfil actualizado con éxito!",
+  "failed_to_update_profile": "Error al actualizar el perfil.",
+  "email_cannot_be_changed": "El correo electrónico no se puede cambiar."
 }

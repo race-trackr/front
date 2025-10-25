@@ -14,6 +14,7 @@ interface AuthState {
   register: (userData: RegisterPayload) => Promise<void>;
   logout: () => void;
   initializeAuth: () => Promise<void>;
+  setUser: (user: UserType) => void; // Added setUser method
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -78,6 +79,10 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null, token: null, isAuthenticated: false, loading: false });
         delete apiClient.defaults.headers.common['Authorization'];
         showSuccess(i18n.t('logged_out_successfully'));
+      },
+
+      setUser: (user: UserType) => { // Implementation of setUser
+        set({ user });
       },
     }),
     {
