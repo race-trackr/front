@@ -96,7 +96,7 @@ const TrackdayList: React.FC = () => {
   const trackOptions = React.useMemo(() => {
     const options = tracks?.map(track => ({
       value: track.id.toString(),
-      label: `${track.name} (${track.city})`
+      label: track.name // Changed to only show track name
     })) || [];
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
