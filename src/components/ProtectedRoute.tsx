@@ -32,7 +32,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   // Check roles if provided
   if (allowedRoles && user) {
-    const userRole = user.isAdmin ? 'admin' : 'user'; // Map isAdmin to 'admin' role
+    const userRole = user.role; // Use user.role directly
     if (!allowedRoles.includes(userRole)) {
       console.log('ProtectedRoute: Authenticated but role not allowed, redirecting to /dashboard');
       return <Navigate to="/dashboard" replace />; // Redirect if role not allowed

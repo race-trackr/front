@@ -17,7 +17,7 @@ export interface UserType {
   password?: string; // Password should not be exposed in client-side UserType, making it optional
   fullName: string;
   avatar: string | null;
-  isAdmin: boolean;
+  role: 'user' | 'admin'; // Changed from isAdmin to role
   createdAt: string;
   updatedAt: string;
   trackDays?: TrackDayType[];
