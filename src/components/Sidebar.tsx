@@ -26,10 +26,10 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon, onClick, isMobile
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center rounded-lg py-2.5 w-full transition-all",
+        "flex items-center rounded-lg py-2.5 w-full transition-colors duration-300 ease-in-out", // Added transition-colors for smooth background/text changes
         isCollapsed ? "justify-center px-3" : "gap-3 px-3",
         isActive
-          ? "btn-primary-gradient"
+          ? "bg-primary text-primary-foreground" // Use solid primary color for active state
           : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
       )}
     >
