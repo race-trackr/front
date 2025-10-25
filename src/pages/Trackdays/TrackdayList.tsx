@@ -38,7 +38,7 @@ const TrackdayList: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [inputValue, setInputValue] = React.useState(''); // State for the input field
-  const debouncedSearchTerm = useDebounce(inputValue, 500); // Debounced search term with 500ms delay
+  const debouncedSearch = useDebounce(inputValue, 500); // Debounced search term with 500ms delay
 
   const [filterVehicleId, setFilterVehicleId] = React.useState<number | undefined>(undefined);
   const [filterTrackId, setFilterTrackId] = React.useState<number | undefined>(undefined);
@@ -47,10 +47,10 @@ const TrackdayList: React.FC = () => {
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
   const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { searchTerm: debouncedSearchTerm, filterVehicleId, filterTrackId }],
+    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: 0, // Fetch all for client-side filtering/display
-      searchTerm: debouncedSearchTerm || undefined,
+      searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
