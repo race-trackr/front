@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Wrench, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react'; // Import DollarSign and CalendarDays
 import { MaintenanceRecordType } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances';
@@ -98,7 +98,12 @@ const MaintenanceList: React.FC = () => {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
+            <div className='flex items-center justify-between'> {/* Added flex container */}
+              <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
+              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'> {/* Icon for Total Cost */}
+                <DollarSign className='h-6 w-6 text-primary' />
+              </span>
+            </div>
             <p className="text-2xl font-bold">
               {maintenances?.reduce((sum, m) => sum + (m.cost || 0), 0).toFixed(2)}€
             </p>
@@ -106,7 +111,12 @@ const MaintenanceList: React.FC = () => {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
+            <div className='flex items-center justify-between'> {/* Added flex container */}
+              <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
+              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'> {/* Icon for Upcoming Maintenances */}
+                <CalendarDays className='h-6 w-6 text-primary' />
+              </span>
+            </div>
             <p className="text-2xl font-bold">
               {maintenances?.filter(m => m.nextDueDate && new Date(m.nextDueDate) > new Date()).length || 0}
             </p>
