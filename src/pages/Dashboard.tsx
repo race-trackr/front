@@ -4,13 +4,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from "lucide-react";
+import { CalendarDays, Car, Wrench, Plus, Edit, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getDashboardSummary } from "@/lib/api/dashboard";
 import { getTrackdays, deleteTrackday } from "@/lib/api/trackdays";
-import { getVehicles } from "@/lib/api/vehicles";
-import { getMaintenances } from "@/lib/api/maintenances";
+import { getMaintenances, deleteMaintenance } from "@/lib/api/maintenances";
+import { getVehicles } from "@/lib/api/vehicles"; // Added this import
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
 import { TrackDayType, UserVehicleType, MaintenanceRecordType } from '@/types';
@@ -22,8 +22,11 @@ const Dashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isTrackdayDeleteDialogOpen, setIsTrackdayDeleteDialogOpen] = React.useState(false);
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
+
+  const [isMaintenanceDeleteDialogOpen, setIsMaintenanceDeleteDialogOpen] = React.useState(false);
+  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
 
   const {
     data: recentTrackdays,
@@ -57,24 +60,50 @@ const Dashboard: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
       toast.success(t('trackday_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
+      setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
-      setIsDeleteDialogOpen(false);
+      setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
   });
 
-  const handleDeleteClick = (id: string) => {
+  const deleteMaintenanceMutation = useMutation({
+    mutationFn: (id: number) => deleteMaintenance(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
+      toast.success(t('maintenance_deleted_successfully'));
+      setIsMaintenanceDeleteDialogOpen(false);
+      setMaintenanceToDelete(null);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_maintenance'));
+      setIsMaintenanceDeleteDialogOpen(false);
+      setMaintenanceToDelete(null);
+    },
+  });
+
+  const handleDeleteTrackdayClick = (id: string) => {
     setTrackdayToDelete(id);
-    setIsDeleteDialogOpen(true);
+    setIsTrackdayDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmTrackdayDelete = () => {
     if (trackdayToDelete !== null) {
       deleteTrackdayMutation.mutate(trackdayToDelete);
+    }
+  };
+
+  const handleDeleteMaintenanceClick = (id: number) => {
+    setMaintenanceToDelete(id);
+    setIsMaintenanceDeleteDialogOpen(true);
+  };
+
+  const handleConfirmMaintenanceDelete = () => {
+    if (maintenanceToDelete !== null) {
+      deleteMaintenanceMutation.mutate(maintenanceToDelete);
     }
   };
 
@@ -188,12 +217,11 @@ const Dashboard: React.FC = () => {
                       </div>
                     </Link>
                     <div className="flex items-center gap-2 z-10">
-                      {/* Removed nested Link, now the button directly navigates */}
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent the outer Link from triggering
+                          e.stopPropagation();
                           navigate(`/trackdays/edit/${trackday.id}`);
                         }}
                       >
@@ -207,12 +235,12 @@ const Dashboard: React.FC = () => {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteClick(trackday.id);
+                          handleDeleteTrackdayClick(trackday.id);
                         }}
                         className="btn-danger"
                         disabled={deleteTrackdayMutation.isPending}
                       >
-                        <Trash className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" />
                         <span className="sr-only">{t("delete_trackday")}</span>
                       </Button>
                     </div>
@@ -261,17 +289,29 @@ const Dashboard: React.FC = () => {
                       </div>
                     </Link>
                     <div className="flex items-center gap-2 z-10">
-                      {/* Removed nested Link, now the button directly navigates */}
                       <Button 
                         variant="ghost" 
                         size="icon" 
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent the outer Link from triggering
+                          e.stopPropagation();
                           navigate(`/maintenances/edit/${maintenance.id}`);
                         }}
                       >
                         <Edit className="h-4 w-4" />
                         <span className="sr-only">{t("view_edit_details")}</span>
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteMaintenanceClick(maintenance.id);
+                        }}
+                        className="btn-danger"
+                        disabled={deleteMaintenanceMutation.isPending}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">{t("delete_maintenance_button")}</span>
                       </Button>
                     </div>
                   </li>
@@ -292,14 +332,25 @@ const Dashboard: React.FC = () => {
       </div>
 
       <ConfirmDeleteDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleConfirmDelete}
+        isOpen={isTrackdayDeleteDialogOpen}
+        onClose={() => setIsTrackdayDeleteDialogOpen(false)}
+        onConfirm={handleConfirmTrackdayDelete}
         title={t('confirm_delete_trackday_title')}
         description={t('confirm_delete_trackday_description')}
         confirmButtonText={t('delete_trackday_button')}
         cancelButtonText={t('cancel')}
         isConfirming={deleteTrackdayMutation.isPending}
+      />
+
+      <ConfirmDeleteDialog
+        isOpen={isMaintenanceDeleteDialogOpen}
+        onClose={() => setIsMaintenanceDeleteDialogOpen(false)}
+        onConfirm={handleConfirmMaintenanceDelete}
+        title={t('confirm_delete_maintenance_title')}
+        description={t('confirm_delete_maintenance_description')}
+        confirmButtonText={t('delete_maintenance_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteMaintenanceMutation.isPending}
       />
     </div>
   );
