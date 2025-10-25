@@ -52,6 +52,10 @@
 }
 
 @layer base {
+  html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling on html/body */
+  }
   * {
     @apply border-border;
   }
