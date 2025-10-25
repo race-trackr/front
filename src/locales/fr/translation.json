@@ -292,5 +292,14 @@
   "confirm_delete_vehicle_description": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.",
   "cancel": "Annuler",
   "delete": "Supprimer",
-  "auth_page_description": "Suivez facilement vos journées de course, véhicules et dossiers d'entretien."
+  "auth_page_description": "Suivez facilement vos journées de course, véhicules et dossiers d'entretien.",
+  "search_trackdays": "Rechercher des journées piste...",
+  "filter_by_vehicle": "Filtrer par véhicule",
+  "all_vehicles": "Tous les véhicules",
+  "filter_by_track": "Filtrer par piste",
+  "all_tracks": "Toutes les pistes",
+  "delete_trackday_button": "Supprimer la journée piste",
+  "confirm_delete_trackday_title": "Confirmer la suppression",
+  "confirm_delete_trackday_description": "Êtes-vous sûr de vouloir supprimer cette journée piste ? Cette action est irréversible.",
+  "not_specified_vehicle": "Véhicule non spécifié"
 }

@@ -292,5 +292,14 @@
   "confirm_delete_vehicle_description": "Are you sure you want to delete this vehicle? This action cannot be undone.",
   "cancel": "Cancel",
   "delete": "Delete",
-  "auth_page_description": "Track your race days, vehicles, and maintenance records with ease."
+  "auth_page_description": "Track your race days, vehicles, and maintenance records with ease.",
+  "search_trackdays": "Search trackdays...",
+  "filter_by_vehicle": "Filter by vehicle",
+  "all_vehicles": "All Vehicles",
+  "filter_by_track": "Filter by track",
+  "all_tracks": "All Tracks",
+  "delete_trackday_button": "Delete Trackday",
+  "confirm_delete_trackday_title": "Confirm Deletion",
+  "confirm_delete_trackday_description": "Are you sure you want to delete this trackday? This action cannot be undone.",
+  "not_specified_vehicle": "Vehicle not specified"
 }

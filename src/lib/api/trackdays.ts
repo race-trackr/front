@@ -1,9 +1,17 @@
 import apiClient from '@/lib/apiClient';
 import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload } from '@/types';
 
-export const getTrackdays = async ({ limit = 10, offset = 0 }): Promise<TrackDayType[]> => {
+interface GetTrackdaysParams {
+  limit?: number;
+  offset?: number;
+  searchTerm?: string;
+  vehicleId?: number;
+  trackId?: number;
+}
+
+export const getTrackdays = async (params?: GetTrackdaysParams): Promise<TrackDayType[]> => {
   const response = await apiClient.get('/trackdays', {
-    params: { limit, offset },
+    params: params,
   });
   return response.data;
 };

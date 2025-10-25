@@ -147,9 +147,9 @@
   "my_drivers": "I miei piloti",
   "recent_trackdays": "Giornate in pista recenti",
   "no_recent_trackdays": "Nessuna giornata in pista recente da visualizzare.",
+  "add_trackday": "Aggiungi giornata in pista",
   "upcoming_events": "Eventi imminenti",
   "no_upcoming_events": "Nessun evento imminente.",
-  "add_trackday": "Aggiungi giornata in pista",
   "my_maintenances": "Le mie manutenzioni",
   "total_maintenances": "Manutenzioni totali",
   "select_a_vehicle": "Seleziona un veicolo",
@@ -308,5 +308,14 @@
   "confirm_delete_vehicle_description": "Sei sicuro di voler eliminare questo veicolo? Questa azione non può essere annullata.",
   "cancel": "Annulla",
   "delete": "Elimina",
-  "auth_page_description": "Tieni traccia facilmente delle tue giornate in pista, veicoli e registri di manutenzione."
+  "auth_page_description": "Tieni traccia facilmente delle tue giornate in pista, veicoli e registri di manutenzione.",
+  "search_trackdays": "Cerca giornate in pista...",
+  "filter_by_vehicle": "Filtra per veicolo",
+  "all_vehicles": "Tutti i veicoli",
+  "filter_by_track": "Filtra per pista",
+  "all_tracks": "Tutte le piste",
+  "delete_trackday_button": "Elimina giornata in pista",
+  "confirm_delete_trackday_title": "Conferma eliminazione",
+  "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può essere annullata.",
+  "not_specified_vehicle": "Veicolo non specificato"
 }
