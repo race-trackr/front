@@ -317,5 +317,9 @@
   "maintenance_name": "Maintenance Name",
   "enter_maintenance_name": "Enter maintenance name",
   "maintenance_type_maintenance": "Maintenance",
-  "maintenance_type_other": "Other"
+  "maintenance_type_other": "Other",
+  "edit_maintenance_button": "Edit Maintenance",
+  "delete_maintenance_button": "Delete Maintenance",
+  "confirm_delete_maintenance_title": "Confirm Deletion",
+  "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone."
 }

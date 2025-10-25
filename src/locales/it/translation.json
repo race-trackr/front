@@ -331,6 +331,10 @@
   "error_loading_vehicle_maintenances": "Erreur lors du chargement des maintenances du véhicule.",
   "maintenance_name": "Nom de la maintenance",
   "enter_maintenance_name": "Entrez le nom de la maintenance",
-  "maintenance_type_maintenance": "Manutenzione",
-  "maintenance_type_other": "Altro"
+  "maintenance_type_maintenance": "Maintenance",
+  "maintenance_type_other": "Autre",
+  "edit_maintenance_button": "Modifier la maintenance",
+  "delete_maintenance_button": "Supprimer la maintenance",
+  "confirm_delete_maintenance_title": "Confirmer la suppression",
+  "confirm_delete_maintenance_description": "Êtes-vous sûr de vouloir supprimer cet enregistrement de maintenance ? Cette action est irréversible."
 }

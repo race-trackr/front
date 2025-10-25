@@ -2,19 +2,66 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Wrench } from 'lucide-react';
-import { MaintenanceRecordType } from '@/types'; // Changed Maintenance to MaintenanceRecordType
+import { PlusCircle, Wrench, Edit, Trash2, Eye } from 'lucide-react';
+import { MaintenanceRecordType } from '@/types';
 import { useTranslation } from 'react-i18next';
-import { getMaintenances } from '@/lib/api/maintenances';
-import { useQuery } from '@tanstack/react-query';
+import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { fr, enUS, es, it } from 'date-fns/locale';
 
 const MaintenanceList: React.FC = () => {
-  const { t } = useTranslation();
-  // Placeholder for fetching maintenances
-  const { data: maintenances, isLoading, isError } = useQuery({
-    queryKey: ['maintenances'], // Changed queryKey to 'maintenances'
+  const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
+
+  const { data: maintenances, isLoading, isError } = useQuery<MaintenanceRecordType[]>({
+    queryKey: ['maintenances'],
     queryFn: () => getMaintenances({ limit: 0 }),
   });
+
+  const deleteMaintenanceMutation = useMutation({
+    mutationFn: (id: number) => deleteMaintenance(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
+      toast.success(t('maintenance_deleted_successfully'));
+      setIsDeleteDialogOpen(false);
+      setMaintenanceToDelete(null);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_maintenance'));
+      setIsDeleteDialogOpen(false);
+      setMaintenanceToDelete(null);
+    },
+  });
+
+  const handleDeleteClick = (id: number) => {
+    setMaintenanceToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (maintenanceToDelete !== null) {
+      deleteMaintenanceMutation.mutate(maintenanceToDelete);
+    }
+  };
+
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'fr':
+        return fr;
+      case 'es':
+        return es;
+      case 'it':
+        return it;
+      default:
+        return enUS;
+    }
+  };
 
   if (isLoading) {
     return <div className="text-center">{t('loading_maintenances')}</div>;
@@ -64,30 +111,59 @@ const MaintenanceList: React.FC = () => {
             </p>
           </CardHeader>
         </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6"> {/* Changed to single column grid */}
         {maintenances && maintenances.length === 0 ? (
           <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
         ) : (
           maintenances?.map((maintenance) => (
-            <Card key={maintenance.id}>
-              <CardHeader>
-                <CardTitle>{maintenance.name}</CardTitle> {/* Changed from description to name */}
-                <p className="text-sm text-muted-foreground">For Vehicle ID: {maintenance.userVehicleId}</p> {/* Changed from vehicleId to userVehicleId */}
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p> {/* Using new type translation */}
-                <p><strong>{t('date')}:</strong> {new Date(maintenance.date).toLocaleDateString()}</p>
-                <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
-                <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
-                {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {new Date(maintenance.nextDueDate).toLocaleDateString()}</p>}
-                {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
-                <Button asChild variant="outline" className="mt-4 w-full">
-                  <Link to={`/maintenances/edit/${maintenance.id}`}>{t('view_edit_details')}</Link>
+            <Card key={maintenance.id} className="flex flex-col">
+              <Link to={`/maintenances/edit/${maintenance.id}`} className="flex-grow block p-6"> {/* Card content is now clickable */}
+                <CardTitle className="text-lg mb-2">{maintenance.name}</CardTitle>
+                <p className="text-sm text-muted-foreground mb-4">For Vehicle ID: {maintenance.userVehicleId}</p>
+                <div className="space-y-2">
+                  <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p>
+                  <p><strong>{t('date')}:</strong> {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
+                  <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
+                  <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
+                  {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {format(new Date(maintenance.nextDueDate), 'PPP', { locale: getLocale() })}</p>}
+                  {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
+                </div>
+              </Link>
+              <div className="p-4 border-t flex justify-end items-center gap-2"> {/* Buttons at right end */}
+                <Button asChild variant="outline" size="icon">
+                  <Link to={`/maintenances/edit/${maintenance.id}`}>
+                    <Edit className="h-4 w-4" />
+                    <span className="sr-only">{t('edit_maintenance_button')}</span>
+                  </Link>
                 </Button>
-              </CardContent>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => handleDeleteClick(maintenance.id)}
+                  disabled={deleteMaintenanceMutation.isPending}
+                  className="btn-danger"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}</span>
+                </Button>
+              </div>
             </Card>
           ))
         )}
       </div>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_maintenance_title')}
+        description={t('confirm_delete_maintenance_description')}
+        confirmButtonText={t('delete_maintenance_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteMaintenanceMutation.isPending}
+      />
     </div>
   );
 };

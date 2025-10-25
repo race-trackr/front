@@ -337,5 +337,9 @@
   "maintenance_name": "Nombre del mantenimiento",
   "enter_maintenance_name": "Introduce el nombre del mantenimiento",
   "maintenance_type_maintenance": "Mantenimiento",
-  "maintenance_type_other": "Otro"
+  "maintenance_type_other": "Otro",
+  "edit_maintenance_button": "Editar mantenimiento",
+  "delete_maintenance_button": "Eliminar mantenimiento",
+  "confirm_delete_maintenance_title": "Confirmar eliminación",
+  "confirm_delete_maintenance_description": "¿Estás seguro de que quieres eliminar este registro de mantenimiento? Esta acción no se puede deshacer."
 }
