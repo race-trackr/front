@@ -181,15 +181,17 @@ const MaintenanceView: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Description Card (full width on smaller screens, spans 2 on larger) */}
-        <Card className="lg:col-span-2 xl:col-span-3">
-          <CardHeader>
-            <CardTitle>{t('description')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg">{maintenance.description}</p>
-          </CardContent>
-        </Card>
+        {/* Details Card (full width on smaller screens, spans 2 on larger) */}
+        {maintenance.details && ( // Only render if details exist
+          <Card className="lg:col-span-2 xl:col-span-3">
+            <CardHeader>
+              <CardTitle>{t('details')}</CardTitle> {/* Changed title */}
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg">{maintenance.details}</p> {/* Changed from description to details */}
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <ConfirmDeleteDialog

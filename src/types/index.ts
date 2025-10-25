@@ -92,7 +92,7 @@ export interface MaintenanceRecordType {
   name: string; // Added 'name' property
   type: MaintenanceRecordTypeType;
   date: string;
-  description: string;
+  details?: string | null; // Changed from 'description' to 'details' and made optional
   cost: number | null;
   mileage: number | null;
   nextDueDate: string | null;

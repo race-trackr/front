@@ -35,10 +35,10 @@ import { PlusCircle } from 'lucide-react';
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
-  name: z.string().min(1, { message: "Le nom de la maintenance est requis." }), // Added name field
-  type: z.enum(['maintenance', 'repair', 'modification', 'other'], { message: "Le type de maintenance est requis." }), // Updated enum
+  name: z.string().min(1, { message: "Le nom de la maintenance est requis." }),
+  type: z.enum(['maintenance', 'repair', 'modification', 'other'], { message: "Le type de maintenance est requis." }),
   date: z.string().min(1, { message: "La date est requise." }),
-  description: z.string().min(1, { message: "La description est requise." }),
+  details: z.string().nullable().optional(), // Changed from 'description' to 'details' and made optional
   cost: z.coerce.number().min(0, { message: "Le coût ne peut pas être négatif." }).nullable().optional(),
   mileage: z.coerce.number().min(0, { message: "Le kilométrage ne peut pas être négatif." }).nullable().optional(),
   nextDueDate: z.string().nullable().optional(),
@@ -56,10 +56,10 @@ const MaintenanceEdit: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       userVehicleId: 0,
-      name: '', // Default value for new name field
-      type: 'maintenance', // Changed default to 'maintenance'
+      name: '',
+      type: 'maintenance',
       date: format(new Date(), 'yyyy-MM-dd'),
-      description: '',
+      details: null, // Changed from 'description' to 'details'
       cost: null,
       mileage: null,
       nextDueDate: null,
@@ -82,10 +82,10 @@ const MaintenanceEdit: React.FC = () => {
     if (maintenance) {
       form.reset({
         userVehicleId: maintenance.userVehicleId,
-        name: maintenance.name, // Reset with name from fetched data
+        name: maintenance.name,
         type: maintenance.type,
         date: maintenance.date,
-        description: maintenance.description,
+        details: maintenance.details || null, // Changed from 'description' to 'details'
         cost: maintenance.cost || null,
         mileage: maintenance.mileage || null,
         nextDueDate: maintenance.nextDueDate || null,
@@ -122,7 +122,8 @@ const MaintenanceEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: UpdateMaintenancePayload = {
       ...values,
-      name: values.name, // Include name in payload
+      name: values.name,
+      details: values.details === '' ? null : values.details, // Changed from 'description' to 'details'
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
@@ -195,7 +196,7 @@ const MaintenanceEdit: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="name" // New name field
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('maintenance_name')}<span className="text-destructive">*</span></FormLabel>
@@ -249,12 +250,12 @@ const MaintenanceEdit: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="description"
+                name="details" // Changed from 'description' to 'details'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('description')}<span className="text-destructive">*</span></FormLabel>
+                    <FormLabel>{t('details')}</FormLabel> {/* Changed label */}
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_description')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_details')} /> {/* Changed placeholder */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
