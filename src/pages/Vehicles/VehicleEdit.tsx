@@ -32,13 +32,12 @@ import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles
 import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
-// Removed import for dangerButtonClasses
 
 const formSchema = z.object({
   brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
   model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
   year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
-  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
+  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
   image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
@@ -46,7 +45,7 @@ const formSchema = z.object({
 
 const VehicleEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const vehicleId = Number(id); // Convert id to number
+  const vehicleId = Number(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -148,7 +147,7 @@ const VehicleEdit: React.FC = () => {
                 name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_brand')}</FormLabel>
+                    <FormLabel>{t('vehicle_brand')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_brand')} />
                     </FormControl>
@@ -161,7 +160,7 @@ const VehicleEdit: React.FC = () => {
                 name="model"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_model')}</FormLabel>
+                    <FormLabel>{t('vehicle_model')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_model')} />
                     </FormControl>
@@ -174,7 +173,7 @@ const VehicleEdit: React.FC = () => {
                 name="year"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_year')}</FormLabel>
+                    <FormLabel>{t('vehicle_year')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -187,7 +186,7 @@ const VehicleEdit: React.FC = () => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_type')}</FormLabel>
+                    <FormLabel>{t('vehicle_type')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -196,7 +195,7 @@ const VehicleEdit: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="moto">{t('type_moto')}</SelectItem> {/* Changed to type_moto */}
+                        <SelectItem value="moto">{t('type_moto')}</SelectItem>
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>

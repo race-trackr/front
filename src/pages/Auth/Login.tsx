@@ -2,15 +2,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate } from 'react-router-dom'; // Removed Link import
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator'; // Import Separator
-import GoogleIcon from '@/components/GoogleIcon'; // Import GoogleIcon
+import { Separator } from '@/components/ui/separator';
+import GoogleIcon from '@/components/GoogleIcon';
 import { LoginPayload } from '@/types';
 import { useTranslation } from 'react-i18next';
 
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('email')}</FormLabel>
+                  <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('password')}</FormLabel>
+                  <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>

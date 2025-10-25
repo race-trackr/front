@@ -105,7 +105,7 @@ const AdminTracksCreate: React.FC = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('track_name')}</FormLabel>
+                    <FormLabel>{t('track_name')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_track_name')} />
                     </FormControl>
@@ -118,7 +118,7 @@ const AdminTracksCreate: React.FC = () => {
                 name="countryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('country')}</FormLabel>
+                    <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
                       <FormControl>
                         <SelectTrigger>
@@ -142,7 +142,7 @@ const AdminTracksCreate: React.FC = () => {
                 name="length"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('length_km')}</FormLabel>
+                    <FormLabel>{t('length_km')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input type="number" step="0.1" {...field} />
                     </FormControl>
@@ -155,7 +155,7 @@ const AdminTracksCreate: React.FC = () => {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('city')}</FormLabel>
+                    <FormLabel>{t('city')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_city')} />
                     </FormControl>

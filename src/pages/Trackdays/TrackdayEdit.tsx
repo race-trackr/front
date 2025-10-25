@@ -31,7 +31,6 @@ import { PlusCircle, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-// Removed import for dangerButtonClasses
 
 const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/; // MM.SS.mmm format
 
@@ -209,7 +208,7 @@ const TrackdayEdit: React.FC = () => {
             name="userVehicleId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicle')}</FormLabel>
+                <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={(value) => {
                   if (value === "create-new-vehicle") {
                     navigate('/vehicles/create');
@@ -249,7 +248,7 @@ const TrackdayEdit: React.FC = () => {
             name="trackId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track')}</FormLabel>
+                <FormLabel>{t('track')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Combobox
                     options={trackOptions}
@@ -271,7 +270,7 @@ const TrackdayEdit: React.FC = () => {
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t('date')}</FormLabel>
+                <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <DatePicker
                     value={field.value ? new Date(field.value) : undefined}
@@ -289,7 +288,7 @@ const TrackdayEdit: React.FC = () => {
             name="weather"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('weather')}</FormLabel>
+                <FormLabel>{t('weather')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -337,7 +336,7 @@ const TrackdayEdit: React.FC = () => {
             name="trackCondition"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track_condition')}</FormLabel>
+                <FormLabel>{t('track_condition')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>

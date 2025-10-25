@@ -12,7 +12,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import GoogleIcon from '@/components/GoogleIcon';
-import { RegisterPayload, CountryType } from '@/types'; // Changed Country to CountryType
+import { RegisterPayload, CountryType } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -23,24 +23,24 @@ const Register: React.FC = () => {
   const { t } = useTranslation();
 
   const formSchema = z.object({
-    fullName: z.string().min(2, { message: t('username_min_length') }), // Changed from username
+    fullName: z.string().min(2, { message: t('username_min_length') }),
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(6, { message: t('password_min_length') }),
-    countryId: z.coerce.number().min(1, { message: t('country_required') }), // Changed to number
+    countryId: z.coerce.number().min(1, { message: t('country_required') }),
   });
 
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: '', // Changed from username
+      fullName: '',
       email: '',
       password: '',
-      countryId: 0, // Default to 0 for number type
+      countryId: 0,
     },
   });
 
   // Fetch countries using react-query
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({ // Changed Country to CountryType
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
@@ -68,10 +68,10 @@ const Register: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
             <FormField
               control={form.control}
-              name="fullName" // Changed from username
+              name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('username')}</FormLabel> {/* Keeping translation key as 'username' for now */}
+                  <FormLabel>{t('username')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="JohnDoe" {...field} />
                   </FormControl>
@@ -84,7 +84,7 @@ const Register: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('email')}</FormLabel>
+                  <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -97,7 +97,7 @@ const Register: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('password')}</FormLabel>
+                  <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
@@ -110,7 +110,7 @@ const Register: React.FC = () => {
               name="countryId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('country')}</FormLabel>
+                  <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
                   <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || authLoading}>
                     <FormControl>
                       <SelectTrigger>

@@ -32,7 +32,6 @@ import { CreateMaintenancePayload, MaintenanceRecordTypeType, UserVehicleType, U
 import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
 import { PlusCircle } from 'lucide-react';
-// Removed import for dangerButtonClasses
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
@@ -47,7 +46,7 @@ const formSchema = z.object({
 
 const MaintenanceEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const maintenanceId = Number(id); // Convert id to number
+  const maintenanceId = Number(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -155,7 +154,7 @@ const MaintenanceEdit: React.FC = () => {
                 name="userVehicleId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle')}</FormLabel>
+                    <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={(value) => {
                       if (value === "create-new-vehicle") {
                         navigate('/vehicles/create');
@@ -195,7 +194,7 @@ const MaintenanceEdit: React.FC = () => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('type')}</FormLabel>
+                    <FormLabel>{t('type')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -217,7 +216,7 @@ const MaintenanceEdit: React.FC = () => {
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t('date')}</FormLabel>
+                    <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <DatePicker
                         value={field.value ? new Date(field.value) : undefined}
@@ -235,7 +234,7 @@ const MaintenanceEdit: React.FC = () => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('description')}</FormLabel>
+                    <FormLabel>{t('description')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_description')} />
                     </FormControl>

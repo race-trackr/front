@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
@@ -48,13 +48,13 @@ const MaintenanceCreate: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams(); // Use useSearchParams
-  const preselectedVehicleId = searchParams.get('vehicleId'); // Get vehicleId from URL
+  const [searchParams] = useSearchParams();
+  const preselectedVehicleId = searchParams.get('vehicleId');
 
   const form = useForm<CreateMaintenancePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userVehicleId: preselectedVehicleId ? Number(preselectedVehicleId) : 0, // Set default if present
+      userVehicleId: preselectedVehicleId ? Number(preselectedVehicleId) : 0,
       type: 'service',
       date: format(new Date(), 'yyyy-MM-dd'),
       description: '',
@@ -74,7 +74,7 @@ const MaintenanceCreate: React.FC = () => {
     mutationFn: createMaintenance,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] }); // Invalidate vehicle specific maintenances
+      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] });
       toast.success(t('maintenance_created_successfully'));
       navigate('/maintenances');
     },
@@ -86,11 +86,10 @@ const MaintenanceCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateMaintenancePayload = {
       ...values,
-      // Ensure required fields are explicitly handled if Zod's infer makes them optional
-      userVehicleId: values.userVehicleId, // userVehicleId is required by schema and payload
-      type: values.type,                   // type is required by schema and payload
-      date: values.date,                   // date is required by schema and payload
-      description: values.description,     // description is required by schema and payload
+      userVehicleId: values.userVehicleId,
+      type: values.type,
+      date: values.date,
+      description: values.description,
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
@@ -112,7 +111,7 @@ const MaintenanceCreate: React.FC = () => {
                 name="userVehicleId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle')}</FormLabel>
+                    <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={(value) => {
                       if (value === "create-new-vehicle") {
                         navigate('/vehicles/create');
@@ -152,7 +151,7 @@ const MaintenanceCreate: React.FC = () => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('type')}</FormLabel>
+                    <FormLabel>{t('type')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -174,7 +173,7 @@ const MaintenanceCreate: React.FC = () => {
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t('date')}</FormLabel>
+                    <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <DatePicker
                         value={field.value ? new Date(field.value) : undefined}
@@ -192,7 +191,7 @@ const MaintenanceCreate: React.FC = () => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('description')}</FormLabel>
+                    <FormLabel>{t('description')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_description')} />
                     </FormControl>

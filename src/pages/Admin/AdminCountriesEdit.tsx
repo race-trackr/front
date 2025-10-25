@@ -19,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import apiClient from '@/lib/apiClient';
 import { CountryType } from '@/types';
-// Removed import for dangerButtonClasses
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du pays est requis." }),
@@ -134,7 +133,7 @@ const AdminCountriesEdit: React.FC = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('country_name')}</FormLabel>
+                    <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_country_name')} />
                     </FormControl>
@@ -147,7 +146,7 @@ const AdminCountriesEdit: React.FC = () => {
                 name="iso"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('country_iso')}</FormLabel>
+                    <FormLabel>{t('country_iso')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., US, FR" />
                     </FormControl>
@@ -160,7 +159,7 @@ const AdminCountriesEdit: React.FC = () => {
                 name="timezone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('timezone')}</FormLabel>
+                    <FormLabel>{t('timezone')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., CET, EST" />
                     </FormControl>
@@ -173,7 +172,7 @@ const AdminCountriesEdit: React.FC = () => {
                 name="capital"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('capital')}</FormLabel>
+                    <FormLabel>{t('capital')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_capital')} />
                     </FormControl>

@@ -34,7 +34,7 @@ const formSchema = z.object({
   brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
   model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
   year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
-  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }), // Updated enum
+  type: z.enum(['car', 'moto', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
   image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
@@ -74,10 +74,10 @@ const VehicleCreate: React.FC = () => {
     const payload: CreateVehiclePayload = {
       ...values,
       // Ensure required fields are explicitly handled if Zod's infer makes them optional
-      brand: values.brand, // brand is required by schema and payload
-      model: values.model, // model is required by schema and payload
-      year: values.year,   // year is required by schema and payload
-      type: values.type,   // type is required by schema and payload
+      brand: values.brand,
+      model: values.model,
+      year: values.year,
+      type: values.type,
       image: values.image === '' ? null : values.image,
       licensePlate: values.licensePlate === '' ? null : values.licensePlate,
       details: values.details === '' ? null : values.details,
@@ -100,7 +100,7 @@ const VehicleCreate: React.FC = () => {
                 name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_brand')}</FormLabel>
+                    <FormLabel>{t('vehicle_brand')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_brand')} />
                     </FormControl>
@@ -113,7 +113,7 @@ const VehicleCreate: React.FC = () => {
                 name="model"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_model')}</FormLabel>
+                    <FormLabel>{t('vehicle_model')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input {...field} placeholder={t('enter_model')} />
                     </FormControl>
@@ -126,7 +126,7 @@ const VehicleCreate: React.FC = () => {
                 name="year"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_year')}</FormLabel>
+                    <FormLabel>{t('vehicle_year')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -139,7 +139,7 @@ const VehicleCreate: React.FC = () => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('vehicle_type')}</FormLabel>
+                    <FormLabel>{t('vehicle_type')}<span className="text-destructive">*</span></FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -148,7 +148,7 @@ const VehicleCreate: React.FC = () => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="moto">{t('type_moto')}</SelectItem> {/* Changed to type_moto */}
+                        <SelectItem value="moto">{t('type_moto')}</SelectItem>
                         <SelectItem value="karting">{t('type_karting')}</SelectItem>
                         <SelectItem value="other">{t('type_other')}</SelectItem>
                       </SelectContent>

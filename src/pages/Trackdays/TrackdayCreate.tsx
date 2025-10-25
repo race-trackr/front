@@ -145,7 +145,7 @@ const TrackdayCreate: React.FC = () => {
             name="userVehicleId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicles')}</FormLabel>
+                <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={(value) => {
                   if (value === "create-new-vehicle") {
                     navigate('/vehicles/create');
@@ -185,7 +185,7 @@ const TrackdayCreate: React.FC = () => {
             name="trackId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track')}</FormLabel>
+                <FormLabel>{t('track')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Combobox
                     options={trackOptions}
@@ -207,7 +207,7 @@ const TrackdayCreate: React.FC = () => {
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t('date')}</FormLabel>
+                <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <DatePicker
                     value={field.value ? new Date(field.value) : undefined}
@@ -225,7 +225,7 @@ const TrackdayCreate: React.FC = () => {
             name="weather"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('weather')}</FormLabel>
+                <FormLabel>{t('weather')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -273,7 +273,7 @@ const TrackdayCreate: React.FC = () => {
             name="trackCondition"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track_condition')}</FormLabel>
+                <FormLabel>{t('track_condition')}<span className="text-destructive">*</span></FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
