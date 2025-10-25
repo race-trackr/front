@@ -399,5 +399,11 @@
   "feature_on_premise_deployment": "Opción de implementación local",
   "get_started": "Empezar",
   "go_pro": "Ir a Pro",
-  "contact_sales": "Contactar ventas"
+  "contact_sales": "Contactar ventas",
+  "notifications": "Notificaciones",
+  "manage_notification_preferences": "Gestiona tus preferencias de notificación.",
+  "email_notifications": "Notificaciones por correo electrónico",
+  "receive_email_updates": "Recibe actualizaciones por correo electrónico sobre tu cuenta y actividades.",
+  "push_notifications": "Notificaciones push",
+  "receive_push_updates": "Recibe notificaciones push en tu dispositivo."
 }

@@ -379,5 +379,11 @@
   "feature_on_premise_deployment": "Option de déploiement sur site",
   "get_started": "Commencer",
   "go_pro": "Passer à Pro",
-  "contact_sales": "Contacter les ventes"
+  "contact_sales": "Contacter les ventes",
+  "notifications": "Notifications",
+  "manage_notification_preferences": "Gérez vos préférences de notification.",
+  "email_notifications": "Notifications par e-mail",
+  "receive_email_updates": "Recevez des mises à jour par e-mail concernant votre compte et vos activités.",
+  "push_notifications": "Notifications push",
+  "receive_push_updates": "Recevez des notifications push sur votre appareil."
 }

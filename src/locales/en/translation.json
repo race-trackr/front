@@ -379,5 +379,11 @@
   "feature_on_premise_deployment": "On-premise Deployment Option",
   "get_started": "Get Started",
   "go_pro": "Go Pro",
-  "contact_sales": "Contact Sales"
+  "contact_sales": "Contact Sales",
+  "notifications": "Notifications",
+  "manage_notification_preferences": "Manage your notification preferences.",
+  "email_notifications": "Email Notifications",
+  "receive_email_updates": "Receive email updates about your account and activities.",
+  "push_notifications": "Push Notifications",
+  "receive_push_updates": "Receive push notifications on your device."
 }

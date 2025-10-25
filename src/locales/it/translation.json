@@ -400,5 +400,11 @@
   "feature_on_premise_deployment": "Opzione di Distribuzione On-premise",
   "get_started": "Inizia",
   "go_pro": "Passa a Pro",
-  "contact_sales": "Contatta le vendite"
+  "contact_sales": "Contatta le vendite",
+  "notifications": "Notifiche",
+  "manage_notification_preferences": "Gestisci le tue preferenze di notifica.",
+  "email_notifications": "Notifiche email",
+  "receive_email_updates": "Ricevi aggiornamenti via email sul tuo account e le tue attività.",
+  "push_notifications": "Notifiche push",
+  "receive_push_updates": "Ricevi notifiche push sul tuo dispositivo."
 }
