@@ -3,26 +3,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Car, Wrench, Plus, Edit, Trash } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getDashboardSummary } from "@/lib/api/dashboard";
-import { getTrackdays } from "@/lib/api/trackdays";
+import { getTrackdays, deleteTrackday } from "@/lib/api/trackdays";
 import { getVehicles } from "@/lib/api/vehicles";
 import { getMaintenances } from "@/lib/api/maintenances";
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
-import { TrackDayType, UserVehicleType, MaintenanceRecordType } from '@/types'; // Updated types
+import { TrackDayType, UserVehicleType, MaintenanceRecordType } from '@/types';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { toast } from 'sonner';
 
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
   const {
     data: recentTrackdays,
     isLoading: isLoadingTrackdays,
     isError: isErrorTrackdays,
-  } = useQuery<TrackDayType[]>({ // Changed Trackday to TrackDayType
+  } = useQuery<TrackDayType[]>({
     queryKey: ["trackdays", { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
@@ -31,7 +37,7 @@ const Dashboard: React.FC = () => {
     data: vehicles,
     isLoading: isLoadingVehicles,
     isError: isErrorVehicles,
-  } = useQuery<UserVehicleType[]>({ // Changed UserVehicle to UserVehicleType
+  } = useQuery<UserVehicleType[]>({
     queryKey: ["vehicles", { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
@@ -40,10 +46,36 @@ const Dashboard: React.FC = () => {
     data: maintenances,
     isLoading: isLoadingMaintenances,
     isError: isErrorMaintenances,
-  } = useQuery<MaintenanceRecordType[]>({ // Changed Maintenance to MaintenanceRecordType
+  } = useQuery<MaintenanceRecordType[]>({
     queryKey: ["maintenances", { limit: 3 }],
     queryFn: () => getMaintenances({ limit: 3 }),
   });
+
+  const deleteTrackdayMutation = useMutation({
+    mutationFn: (id: string) => deleteTrackday(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trackdays'] });
+      toast.success(t('trackday_deleted_successfully'));
+      setIsDeleteDialogOpen(false);
+      setTrackdayToDelete(null);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
+      setIsDeleteDialogOpen(false);
+      setTrackdayToDelete(null);
+    },
+  });
+
+  const handleDeleteClick = (id: string) => {
+    setTrackdayToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (trackdayToDelete !== null) {
+      deleteTrackdayMutation.mutate(trackdayToDelete);
+    }
+  };
 
   const getLocale = () => {
     switch (i18n.language) {
@@ -171,14 +203,16 @@ const Dashboard: React.FC = () => {
                         </Link>
                       </Button>
                       <Button
-                        variant="ghost"
+                        variant="destructive"
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log("Delete trackday", trackday.id);
+                          handleDeleteClick(trackday.id);
                         }}
+                        className="btn-danger"
+                        disabled={deleteTrackdayMutation.isPending}
                       >
-                        <Trash className="h-4 w-4 text-destructive" />
+                        <Trash className="h-4 w-4" />
                         <span className="sr-only">{t("delete_trackday")}</span>
                       </Button>
                     </div>
@@ -225,7 +259,7 @@ const Dashboard: React.FC = () => {
                       </p>
                     </div>
                     <Button asChild variant="ghost" size="sm">
-                      <Link to={`/maintenances/edit/${maintenance.id}`}> {/* Changed to edit route */}
+                      <Link to={`/maintenances/edit/${maintenance.id}`}>
                         {t("view_edit_details")}
                       </Link>
                     </Button>
@@ -245,6 +279,17 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_trackday_title')}
+        description={t('confirm_delete_trackday_description')}
+        confirmButtonText={t('delete_trackday_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteTrackdayMutation.isPending}
+      />
     </div>
   );
 };
