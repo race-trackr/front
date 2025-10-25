@@ -18,7 +18,7 @@ const useBreadcrumbs = (): Breadcrumb[] => {
     .filter((match) => (match.handle as BreadcrumbHandle)?.crumb)
     .map((match) => {
       const handle = match.handle as BreadcrumbHandle;
-      const label = handle.crumb(match.data);
+      const label = handle.crumb(match); // Pass the entire match object instead of just match.data
       return {
         path: match.pathname,
         label: label,
