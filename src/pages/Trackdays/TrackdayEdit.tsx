@@ -27,7 +27,7 @@ import { getTrackdayById, updateTrackday, deleteTrackday } from '@/lib/api/track
 import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { Combobox } from '@/components/ui/combobox';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
@@ -189,15 +189,19 @@ const TrackdayEdit: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
+        <Button variant="outline" onClick={() => navigate(-1)}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
+        </Button>
         <h1 className="text-3xl font-bold">{t('edit_trackday', { id: trackday.id })}</h1>
         <Button
           variant="destructive"
+          size="icon"
           onClick={handleDeleteClick}
           disabled={deleteTrackdayMutation.isPending}
           className="btn-danger"
         >
-          <Trash2 className="mr-2 h-4 w-4" />
-          {deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}</span>
         </Button>
       </div>
 
