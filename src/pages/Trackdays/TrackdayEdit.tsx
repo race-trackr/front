@@ -29,7 +29,7 @@ const TrackdayEdit: React.FC = () => {
   const { t } = useTranslation();
 
   const formSchema = z.object({
-    vehicleId: z.string().min(1, { message: t('vehicle_id_placeholder') }),
+    vehicleId: z.coerce.number().min(1, { message: t('vehicle_id_placeholder') }),
     trackId: z.string().min(1, { message: t('track_id_placeholder') }),
     date: z.string().min(1, { message: t('date') }),
     weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
@@ -47,7 +47,7 @@ const TrackdayEdit: React.FC = () => {
   const form = useForm<CreateTrackdayPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vehicleId: '',
+      vehicleId: 0, // Default to 0 or a suitable placeholder for number
       trackId: '',
       date: '',
       weather: 'clear', // Valeur par défaut pour le sélecteur
@@ -67,7 +67,7 @@ const TrackdayEdit: React.FC = () => {
       const fetchedTrackday: Trackday = {
         id: id,
         userId: 'user1',
-        vehicleId: 'v1',
+        vehicleId: 1, // Example with number
         trackId: 't1',
         date: '2023-10-26',
         weather: 'clear', // Exemple avec la nouvelle option
@@ -129,7 +129,7 @@ const TrackdayEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_id_placeholder')}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value.toString()} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
                     <FormDescription>In a real app, this would be a select dropdown.</FormDescription>
                     <FormMessage />

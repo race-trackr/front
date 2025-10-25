@@ -37,7 +37,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
 const formSchema = z.object({
-  vehicleId: z.string().min(1, { message: "Le véhicule est requis." }),
+  vehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
   trackId: z.string().min(1, { message: "La piste est requise." }),
   date: z.string().min(1, { message: "La date est requise." }),
   weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
@@ -60,7 +60,7 @@ const TrackdayCreate: React.FC = () => {
   const form = useForm<CreateTrackdayPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vehicleId: '',
+      vehicleId: 0, // Default to 0 or a suitable placeholder for number
       trackId: '',
       date: '',
       weather: 'clear', // Valeur par défaut pour le sélecteur
@@ -124,9 +124,9 @@ const TrackdayCreate: React.FC = () => {
                   if (value === "create-new-vehicle") {
                     navigate('/vehicles/create');
                   } else {
-                    field.onChange(value);
+                    field.onChange(Number(value)); // Convert to number
                   }
-                }} defaultValue={field.value}>
+                }} value={field.value.toString()}> {/* Convert to string for Select */}
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_a_vehicle')} />
@@ -143,7 +143,7 @@ const TrackdayCreate: React.FC = () => {
                       </SelectItem>
                     ) : (
                       vehicles.map((vehicle) => (
-                        <SelectItem key={vehicle.id} value={vehicle.id}>
+                        <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
                           {vehicle.brand} {vehicle.model} ({vehicle.licensePlate})
                         </SelectItem>
                       ))

@@ -35,25 +35,17 @@ import { format } from 'date-fns';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  type: z.enum(['car', 'bike', 'karting', 'other']).optional().or(z.literal('')),
-  brand: z.string().optional().or(z.literal('')),
-  model: z.string().optional().or(z.literal('')),
-  licensePlate: z.string().optional().or(z.literal('')),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).optional(),
-  vin: z.string().optional().or(z.literal('')),
-  color: z.string().optional().or(z.literal('')),
-  engineType: z.string().optional().or(z.literal('')),
-  transmissionType: z.string().optional().or(z.literal('')),
-  mileage: z.coerce.number().min(0, { message: "Le kilométrage ne peut pas être négatif." }).optional(),
-  lastServiceMileage: z.coerce.number().min(0, { message: "Le kilométrage du dernier service ne peut pas être négatif." }).optional(),
-  purchaseDate: z.string().optional().or(z.literal('')),
-  purchasePrice: z.coerce.number().min(0, { message: "Le prix d'achat ne peut pas être négatif." }).optional(),
-  details: z.string().optional().or(z.literal('')),
-  otherDetails: z.record(z.string(), z.any()).optional().nullable(),
+  type: z.enum(['car', 'bike', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
+  brand: z.string().nullable().optional(),
+  model: z.string().nullable().optional(),
+  licensePlate: z.string().nullable().optional(),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
+  details: z.string().nullable().optional(),
 });
 
 const VehicleEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const vehicleId = Number(id); // Convert id to number
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -62,51 +54,42 @@ const VehicleEdit: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: '',
-      brand: '',
-      model: '',
-      licensePlate: '',
-      year: undefined,
-      vin: '',
-      color: '',
-      engineType: '',
-      transmissionType: '',
-      mileage: undefined,
-      lastServiceMileage: undefined,
-      purchaseDate: '',
-      purchasePrice: undefined,
-      details: '',
-      otherDetails: null,
+      type: 'car',
+      brand: null,
+      model: null,
+      licensePlate: null,
+      year: null,
+      details: null,
     },
   });
 
   const { data: vehicle, isLoading, isError } = useQuery<UserVehicle>({
-    queryKey: ['vehicle', id],
-    queryFn: () => getVehicleById(id!),
-    enabled: !!id,
+    queryKey: ['vehicle', vehicleId],
+    queryFn: () => getVehicleById(vehicleId),
+    enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
   useEffect(() => {
     if (vehicle) {
       form.reset({
-        ...vehicle,
-        year: vehicle.year || undefined,
-        mileage: vehicle.mileage || undefined,
-        lastServiceMileage: vehicle.lastServiceMileage || undefined,
-        purchasePrice: vehicle.purchasePrice || undefined,
-        purchaseDate: vehicle.purchaseDate ? format(new Date(vehicle.purchaseDate), 'yyyy-MM-dd') : '',
-        otherDetails: vehicle.otherDetails || null,
+        name: vehicle.name,
+        type: vehicle.type,
+        brand: vehicle.brand || null,
+        model: vehicle.model || null,
+        licensePlate: vehicle.licensePlate || null,
+        year: vehicle.year || null,
+        details: vehicle.details || null,
       });
     }
   }, [vehicle, form]);
 
   const updateVehicleMutation = useMutation({
-    mutationFn: (payload: Partial<CreateVehiclePayload>) => updateVehicle(id!, payload),
+    mutationFn: (payload: Partial<CreateVehiclePayload>) => updateVehicle(vehicleId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vehicle', id] });
+      queryClient.invalidateQueries({ queryKey: ['vehicle', vehicleId] });
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
       toast.success(t('vehicle_updated_successfully'));
-      navigate(`/vehicles/${id}`);
+      navigate(`/vehicles/${vehicleId}`);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || t('failed_to_update_vehicle'));
@@ -114,7 +97,7 @@ const VehicleEdit: React.FC = () => {
   });
 
   const deleteVehicleMutation = useMutation({
-    mutationFn: () => deleteVehicle(id!),
+    mutationFn: () => deleteVehicle(vehicleId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
       toast.success(t('vehicle_deleted_successfully'));
@@ -128,17 +111,12 @@ const VehicleEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: Partial<CreateVehiclePayload> = {
       ...values,
-      type: values.type === '' ? undefined : values.type,
-      brand: values.brand === '' ? undefined : values.brand,
-      model: values.model === '' ? undefined : values.model,
-      licensePlate: values.licensePlate === '' ? undefined : values.licensePlate,
-      vin: values.vin === '' ? undefined : values.vin,
-      color: values.color === '' ? undefined : values.color,
-      engineType: values.engineType === '' ? undefined : values.engineType,
-      transmissionType: values.transmissionType === '' ? undefined : values.transmissionType,
-      details: values.details === '' ? undefined : values.details,
-      purchaseDate: values.purchaseDate === '' ? undefined : values.purchaseDate,
-      otherDetails: values.otherDetails || null,
+      // Convert empty strings to null for optional string fields, and ensure year is null if undefined
+      brand: values.brand === '' ? null : values.brand,
+      model: values.model === '' ? null : values.model,
+      licensePlate: values.licensePlate === '' ? null : values.licensePlate,
+      details: values.details === '' ? null : values.details,
+      year: values.year === undefined ? null : values.year,
     };
     updateVehicleMutation.mutate(payload);
   };
@@ -159,7 +137,7 @@ const VehicleEdit: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { id: vehicle.name })}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('edit_vehicle', { name: vehicle.name })}</h1>
       <Card>
         <CardHeader>
           <CardTitle>{t('vehicle_details')}</CardTitle>
@@ -210,7 +188,7 @@ const VehicleEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_brand')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_brand')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_brand')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -223,7 +201,7 @@ const VehicleEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_model')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_model')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_model')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -236,7 +214,7 @@ const VehicleEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_license_plate')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_license_plate')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_license_plate')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -249,116 +227,7 @@ const VehicleEdit: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_year')}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} placeholder={t('enter_year')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="vin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('vin')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_vin')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="color"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('color')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_color')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="engineType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('engine_type')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_engine_type')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="transmissionType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('transmission_type')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_transmission_type')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="mileage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('mileage')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} placeholder={t('enter_mileage')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastServiceMileage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('last_service_mileage')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} placeholder={t('enter_last_service_mileage')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="purchaseDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>{t('purchase_date')}</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        value={field.value ? new Date(field.value) : undefined}
-                        onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
-                        disabled={field.disabled}
-                        placeholder={t('pick_a_date')}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="purchasePrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('purchase_price')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.01" {...field} placeholder={t('enter_purchase_price')} />
+                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -371,13 +240,12 @@ const VehicleEdit: React.FC = () => {
                   <FormItem className="md:col-span-2">
                     <FormLabel>{t('details')}</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} placeholder={t('enter_any_details')} />
+                      <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_any_details')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* You might want a dedicated component for otherDetails if it gets complex */}
               <div className="flex justify-between w-full md:col-span-2 mt-4">
                 <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>
                   {updateVehicleMutation.isPending ? t('saving') : t('save_changes')}

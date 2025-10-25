@@ -19,29 +19,21 @@ export interface Country {
 }
 
 export interface UserVehicle {
-  id: string;
-  userId: string;
-  name: string; // Added from src/types.ts
-  type?: 'car' | 'bike' | 'karting' | 'other'; // Added from src/types.ts
-  brand?: string;
-  model?: string;
-  year?: number;
-  licensePlate?: string;
-  vin?: string; // Made optional
-  color?: string; // Made optional
-  engineType?: string; // Made optional
-  transmissionType?: string; // Made optional
-  mileage?: number; // Made optional
-  lastServiceMileage?: number; // Made optional
-  purchaseDate?: string; // Made optional
-  purchasePrice?: number; // Made optional
-  details?: string; // Added from src/types.ts
-  otherDetails?: Record<string, any> | null; // Made optional
+  id: number;
+  userId: number;
+  name: string;
+  slug: string;
+  type: 'bike' | 'car' | 'karting' | 'other';
+  brand?: string | null;
+  model?: string | null;
+  year?: number | null;
+  licensePlate?: string | null;
+  details?: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
+export type CreateVehiclePayload = Omit<UserVehicle, 'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt'>;
 
 export interface Track {
   id: string;
@@ -62,7 +54,7 @@ export interface Trackday {
   id: string;
   userId: string;
   user?: User;
-  vehicleId: string;
+  vehicleId: number; // Updated to number
   vehicle?: UserVehicle;
   trackId: string;
   track?: Track;
@@ -79,7 +71,7 @@ export interface Trackday {
 }
 
 export interface CreateTrackdayPayload {
-  vehicleId: string;
+  vehicleId: number; // Updated to number
   trackId: string;
   date: string;
   weather: string;
@@ -95,7 +87,7 @@ export interface Maintenance {
   id: string;
   userId: string;
   user?: User;
-  vehicleId: string;
+  vehicleId: number; // Updated to number
   vehicle?: UserVehicle;
   type: string;
   date: string;

@@ -13,13 +13,14 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 
 const VehicleView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const vehicleId = Number(id); // Convert id to number
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const { data: vehicle, isLoading, isError } = useQuery({
-    queryKey: ['vehicle', id],
-    queryFn: () => getVehicleById(id!),
-    enabled: !!id,
+    queryKey: ['vehicle', vehicleId],
+    queryFn: () => getVehicleById(vehicleId),
+    enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
   const getLocale = () => {
@@ -69,8 +70,12 @@ const VehicleView: React.FC = () => {
             <p className="text-lg">{vehicle.name}</p>
           </div>
           <div>
+            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_slug')}</p>
+            <p className="text-lg">{vehicle.slug}</p>
+          </div>
+          <div>
             <p className="text-sm font-medium text-muted-foreground">{t('vehicle_type')}</p>
-            <p className="text-lg">{vehicle.type ? t(`type_${vehicle.type.toLowerCase()}`) : t('not_specified')}</p>
+            <p className="text-lg">{t(`type_${vehicle.type.toLowerCase()}`)}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('vehicle_brand')}</p>
@@ -88,64 +93,10 @@ const VehicleView: React.FC = () => {
             <p className="text-sm font-medium text-muted-foreground">{t('vehicle_license_plate')}</p>
             <p className="text-lg">{vehicle.licensePlate || t('not_specified')}</p>
           </div>
-          {vehicle.vin && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('vin')}</p>
-              <p className="text-lg">{vehicle.vin}</p>
-            </div>
-          )}
-          {vehicle.color && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('color')}</p>
-              <p className="text-lg">{vehicle.color}</p>
-            </div>
-          )}
-          {vehicle.engineType && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('engine_type')}</p>
-              <p className="text-lg">{vehicle.engineType}</p>
-            </div>
-          )}
-          {vehicle.transmissionType && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('transmission_type')}</p>
-              <p className="text-lg">{vehicle.transmissionType}</p>
-            </div>
-          )}
-          {vehicle.mileage !== undefined && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('mileage')}</p>
-              <p className="text-lg">{vehicle.mileage} km</p>
-            </div>
-          )}
-          {vehicle.lastServiceMileage !== undefined && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('last_service_mileage')}</p>
-              <p className="text-lg">{vehicle.lastServiceMileage} km</p>
-            </div>
-          )}
-          {vehicle.purchaseDate && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('purchase_date')}</p>
-              <p className="text-lg">{format(new Date(vehicle.purchaseDate), 'PPP', { locale: getLocale() })}</p>
-            </div>
-          )}
-          {vehicle.purchasePrice !== undefined && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('purchase_price')}</p>
-              <p className="text-lg">{vehicle.purchasePrice} €</p>
-            </div>
-          )}
           {vehicle.details && (
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">{t('details')}</p>
               <p className="text-lg">{vehicle.details}</p>
-            </div>
-          )}
-          {vehicle.otherDetails && Object.keys(vehicle.otherDetails).length > 0 && (
-            <div className="md:col-span-2">
-              <p className="text-sm font-medium text-muted-foreground">{t('other_details')}</p>
-              <pre className="text-sm bg-muted p-2 rounded-md overflow-auto">{JSON.stringify(vehicle.otherDetails, null, 2)}</pre>
             </div>
           )}
         </CardContent>

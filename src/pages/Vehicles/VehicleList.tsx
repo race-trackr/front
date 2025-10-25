@@ -46,8 +46,8 @@ const VehicleList: React.FC = () => {
                 <p className="text-sm text-muted-foreground">{vehicle.brand} {vehicle.model} ({vehicle.year})</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p><strong>{t('type')}:</strong> {t(`type_${vehicle.type?.toLowerCase()}`)}</p>
-                <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate}</p>
+                <p><strong>{t('type')}:</strong> {t(`type_${vehicle.type.toLowerCase()}`)}</p>
+                <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate || t('not_specified')}</p>
                 <Button asChild variant="outline" className="mt-4 w-full">
                   <Link to={`/vehicles/${vehicle.id}`}>{t('view_edit_details')}</Link>
                 </Button>

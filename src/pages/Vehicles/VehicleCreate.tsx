@@ -32,12 +32,12 @@ import { CreateVehiclePayload } from '@/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  type: z.enum(['car', 'bike', 'karting', 'other']).optional().or(z.literal('')),
-  brand: z.string().optional().or(z.literal('')),
-  model: z.string().optional().or(z.literal('')),
-  licensePlate: z.string().optional().or(z.literal('')),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).optional(),
-  details: z.string().optional().or(z.literal('')),
+  type: z.enum(['car', 'bike', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
+  brand: z.string().nullable().optional(),
+  model: z.string().nullable().optional(),
+  licensePlate: z.string().nullable().optional(),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
+  details: z.string().nullable().optional(),
 });
 
 const VehicleCreate: React.FC = () => {
@@ -49,12 +49,12 @@ const VehicleCreate: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: '',
-      brand: '',
-      model: '',
-      licensePlate: '',
-      year: undefined,
-      details: '',
+      type: 'car', // Default to 'car' as type is now required
+      brand: null,
+      model: null,
+      licensePlate: null,
+      year: null,
+      details: null,
     },
   });
 
@@ -73,12 +73,12 @@ const VehicleCreate: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CreateVehiclePayload = {
       ...values,
-      // Convert empty strings to undefined for optional string fields
-      type: values.type === '' ? undefined : values.type,
-      brand: values.brand === '' ? undefined : values.brand,
-      model: values.model === '' ? undefined : values.model,
-      licensePlate: values.licensePlate === '' ? undefined : values.licensePlate,
-      details: values.details === '' ? undefined : values.details,
+      // Convert empty strings to null for optional string fields, and ensure year is null if undefined
+      brand: values.brand === '' ? null : values.brand,
+      model: values.model === '' ? null : values.model,
+      licensePlate: values.licensePlate === '' ? null : values.licensePlate,
+      details: values.details === '' ? null : values.details,
+      year: values.year === undefined ? null : values.year,
     };
     createVehicleMutation.mutate(payload);
   };
@@ -106,7 +106,6 @@ const VehicleCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              {/* Le champ slug a été supprimé car il est généré par le backend */}
               <FormField
                 control={form.control}
                 name="type"
@@ -137,7 +136,7 @@ const VehicleCreate: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_brand')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_brand')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_brand')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -150,7 +149,7 @@ const VehicleCreate: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_model')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_model')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_model')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -163,7 +162,7 @@ const VehicleCreate: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_license_plate')}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder={t('enter_license_plate')} />
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_license_plate')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -176,7 +175,7 @@ const VehicleCreate: React.FC = () => {
                   <FormItem>
                     <FormLabel>{t('vehicle_year')}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} placeholder={t('enter_year')} />
+                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -189,7 +188,7 @@ const VehicleCreate: React.FC = () => {
                   <FormItem className="md:col-span-2">
                     <FormLabel>{t('vehicle_details')}</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} placeholder={t('enter_any_details')} />
+                      <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_any_details')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
