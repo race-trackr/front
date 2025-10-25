@@ -30,13 +30,16 @@ import {
 import { TrackDayType, UserVehicleType, TrackType } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
-import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton component
+import { Skeleton } from '@/components/ui/skeleton';
+import useDebounce from '@/hooks/useDebounce'; // Import the useDebounce hook
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [inputValue, setInputValue] = React.useState(''); // State for the input field
+  const debouncedSearchTerm = useDebounce(inputValue, 500); // Debounced search term with 500ms delay
+
   const [filterVehicleId, setFilterVehicleId] = React.useState<number | undefined>(undefined);
   const [filterTrackId, setFilterTrackId] = React.useState<number | undefined>(undefined);
 
@@ -44,10 +47,10 @@ const TrackdayList: React.FC = () => {
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
   const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { searchTerm, filterVehicleId, filterTrackId }],
+    queryKey: ['trackdays', { searchTerm: debouncedSearchTerm, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: 0, // Fetch all for client-side filtering/display
-      searchTerm: searchTerm || undefined,
+      searchTerm: debouncedSearchTerm || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
@@ -110,8 +113,8 @@ const TrackdayList: React.FC = () => {
           <Input
             type="text"
             placeholder={t('search_trackdays')}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={inputValue} // Use inputValue for the input field
+            onChange={(e) => setInputValue(e.target.value)} // Update inputValue on change
             className="pl-8 w-full"
           />
         </div>
