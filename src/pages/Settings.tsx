@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import UserProfileForm from '@/components/UserProfileForm'; // Import the new component
 
 const Settings: React.FC = () => {
   const { t } = useTranslation();
@@ -17,8 +16,6 @@ const Settings: React.FC = () => {
           <p className="text-muted-foreground">{t('settings_page_description')}</p>
         </CardContent>
       </Card>
-
-      <UserProfileForm /> {/* Render the new UserProfileForm component */}
     </div>
   );
 };

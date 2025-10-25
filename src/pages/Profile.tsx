@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserProfileForm from '@/components/UserProfileForm'; // Import the UserProfileForm component
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
@@ -29,6 +30,8 @@ const Profile: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      <UserProfileForm /> {/* Render the UserProfileForm component here */}
     </div>
   );
 };
