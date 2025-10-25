@@ -54,18 +54,16 @@ const VehicleView: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('view_vehicle', { name: `${vehicle.brand} ${vehicle.model}` })}</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate('/vehicles')}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> {t('back_to_vehicles')}
-          </Button>
-          <Button asChild className="btn-primary-gradient">
-            <Link to={`/vehicles/edit/${vehicle.id}`}>
-              <Edit className="mr-2 h-4 w-4" /> {t('edit_vehicle_button')}
-            </Link>
-          </Button>
-        </div>
+      <div className="flex items-center justify-between mb-4">
+        <Button variant="outline" onClick={() => navigate('/vehicles')}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
+        </Button>
+        <h1 className="text-3xl font-bold">{`${vehicle.brand} ${vehicle.model}`}</h1>
+        <Button asChild className="btn-primary-gradient">
+          <Link to={`/vehicles/edit/${vehicle.id}`}>
+            <Edit className="mr-2 h-4 w-4" /> {t('edit_vehicle_button')}
+          </Link>
+        </Button>
       </div>
 
       {/* Vehicle Details Card */}
