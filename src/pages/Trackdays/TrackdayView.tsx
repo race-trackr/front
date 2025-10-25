@@ -133,97 +133,79 @@ const TrackdayView: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Date Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('date')}</CardTitle>
-            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Informations Card (full width on small screens, 2/3 on large) */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>{t('trackday_details')}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formattedDate}</div>
-          </CardContent>
-        </Card>
-
-        {/* Vehicle Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('vehicle')}</CardTitle>
-            <Car className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : t('not_specified_vehicle')}
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Date */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('date')}</p>
+              <p className="text-lg">{formattedDate}</p>
             </div>
-            {trackday.vehicle?.licensePlate && (
-              <p className="text-xs text-muted-foreground">{trackday.vehicle.licensePlate}</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Track Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('track')}</CardTitle>
-            <Flag className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{trackday.track?.name || trackday.trackId}</div>
-            {trackday.track?.city && (
-              <p className="text-xs text-muted-foreground">{trackday.track.city}, {trackday.track.country?.name || t('unknown_country')}</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Weather Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('weather')}</CardTitle>
-            <Cloud className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{t(`weather_${trackday.weather}`)}</div>
-          </CardContent>
-        </Card>
-
-        {/* Air Temperature Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('air_temperature')}</CardTitle>
-            <Thermometer className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
+            {/* Vehicle */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle')}</p>
+              <p className="text-lg">
+                {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : t('not_specified_vehicle')}
+              </p>
+              {trackday.vehicle?.licensePlate && (
+                <p className="text-xs text-muted-foreground">{trackday.vehicle.licensePlate}</p>
+              )}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Track Temperature Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('track_temperature')}</CardTitle>
-            <Thermometer className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
+            {/* Track */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('track')}</p>
+              <p className="text-lg">{trackday.track?.name || trackday.trackId}</p>
+              {trackday.track?.city && (
+                <p className="text-xs text-muted-foreground">{trackday.track.city}, {trackday.track.country?.name || t('unknown_country')}</p>
+              )}
+            </div>
+            {/* Weather */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
+              <p className="text-lg">{t(`weather_${trackday.weather}`)}</p>
+            </div>
+            {/* Air Temperature */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
+              <p className="text-lg">
+                {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
+              </p>
+            </div>
+            {/* Track Temperature */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
+              <p className="text-lg">
+                {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
+              </p>
+            </div>
+            {/* Track Condition */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
+              <p className="text-lg">{t(`track_condition_${trackday.trackCondition}`)}</p>
+            </div>
+            {/* Total Laps */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>
+              <p className="text-lg">{trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}</p>
+            </div>
+            {/* Total Distance */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('total_distance')}</p>
+              <p className="text-lg">{trackday.totalDistance ? `${trackday.totalDistance} km` : t('not_specified')}</p>
+            </div>
+            {/* Average Laptime */}
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('average_laptime')}</p>
+              <p className="text-lg">{averageLapTime || t('not_available')}</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Track Condition Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('track_condition')}</CardTitle>
-            <Droplet className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{t(`track_condition_${trackday.trackCondition}`)}</div>
-          </CardContent>
-        </Card>
-
-        {/* Best Lap Time Card */}
+        {/* Best Lap Time Card (1/3 width on large screens) */}
         <Card className="bg-primary/10 dark:bg-primary/20 text-primary-foreground dark:text-primary-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">{t('best_laptime')}</CardTitle>
@@ -232,22 +214,6 @@ const TrackdayView: React.FC = () => {
           <CardContent>
             <div className="text-3xl font-bold text-primary">
               {trackday.bestLapTime || t('no_best_laptime')}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Stats Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('stats')}</CardTitle>
-            <Gauge className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold mb-2">
-              {t('total_laps')}: {trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}
-            </div>
-            <div className="text-2xl font-bold">
-              {t('average_laptime')}: {averageLapTime || t('not_available')}
             </div>
           </CardContent>
         </Card>
