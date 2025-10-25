@@ -102,19 +102,7 @@ const VehicleList: React.FC = () => {
                   </div>
                 )}
               </CardContent>
-              <div className="p-4 border-t flex justify-between gap-2">
-                <Button asChild variant="outline" size="icon">
-                  <Link to={`/vehicles/${vehicle.id}`}>
-                    <Eye className="h-4 w-4" />
-                    <span className="sr-only">{t('view_details')}</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link to={`/vehicles/edit/${vehicle.id}`}>
-                    <Edit className="h-4 w-4" />
-                    <span className="sr-only">{t('edit_vehicle_button')}</span>
-                  </Link>
-                </Button>
+              <div className="p-4 border-t flex justify-between items-center">
                 <Button
                   variant="destructive"
                   size="icon"
@@ -125,6 +113,20 @@ const VehicleList: React.FC = () => {
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
                 </Button>
+                <div className="flex gap-2">
+                  <Button asChild variant="outline" size="icon">
+                    <Link to={`/vehicles/${vehicle.id}`}>
+                      <Eye className="h-4 w-4" />
+                      <span className="sr-only">{t('view_details')}</span>
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="icon">
+                    <Link to={`/vehicles/edit/${vehicle.id}`}>
+                      <Edit className="h-4 w-4" />
+                      <span className="sr-only">{t('edit_vehicle_button')}</span>
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </Card>
           ))
