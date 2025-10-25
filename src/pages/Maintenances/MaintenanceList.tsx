@@ -11,6 +11,7 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
+import { cn } from '@/lib/utils'; // Import cn for conditional class names
 
 const MaintenanceList: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -119,22 +120,25 @@ const MaintenanceList: React.FC = () => {
         ) : (
           maintenances?.map((maintenance) => (
             <Card key={maintenance.id} className="flex flex-col">
-              {/* The entire card is now a link to the view page */}
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
-                <div className="flex justify-between items-center w-full"> {/* Changed items-start to items-center */}
-                  <div className="flex-1 pr-4"> {/* Content area */}
-                    <CardTitle className="text-lg mb-2">{maintenance.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground mb-4">For Vehicle ID: {maintenance.userVehicleId}</p>
-                    <div className="space-y-2">
-                      <p><strong>{t('type')}:</strong> {t(`maintenance_type_${maintenance.type}`)}</p>
-                      <p><strong>{t('date')}:</strong> {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
-                      <p><strong>{t('cost')}:</strong> ${maintenance.cost?.toFixed(2) || '0.00'}</p>
-                      <p><strong>{t('mileage')}:</strong> {maintenance.mileage || t('not_specified')} km</p>
-                      {maintenance.nextDueDate && <p><strong>{t('next_due_date')}:</strong> {format(new Date(maintenance.nextDueDate), 'PPP', { locale: getLocale() })}</p>}
-                      {maintenance.nextDueMileage && <p><strong>{t('next_due_mileage')}:</strong> {maintenance.nextDueMileage} km</p>}
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex items-center gap-4 flex-1 pr-4"> {/* Combined icon, title, subtitle */}
+                    <div className={cn(
+                      "flex items-center justify-center w-10 h-10 rounded-md font-bold text-white flex-shrink-0",
+                      "bg-gradient-to-r from-red-500 to-orange-500"
+                    )}>
+                      <Wrench className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">{maintenance.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground">{t(`maintenance_type_${maintenance.type}`)}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2"> {/* Buttons aligned right */}
+                  <div className="flex flex-col items-end gap-2"> {/* Date and Cost */}
+                    <p className="text-sm font-medium">{format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
+                    <p className="text-lg font-bold">{maintenance.cost !== null ? `${maintenance.cost.toFixed(2)}€` : t('not_specified')}</p>
+                  </div>
+                  <div className="flex items-center gap-2 ml-4"> {/* Buttons aligned right */}
                     <Button asChild variant="outline" size="icon" onClick={(e) => e.stopPropagation()}>
                       <Link to={`/maintenances/edit/${maintenance.id}`}>
                         <Edit className="h-4 w-4" />
@@ -145,7 +149,7 @@ const MaintenanceList: React.FC = () => {
                       variant="destructive"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation when deleting
+                        e.stopPropagation();
                         handleDeleteClick(maintenance.id);
                       }}
                       disabled={deleteMaintenanceMutation.isPending}
