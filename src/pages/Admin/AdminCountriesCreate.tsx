@@ -129,9 +129,14 @@ const AdminCountriesCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button onClick={form.handleSubmit(onSubmit)} className="mt-4 btn-primary-gradient md:col-span-2" disabled={createCountryMutation.isPending}>
-                {createCountryMutation.isPending ? t('creating') : t('save_country')}
-              </Button>
+              <div className="flex justify-between mt-4 md:col-span-2">
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
+                </Button>
+                <Button type="submit" className="btn-primary-gradient" disabled={createCountryMutation.isPending}>
+                  {createCountryMutation.isPending ? t('creating') : t('save_country')}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

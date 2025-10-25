@@ -196,9 +196,14 @@ const VehicleCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="btn-primary-gradient md:col-span-2" disabled={createVehicleMutation.isPending}>
-                {createVehicleMutation.isPending ? t('creating') : t('create_vehicle')}
-              </Button>
+              <div className="flex justify-between mt-4 md:col-span-2">
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
+                </Button>
+                <Button type="submit" className="btn-primary-gradient" disabled={createVehicleMutation.isPending}>
+                  {createVehicleMutation.isPending ? t('creating') : t('create_vehicle')}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

@@ -243,12 +243,17 @@ const AdminTracksEdit: React.FC = () => {
                 )}
               />
               <div className="flex justify-between mt-4 md:col-span-2">
-                <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateTrackMutation.isPending}>
-                  {updateTrackMutation.isPending ? t('saving') : t('save_changes')}
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
                 </Button>
-                <Button variant="destructive" onClick={handleDelete} disabled={deleteTrackMutation.isPending}>
-                  {deleteTrackMutation.isPending ? t('deleting') : t('delete_track')}
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteTrackMutation.isPending}>
+                    {deleteTrackMutation.isPending ? t('deleting') : t('delete_track')}
+                  </Button>
+                  <Button type="submit" className="btn-primary-gradient" disabled={updateTrackMutation.isPending}>
+                    {updateTrackMutation.isPending ? t('saving') : t('save_changes')}
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

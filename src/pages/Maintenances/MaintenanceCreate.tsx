@@ -256,9 +256,14 @@ const MaintenanceCreate: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="mt-4 btn-primary-gradient md:col-span-2" disabled={createMaintenanceMutation.isPending}>
-                {createMaintenanceMutation.isPending ? t('creating') : t('save_maintenance')}
-              </Button>
+              <div className="flex justify-between mt-4 md:col-span-2">
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
+                </Button>
+                <Button type="submit" className="btn-primary-gradient" disabled={createMaintenanceMutation.isPending}>
+                  {createMaintenanceMutation.isPending ? t('creating') : t('save_maintenance')}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

@@ -244,12 +244,17 @@ const VehicleEdit: React.FC = () => {
                 )}
               />
               <div className="flex justify-between w-full md:col-span-2 mt-4">
-                <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>
-                  {updateVehicleMutation.isPending ? t('saving') : t('save_changes')}
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
                 </Button>
-                <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending}>
-                  {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle')}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending}>
+                    {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle')}
+                  </Button>
+                  <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>
+                    {updateVehicleMutation.isPending ? t('saving') : t('save_changes')}
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

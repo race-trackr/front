@@ -413,12 +413,17 @@ const TrackdayEdit: React.FC = () => {
                 )}
               />
               <div className="flex justify-between w-full md:col-span-2">
-                <Button type="submit" className="btn-primary-gradient" disabled={updateTrackdayMutation.isPending}>
-                  {updateTrackdayMutation.isPending ? t('saving') : t('save_changes')}
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
                 </Button>
-                <Button type="button" variant="destructive" onClick={onDelete} disabled={deleteTrackdayMutation.isPending}>
-                  {deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="button" variant="destructive" onClick={onDelete} disabled={deleteTrackdayMutation.isPending}>
+                    {deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}
+                  </Button>
+                  <Button type="submit" className="btn-primary-gradient" disabled={updateTrackdayMutation.isPending}>
+                    {updateTrackdayMutation.isPending ? t('saving') : t('save_changes')}
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

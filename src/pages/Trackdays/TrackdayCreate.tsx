@@ -361,9 +361,14 @@ const TrackdayCreate: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="btn-primary-gradient md:col-span-2" disabled={createTrackdayMutation.isPending}>
-            {createTrackdayMutation.isPending ? t('creating') : t('create_trackday')}
-          </Button>
+          <div className="flex justify-between mt-4 md:col-span-2">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+              {t('cancel')}
+            </Button>
+            <Button type="submit" className="btn-primary-gradient" disabled={createTrackdayMutation.isPending}>
+              {createTrackdayMutation.isPending ? t('creating') : t('create_trackday')}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

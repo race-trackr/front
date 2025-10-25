@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
-import { CreateMaintenancePayload, MaintenanceRecordType, MaintenanceRecordTypeType, UserVehicleType, UpdateMaintenancePayload } from '@/types';
+import { CreateMaintenancePayload, MaintenanceRecordTypeType, UserVehicleType, UpdateMaintenancePayload, MaintenanceRecordType } from '@/types';
 import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
 import { PlusCircle } from 'lucide-react';
@@ -302,12 +302,17 @@ const MaintenanceEdit: React.FC = () => {
                 )}
               />
               <div className="flex justify-between mt-4 md:col-span-2">
-                <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>
-                  {updateMaintenanceMutation.isPending ? t('saving') : t('save_changes')}
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
                 </Button>
-                <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending}>
-                  {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending}>
+                    {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
+                  </Button>
+                  <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>
+                    {updateMaintenanceMutation.isPending ? t('saving') : t('save_changes')}
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>
