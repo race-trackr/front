@@ -49,7 +49,7 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={onConfirm} disabled={isConfirming}>
+            <Button variant="destructive" onClick={onConfirm} disabled={isConfirming} className="bg-red-600 hover:bg-red-700 text-white">
               {isConfirming ? t('deleting') : (confirmButtonText || t('delete'))}
             </Button>
           </AlertDialogAction>

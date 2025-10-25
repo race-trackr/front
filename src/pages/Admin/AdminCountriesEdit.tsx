@@ -185,7 +185,7 @@ const AdminCountriesEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending}>
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
                     {deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}
                   </Button>
                   <Button type="submit" className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>

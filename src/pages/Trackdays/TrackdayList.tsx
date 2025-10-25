@@ -209,6 +209,7 @@ const TrackdayList: React.FC = () => {
                   size="icon"
                   onClick={() => handleDeleteClick(trackday.id)}
                   disabled={deleteTrackdayMutation.isPending}
+                  className="bg-red-600 hover:bg-red-700 text-white"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>

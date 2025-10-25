@@ -119,6 +119,7 @@ const VehicleList: React.FC = () => {
                   size="icon"
                   onClick={() => handleDeleteClick(vehicle.id)}
                   disabled={deleteVehicleMutation.isPending}
+                  className="bg-red-600 hover:bg-red-700 text-white"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>

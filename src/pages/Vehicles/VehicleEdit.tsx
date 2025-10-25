@@ -248,7 +248,7 @@ const VehicleEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending}>
+                  <Button type="button" variant="destructive" onClick={handleDelete} disabled={deleteVehicleMutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
                     {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle')}
                   </Button>
                   <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>

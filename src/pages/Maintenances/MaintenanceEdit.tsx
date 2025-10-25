@@ -306,7 +306,7 @@ const MaintenanceEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending}>
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteMaintenanceMutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
                     {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance')}
                   </Button>
                   <Button onClick={form.handleSubmit(onSubmit)} className="btn-primary-gradient" disabled={updateMaintenanceMutation.isPending}>

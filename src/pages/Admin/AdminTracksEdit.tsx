@@ -247,7 +247,7 @@ const AdminTracksEdit: React.FC = () => {
                   {t('cancel')}
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteTrackMutation.isPending}>
+                  <Button variant="destructive" onClick={handleDelete} disabled={deleteTrackMutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
                     {deleteTrackMutation.isPending ? t('deleting') : t('delete_track')}
                   </Button>
                   <Button type="submit" className="btn-primary-gradient" disabled={updateTrackMutation.isPending}>
