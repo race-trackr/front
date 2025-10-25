@@ -65,6 +65,7 @@
   "total_laps": "Giri totali",
   "create_trackday": "Crea giornata in pista",
   "creating": "Creazione in corso...",
+  "create_trackday": "Crea giornata in pista",
   "trackday_created_successfully": "Giornata in pista creata con successo!",
   "failed_to_create_trackday": "Impossibile creare la giornata in pista.",
   "edit_trackday": "Modifica giornata in pista #{{id}}",
@@ -319,7 +320,7 @@
   "all_tracks": "Tutte le piste",
   "delete_trackday_button": "Elimina giornata in pista",
   "confirm_delete_trackday_title": "Conferma eliminazione",
-  "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può essere annullata.",
+  "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può être annullata.",
   "not_specified_vehicle": "Veicolo non specificato",
   "session_of_date": "Sessione del {{date}}",
   "stats": "Statistiche",
@@ -366,5 +367,6 @@
   "password_updated_successfully": "Password aggiornata con successo!",
   "failed_to_update_password": "Impossibile aggiornare la password.",
   "show_password": "Mostra password",
-  "hide_password": "Nascondi password"
+  "hide_password": "Nascondi password",
+  "no_track_found": "Nessuna pista trovata."
 }
