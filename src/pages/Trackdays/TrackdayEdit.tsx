@@ -281,7 +281,7 @@ const TrackdayEdit: React.FC = () => {
             control={form.control}
             name="date"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem>
                 <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <DatePicker
