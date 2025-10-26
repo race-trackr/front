@@ -118,7 +118,7 @@ const AdminTracksCreate: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                    <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
+                    <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />

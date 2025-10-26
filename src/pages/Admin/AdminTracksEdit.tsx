@@ -11,24 +11,23 @@ import { toast } from 'sonner';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"; // Import ajouté
 import apiClient from '@/lib/apiClient';
 import { CountryType, TrackType } from '@/types';
 
+// Schéma de validation mis à jour pour correspondre à TrackType
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la piste est requis." }),
   countryId: z.coerce.number().min(1, { message: "Le pays est requis." }),
@@ -45,7 +44,7 @@ const AdminTracksEdit: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const form = useForm<Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'>>({
+  const form = useForm<z.infer<typeof formSchema>>({ // Utilisation de z.infer<typeof formSchema> pour le type
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -88,7 +87,7 @@ const AdminTracksEdit: React.FC = () => {
   }, [track, form]);
 
   const updateTrackMutation = useMutation({
-    mutationFn: async (payload: Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'>) => {
+    mutationFn: async (payload: z.infer<typeof formSchema>) => { // Utilisation de z.infer<typeof formSchema> pour le type de payload
       const response = await apiClient.put(`/tracks/${trackId}`, payload);
       return response.data;
     },
@@ -118,7 +117,7 @@ const AdminTracksEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'> = {
+    const payload: z.infer<typeof formSchema> = { // Utilisation de z.infer<typeof formSchema> pour le type de payload
       ...values,
       name: values.name,
       countryId: values.countryId,
@@ -171,7 +170,7 @@ const AdminTracksEdit: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                    <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || updateTrackMutation.isPending}>
+                    <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || updateTrackMutation.isPending}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
