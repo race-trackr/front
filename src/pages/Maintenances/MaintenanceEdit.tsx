@@ -231,7 +231,7 @@ const MaintenanceEdit: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('type')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_maintenance_type')} />
