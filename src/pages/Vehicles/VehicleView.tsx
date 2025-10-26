@@ -70,15 +70,15 @@ const VehicleView: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="container mx-auto p-4 text-center">{t('loading_vehicle')}</div>;
+    return <div className="mx-auto p-4 text-center">{t('loading_vehicle')}</div>;
   }
 
   if (isError || !vehicle) {
-    return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_vehicle')}</div>;
+    return <div className="mx-auto p-4 text-center text-red-500">{t('error_loading_vehicle')}</div>;
   }
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" onClick={() => navigate('/vehicles')}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}

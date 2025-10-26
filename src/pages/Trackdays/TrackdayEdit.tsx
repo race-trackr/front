@@ -441,7 +441,7 @@ const TrackdayEdit: React.FC = () => {
               </FormItem>
             )}
           />
-          <div className="flex justify-between w-full md:col-span-2">
+          <div className="flex justify-between mt-4 md:col-span-2">
             <Button type="button" variant="outline" onClick={() => navigate(-1)}>
               {t('cancel')}
             </Button>
@@ -451,17 +451,6 @@ const TrackdayEdit: React.FC = () => {
           </div>
         </form>
       </Form>
-
-      <ConfirmDeleteDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title={t('confirm_delete_trackday_title')}
-        description={t('confirm_delete_trackday_description')}
-        confirmButtonText={t('delete_trackday_button')}
-        cancelButtonText={t('cancel')}
-        isConfirming={deleteTrackdayMutation.isPending}
-      />
     </div>
   );
 };

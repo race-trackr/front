@@ -69,7 +69,7 @@ const Upgrade: React.FC = () => {
   ];
 
   return (
-    <div className="container mx-auto p-4 space-y-8">
+    <div className="mx-auto p-4 space-y-8">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">{t('upgrade_to_pro')}</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

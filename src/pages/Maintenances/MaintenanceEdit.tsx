@@ -152,7 +152,7 @@ const MaintenanceEdit: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between mb-6">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}

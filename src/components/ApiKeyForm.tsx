@@ -33,10 +33,10 @@ interface ApiKeyFormProps {
 
 // Define the schema for individual permission actions
 const permissionActionsSchema = z.object({
-  create: z.boolean(), // Supprimé .default(false)
-  read: z.boolean(),   // Supprimé .default(false)
-  update: z.boolean(), // Supprimé .default(false)
-  delete: z.boolean(), // Supprimé .default(false)
+  create: z.boolean().default(false), // Ajout de .default(false)
+  read: z.boolean().default(false),   // Ajout de .default(false)
+  update: z.boolean().default(false), // Ajout de .default(false)
+  delete: z.boolean().default(false), // Ajout de .default(false)
 });
 
 const formSchema = z.object({
