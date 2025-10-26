@@ -421,5 +421,20 @@
   "enter_track_width": "Enter track width",
   "enter_max_db": "Enter max dB",
   "enter_best_laptime_pilot": "Enter best laptime pilot",
-  "enter_track_description": "Enter track description"
+  "enter_track_description": "Enter track description",
+  "developer": "Developer",
+  "api_keys": "API Keys",
+  "manage_api_keys_description": "Manage your API keys for integrating with external services.",
+  "no_api_keys_created": "No API keys created yet.",
+  "create_api_key": "Create API Key",
+  "api_key_created_successfully": "API Key created successfully!",
+  "failed_to_create_api_key": "Failed to create API key.",
+  "api_key": "API Key",
+  "created_at": "Created At",
+  "copy_api_key": "Copy API Key",
+  "api_key_copied_to_clipboard": "API Key copied to clipboard!",
+  "api_key_deleted_successfully": "API Key deleted successfully!",
+  "confirm_delete_api_key_title": "Confirm Deletion",
+  "confirm_delete_api_key_description": "Are you sure you want to delete this API key? This action cannot be undone.",
+  "search_api_keys": "Search API keys..."
 }

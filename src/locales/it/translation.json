@@ -443,5 +443,20 @@
   "enter_track_width": "Inserisci la larghezza della pista",
   "enter_max_db": "Inserisci il massimo di dB",
   "enter_best_laptime_pilot": "Inserisci il pilota del miglior tempo",
-  "enter_track_description": "Inserisci la descrizione della pista"
+  "enter_track_description": "Inserisci la descrizione della pista",
+  "developer": "Sviluppatore",
+  "api_keys": "Chiavi API",
+  "manage_api_keys_description": "Gestisci le tue chiavi API per l'integrazione con servizi esterni.",
+  "no_api_keys_created": "Nessuna chiave API creata ancora.",
+  "create_api_key": "Crea chiave API",
+  "api_key_created_successfully": "Chiave API creata con successo!",
+  "failed_to_create_api_key": "Impossibile creare la chiave API.",
+  "api_key": "Chiave API",
+  "created_at": "Creato il",
+  "copy_api_key": "Copia chiave API",
+  "api_key_copied_to_clipboard": "Chiave API copiata negli appunti!",
+  "api_key_deleted_successfully": "Chiave API eliminata con successo!",
+  "confirm_delete_api_key_title": "Conferma eliminazione",
+  "confirm_delete_api_key_description": "Sei sicuro di voler eliminare questa chiave API? Questa azione non può essere annullata.",
+  "search_api_keys": "Cerca chiavi API..."
 }

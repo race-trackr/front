@@ -421,5 +421,20 @@
   "enter_track_width": "Entrez la largeur de la piste",
   "enter_max_db": "Entrez le max dB",
   "enter_best_laptime_pilot": "Entrez le pilote du meilleur temps",
-  "enter_track_description": "Entrez la description de la piste"
+  "enter_track_description": "Entrez la description de la piste",
+  "developer": "Développeur",
+  "api_keys": "Clés API",
+  "manage_api_keys_description": "Gérez vos clés API pour l'intégration avec des services externes.",
+  "no_api_keys_created": "Aucune clé API créée pour le moment.",
+  "create_api_key": "Créer une clé API",
+  "api_key_created_successfully": "Clé API créée avec succès !",
+  "failed_to_create_api_key": "Échec de la création de la clé API.",
+  "api_key": "Clé API",
+  "created_at": "Créé le",
+  "copy_api_key": "Copier la clé API",
+  "api_key_copied_to_clipboard": "Clé API copiée dans le presse-papiers !",
+  "api_key_deleted_successfully": "Clé API supprimée avec succès !",
+  "confirm_delete_api_key_title": "Confirmer la suppression",
+  "confirm_delete_api_key_description": "Êtes-vous sûr de vouloir supprimer cette clé API ? Cette action est irréversible.",
+  "search_api_keys": "Rechercher des clés API..."
 }
