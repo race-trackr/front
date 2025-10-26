@@ -3,7 +3,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ApiKeyForm from '@/components/ApiKeyForm';
 import { ApiKey } from '@/types';
 import { toast } from 'sonner';
@@ -37,20 +36,15 @@ const ApiKeyCreate: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('create_new_api_key')}</h1>
+      <div className="flex items-center gap-4">
         <Button variant="outline" onClick={() => navigate('/settings/developer')}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
+          <ArrowLeft className="h-4 w-4" />
         </Button>
+        <h1 className="text-3xl font-bold flex-1">{t('create_new_api_key')}</h1>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('fill_in_api_key_details')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ApiKeyForm onSave={handleCreateApiKey} onCancel={() => navigate('/settings/developer')} isSaving={isSavingApiKey} />
-        </CardContent>
-      </Card>
+      <div className="border rounded-lg p-6">
+        <ApiKeyForm onSave={handleCreateApiKey} onCancel={() => navigate('/settings/developer')} isSaving={isSavingApiKey} />
+      </div>
     </div>
   );
 };
