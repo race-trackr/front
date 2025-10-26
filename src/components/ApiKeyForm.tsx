@@ -23,7 +23,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ApiKey, Permissions, PermissionAction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils'; // Correction ici
+import { cn } from '@/lib/utils';
 
 interface ApiKeyFormProps {
   onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
@@ -33,16 +33,16 @@ interface ApiKeyFormProps {
 
 // Define the schema for individual permission actions
 const permissionActionsSchema = z.object({
-  create: z.boolean(),
-  read: z.boolean(),
-  update: z.boolean(),
-  delete: z.boolean(),
+  create: z.boolean(), // Supprimé .default(false)
+  read: z.boolean(),   // Supprimé .default(false)
+  update: z.boolean(), // Supprimé .default(false)
+  delete: z.boolean(), // Supprimé .default(false)
 });
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la clé API est requis." }),
   expiresAt: z.string().nullable().optional(),
-  permissions: z.object({ // Define as a direct object to ensure non-optional properties
+  permissions: z.object({
     trackdays: permissionActionsSchema,
     vehicles: permissionActionsSchema,
     maintenances: permissionActionsSchema,
@@ -70,7 +70,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     defaultValues: {
       name: '',
       expiresAt: null,
-      permissions: defaultPermissionsForForm, // Use the explicitly typed default
+      permissions: defaultPermissionsForForm,
     },
   });
 
@@ -78,7 +78,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     onSave({
       name: values.name,
       expiresAt: values.expiresAt || null,
-      permissions: values.permissions, // This should now be correctly typed as Permissions
+      permissions: values.permissions,
     });
   };
 
