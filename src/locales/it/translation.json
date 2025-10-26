@@ -43,7 +43,7 @@
   "upcoming_maintenances": "Manutenzioni imminenti",
   "maintenance_due_soon": "{{count}} manutenzione in scadenza a breve.",
   "view_maintenances": "Visualizza manutenzioni",
-  "admin_panel": "Pannel di amministrazione",
+  "admin_panel": "Pannel de amministrazione",
   "access_admin_tools": "Accedi agli strumenti di amministrazione",
   "manage_tracks_countries_users": "Gestisci piste, paesi e utenti.",
   "oops_page_not_found": "Ops! Pagina non trovata",
@@ -423,5 +423,16 @@
   "sending_reset_link": "Invio link...",
   "send_reset_link": "Invia link di reimpostazione",
   "remember_password": "Ricordi la tua password?",
-  "password_reset_email_sent": "Se esiste un account con questa email, un link di reimpostazione è stato inviato."
+  "password_reset_email_sent": "Se esiste un account con questa email, un link di reimpostazione è stato inviato.",
+  "search_table": "Cerca...",
+  "no_results": "Nessun risultato.",
+  "actions": "Azioni",
+  "search_tracks": "Cerca piste...",
+  "confirm_delete_track_title": "Conferma eliminazione",
+  "confirm_delete_track_description": "Sei sicuro di voler eliminare questa pista? Questa azione non può essere annullata.",
+  "delete_track_button": "Elimina pista",
+  "search_countries": "Cerca paesi...",
+  "confirm_delete_country_title": "Conferma eliminazione",
+  "confirm_delete_country_description": "Sei sicuro di voler eliminare questo paese? Questa azione non può essere annullata.",
+  "delete_country_button": "Elimina paese"
 }

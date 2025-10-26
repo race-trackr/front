@@ -422,5 +422,16 @@
   "sending_reset_link": "Enviando enlace...",
   "send_reset_link": "Enviar enlace de restablecimiento",
   "remember_password": "¿Recuerdas tu contraseña?",
-  "password_reset_email_sent": "Si existe una cuenta con ese correo electrónico, se ha enviado un enlace de restablecimiento."
+  "password_reset_email_sent": "Si existe una cuenta con ese correo electrónico, se ha enviado un enlace de restablecimiento.",
+  "search_table": "Buscar...",
+  "no_results": "No hay resultados.",
+  "actions": "Acciones",
+  "search_tracks": "Buscar pistas...",
+  "confirm_delete_track_title": "Confirmar eliminación",
+  "confirm_delete_track_description": "¿Estás seguro de que quieres eliminar esta pista? Esta acción no se puede deshacer.",
+  "delete_track_button": "Eliminar pista",
+  "search_countries": "Buscar países...",
+  "confirm_delete_country_title": "Confirmar eliminación",
+  "confirm_delete_country_description": "¿Estás seguro de que quieres eliminar este país? Esta acción no se puede deshacer.",
+  "delete_country_button": "Eliminar país"
 }

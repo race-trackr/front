@@ -402,5 +402,16 @@
   "sending_reset_link": "Sending link...",
   "send_reset_link": "Send Reset Link",
   "remember_password": "Remember your password?",
-  "password_reset_email_sent": "If an account exists with that email, a reset link has been sent."
+  "password_reset_email_sent": "If an account exists with that email, a reset link has been sent.",
+  "search_table": "Search...",
+  "no_results": "No results.",
+  "actions": "Actions",
+  "search_tracks": "Search tracks...",
+  "confirm_delete_track_title": "Confirm Deletion",
+  "confirm_delete_track_description": "Are you sure you want to delete this track? This action cannot be undone.",
+  "delete_track_button": "Delete Track",
+  "search_countries": "Search countries...",
+  "confirm_delete_country_title": "Confirm Deletion",
+  "confirm_delete_country_description": "Are you sure you want to delete this country? This action cannot be undone.",
+  "delete_country_button": "Delete Country"
 }
