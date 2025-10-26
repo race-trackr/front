@@ -23,7 +23,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ApiKey, Permissions, PermissionAction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } => '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 interface ApiKeyFormProps {
   onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
@@ -78,7 +78,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     onSave({
       name: values.name,
       expiresAt: values.expiresAt || null,
-      permissions: values.permissions as Permissions, // Explicitly cast to Permissions
+      permissions: values.permissions as Permissions, // Explicit cast to Permissions
     });
   };
 
