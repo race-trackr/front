@@ -14,7 +14,7 @@ const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
     case 'car':
       return <Car className="h-5 w-5 text-muted-foreground" />;
-    case 'moto':
+    case 'motorcycle':
       return <Bike className="h-5 w-5 text-muted-foreground" />;
     case 'karting':
       return <Car className="h-5 w-5 text-muted-foreground" />;

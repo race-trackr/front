@@ -43,7 +43,7 @@ export interface TrackType {
 
 export type WeatherCondition = 'clear' | 'cloudy' | 'rainy';
 export type TrackCondition = 'wet' | 'dry' | 'moist';
-export type VehicleType = 'car' | 'moto' | 'karting' | 'other';
+export type VehicleType = 'car' | 'motorcycle' | 'karting' | 'other';
 export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other';
 
 export interface TrackDayType {
