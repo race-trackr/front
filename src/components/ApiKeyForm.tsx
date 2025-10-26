@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useForm, Path } from 'react-hook-form'; // Import Path
+import { useForm, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslation } from 'react-i18next';
@@ -31,18 +31,21 @@ interface ApiKeyFormProps {
   isSaving: boolean;
 }
 
+// Define the schema for individual permission actions
+const permissionActionsSchema = z.object({
+  create: z.boolean(),
+  read: z.boolean(),
+  update: z.boolean(),
+  delete: z.boolean(),
+});
+
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la clé API est requis." }),
   expiresAt: z.string().nullable().optional(),
   permissions: z.record(
     z.enum(['trackdays', 'vehicles', 'maintenances', 'tracks', 'countries', 'users']),
-    z.object({
-      create: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
-      read: z.boolean().default(false),   // Rendre non optionnel avec une valeur par défaut
-      update: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
-      delete: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
-    })
-  ),
+    permissionActionsSchema
+  ), // Removed .default() here
 });
 
 const defaultPermissions: Permissions = {
@@ -62,7 +65,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     defaultValues: {
       name: '',
       expiresAt: null,
-      permissions: defaultPermissions,
+      permissions: defaultPermissions, // Set default here instead
     },
   });
 
@@ -134,7 +137,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
                         <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>
                             <Checkbox
-                              checked={field.value}
+                              checked={field.value as boolean}
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
