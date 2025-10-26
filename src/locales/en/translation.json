@@ -396,5 +396,11 @@
   "view_maintenance_name_date": "View maintenance {{name}} ({{date}})",
   "edit_maintenance_name_date": "Edit maintenance {{name}} ({{date}})",
   "edit_track_name": "Edit track {{name}}",
-  "edit_country_name": "Edit country {{name}}"
+  "edit_country_name": "Edit country {{name}}",
+  "forgot_password": "Forgot password?",
+  "enter_email_for_reset": "Enter your email below to receive a password reset link.",
+  "sending_reset_link": "Sending link...",
+  "send_reset_link": "Send Reset Link",
+  "remember_password": "Remember your password?",
+  "password_reset_email_sent": "If an account exists with that email, a reset link has been sent."
 }

@@ -396,5 +396,11 @@
   "view_maintenance_name_date": "Voir la maintenance {{name}} ({{date}})",
   "edit_maintenance_name_date": "Modifier la maintenance {{name}} ({{date}})",
   "edit_track_name": "Modifier la piste {{name}}",
-  "edit_country_name": "Modifier le pays {{name}}"
+  "edit_country_name": "Modifier le pays {{name}}",
+  "forgot_password": "Mot de passe oublié ?",
+  "enter_email_for_reset": "Entrez votre adresse e-mail ci-dessous pour recevoir un lien de réinitialisation de mot de passe.",
+  "sending_reset_link": "Envoi du lien...",
+  "send_reset_link": "Envoyer le lien de réinitialisation",
+  "remember_password": "Vous vous souvenez de votre mot de passe ?",
+  "password_reset_email_sent": "Si un compte existe avec cette adresse e-mail, un lien de réinitialisation a été envoyé."
 }

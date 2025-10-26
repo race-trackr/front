@@ -417,5 +417,11 @@
   "view_maintenance_name_date": "Visualizza manutenzione {{name}} ({{date}})",
   "edit_maintenance_name_date": "Modifica manutenzione {{name}} ({{date}})",
   "edit_track_name": "Modifica pista {{name}}",
-  "edit_country_name": "Modifica paese {{name}}"
+  "edit_country_name": "Modifica paese {{name}}",
+  "forgot_password": "Password dimenticata?",
+  "enter_email_for_reset": "Inserisci la tua email qui sotto per ricevere un link di reimpostazione della password.",
+  "sending_reset_link": "Invio link...",
+  "send_reset_link": "Invia link di reimpostazione",
+  "remember_password": "Ricordi la tua password?",
+  "password_reset_email_sent": "Se esiste un account con questa email, un link di reimpostazione è stato inviato."
 }

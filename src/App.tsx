@@ -30,6 +30,7 @@ import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
+import ForgotPassword from './pages/Auth/ForgotPassword'; // Import the new component
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
@@ -73,6 +74,11 @@ const App: React.FC = () => {
     {
       path: "/auth",
       element: <AuthTabs />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/auth/forgot-password", // New route for forgot password
+      element: <ForgotPassword />,
       errorElement: <ErrorPage />,
     },
     {

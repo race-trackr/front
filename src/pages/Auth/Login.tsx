@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,7 +69,15 @@ const Login: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
+                  <div className="flex items-center">
+                    <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
+                    <Link
+                      to="/auth/forgot-password"
+                      className="ml-auto inline-block text-sm underline text-muted-foreground hover:text-primary"
+                    >
+                      {t('forgot_password')}
+                    </Link>
+                  </div>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
