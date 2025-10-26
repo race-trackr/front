@@ -175,7 +175,7 @@ const TrackdayView: React.FC = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
-              <p className="text-lg">{t(`weather_${trackday.weather}`)}</p>
+              <p className="text-lg">{trackday.weather ? t(`weather_${trackday.weather}`) : t('not_specified')}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
@@ -191,7 +191,7 @@ const TrackdayView: React.FC = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
-              <p className="text-lg">{t(`track_condition_${trackday.trackCondition}`)}</p>
+              <p className="text-lg">{trackday.trackCondition ? t(`track_condition_${trackday.trackCondition}`) : t('not_specified')}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>

@@ -52,10 +52,10 @@ export interface TrackDayType {
   trackId: number;
   userVehicleId: number | null;
   date: string;
-  weather: WeatherCondition;
+  weather: WeatherCondition | null; // Rendu optionnel
   airTemperature: number | null;
   trackTemperature: number | null;
-  trackCondition: TrackCondition;
+  trackCondition: TrackCondition | null; // Rendu optionnel
   notes: string | null;
   bestLapTime: string | null;
   totalLaps: number | null;

@@ -38,10 +38,10 @@ const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),
   trackId: z.coerce.number().min(1, { message: "La piste est requise." }),
   date: z.string().min(1, { message: "La date est requise." }),
-  weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }),
+  weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }).nullable().optional(), // Rendu optionnel
   airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }).nullable().optional(),
   trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }).nullable().optional(),
-  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }),
+  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }).nullable().optional(), // Rendu optionnel
   notes: z.string().nullable().optional(),
   bestLapTime: z.string().optional().refine(
     (val) => !val || chronoFormatRegex.test(val),
@@ -72,10 +72,10 @@ const TrackdayEdit: React.FC = () => {
       userVehicleId: null,
       trackId: 0,
       date: '',
-      weather: 'clear',
+      weather: null, // Défini à null
       airTemperature: null,
       trackTemperature: null,
-      trackCondition: 'dry',
+      trackCondition: null, // Défini à null
       notes: null,
       bestLapTime: null,
       totalLaps: null,
@@ -109,10 +109,10 @@ const TrackdayEdit: React.FC = () => {
         userVehicleId: trackday.userVehicleId || null,
         trackId: trackday.trackId,
         date: trackday.date,
-        weather: trackday.weather,
+        weather: trackday.weather || null, // Gère les valeurs null
         airTemperature: trackday.airTemperature || null,
         trackTemperature: trackday.trackTemperature || null,
-        trackCondition: trackday.trackCondition,
+        trackCondition: trackday.trackCondition || null, // Gère les valeurs null
         notes: trackday.notes || null,
         bestLapTime: trackday.bestLapTime || null,
         totalLaps: trackday.totalLaps || null,
@@ -158,8 +158,8 @@ const TrackdayEdit: React.FC = () => {
       userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
       trackId: values.trackId,
       date: values.date,
-      weather: values.weather,
-      trackCondition: values.trackCondition,
+      weather: values.weather === undefined ? null : values.weather, // Gère les valeurs undefined
+      trackCondition: values.trackCondition === undefined ? null : values.trackCondition, // Gère les valeurs undefined
       airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
       trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
       notes: values.notes === '' ? null : values.notes,
@@ -300,14 +300,15 @@ const TrackdayEdit: React.FC = () => {
             name="weather"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('weather')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormLabel>{t('weather')}</FormLabel> {/* Removed '*' */}
+                <Select onValueChange={field.onChange} value={field.value || ''}> {/* Handle null/undefined */}
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_weather_condition')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value="">{t('not_specified')}</SelectItem> {/* Option pour non spécifié */}
                     <SelectItem value="clear">{t('weather_clear')}</SelectItem>
                     <SelectItem value="cloudy">{t('weather_cloudy')}</SelectItem>
                     <SelectItem value="rainy">{t('weather_rainy')}</SelectItem>
@@ -348,14 +349,15 @@ const TrackdayEdit: React.FC = () => {
             name="trackCondition"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track_condition')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormLabel>{t('track_condition')}</FormLabel> {/* Removed '*' */}
+                <Select onValueChange={field.onChange} value={field.value || ''}> {/* Handle null/undefined */}
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_track_condition')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value="">{t('not_specified')}</SelectItem> {/* Option pour non spécifié */}
                     <SelectItem value="wet">{t('track_condition_wet')}</SelectItem>
                     <SelectItem value="dry">{t('track_condition_dry')}</SelectItem>
                     <SelectItem value="moist">{t('track_condition_moist')}</SelectItem>
