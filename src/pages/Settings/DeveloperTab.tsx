@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiKey, Permissions } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } => 'react-router-dom'; // Import useNavigate
 
 const columnHelper = createColumnHelper<ApiKey>();
 
@@ -113,7 +113,7 @@ const DeveloperTab: React.FC = () => {
       header: () => t('api_key'),
       cell: (info) => (
         <div className="flex items-center space-x-2">
-          <span className="font-mono text-sm">{info.getValue()}</span>
+          <span className="font-mono text-sm max-w-[150px] truncate">{info.getValue()}</span>
           <Button variant="ghost" size="icon" onClick={() => copyApiKey(info.getValue())}>
             <Copy className="h-4 w-4" />
             <span className="sr-only">{t('copy_api_key')}</span>
