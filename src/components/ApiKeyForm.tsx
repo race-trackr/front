@@ -23,7 +23,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ApiKey, Permissions, PermissionAction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn } => '@/lib/utils';
 
 interface ApiKeyFormProps {
   onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
@@ -33,7 +33,7 @@ interface ApiKeyFormProps {
 
 // Define the schema for individual permission actions
 const permissionActionsSchema = z.object({
-  create: z.boolean().default(false), // S'assure que ces propriétés sont obligatoires avec une valeur par défaut
+  create: z.boolean().default(false),
   read: z.boolean().default(false),
   update: z.boolean().default(false),
   delete: z.boolean().default(false),
@@ -78,7 +78,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     onSave({
       name: values.name,
       expiresAt: values.expiresAt || null,
-      permissions: values.permissions,
+      permissions: values.permissions as Permissions, // Explicitly cast to Permissions
     });
   };
 
