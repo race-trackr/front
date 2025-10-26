@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Flag, Users } from 'lucide-react';
+import { Flag, Users, User as UserIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/apiClient';
-import { TrackType, CountryType } from '@/types';
+import { TrackType, CountryType, UserType } from '@/types';
+import { getUsers } from '@/lib/api/users';
 
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -27,11 +28,16 @@ const AdminDashboard: React.FC = () => {
     },
   });
 
-  if (isLoadingTracks || isLoadingCountries) {
+  const { data: users, isLoading: isLoadingUsers, isError: isErrorUsers } = useQuery<UserType[]>({
+    queryKey: ['users'],
+    queryFn: getUsers,
+  });
+
+  if (isLoadingTracks || isLoadingCountries || isLoadingUsers) {
     return <div className="space-y-6">{t('loading')}...</div>;
   }
 
-  if (isErrorTracks || isErrorCountries) {
+  if (isErrorTracks || isErrorCountries || isErrorUsers) {
     return <div className="space-y-6 text-red-500">{t('error_loading_admin_dashboard')}</div>;
   }
 
@@ -40,7 +46,7 @@ const AdminDashboard: React.FC = () => {
       <h1 className="text-3xl font-bold">{t('admin_dashboard')}</h1>
       <p className="text-lg text-muted-foreground">{t('manage_application_data')}</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('manage_tracks')}</CardTitle>
@@ -65,6 +71,20 @@ const AdminDashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">{t('total_countries_in_system')}</p>
             <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/countries">{t('go_to_countries')}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('manage_users')}</CardTitle>
+            <UserIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{users?.length || 0}</div>
+            <p className="text-xs text-muted-foreground">{t('total_users_in_system')}</p>
+            <Button asChild className="mt-4 btn-primary-gradient">
+              <Link to="/admin/users">{t('go_to_users')}</Link>
             </Button>
           </CardContent>
         </Card>
