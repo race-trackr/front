@@ -344,7 +344,7 @@
   "failed_to_update_password": "Échec de la mise à jour du mot de passe.",
   "show_password": "Afficher le mot de passe",
   "hide_password": "Masquer le mot de passe",
-  "no_track_found": "Aucune piste trouvée.",
+  "loading": "Chargement",
   "manage_countries": "Gérer les pays",
   "plan_starter_name": "Starter",
   "plan_starter_price": "4.99€",

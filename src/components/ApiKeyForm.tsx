@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Path } from 'react-hook-form'; // Import Path
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslation } from 'react-i18next';
@@ -37,10 +37,10 @@ const formSchema = z.object({
   permissions: z.record(
     z.enum(['trackdays', 'vehicles', 'maintenances', 'tracks', 'countries', 'users']),
     z.object({
-      create: z.boolean(),
-      read: z.boolean(),
-      update: z.boolean(),
-      delete: z.boolean(),
+      create: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
+      read: z.boolean().default(false),   // Rendre non optionnel avec une valeur par défaut
+      update: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
+      delete: z.boolean().default(false), // Rendre non optionnel avec une valeur par défaut
     })
   ),
 });
@@ -121,7 +121,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
           {tableNames.map((tableName) => (
             <Card key={tableName}>
               <CardHeader>
-                <CardTitle className="text-lg capitalize">{t(tableName)}</CardTitle>
+                <CardTitle className="text-lg capitalize">{t(tableName as string)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -129,7 +129,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
                     <FormField
                       key={`${tableName}-${action}`}
                       control={form.control}
-                      name={`permissions.${tableName}.${action}`}
+                      name={`permissions.${tableName}.${action}` as Path<z.infer<typeof formSchema>>}
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>

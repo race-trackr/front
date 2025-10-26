@@ -203,7 +203,7 @@
   "enter_vin": "Enter VIN",
   "enter_color": "Enter color",
   "enter_engine_type": "Enter engine type",
-  "enter_transmission_type": "Enter transmission type",
+  "enter_transmission_type": "Enter engine type",
   "enter_mileage": "Enter mileage",
   "enter_last_service_mileage": "Enter last service mileage",
   "enter_purchase_price": "Enter purchase price",
