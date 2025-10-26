@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import apiClient from '@/lib/apiClient';
 import { CountryType } from '@/types';
+import { ArrowLeft, Trash2 } from 'lucide-react'; // Import des icônes
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du pays est requis." }),
@@ -121,29 +122,42 @@ const AdminCountriesEdit: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('edit_country', { id: country.id })}</h1>
-      <Card>
-        <CardHeader><CardTitle>{t('country_details')}</CardTitle></CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_country_name')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="iso"
-                render={({ field }) => (
+      <div className="flex items-center justify-between mb-6">
+        <Button variant="outline" onClick={() => navigate(-1)}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
+        </Button>
+        <h1 className="text-3xl font-bold">{t('edit_country', { id: country.id })}</h1>
+        <Button
+          variant="destructive"
+          size="icon"
+          onClick={handleDelete}
+          disabled={deleteCountryMutation.isPending}
+          className="btn-danger"
+        >
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">{deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}</span>
+        </Button>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_country_name')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="iso"
+            render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('country_iso')}<span className="text-destructive">*</span></FormLabel>
                     <FormControl>
@@ -179,23 +193,13 @@ const AdminCountriesEdit: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-between mt-4 md:col-span-2">
-                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-                  {t('cancel')}
+              <div className="flex justify-end mt-4 md:col-span-2">
+                <Button type="submit" className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>
+                  {updateCountryMutation.isPending ? t('saving') : t('save_changes')}
                 </Button>
-                <div className="flex gap-2">
-                  <Button variant="destructive" onClick={handleDelete} disabled={deleteCountryMutation.isPending} className="btn-danger">
-                    {deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}
-                  </Button>
-                  <Button type="submit" className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>
-                    {updateCountryMutation.isPending ? t('saving') : t('save_changes')}
-                  </Button>
-                </div>
               </div>
             </form>
           </Form>
-        </CardContent>
-      </Card>
     </div>
   );
 };
