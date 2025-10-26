@@ -18,7 +18,7 @@ export interface UserType {
   fullName: string;
   avatar: string | null;
   role: 'user' | 'admin';
-  countryId: number;
+  countryId: number; // Added countryId
   createdAt: string;
   updatedAt: string;
   trackDays?: TrackDayType[];
@@ -52,10 +52,10 @@ export interface TrackDayType {
   trackId: number;
   userVehicleId: number | null;
   date: string;
-  weather: WeatherCondition | null;
+  weather: WeatherCondition | null; // Rendu optionnel
   airTemperature: number | null;
   trackTemperature: number | null;
-  trackCondition: TrackCondition | null;
+  trackCondition: TrackCondition | null; // Rendu optionnel
   notes: string | null;
   bestLapTime: string | null;
   totalLaps: number | null;
@@ -129,19 +129,6 @@ export interface RegisterPayload {
   email: string;
   password: string;
   countryId: number;
-}
-
-// Redéfini directement pour éviter les problèmes d'inférence de type
-export interface CreateUserPayload {
-  fullName: string;
-  email: string;
-  password: string;
-  countryId: number;
-  role: 'user' | 'admin';
-}
-
-export interface UpdateUserPayload extends Partial<Omit<UserType, 'id' | 'createdAt' | 'updatedAt' | 'trackDays' | 'vehicles' | 'maintenances'>> {
-  password?: string; // Password is optional for update
 }
 
 export interface AuthResponse {

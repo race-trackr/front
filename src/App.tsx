@@ -27,13 +27,10 @@ import AdminTracksEdit from './pages/Admin/AdminTracksEdit';
 import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
-import AdminUsers from './pages/Admin/AdminUsers'; // New import
-import AdminUsersCreate from './pages/Admin/AdminUsersCreate'; // New import
-import AdminUsersEdit from './pages/Admin/AdminUsersEdit'; // New import
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
-import ForgotPassword from './pages/Auth/ForgotPassword';
+import ForgotPassword from './pages/Auth/ForgotPassword'; // Import the new component
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
@@ -43,8 +40,7 @@ import apiClient from '@/lib/apiClient';
 import { getTrackdayById } from '@/lib/api/trackdays';
 import { getVehicleById } from '@/lib/api/vehicles';
 import { getMaintenanceById } from '@/lib/api/maintenances';
-import { getUserById } from '@/lib/api/users'; // New import
-import { TrackDayType, UserVehicleType, MaintenanceRecordType, TrackType, CountryType, UserType } from '@/types';
+import { TrackDayType, UserVehicleType, MaintenanceRecordType, TrackType, CountryType } from '@/types';
 
 const queryClient = new QueryClient();
 
@@ -81,16 +77,16 @@ const App: React.FC = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: "/auth/forgot-password",
+      path: "/auth/forgot-password", // New route for forgot password
       element: <ForgotPassword />,
       errorElement: <ErrorPage />,
     },
     {
-      element: <ProtectedRoute />,
+      element: <ProtectedRoute />, // ProtectedRoute acts as a guard
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />,
+          element: <Layout />, // Layout wraps the Outlet for all its children
           children: [
             {
               path: "/dashboard",
@@ -246,11 +242,11 @@ const App: React.FC = () => {
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin']} />,
+      element: <ProtectedRoute allowedRoles={['admin']} />, // Admin ProtectedRoute acts as a guard
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />,
+          element: <Layout />, // Layout wraps the Outlet for all its admin children
           children: [
             {
               path: "/admin",
@@ -261,7 +257,7 @@ const App: React.FC = () => {
                   element: <AdminDashboard />,
                 },
                 {
-                  path: "tracks",
+                  path: "tracks", // This becomes /admin/tracks
                   handle: { crumb: () => t('manage_tracks') },
                   children: [
                     {
@@ -290,7 +286,7 @@ const App: React.FC = () => {
                   ],
                 },
                 {
-                  path: "countries",
+                  path: "countries", // This becomes /admin/countries
                   handle: { crumb: () => t('manage_countries') },
                   children: [
                     {
@@ -313,35 +309,6 @@ const App: React.FC = () => {
                         crumb: ({ data }: RouteMatchWithData) => {
                           const country = data?.country as CountryType;
                           return country ? t('edit_country_name', { name: country.name }) : t('edit_country', { id: data?.params?.id || '' });
-                        }
-                      },
-                    },
-                  ],
-                },
-                {
-                  path: "users", // New route for user management
-                  handle: { crumb: () => t('manage_users') },
-                  children: [
-                    {
-                      index: true,
-                      element: <AdminUsers />,
-                    },
-                    {
-                      path: "create",
-                      element: <AdminUsersCreate />,
-                      handle: { crumb: () => t('create_new_user') },
-                    },
-                    {
-                      path: "edit/:id",
-                      element: <AdminUsersEdit />,
-                      loader: async ({ params }) => {
-                        const user = await getUserById(Number(params.id!));
-                        return { user };
-                      },
-                      handle: {
-                        crumb: ({ data }: RouteMatchWithData) => {
-                          const user = data?.user as UserType;
-                          return user ? t('edit_user_name', { name: user.fullName }) : t('edit_user', { id: data?.params?.id || '' });
                         }
                       },
                     },
