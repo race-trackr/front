@@ -30,7 +30,8 @@ import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
-import ForgotPassword from './pages/Auth/ForgotPassword'; // Import the new component
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ApiKeyCreate from './pages/Settings/ApiKeyCreate'; // Import the new component
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
@@ -77,16 +78,16 @@ const App: React.FC = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: "/auth/forgot-password", // New route for forgot password
+      path: "/auth/forgot-password",
       element: <ForgotPassword />,
       errorElement: <ErrorPage />,
     },
     {
-      element: <ProtectedRoute />, // ProtectedRoute acts as a guard
+      element: <ProtectedRoute />,
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />, // Layout wraps the Outlet for all its children
+          element: <Layout />,
           children: [
             {
               path: "/dashboard",
@@ -228,6 +229,11 @@ const App: React.FC = () => {
               handle: { crumb: () => t('settings') },
             },
             {
+              path: "/settings/api-keys/create", // New route for creating API keys
+              element: <ApiKeyCreate />,
+              handle: { crumb: () => t('create_new_api_key') },
+            },
+            {
               path: "/profile",
               element: <Profile />,
               handle: { crumb: () => t('my_account') },
@@ -242,11 +248,11 @@ const App: React.FC = () => {
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin']} />, // Admin ProtectedRoute acts as a guard
+      element: <ProtectedRoute allowedRoles={['admin']} />,
       errorElement: <ErrorPage />,
       children: [
         {
-          element: <Layout />, // Layout wraps the Outlet for all its admin children
+          element: <Layout />,
           children: [
             {
               path: "/admin",
@@ -257,7 +263,7 @@ const App: React.FC = () => {
                   element: <AdminDashboard />,
                 },
                 {
-                  path: "tracks", // This becomes /admin/tracks
+                  path: "tracks",
                   handle: { crumb: () => t('manage_tracks') },
                   children: [
                     {
@@ -286,7 +292,7 @@ const App: React.FC = () => {
                   ],
                 },
                 {
-                  path: "countries", // This becomes /admin/countries
+                  path: "countries",
                   handle: { crumb: () => t('manage_countries') },
                   children: [
                     {

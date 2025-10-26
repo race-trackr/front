@@ -12,10 +12,9 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiKey, Permissions } from '@/types';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import ApiKeyForm from '@/components/ApiKeyForm';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const columnHelper = createColumnHelper<ApiKey>();
 
@@ -58,28 +57,33 @@ const PermissionsDisplay: React.FC<{ permissions: Permissions }> = ({ permission
 
 const DeveloperTab: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [apiKeys, setApiKeys] = React.useState<ApiKey[]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [apiKeyToDelete, setApiKeyToDelete] = React.useState<string | null>(null);
-  const [isFormOpen, setIsFormOpen] = React.useState(false);
-  const [isSavingApiKey, setIsSavingApiKey] = React.useState(false);
 
-  const handleCreateApiKey = (newApiKeyData: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => {
-    setIsSavingApiKey(true);
-    // Simulate API call
-    setTimeout(() => {
-      const newKey: ApiKey = {
-        id: uuidv4(),
-        key: `sk_live_${uuidv4().replace(/-/g, '')}`,
+  // Simulate fetching API keys on component mount
+  React.useEffect(() => {
+    // In a real app, you would fetch this from your backend
+    const mockApiKeys: ApiKey[] = [
+      {
+        id: '1',
+        name: 'My First API Key',
+        key: 'sk_live_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567',
         createdAt: new Date().toISOString(),
-        ...newApiKeyData,
-      };
-      setApiKeys((prevKeys) => [...prevKeys, newKey]);
-      toast.success(t('api_key_created_successfully'));
-      setIsSavingApiKey(false);
-      setIsFormOpen(false);
-    }, 1000);
-  };
+        expiresAt: null,
+        permissions: {
+          trackdays: { create: true, read: true, update: false, delete: false },
+          vehicles: { create: false, read: true, update: false, delete: false },
+          maintenances: { create: false, read: false, update: false, delete: false },
+          tracks: { create: false, read: true, update: false, delete: false },
+          countries: { create: false, read: true, update: false, delete: false },
+          users: { create: false, read: false, update: false, delete: false },
+        },
+      },
+    ];
+    setApiKeys(mockApiKeys);
+  }, []);
 
   const copyApiKey = (key: string) => {
     navigator.clipboard.writeText(key);
@@ -158,14 +162,14 @@ const DeveloperTab: React.FC = () => {
           <div className="flex flex-col items-center justify-center p-6 text-center border rounded-md">
             <Key className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground mb-4">{t('no_api_keys_created')}</p>
-            <Button onClick={() => setIsFormOpen(true)} className="btn-primary-gradient">
+            <Button onClick={() => navigate('/settings/api-keys/create')} className="btn-primary-gradient">
               <PlusCircle className="mr-2 h-5 w-5" /> {t('create_api_key')}
             </Button>
           </div>
         ) : (
           <>
             <div className="flex justify-end">
-              <Button onClick={() => setIsFormOpen(true)} className="btn-primary-gradient">
+              <Button onClick={() => navigate('/settings/api-keys/create')} className="btn-primary-gradient">
                 <PlusCircle className="mr-2 h-5 w-5" /> {t('create_api_key')}
               </Button>
             </div>
@@ -183,16 +187,6 @@ const DeveloperTab: React.FC = () => {
         confirmButtonText={t('delete')}
         cancelButtonText={t('cancel')}
       />
-
-      <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <SheetContent className="sm:max-w-md">
-          <SheetHeader>
-            <SheetTitle>{t('create_new_api_key')}</SheetTitle>
-            <SheetDescription>{t('fill_in_api_key_details')}</SheetDescription>
-          </SheetHeader>
-          <ApiKeyForm onSave={handleCreateApiKey} onCancel={() => setIsFormOpen(false)} isSaving={isSavingApiKey} />
-        </SheetContent>
-      </Sheet>
     </Card>
   );
 };
