@@ -149,7 +149,7 @@ const AdminTracksEdit: React.FC = () => {
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{t('edit_track_name', { name: track.name })}</h1>
+        <h1 className="text-3xl font-bold">{track.name}</h1>
         <Button
           variant="destructive"
           size="icon"
