@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                     </Link>
                   </div>
                   <FormControl>
-                    <PasswordInput {...field} /> {/* Using PasswordInput here */}
+                    <PasswordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
