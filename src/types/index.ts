@@ -145,10 +145,19 @@ export interface AuthResponse {
 
 export type PermissionAction = 'create' | 'read' | 'update' | 'delete';
 
+// Nouvelle définition de ResourcePermissions pour correspondre au schéma Zod
+export type ResourcePermissions = {
+  [action in PermissionAction]: boolean;
+};
+
+// Nouvelle définition de Permissions pour correspondre au schéma Zod
 export type Permissions = {
-  [key: string]: {
-    [action in PermissionAction]: boolean;
-  };
+  trackdays: ResourcePermissions;
+  vehicles: ResourcePermissions;
+  maintenances: ResourcePermissions;
+  tracks: ResourcePermissions;
+  countries: ResourcePermissions;
+  users: ResourcePermissions;
 };
 
 export interface ApiKey {
