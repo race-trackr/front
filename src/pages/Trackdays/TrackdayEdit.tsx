@@ -65,6 +65,7 @@ const TrackdayEdit: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false); // État pour contrôler l'ouverture du DatePicker
 
   const form = useForm<UpdateTrackdayPayload>({
     resolver: zodResolver(formSchema),
@@ -289,6 +290,8 @@ const TrackdayEdit: React.FC = () => {
                     onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
                     disabled={field.disabled}
                     placeholder={t('pick_a_date')}
+                    open={isDatePickerOpen} // Passe l'état d'ouverture
+                    onOpenChange={setIsDatePickerOpen} // Passe la fonction de mise à jour de l'état
                   />
                 </FormControl>
                 <FormMessage />
