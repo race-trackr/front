@@ -33,10 +33,10 @@ interface ApiKeyFormProps {
 
 // Define the schema for individual permission actions
 const permissionActionsSchema = z.object({
-  create: z.boolean().default(false), // Ajout de .default(false)
-  read: z.boolean().default(false),   // Ajout de .default(false)
-  update: z.boolean().default(false), // Ajout de .default(false)
-  delete: z.boolean().default(false), // Ajout de .default(false)
+  create: z.boolean().default(false), // S'assure que ces propriétés sont obligatoires avec une valeur par défaut
+  read: z.boolean().default(false),
+  update: z.boolean().default(false),
+  delete: z.boolean().default(false),
 });
 
 const formSchema = z.object({
@@ -52,7 +52,7 @@ const formSchema = z.object({
   }),
 });
 
-// Explicitly type defaultPermissions to match the inferred type from formSchema['permissions']
+// Le type inféré de defaultPermissionsForForm devrait maintenant correspondre correctement à Permissions
 const defaultPermissionsForForm: z.infer<typeof formSchema>['permissions'] = {
   trackdays: { create: false, read: false, update: false, delete: false },
   vehicles: { create: false, read: false, update: false, delete: false },

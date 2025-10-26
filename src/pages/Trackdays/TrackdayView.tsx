@@ -110,18 +110,18 @@ const TrackdayView: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="mx-auto p-4 text-center">{t('loading_trackday')}</div>;
+    return <div className="p-4 text-center">{t('loading_trackday')}</div>;
   }
 
   if (isError || !trackday) {
-    return <div className="mx-auto p-4 text-center text-red-500">{t('error_loading_trackday')}</div>;
+    return <div className="p-4 text-center text-red-500">{t('error_loading_trackday')}</div>;
   }
 
   const formattedDate = getFormattedDate(trackday.date);
   const averageLapTime = calculateAverageLapTime(trackday.chronos) || trackday.bestLapTime;
 
   return (
-    <div className="mx-auto p-4 space-y-6">
+    <div className="p-4 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}

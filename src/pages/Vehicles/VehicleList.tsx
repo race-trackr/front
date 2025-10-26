@@ -62,11 +62,11 @@ const VehicleList: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="container mx-auto p-4 text-center">{t('loading_vehicles')}</div>;
+    return <div className="p-4 text-center">{t('loading_vehicles')}</div>;
   }
 
   if (isError) {
-    return <div className="container mx-auto p-4 text-center text-red-500">{t('error_loading_vehicles')}</div>;
+    return <div className="p-4 text-center text-red-500">{t('error_loading_vehicles')}</div>;
   }
 
   return (
