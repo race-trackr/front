@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import * as z from 'zod'; // Correction de l'importation
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -126,7 +126,7 @@ const AdminCountriesEdit: React.FC = () => {
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{t('edit_country', { id: country.id })}</h1>
+        <h1 className="text-3xl font-bold">{t('edit_country_name', { name: country.name })}</h1>
         <Button
           variant="destructive"
           size="icon"
