@@ -35,7 +35,6 @@ const formSchema = z.object({
   length: z.coerce.number().min(0.1, { message: "La longueur doit être supérieure à 0." }),
   address: z.string().nullable().optional(),
   city: z.string().min(1, { message: "La ville est requise." }),
-  website: z.string().url({ message: "L'URL du site web est invalide." }).nullable().optional(),
   turns: z.string().nullable().optional(),
   width: z.union([z.string(), z.coerce.number()]).nullable().optional(),
   maxDb: z.coerce.number().min(0).nullable().optional(),
@@ -51,7 +50,7 @@ const AdminTracksEdit: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({ // Utilisation de z.infer<typeof formSchema>
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -59,7 +58,6 @@ const AdminTracksEdit: React.FC = () => {
       length: 0.1,
       address: null,
       city: '',
-      website: null,
       turns: null,
       width: null,
       maxDb: null,
@@ -94,7 +92,6 @@ const AdminTracksEdit: React.FC = () => {
         length: track.length,
         address: track.address || null,
         city: track.city,
-        website: track.website || null,
         turns: track.turns || null,
         width: track.width || null,
         maxDb: track.maxDb || null,
@@ -106,7 +103,7 @@ const AdminTracksEdit: React.FC = () => {
   }, [track, form]);
 
   const updateTrackMutation = useMutation({
-    mutationFn: async (payload: z.infer<typeof formSchema>) => { // Utilisation de z.infer<typeof formSchema>
+    mutationFn: async (payload: z.infer<typeof formSchema>) => {
       const response = await apiClient.put(`/tracks/${trackId}`, payload);
       return response.data;
     },
@@ -136,14 +133,13 @@ const AdminTracksEdit: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: z.infer<typeof formSchema> = { // Utilisation de z.infer<typeof formSchema>
+    const payload: z.infer<typeof formSchema> = {
       ...values,
       name: values.name,
       countryId: values.countryId,
       length: values.length,
       city: values.city,
       address: values.address === '' ? null : values.address,
-      website: values.website === '' ? null : values.website,
       turns: values.turns === '' ? null : values.turns,
       width: values.width === '' ? null : values.width,
       maxDb: values.maxDb === undefined ? null : values.maxDb,
@@ -260,19 +256,6 @@ const AdminTracksEdit: React.FC = () => {
                 <FormLabel>{t('address')}</FormLabel>
                 <FormControl>
                   <Input {...field} value={field.value || ''} placeholder={t('enter_address')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="website"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('website')}</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_website_url')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

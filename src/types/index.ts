@@ -40,7 +40,6 @@ export interface TrackType {
   bestLapTime: string | null;
   bestLapTimePilot: string | null;
   description: string | null;
-  website: string | null; // Ajout de la propriété 'website'
   createdAt: string;
   updatedAt: string;
 
