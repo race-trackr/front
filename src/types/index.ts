@@ -30,13 +30,21 @@ export interface TrackType {
   id: number;
   name: string;
   slug: string;
-  countryId: number;
-  length: number;
-  address: string | null;
   city: string;
-  website: string | null;
+  countryId: number;
+  address: string | null;
+  turns: string | null;
+  length: number;
+  width: string | number | null;
+  maxDb: number | null;
+  bestLapTime: string | null;
+  bestLapTimePilot: string | null;
+  description: string | null;
+  website: string | null; // Ajout de la propriété 'website'
   createdAt: string;
   updatedAt: string;
+
+  // relations (optional in DTOs)
   country?: CountryType;
   trackDays?: TrackDayType[];
 }

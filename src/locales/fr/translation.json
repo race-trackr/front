@@ -219,7 +219,6 @@
   "city": "Ville",
   "enter_city": "Entrez la ville",
   "address": "Adresse",
-  "enter_address": "Entrez l'adresse",
   "website": "Site web",
   "enter_website_url": "Entrez l'URL du site web",
   "track_created_successfully": "Piste créée avec succès !",
@@ -413,5 +412,14 @@
   "search_countries": "Rechercher des pays...",
   "confirm_delete_country_title": "Confirmer la suppression",
   "confirm_delete_country_description": "Êtes-vous sûr de vouloir supprimer ce pays ? Cette action est irréversible.",
-  "delete_country_button": "Supprimer le pays"
+  "delete_country_button": "Supprimer le pays",
+  "width": "Largeur",
+  "max_db": "Max dB",
+  "best_laptime_pilot": "Pilote meilleur temps",
+  "description": "Description",
+  "enter_number_of_turns": "Entrez le nombre de virages",
+  "enter_track_width": "Entrez la largeur de la piste",
+  "enter_max_db": "Entrez le max dB",
+  "enter_best_laptime_pilot": "Entrez le pilote du meilleur temps",
+  "enter_track_description": "Entrez la description de la piste"
 }

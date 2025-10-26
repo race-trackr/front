@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import apiClient from '@/lib/apiClient';
 import { CountryType, TrackType } from '@/types';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la piste est requis." }),
@@ -36,6 +37,12 @@ const formSchema = z.object({
   address: z.string().nullable().optional(),
   city: z.string().min(1, { message: "La ville est requise." }),
   website: z.string().url({ message: "L'URL du site web est invalide." }).nullable().optional(),
+  turns: z.string().nullable().optional(),
+  width: z.union([z.string(), z.coerce.number()]).nullable().optional(),
+  maxDb: z.coerce.number().min(0).nullable().optional(),
+  bestLapTime: z.string().nullable().optional(),
+  bestLapTimePilot: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
 });
 
 const AdminTracksCreate: React.FC = () => {
@@ -43,7 +50,7 @@ const AdminTracksCreate: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const form = useForm<Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'>>({
+  const form = useForm<z.infer<typeof formSchema>>({ // Utilisation de z.infer<typeof formSchema>
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -52,6 +59,12 @@ const AdminTracksCreate: React.FC = () => {
       address: null,
       city: '',
       website: null,
+      turns: null,
+      width: null,
+      maxDb: null,
+      bestLapTime: null,
+      bestLapTimePilot: null,
+      description: null,
     },
   });
 
@@ -64,7 +77,7 @@ const AdminTracksCreate: React.FC = () => {
   });
 
   const createTrackMutation = useMutation({
-    mutationFn: async (payload: Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'>) => {
+    mutationFn: async (payload: z.infer<typeof formSchema>) => { // Utilisation de z.infer<typeof formSchema>
       const response = await apiClient.post('/tracks', payload);
       return response.data;
     },
@@ -79,7 +92,7 @@ const AdminTracksCreate: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: Omit<TrackType, 'id' | 'slug' | 'createdAt' | 'updatedAt' | 'country' | 'trackDays'> = {
+    const payload: z.infer<typeof formSchema> = { // Utilisation de z.infer<typeof formSchema>
       ...values,
       name: values.name,
       countryId: values.countryId,
@@ -87,6 +100,12 @@ const AdminTracksCreate: React.FC = () => {
       city: values.city,
       address: values.address === '' ? null : values.address,
       website: values.website === '' ? null : values.website,
+      turns: values.turns === '' ? null : values.turns,
+      width: values.width === '' ? null : values.width,
+      maxDb: values.maxDb === undefined ? null : values.maxDb,
+      bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
+      bestLapTimePilot: values.bestLapTimePilot === '' ? null : values.bestLapTimePilot,
+      description: values.description === '' ? null : values.description,
     };
     createTrackMutation.mutate(payload);
   };
@@ -183,6 +202,84 @@ const AdminTracksCreate: React.FC = () => {
                     <FormLabel>{t('website')}</FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value || ''} placeholder={t('enter_website_url')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="turns"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('turns')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_number_of_turns')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="width"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('width')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_track_width')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="maxDb"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('max_db')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_max_db')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bestLapTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('best_laptime')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} placeholder="MM.SS.mmm" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bestLapTimePilot"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('best_laptime_pilot')}</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} placeholder={t('enter_best_laptime_pilot')} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel>{t('description')}</FormLabel>
+                    <FormControl>
+                      <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_track_description')} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

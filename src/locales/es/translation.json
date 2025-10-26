@@ -433,5 +433,14 @@
   "search_countries": "Buscar países...",
   "confirm_delete_country_title": "Confirmar eliminación",
   "confirm_delete_country_description": "¿Estás seguro de que quieres eliminar este país? Esta acción no se puede deshacer.",
-  "delete_country_button": "Eliminar país"
+  "delete_country_button": "Eliminar país",
+  "width": "Ancho",
+  "max_db": "Max dB",
+  "best_laptime_pilot": "Piloto mejor tiempo",
+  "description": "Descripción",
+  "enter_number_of_turns": "Introduce el número de curvas",
+  "enter_track_width": "Introduce el ancho de la pista",
+  "enter_max_db": "Introduce el máximo de dB",
+  "enter_best_laptime_pilot": "Introduce el piloto del mejor tiempo",
+  "enter_track_description": "Introduce la descripción de la pista"
 }
