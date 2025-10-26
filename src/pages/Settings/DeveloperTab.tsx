@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiKey, Permissions } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Link, useNavigate } => 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const columnHelper = createColumnHelper<ApiKey>();
 
