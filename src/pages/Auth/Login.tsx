@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import GoogleIcon from '@/components/GoogleIcon';
 import { LoginPayload } from '@/types';
 import { useTranslation } from 'react-i18next';
+import { PasswordInput } from '@/components/PasswordInput'; // Import the PasswordInput component
 
 const Login: React.FC = () => {
   const { login, loading } = useAuth();
@@ -79,7 +80,7 @@ const Login: React.FC = () => {
                     </Link>
                   </div>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <PasswordInput {...field} /> {/* Using PasswordInput here */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
