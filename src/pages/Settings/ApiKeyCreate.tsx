@@ -36,16 +36,18 @@ const ApiKeyCreate: React.FC = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="flex items-center justify-between mb-4">
-        <Button variant="outline" onClick={() => navigate(-1)}>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">{t('create_new_api_key')}</h1>
+        <Button variant="outline" onClick={() => navigate('/settings/developer')}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold flex-grow text-center">{t('create_new_api_key')}</h1>
-        <div className="w-10"></div> {/* Placeholder for alignment */}
       </div>
-      <Card className="w-full max-w-2xl mx-auto">
-        <CardContent className="p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('fill_in_api_key_details')}</CardTitle>
+        </CardHeader>
+        <CardContent>
           <ApiKeyForm onSave={handleCreateApiKey} onCancel={() => navigate('/settings/developer')} isSaving={isSavingApiKey} />
         </CardContent>
       </Card>
