@@ -23,7 +23,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ApiKey, Permissions, PermissionAction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn } => '@/lib/utils';
 
 interface ApiKeyFormProps {
   onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
@@ -42,13 +42,18 @@ const permissionActionsSchema = z.object({
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom de la clé API est requis." }),
   expiresAt: z.string().nullable().optional(),
-  permissions: z.record(
-    z.enum(['trackdays', 'vehicles', 'maintenances', 'tracks', 'countries', 'users']),
-    permissionActionsSchema
-  ), // Removed .default() here
+  permissions: z.object({ // Define as a direct object to ensure non-optional properties
+    trackdays: permissionActionsSchema,
+    vehicles: permissionActionsSchema,
+    maintenances: permissionActionsSchema,
+    tracks: permissionActionsSchema,
+    countries: permissionActionsSchema,
+    users: permissionActionsSchema,
+  }),
 });
 
-const defaultPermissions: Permissions = {
+// Explicitly type defaultPermissions to match the inferred type from formSchema['permissions']
+const defaultPermissionsForForm: z.infer<typeof formSchema>['permissions'] = {
   trackdays: { create: false, read: false, update: false, delete: false },
   vehicles: { create: false, read: false, update: false, delete: false },
   maintenances: { create: false, read: false, update: false, delete: false },
@@ -65,7 +70,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     defaultValues: {
       name: '',
       expiresAt: null,
-      permissions: defaultPermissions, // Set default here instead
+      permissions: defaultPermissionsForForm, // Use the explicitly typed default
     },
   });
 
@@ -73,7 +78,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
     onSave({
       name: values.name,
       expiresAt: values.expiresAt || null,
-      permissions: values.permissions,
+      permissions: values.permissions, // This should now be correctly typed as Permissions
     });
   };
 
