@@ -23,7 +23,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ApiKey, Permissions, PermissionAction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } => '@/lib/utils';
+import { cn } from '@/lib/utils'; // Correction ici
 
 interface ApiKeyFormProps {
   onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
