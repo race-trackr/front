@@ -300,15 +300,15 @@ const TrackdayEdit: React.FC = () => {
             name="weather"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('weather')}</FormLabel> {/* Removed '*' */}
-                <Select onValueChange={field.onChange} value={field.value || ''}> {/* Handle null/undefined */}
+                <FormLabel>{t('weather')}</FormLabel>
+                <Select onValueChange={(value) => field.onChange(value === 'null-option' ? null : value)} value={field.value || 'null-option'}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_weather_condition')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">{t('not_specified')}</SelectItem> {/* Option pour non spécifié */}
+                    <SelectItem value="null-option">{t('not_specified')}</SelectItem>
                     <SelectItem value="clear">{t('weather_clear')}</SelectItem>
                     <SelectItem value="cloudy">{t('weather_cloudy')}</SelectItem>
                     <SelectItem value="rainy">{t('weather_rainy')}</SelectItem>
@@ -349,15 +349,15 @@ const TrackdayEdit: React.FC = () => {
             name="trackCondition"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track_condition')}</FormLabel> {/* Removed '*' */}
-                <Select onValueChange={field.onChange} value={field.value || ''}> {/* Handle null/undefined */}
+                <FormLabel>{t('track_condition')}</FormLabel>
+                <Select onValueChange={(value) => field.onChange(value === 'null-option' ? null : value)} value={field.value || 'null-option'}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_track_condition')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">{t('not_specified')}</SelectItem> {/* Option pour non spécifié */}
+                    <SelectItem value="null-option">{t('not_specified')}</SelectItem>
                     <SelectItem value="wet">{t('track_condition_wet')}</SelectItem>
                     <SelectItem value="dry">{t('track_condition_dry')}</SelectItem>
                     <SelectItem value="moist">{t('track_condition_moist')}</SelectItem>
