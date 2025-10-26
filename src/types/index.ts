@@ -142,3 +142,20 @@ export interface AuthResponse {
   token: string;
   user: UserType;
 }
+
+export type PermissionAction = 'create' | 'read' | 'update' | 'delete';
+
+export type Permissions = {
+  [key: string]: {
+    [action in PermissionAction]: boolean;
+  };
+};
+
+export interface ApiKey {
+  id: string;
+  name: string;
+  key: string;
+  createdAt: string;
+  expiresAt: string | null;
+  permissions: Permissions;
+}
