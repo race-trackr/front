@@ -75,7 +75,7 @@ const AdminUsersCreate: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    createUserMutation.mutate(values);
+    createUserMutation.mutate(values as CreateUserPayload);
   };
 
   return (
