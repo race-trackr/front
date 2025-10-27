@@ -65,7 +65,7 @@ const TrackdayList: React.FC = () => {
     queryKey: ['trackdays', { page: currentPage, limit: itemsPerPage, search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: itemsPerPage,
-      offset: (currentPage - 1) * itemsPerPage + (currentPage === 1 ? 1 : 0), // Offset starts at 1 for the first page
+      offset: (currentPage - 1) * itemsPerPage + 1, // Offset starts at 1 for the first page
       searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
@@ -116,7 +116,7 @@ const TrackdayList: React.FC = () => {
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
 
-  const totalItems = paginatedTrackdaysResponse?.total || 0;
+  const totalItems = paginatedTrackdaysResponse?.meta?.total || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const paginatedTrackdays = paginatedTrackdaysResponse?.data || [];
 

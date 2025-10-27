@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
 
   // Extract the actual trackday data from the paginated response
   const recentTrackdays = recentTrackdaysResponse?.data || [];
-  const totalTrackdaysCount = recentTrackdaysResponse?.total || 0;
+  const totalTrackdaysCount = recentTrackdaysResponse?.meta?.total || 0;
 
   if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t("loading")}...</div>;
