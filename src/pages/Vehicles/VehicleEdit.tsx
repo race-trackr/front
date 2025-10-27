@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,18 +28,16 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, UserVehicleType, VehicleType, UpdateVehiclePayload } from '@/types/index';
-import { DatePicker } from '@/components/ui/date-picker';
-import { format } from 'date-fns';
+import { CreateVehiclePayload, UserVehicleType, VehicleCategory, UpdateVehiclePayload } from '@/types/index';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 
 const formSchema = z.object({
-  brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
-  model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
+  name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
   type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
-  image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(),
+  brand: z.string().nullable().optional(),
+  model: z.string().nullable().optional(),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
 });
@@ -57,11 +54,11 @@ const VehicleEdit: React.FC = () => {
   const form = useForm<CreateVehiclePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      brand: '',
-      model: '',
-      year: new Date().getFullYear(),
+      name: '',
       type: 'car',
-      image: null,
+      brand: null,
+      model: null,
+      year: null,
       licensePlate: null,
       details: null,
     },
@@ -76,11 +73,11 @@ const VehicleEdit: React.FC = () => {
   useEffect(() => {
     if (vehicle) {
       form.reset({
-        brand: vehicle.brand,
-        model: vehicle.model,
-        year: vehicle.year,
+        name: vehicle.name,
         type: vehicle.type,
-        image: vehicle.image || null,
+        brand: vehicle.brand || null,
+        model: vehicle.model || null,
+        year: vehicle.year || null,
         licensePlate: vehicle.licensePlate || null,
         details: vehicle.details || null,
       });
@@ -115,7 +112,11 @@ const VehicleEdit: React.FC = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: UpdateVehiclePayload = {
       ...values,
-      image: values.image === '' ? null : values.image,
+      name: values.name,
+      type: values.type,
+      brand: values.brand === '' ? null : values.brand,
+      model: values.model === '' ? null : values.model,
+      year: values.year === undefined ? null : values.year,
       licensePlate: values.licensePlate === '' ? null : values.licensePlate,
       details: values.details === '' ? null : values.details,
     };
@@ -144,7 +145,7 @@ const VehicleEdit: React.FC = () => {
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{`${vehicle.brand} ${vehicle.model}`}</h1>
+        <h1 className="text-3xl font-bold">{vehicle.name}</h1>
         <Button
           variant="destructive"
           size="icon"
@@ -153,7 +154,7 @@ const VehicleEdit: React.FC = () => {
           className="btn-danger"
         >
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle')}</span>
+          <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
         </Button>
       </div>
 
@@ -161,38 +162,12 @@ const VehicleEdit: React.FC = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="brand"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicle_brand')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>{t('vehicle_name')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder={t('enter_brand')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="model"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_model')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder={t('enter_model')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="year"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_year')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
+                  <Input {...field} placeholder={t('enter_vehicle_name')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -223,12 +198,12 @@ const VehicleEdit: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="licensePlate"
+            name="brand"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicle_license_plate')}</FormLabel>
+                <FormLabel>{t('vehicle_brand')}</FormLabel>
                 <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_license_plate')} />
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_brand_optional')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -236,12 +211,38 @@ const VehicleEdit: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="image"
+            name="model"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicle_image_url')}</FormLabel>
+                <FormLabel>{t('vehicle_model')}</FormLabel>
                 <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_image_url')} />
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_model_optional')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle_year')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year_optional')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="licensePlate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle_license_plate')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_license_plate')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

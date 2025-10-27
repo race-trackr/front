@@ -198,8 +198,8 @@
   "confirm_delete_maintenance_description": "Êtes-vous sûr de vouloir supprimer cet enregistrement de maintenance ? Cette action est irréversible.",
   "session_of_date": "Session du {{date}}",
   "edit_session_of_date": "Modifier la session du {{date}}",
-  "view_vehicle_name": "Voir {{brand}} {{model}}",
-  "edit_vehicle_name": "Modifier {{brand}} {{model}}",
+  "view_vehicle_name": "Voir {{name}}",
+  "edit_vehicle_name": "Modifier {{name}}",
   "view_maintenance_name_date": "Voir {{name}} ({{date}})",
   "edit_maintenance_name_date": "Modifier {{name}} ({{date}})",
   "edit_track_name": "Modifier la piste : {{name}}",
@@ -353,5 +353,8 @@
   "description": "Description",
   "enter_track_description": "Entrez une description pour la piste",
   "no_results": "Aucun résultat.",
-  "search_table": "Rechercher dans le tableau..."
+  "search_table": "Rechercher dans le tableau...",
+  "enter_brand_optional": "Entrez la marque (facultatif)",
+  "enter_model_optional": "Entrez le modèle (facultatif)",
+  "enter_year_optional": "Entrez l'année (facultatif)"
 }

@@ -198,8 +198,8 @@
   "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone.",
   "session_of_date": "Session of {{date}}",
   "edit_session_of_date": "Edit Session of {{date}}",
-  "view_vehicle_name": "View {{brand}} {{model}}",
-  "edit_vehicle_name": "Edit {{brand}} {{model}}",
+  "view_vehicle_name": "View {{name}}",
+  "edit_vehicle_name": "Edit {{name}}",
   "view_maintenance_name_date": "View {{name}} ({{date}})",
   "edit_maintenance_name_date": "Edit {{name}} ({{date}})",
   "edit_track_name": "Edit Track: {{name}}",
@@ -353,5 +353,8 @@
   "description": "Description",
   "enter_track_description": "Enter a description for the track",
   "no_results": "No results.",
-  "search_table": "Search table..."
+  "search_table": "Search table...",
+  "enter_brand_optional": "Enter brand (optional)",
+  "enter_model_optional": "Enter model (optional)",
+  "enter_year_optional": "Enter year (optional)"
 }

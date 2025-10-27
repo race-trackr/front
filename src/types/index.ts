@@ -50,7 +50,7 @@ export interface TrackType {
 
 export type WeatherCondition = 'clear' | 'cloudy' | 'rainy';
 export type TrackCondition = 'wet' | 'dry' | 'moist';
-export type VehicleType = 'car' | 'motorcycle' | 'karting' | 'other';
+export type VehicleCategory = 'car' | 'motorcycle' | 'karting' | 'other'; // Renamed from VehicleType to VehicleCategory
 export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other';
 
 export interface TrackDayType {
@@ -78,16 +78,17 @@ export interface TrackDayType {
 export interface UserVehicleType {
   id: number;
   userId: number;
-  brand: string;
-  model: string;
-  year: number;
-  type: VehicleType;
-  image: string | null;
-  licensePlate?: string | null;
-  details?: string | null;
+  name: string;
   slug: string;
-  createdAt: string;
-  updatedAt: string;
+  type: VehicleCategory; // Using VehicleCategory
+  brand: string | null;
+  model: string | null;
+  year: number | null;
+  licensePlate: string | null;
+  details: string | null;
+  createdAt: string; // Using string for DateTime consistency
+  updatedAt: string; // Using string for DateTime consistency
+
   user?: UserType;
   trackDays?: TrackDayType[];
   maintenances?: MaintenanceRecordType[];

@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -28,15 +27,15 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { createVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, VehicleType } from '@/types';
-import { ArrowLeft } from 'lucide-react'; // Import de l'icône ArrowLeft
+import { CreateVehiclePayload, VehicleCategory } from '@/types';
+import { ArrowLeft } from 'lucide-react';
 
 const formSchema = z.object({
-  brand: z.string().min(1, { message: "La marque du véhicule est requise." }),
-  model: z.string().min(1, { message: "Le modèle du véhicule est requis." }),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }),
+  name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
   type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
-  // image: z.string().url({ message: "L'URL de l'image est invalide." }).nullable().optional(), // Champ supprimé
+  brand: z.string().nullable().optional(),
+  model: z.string().nullable().optional(),
+  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
   licensePlate: z.string().nullable().optional(),
   details: z.string().nullable().optional(),
 });
@@ -46,14 +45,14 @@ const VehicleCreate: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const form = useForm<Omit<CreateVehiclePayload, 'image'>>({ // Mise à jour du type pour exclure 'image'
+  const form = useForm<CreateVehiclePayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      brand: '',
-      model: '',
-      year: new Date().getFullYear(),
+      name: '',
       type: 'car',
-      // image: null, // Supprimé
+      brand: null,
+      model: null,
+      year: null,
       licensePlate: null,
       details: null,
     },
@@ -72,17 +71,17 @@ const VehicleCreate: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: Omit<CreateVehiclePayload, 'image'> = { // Mise à jour du type pour exclure 'image'
+    const payload: CreateVehiclePayload = {
       ...values,
-      brand: values.brand,
-      model: values.model,
-      year: values.year,
+      name: values.name,
       type: values.type,
-      // image: values.image === '' ? null : values.image, // Supprimé
+      brand: values.brand === '' ? null : values.brand,
+      model: values.model === '' ? null : values.model,
+      year: values.year === undefined ? null : values.year,
       licensePlate: values.licensePlate === '' ? null : values.licensePlate,
       details: values.details === '' ? null : values.details,
     };
-    createVehicleMutation.mutate(payload as CreateVehiclePayload); // Cast pour correspondre à la mutation
+    createVehicleMutation.mutate(payload);
   };
 
   return (
@@ -98,38 +97,12 @@ const VehicleCreate: React.FC = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="brand"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('vehicle_brand')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>{t('vehicle_name')}<span className="text-destructive">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder={t('enter_brand')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="model"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_model')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder={t('enter_model')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="year"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_year')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
+                  <Input {...field} placeholder={t('enter_vehicle_name')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -160,6 +133,45 @@ const VehicleCreate: React.FC = () => {
           />
           <FormField
             control={form.control}
+            name="brand"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle_brand')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_brand_optional')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="model"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle_model')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_model_optional')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('vehicle_year')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year_optional')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="licensePlate"
             render={({ field }) => (
               <FormItem>
@@ -171,7 +183,6 @@ const VehicleCreate: React.FC = () => {
               </FormItem>
             )}
           />
-          {/* Champ 'image' supprimé */}
           <FormField
             control={form.control}
             name="details"

@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { getDashboardSummary } from "@/lib/api/dashboard";
 import { getTrackdays, deleteTrackday } from "@/lib/api/trackdays";
 import { getMaintenances, deleteMaintenance } from "@/lib/api/maintenances";
-import { getVehicles } from "@/lib/api/vehicles"; // Added this import
+import { getVehicles } from "@/lib/api/vehicles";
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
-import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types'; // Import PaginatedResponse
+import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 
@@ -29,10 +29,10 @@ const Dashboard: React.FC = () => {
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
 
   const {
-    data: recentTrackdaysResponse, // Renamed to reflect PaginatedResponse
+    data: recentTrackdaysResponse,
     isLoading: isLoadingTrackdays,
     isError: isErrorTrackdays,
-  } = useQuery<PaginatedResponse<TrackDayType>>({ // Updated type to PaginatedResponse
+  } = useQuery<PaginatedResponse<TrackDayType>>({
     queryKey: ["trackdays", { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
                       to={`/trackdays/${trackday.id}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
-                          {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId} -
+                          {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
                           {trackday.track?.name || trackday.trackId}
                         </p>
                         <p className="text-sm text-muted-foreground">
@@ -282,7 +282,7 @@ const Dashboard: React.FC = () => {
                     <Link to={`/maintenances/${maintenance.id}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
-                          {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : maintenance.userVehicleId}
+                          {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.name}` : maintenance.userVehicleId}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {format(new Date(maintenance.date), "PPP", {
@@ -293,9 +293,9 @@ const Dashboard: React.FC = () => {
                       </div>
                     </Link>
                     <div className="flex items-center gap-2 z-10">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
                           navigate(`/maintenances/edit/${maintenance.id}`);

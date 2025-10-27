@@ -202,7 +202,7 @@ const MaintenanceEdit: React.FC = () => {
                         ) : (
                           vehicles.map((vehicle) => (
                             <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                              {vehicle.brand} {vehicle.model} ({vehicle.licensePlate || t('not_specified')})
+                              {vehicle.name} ({vehicle.licensePlate || t('not_specified')})
                             </SelectItem>
                           ))
                         )}

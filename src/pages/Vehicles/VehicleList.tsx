@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -87,19 +89,18 @@ const VehicleList: React.FC = () => {
           vehicles?.map((vehicle) => (
             <Card key={vehicle.id} className="flex flex-col">
               <CardHeader>
-                <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle>
+                <CardTitle>{vehicle.name}</CardTitle>
                 <div className="flex items-center text-sm text-muted-foreground">
                   {getVehicleIcon(vehicle.type)}
-                  <span className="ml-2">({vehicle.year}) - {t(`type_${vehicle.type.toLowerCase()}`)}</span>
+                  <span className="ml-2">
+                    {vehicle.brand && vehicle.model && `(${vehicle.brand} ${vehicle.model})`}
+                    {vehicle.year && ` (${vehicle.year})`}
+                    {` - ${t(`type_${vehicle.type.toLowerCase()}`)}`}
+                  </span>
                 </div>
               </CardHeader>
               <CardContent className="flex-grow space-y-2">
                 <p><strong>{t('license_plate')}:</strong> {vehicle.licensePlate || t('not_specified')}</p>
-                {vehicle.image && (
-                  <div className="mt-4">
-                    <img src={vehicle.image} alt={`${vehicle.brand} ${vehicle.model}`} className="max-h-32 w-full object-cover rounded-md" />
-                  </div>
-                )}
               </CardContent>
               <div className="p-4 border-t flex justify-between items-center">
                 <Button

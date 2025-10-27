@@ -213,8 +213,8 @@
   "confirm_delete_maintenance_description": "Sei sicuro di voler eliminare questo record di manutenzione? Questa azione non può essere annullata.",
   "session_of_date": "Sessione del {{date}}",
   "edit_session_of_date": "Modifica sessione del {{date}}",
-  "view_vehicle_name": "Visualizza {{brand}} {{model}}",
-  "edit_vehicle_name": "Modifica {{brand}} {{model}}",
+  "view_vehicle_name": "Visualizza {{name}}",
+  "edit_vehicle_name": "Modifica {{name}}",
   "view_maintenance_name_date": "Visualizza {{name}} ({{date}})",
   "edit_maintenance_name_date": "Modifica {{name}} ({{date}})",
   "edit_track_name": "Modifica pista: {{name}}",
@@ -267,7 +267,7 @@
   "enter_next_due_mileage": "Inserisci prossimo chilometraggio di scadenza",
   "optional_next_due_mileage": "Prossimo chilometraggio di scadenza opzionale per manutenzione ricorrente.",
   "total_cost": "Costo totale",
-  "upcoming_maintenances": "Manutenzioni imminenti",
+  "upcoming_maintenances": "Manutenzioni imminentes",
   "maintenance_cost_over_time": "Costo manutenzione nel tempo",
   "no_maintenance_data_for_chart": "Nessun dato di manutenzione disponibile per il grafico.",
   "average_laptime": "Tempo medio sul giro",
@@ -368,5 +368,8 @@
   "description": "Descrizione",
   "enter_track_description": "Inserisci una descrizione per la pista",
   "no_results": "Nessun risultato.",
-  "search_table": "Cerca nella tabella..."
+  "search_table": "Cerca nella tabella...",
+  "enter_brand_optional": "Inserisci la marca (opzionale)",
+  "enter_model_optional": "Inserisci il modello (opzionale)",
+  "enter_year_optional": "Inserisci l'anno (opzionale)"
 }

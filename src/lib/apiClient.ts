@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserProfileFormValues } from '@/components/UserProfileForm'; // Import the type
+// Removed: import { UserProfileFormValues } from '@/components/UserProfileForm'; // Import the type
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333/api/v1'; // Default API URL
 

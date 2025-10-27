@@ -83,7 +83,7 @@ const VehicleView: React.FC = () => {
         <Button variant="outline" onClick={() => navigate('/vehicles')}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{`${vehicle.brand} ${vehicle.model}`}</h1>
+        <h1 className="text-3xl font-bold">{vehicle.name}</h1>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
             <Link to={`/vehicles/edit/${vehicle.id}`}>
@@ -110,29 +110,35 @@ const VehicleView: React.FC = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_brand')}</p>
-            <p className="text-lg">{vehicle.brand}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_model')}</p>
-            <p className="text-lg">{vehicle.model}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_year')}</p>
-            <p className="text-lg">{vehicle.year}</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_name')}</p>
+            <p className="text-lg">{vehicle.name}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{t('vehicle_type')}</p>
             <p className="text-lg">{t(`type_${vehicle.type.toLowerCase()}`)}</p>
           </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('vehicle_license_plate')}</p>
-            <p className="text-lg">{vehicle.licensePlate || t('not_specified')}</p>
-          </div>
-          {vehicle.image && (
+          {vehicle.brand && (
             <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_image')}</p>
-              <img src={vehicle.image} alt={`${vehicle.brand} ${vehicle.model}`} className="mt-2 max-h-32 object-cover rounded-md" />
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_brand')}</p>
+              <p className="text-lg">{vehicle.brand}</p>
+            </div>
+          )}
+          {vehicle.model && (
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_model')}</p>
+              <p className="text-lg">{vehicle.model}</p>
+            </div>
+          )}
+          {vehicle.year && (
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_year')}</p>
+              <p className="text-lg">{vehicle.year}</p>
+            </div>
+          )}
+          {vehicle.licensePlate && (
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_license_plate')}</p>
+              <p className="text-lg">{vehicle.licensePlate}</p>
             </div>
           )}
           {vehicle.details && (

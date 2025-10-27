@@ -180,7 +180,7 @@ const TrackdayCreate: React.FC = () => {
                     ) : (
                       vehicles.map((vehicle) => (
                         <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                          {vehicle.brand} {vehicle.model} ({vehicle.licensePlate || t('not_specified')})
+                          {vehicle.name} ({vehicle.licensePlate || t('not_specified')})
                         </SelectItem>
                       ))
                     )}
@@ -224,8 +224,8 @@ const TrackdayCreate: React.FC = () => {
                     onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
                     disabled={field.disabled}
                     placeholder={t('pick_a_date')}
-                    open={isDatePickerOpen} // Passe l'état d'ouverture
-                    onOpenChange={setIsDatePickerOpen} // Passe la fonction de mise à jour de l'état
+                    open={isDatePickerOpen}
+                    onOpenChange={setIsDatePickerOpen}
                   />
                 </FormControl>
                 <FormMessage />
