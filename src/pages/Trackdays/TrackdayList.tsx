@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TrackDayType, UserVehicleType, TrackType } from '@/types';
+import { TrackDayType, UserVehicleType, TrackType, PaginatedResponse } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -59,12 +59,13 @@ const TrackdayList: React.FC = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10; // Fixed limit of 10 items per page
+  const itemsPerPage = 9; // Fixed limit of 9 items per page
 
-  const { data: allTrackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId, fetchAll: true }], // Fetch all for client-side filtering/pagination
+  const { data: paginatedTrackdaysResponse, isLoading, isError } = useQuery<PaginatedResponse<TrackDayType>>({
+    queryKey: ['trackdays', { page: currentPage, limit: itemsPerPage, search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
-      limit: 0, // Fetch all items
+      limit: itemsPerPage,
+      offset: (currentPage - 1) * itemsPerPage,
       searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
@@ -115,12 +116,9 @@ const TrackdayList: React.FC = () => {
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
 
-  // Client-side pagination logic
-  const totalItems = allTrackdays?.length || 0;
+  const totalItems = paginatedTrackdaysResponse?.total || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedTrackdays = allTrackdays?.slice(startIndex, endIndex) || [];
+  const paginatedTrackdays = paginatedTrackdaysResponse?.data || [];
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
@@ -182,7 +180,7 @@ const TrackdayList: React.FC = () => {
 
       {isLoading || isLoadingVehicles || isLoadingTracks ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 3 }).map((_, index) => (
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
             <Card key={index} className="flex flex-col">
               <CardHeader>
                 <Skeleton className="h-6 w-3/4 mb-2" />

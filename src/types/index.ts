@@ -168,3 +168,11 @@ export interface ApiKey {
   expiresAt: string | null;
   permissions: Permissions;
 }
+
+// New interface for paginated responses
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  limit: number;
+  offset: number;
+}

@@ -1,5 +1,5 @@
 import apiClient from '@/lib/apiClient';
-import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload } from '@/types';
+import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload, PaginatedResponse } from '@/types';
 
 interface GetTrackdaysParams {
   limit?: number;
@@ -12,11 +12,11 @@ interface GetTrackdaysParams {
   // endDate?: string;
 }
 
-export const getTrackdays = async (params?: GetTrackdaysParams): Promise<TrackDayType[]> => {
+export const getTrackdays = async (params?: GetTrackdaysParams): Promise<PaginatedResponse<TrackDayType>> => {
   const response = await apiClient.get('/trackdays', {
     params: params,
   });
-  return response.data;
+  return response.data; // Assuming API returns { data: T[], total: number, limit: number, offset: number }
 };
 
 export const getTrackdayById = async (id: string): Promise<TrackDayType> => {
