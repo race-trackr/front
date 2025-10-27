@@ -3,7 +3,7 @@ import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload, PaginatedRe
 
 interface GetTrackdaysParams {
   limit?: number;
-  offset?: number;
+  page?: number; // Changed from offset to page
   searchTerm?: string;
   vehicleId?: number;
   trackId?: number;
