@@ -202,5 +202,13 @@
   "back_to_trackdays": "Torna alle giornate in pista",
   "edit_trackday_button": "Modifica giornata in pista",
   "pagination_previous": "Precedente",
-  "pagination_next": "Successivo"
+  "pagination_next": "Successivo",
+  "search_trackdays": "Cerca giornate in pista",
+  "filter_by_vehicle": "Filtra per veicolo",
+  "all_vehicles": "Tutti i veicoli",
+  "filter_by_track": "Filtra per pista",
+  "all_tracks": "Tutte le piste",
+  "error_loading_dashboard_summary": "Errore nel caricamento del riepilogo del cruscotto.",
+  "confirm_delete_maintenance_title": "Conferma eliminazione manutenzione",
+  "confirm_delete_maintenance_description": "Sei sicuro di voler eliminare questo record di manutenzione? Questa azione non può essere annullata."
 }

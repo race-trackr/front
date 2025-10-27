@@ -187,5 +187,13 @@
   "back_to_trackdays": "Retour aux journées en piste",
   "edit_trackday_button": "Modifier la journée en piste",
   "pagination_previous": "Précédent",
-  "pagination_next": "Suivant"
+  "pagination_next": "Suivant",
+  "search_trackdays": "Rechercher des journées en piste",
+  "filter_by_vehicle": "Filtrer par véhicule",
+  "all_vehicles": "Tous les véhicules",
+  "filter_by_track": "Filtrer par piste",
+  "all_tracks": "Toutes les pistes",
+  "error_loading_dashboard_summary": "Erreur lors du chargement du résumé du tableau de bord.",
+  "confirm_delete_maintenance_title": "Confirmer la suppression de la maintenance",
+  "confirm_delete_maintenance_description": "Êtes-vous sûr de vouloir supprimer cet enregistrement de maintenance ? Cette action est irréversible."
 }

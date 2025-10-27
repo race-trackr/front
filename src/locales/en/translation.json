@@ -187,5 +187,13 @@
   "back_to_trackdays": "Back to Trackdays",
   "edit_trackday_button": "Edit Trackday",
   "pagination_previous": "Previous",
-  "pagination_next": "Next"
+  "pagination_next": "Next",
+  "search_trackdays": "Search trackdays",
+  "filter_by_vehicle": "Filter by vehicle",
+  "all_vehicles": "All vehicles",
+  "filter_by_track": "Filter by track",
+  "all_tracks": "All tracks",
+  "error_loading_dashboard_summary": "Error loading dashboard summary.",
+  "confirm_delete_maintenance_title": "Confirm Delete Maintenance",
+  "confirm_delete_maintenance_description": "Are you sure you want to delete this maintenance record? This action cannot be undone."
 }

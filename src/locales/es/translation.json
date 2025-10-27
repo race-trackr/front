@@ -202,5 +202,13 @@
   "back_to_trackdays": "Volver a días de pista",
   "edit_trackday_button": "Editar día de pista",
   "pagination_previous": "Anterior",
-  "pagination_next": "Siguiente"
+  "pagination_next": "Siguiente",
+  "search_trackdays": "Buscar días de pista",
+  "filter_by_vehicle": "Filtrar por vehículo",
+  "all_vehicles": "Todos los vehículos",
+  "filter_by_track": "Filtrar por pista",
+  "all_tracks": "Todas las pistas",
+  "error_loading_dashboard_summary": "Error al cargar el resumen del panel de control.",
+  "confirm_delete_maintenance_title": "Confirmar eliminación de mantenimiento",
+  "confirm_delete_maintenance_description": "¿Estás seguro de que quieres eliminar este registro de mantenimiento? Esta acción no se puede deshacer."
 }
