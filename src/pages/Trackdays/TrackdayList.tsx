@@ -33,6 +33,15 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDebounce from '@/hooks/useDebounce';
 import { Combobox } from '@/components/ui/combobox';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 const TrackdayList: React.FC = () => {
   const { t } = useTranslation();
@@ -48,10 +57,14 @@ const TrackdayList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
 
-  const { data: trackdays, isLoading, isError } = useQuery<TrackDayType[]>({
-    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId }],
+  // Pagination states
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10; // Fixed limit of 10 items per page
+
+  const { data: allTrackdays, isLoading, isError } = useQuery<TrackDayType[]>({
+    queryKey: ['trackdays', { search: debouncedSearch, filterVehicleId, filterTrackId, fetchAll: true }], // Fetch all for client-side filtering/pagination
     queryFn: () => getTrackdays({
-      limit: 0,
+      limit: 0, // Fetch all items
       searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
@@ -101,6 +114,19 @@ const TrackdayList: React.FC = () => {
     })) || [];
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
+
+  // Client-side pagination logic
+  const totalItems = allTrackdays?.length || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedTrackdays = allTrackdays?.slice(startIndex, endIndex) || [];
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   if (isError) {
     return <div className="space-y-6 p-4 text-center text-red-500">{t('error_loading_trackdays')}</div>;
@@ -175,52 +201,73 @@ const TrackdayList: React.FC = () => {
             </Card>
           ))}
         </div>
-      ) : trackdays && trackdays.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trackdays.map((trackday) => (
-            <Card key={trackday.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {trackday.track?.name || trackday.trackId} - {format(new Date(trackday.date), 'PPP')}
-                </CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : t('not_specified_vehicle')}
-                </p>
-              </CardHeader>
-              <CardContent className="flex-grow space-y-2">
-                <p><strong>{t('best_laptime')}:</strong> {trackday.bestLapTime || t('no_best_laptime')}</p>
-                <p><strong>{t('total_laps')}:</strong> {trackday.totalLaps || t('not_specified')}</p>
-                <p><strong>{t('total_distance')}:</strong> {trackday.totalDistance ? `${trackday.totalDistance} km` : t('not_specified')}</p>
-              </CardContent>
-              <div className="p-4 border-t flex items-center justify-between gap-2">
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => handleDeleteClick(trackday.id)}
-                  disabled={deleteTrackdayMutation.isPending}
-                  className="btn-danger"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
-                </Button>
-                <div className="flex gap-2">
-                  <Button asChild variant="outline" size="icon">
-                    <Link to={`/trackdays/${trackday.id}`}>
-                      <Eye className="h-4 w-4" />
-                      <span className="sr-only">{t('view_details')}</span>
-                    </Link>
+      ) : paginatedTrackdays.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedTrackdays.map((trackday) => (
+              <Card key={trackday.id} className="flex flex-col">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    {trackday.track?.name || trackday.trackId} - {format(new Date(trackday.date), 'PPP')}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : t('not_specified_vehicle')}
+                  </p>
+                </CardHeader>
+                <CardContent className="flex-grow space-y-2">
+                  <p><strong>{t('best_laptime')}:</strong> {trackday.bestLapTime || t('no_best_laptime')}</p>
+                  <p><strong>{t('total_laps')}:</strong> {trackday.totalLaps || t('not_specified')}</p>
+                  <p><strong>{t('total_distance')}:</strong> {trackday.totalDistance ? `${trackday.totalDistance} km` : t('not_specified')}</p>
+                </CardContent>
+                <div className="p-4 border-t flex items-center justify-between gap-2">
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => handleDeleteClick(trackday.id)}
+                    disabled={deleteTrackdayMutation.isPending}
+                    className="btn-danger"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
                   </Button>
-                  <Button asChild variant="outline" size="icon">
-                    <Link to={`/trackdays/edit/${trackday.id}`}>
-                      <Edit className="h-4 w-4" />
-                      <span className="sr-only">{t('edit_trackday_button')}</span>
-                    </Link>
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button asChild variant="outline" size="icon">
+                      <Link to={`/trackdays/${trackday.id}`}>
+                        <Eye className="h-4 w-4" />
+                        <span className="sr-only">{t('view_details')}</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="icon">
+                      <Link to={`/trackdays/edit/${trackday.id}`}>
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">{t('edit_trackday_button')}</span>
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
-        </div>
+              </Card>
+            ))}
+          </div>
+          {totalPages > 1 && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink isActive={page === currentPage} onClick={() => handlePageChange(page)}>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
+        </>
       ) : (
         <Card className="w-full mx-auto text-center p-6">
           <CardContent className="flex flex-col items-center justify-center space-y-4">
