@@ -13,7 +13,7 @@ import { getMaintenances, deleteMaintenance } from "@/lib/api/maintenances";
 import { getVehicles } from "@/lib/api/vehicles"; // Added this import
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
-import { TrackDayType, UserVehicleType, MaintenanceRecordType } from '@/types';
+import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types'; // Import PaginatedResponse
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 
@@ -29,10 +29,10 @@ const Dashboard: React.FC = () => {
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
 
   const {
-    data: recentTrackdays,
+    data: recentTrackdaysResponse, // Renamed to reflect PaginatedResponse
     isLoading: isLoadingTrackdays,
     isError: isErrorTrackdays,
-  } = useQuery<TrackDayType[]>({
+  } = useQuery<PaginatedResponse<TrackDayType>>({ // Updated type to PaginatedResponse
     queryKey: ["trackdays", { limit: 3 }],
     queryFn: () => getTrackdays({ limit: 3 }),
   });
@@ -120,6 +120,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Extract the actual trackday data from the paginated response
+  const recentTrackdays = recentTrackdaysResponse?.data || [];
+  const totalTrackdaysCount = recentTrackdaysResponse?.total || 0;
+
   if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
     return <div>{t("loading")}...</div>;
   }
@@ -144,7 +148,7 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {recentTrackdays?.length || 0}
+              {totalTrackdaysCount}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("total_trackdays")}
