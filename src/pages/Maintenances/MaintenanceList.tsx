@@ -162,6 +162,7 @@ const MaintenanceList: React.FC = () => {
                       size="icon" 
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent the outer Link from triggering
+                        e.preventDefault(); // Prevent default navigation behavior
                         navigate(`/maintenances/edit/${maintenance.id}`);
                       }}
                     >
@@ -172,7 +173,8 @@ const MaintenanceList: React.FC = () => {
                       variant="destructive"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.stopPropagation(); // Prevent the outer Link from triggering
+                        e.preventDefault(); // Prevent default navigation behavior
                         handleDeleteClick(maintenance.id);
                       }}
                       disabled={deleteMaintenanceMutation.isPending}
