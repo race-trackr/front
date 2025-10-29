@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error: any) {
           console.error('AuthStore: login error', error.response?.data || error.message);
           set({ loading: false });
-          showError(error.response?.data?.message || i18n.t('login_failed'));
+          showError(i18n.t('an_unexpected_error_occurred')); // Generic error message
           throw error;
         }
       },
@@ -71,7 +71,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error: any) {
           console.error('AuthStore: registration error', error.response?.data || error.message);
           set({ loading: false });
-          showError(error.response?.data?.message || i18n.t('registration_failed'));
+          showError(i18n.t('an_unexpected_error_occurred')); // Generic error message
           throw error;
         }
       },

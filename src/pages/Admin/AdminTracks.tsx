@@ -27,6 +27,9 @@ const AdminTracks: React.FC = () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const deleteTrackMutation = useMutation({
@@ -40,7 +43,7 @@ const AdminTracks: React.FC = () => {
       setTrackToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_track'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setTrackToDelete(null);
     },

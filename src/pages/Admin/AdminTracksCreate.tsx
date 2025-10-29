@@ -72,6 +72,9 @@ const AdminTracksCreate: React.FC = () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const createTrackMutation = useMutation({
@@ -85,7 +88,7 @@ const AdminTracksCreate: React.FC = () => {
       navigate('/admin/tracks');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_create_track'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

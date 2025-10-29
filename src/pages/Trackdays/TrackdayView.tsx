@@ -38,7 +38,7 @@ const TrackdayView: React.FC = () => {
       navigate('/trackdays');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

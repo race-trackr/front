@@ -35,6 +35,9 @@ const VehicleList: React.FC = () => {
   const { data: vehicles, isLoading, isError } = useQuery<UserVehicleType[]>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const deleteVehicleMutation = useMutation({
@@ -46,7 +49,7 @@ const VehicleList: React.FC = () => {
       setVehicleToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_vehicle'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setVehicleToDelete(null);
     },

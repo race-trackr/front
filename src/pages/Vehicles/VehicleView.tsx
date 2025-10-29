@@ -34,6 +34,9 @@ const VehicleView: React.FC = () => {
     queryKey: ['vehicleMaintenances', vehicleId],
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const deleteVehicleMutation = useMutation({
@@ -44,7 +47,7 @@ const VehicleView: React.FC = () => {
       navigate('/vehicles');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_vehicle'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

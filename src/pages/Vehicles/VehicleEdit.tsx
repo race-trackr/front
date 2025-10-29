@@ -93,7 +93,7 @@ const VehicleEdit: React.FC = () => {
       navigate(`/vehicles/${vehicleId}`);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_update_vehicle'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
@@ -105,7 +105,7 @@ const VehicleEdit: React.FC = () => {
       navigate('/vehicles');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_vehicle'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

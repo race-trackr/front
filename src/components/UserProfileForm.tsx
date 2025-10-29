@@ -95,6 +95,9 @@ const UserProfileForm: React.FC = () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   useEffect(() => {
@@ -123,7 +126,7 @@ const UserProfileForm: React.FC = () => {
       toast.success(t('profile_updated_successfully'));
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_update_profile'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
@@ -140,7 +143,7 @@ const UserProfileForm: React.FC = () => {
       form.resetField('confirmNewPassword');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_update_password'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

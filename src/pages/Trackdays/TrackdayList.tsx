@@ -70,16 +70,25 @@ const TrackdayList: React.FC = () => {
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const { data: vehicles, isLoading: isLoadingVehicles } = useQuery<UserVehicleType[]>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const { data: tracks, isLoading: isLoadingTracks } = useQuery<TrackType[]>({
     queryKey: ['tracks'],
     queryFn: () => getTracks(),
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const deleteTrackdayMutation = useMutation({
@@ -91,7 +100,7 @@ const TrackdayList: React.FC = () => {
       setTrackdayToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_trackday'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },

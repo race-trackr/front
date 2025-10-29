@@ -27,6 +27,9 @@ const AdminCountries: React.FC = () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const deleteCountryMutation = useMutation({
@@ -40,7 +43,7 @@ const AdminCountries: React.FC = () => {
       setCountryToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_country'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setCountryToDelete(null);
     },

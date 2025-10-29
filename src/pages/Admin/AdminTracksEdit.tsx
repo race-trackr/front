@@ -82,6 +82,9 @@ const AdminTracksEdit: React.FC = () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   useEffect(() => {
@@ -114,7 +117,7 @@ const AdminTracksEdit: React.FC = () => {
       navigate('/admin/tracks');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_update_track'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
@@ -128,7 +131,7 @@ const AdminTracksEdit: React.FC = () => {
       navigate('/admin/tracks');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || t('failed_to_delete_track'));
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 

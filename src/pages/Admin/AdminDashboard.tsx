@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/apiClient';
 import { TrackType, CountryType } from '@/types';
+import { toast } from 'sonner';
 
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -17,6 +18,9 @@ const AdminDashboard: React.FC = () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    },
   });
 
   const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
@@ -24,6 +28,9 @@ const AdminDashboard: React.FC = () => {
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
