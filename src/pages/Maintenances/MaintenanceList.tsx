@@ -130,7 +130,17 @@ const MaintenanceList: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {maintenances && maintenances.length === 0 ? (
-          <p className="text-muted-foreground">{t('no_maintenances_recorded')}</p>
+          <Card className="w-full mx-auto text-center p-6 col-span-full">
+            <CardContent className="flex flex-col items-center justify-center space-y-4">
+              <Wrench className="h-12 w-12 text-muted-foreground" />
+              <p className="text-muted-foreground mb-4">{t('no_maintenances_recorded')}</p>
+              <Button asChild className="btn-primary-gradient">
+                <Link to="/maintenances/create">
+                  <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_maintenance')}
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
           maintenances?.map((maintenance) => (
             <Card 

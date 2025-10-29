@@ -95,7 +95,17 @@ const VehicleList: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {vehicles && vehicles.length === 0 ? ( // Accessing vehicles safely
-          <p className="text-muted-foreground">{t('no_vehicles_added')}</p>
+          <Card className="w-full mx-auto text-center p-6 col-span-full">
+            <CardContent className="flex flex-col items-center justify-center space-y-4">
+              <Car className="h-12 w-12 text-muted-foreground" />
+              <p className="text-muted-foreground mb-4">{t('no_vehicles_added')}</p>
+              <Button asChild className="btn-primary-gradient">
+                <Link to="/vehicles/create">
+                  <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_vehicle')}
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
           vehicles?.map((vehicle) => ( // Accessing vehicles safely
             <Card key={vehicle.id} className="flex flex-col">
