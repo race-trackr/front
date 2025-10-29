@@ -36,7 +36,7 @@ const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),
-  trackId: z.coerce.number().min(1, { message: "La piste est requise." }),
+  trackId: z.coerce.number().min(1, { message: "La piste est requise." }).nullable(),
   date: z.string().min(1, { message: "La date est requise." }),
   weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }).nullable().optional(), // Rendu optionnel
   airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }).nullable().optional(),
@@ -210,7 +210,7 @@ const TrackdayEdit: React.FC = () => {
           className="btn-danger"
         >
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday')}</span>
+          <span className="sr-only">{deleteTrackdayMutation.isPending ? t('deleting') : t('delete_trackday_button')}</span>
         </Button>
       </div>
 
@@ -451,6 +451,17 @@ const TrackdayEdit: React.FC = () => {
           </div>
         </form>
       </Form>
+
+      <ConfirmDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={t('confirm_delete_trackday_title')}
+        description={t('confirm_delete_trackday_description')}
+        confirmButtonText={t('delete_trackday_button')}
+        cancelButtonText={t('cancel')}
+        isConfirming={deleteTrackdayMutation.isPending}
+      />
     </div>
   );
 };

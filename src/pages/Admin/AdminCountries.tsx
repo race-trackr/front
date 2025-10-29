@@ -93,7 +93,7 @@ const AdminCountries: React.FC = () => {
             className="btn-danger"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteCountryMutation.isPending ? t('deleting') : t('delete_country')}</span>
+            <span className="sr-only">{deleteCountryMutation.isPending ? t('deleting') : t('delete_country_button')}</span>
           </Button>
         </div>
       ),

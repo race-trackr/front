@@ -179,7 +179,7 @@ const AdminTracksEdit: React.FC = () => {
           className="btn-danger"
         >
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">{deleteTrackMutation.isPending ? t('deleting') : t('delete_track')}</span>
+          <span className="sr-only">{deleteTrackMutation.isPending ? t('deleting') : t('delete_track_button')}</span>
         </Button>
       </div>
 

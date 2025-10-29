@@ -11,14 +11,14 @@ import { Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const LanguageSwitcher: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const currentLanguage = i18n.language;
 
   const languages = {
-    en: 'English',
-    fr: 'Français',
-    it: 'Italiano',
-    es: 'Español',
+    en: 'language_english',
+    fr: 'language_french',
+    it: 'language_italian',
+    es: 'language_spanish',
   };
 
   const changeLanguage = (lng: string) => {
@@ -30,11 +30,11 @@ const LanguageSwitcher: React.FC = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
           <Globe className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Select language</span>
+          <span className="sr-only">{t('select_language')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {Object.entries(languages).map(([code, name]) => (
+        {Object.entries(languages).map(([code, nameKey]) => (
           <DropdownMenuItem
             key={code}
             onClick={() => changeLanguage(code)}
@@ -42,7 +42,7 @@ const LanguageSwitcher: React.FC = () => {
               currentLanguage === code && "bg-accent text-accent-foreground"
             )}
           >
-            {name}
+            {t(nameKey)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
