@@ -1,3 +1,4 @@
+' to 'from'.">
 "use client";
 
 import React, { useEffect } from 'react';
@@ -282,9 +283,7 @@ const TrackdayList: React.FC = () => {
           {totalPages > 1 && (
             <Pagination>
               <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                </PaginationItem>
+                <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <PaginationItem key={page}>
                     <PaginationLink isActive={page === currentPage} onClick={() => handlePageChange(page)}>
@@ -292,9 +291,7 @@ const TrackdayList: React.FC = () => {
                     </PaginationLink>
                   </PaginationItem>
                 ))}
-                <PaginationItem>
-                  <PaginationNext onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-                </PaginationItem>
+                <PaginationNext onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
               </PaginationContent>
             </Pagination>
           )}
