@@ -92,7 +92,7 @@
   "turns": "Curvas",
   "manage_countries": "Gestionar países",
   "add_new_country": "Añadir nuevo país",
-  "no_countries_added": "Aún no hay países añadidos.",
+  "no_countries_added": "Aún no hay países añadidas.",
   "timezone": "Zona horaria",
   "create_new_country": "Crear nuevo país",
   "country_details": "Detalles del país",
@@ -443,5 +443,6 @@
   "ends_on": "Termina el",
   "manage_subscription": "Gestionar suscripción",
   "no_active_subscription": "No se encontró ninguna suscripción activa.",
-  "free_tier_active": "Actualmente estás en el nivel Gratuito."
+  "free_tier_active": "Actualmente estás en el nivel Gratuito.",
+  "no_vehicles_added": "Aún no hay vehículos añadidos. ¡Empieza añadiendo uno!"
 }

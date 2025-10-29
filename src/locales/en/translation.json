@@ -428,5 +428,6 @@
   "ends_on": "Ends on",
   "manage_subscription": "Manage Subscription",
   "no_active_subscription": "No active subscription found.",
-  "free_tier_active": "You are currently on the Free tier."
+  "free_tier_active": "You are currently on the Free tier.",
+  "no_vehicles_added": "No vehicles added yet. Start by adding one!"
 }

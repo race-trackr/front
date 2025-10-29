@@ -443,5 +443,6 @@
   "ends_on": "Se termine le",
   "manage_subscription": "Gérer l'abonnement",
   "no_active_subscription": "Aucun abonnement actif trouvé.",
-  "free_tier_active": "Vous êtes actuellement sur le plan gratuit."
+  "free_tier_active": "Vous êtes actuellement sur le plan gratuit.",
+  "no_vehicles_added": "Nessun veicolo aggiunto. Inizia aggiungendone uno!"
 }
