@@ -108,30 +108,30 @@ const App: React.FC = () => {
                   handle: { crumb: () => t('create_new_trackday') },
                 },
                 {
-                  path: ":id",
+                  path: ":uuid", // Changed to :uuid
                   element: <TrackdayView />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
+                    const trackday = await getTrackdayById(params.uuid!); // Changed to params.uuid!
                     return { trackday };
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
                       const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
+                      return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.uuid || '' }); // Changed to uuid
                     }
                   },
                 },
                 {
-                  path: "edit/:id",
+                  path: "edit/:uuid", // Changed to :uuid
                   element: <TrackdayEdit />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
+                    const trackday = await getTrackdayById(params.uuid!); // Changed to params.uuid!
                     return { trackday };
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
                       const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
+                      return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.uuid || '' }); // Changed to uuid
                     }
                   },
                 },

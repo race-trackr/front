@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
 const TrackdayView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { uuid } = useParams<{ uuid: string }>(); // Changed from id to uuid
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
@@ -25,19 +25,19 @@ const TrackdayView: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({
-    queryKey: ['trackday', id],
-    queryFn: () => getTrackdayById(id!),
-    enabled: !!id,
+    queryKey: ['trackday', uuid], // Changed queryKey to use uuid
+    queryFn: () => getTrackdayById(uuid!),
+    enabled: !!uuid,
   });
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: () => deleteTrackday(id!),
+    mutationFn: () => deleteTrackday(uuid!), // Changed to uuid!
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
       toast.success(t('trackday_deleted_successfully'));
       navigate('/trackdays');
     },
-    onError: (error: any) => {
+        onError: (error: any) => {
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });

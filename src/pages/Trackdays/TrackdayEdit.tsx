@@ -60,7 +60,7 @@ const formSchema = z.object({
 });
 
 const TrackdayEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { uuid } = useParams<{ uuid: string }>(); // Changed from id to uuid
   const navigate = useNavigate();
   const { t, i18n } = useTranslation(); // Destructure i18n
   const queryClient = useQueryClient();
@@ -87,9 +87,9 @@ const TrackdayEdit: React.FC = () => {
   });
 
   const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({
-    queryKey: ['trackday', id],
-    queryFn: () => getTrackdayById(id!),
-    enabled: !!id,
+    queryKey: ['trackday', uuid], // Changed queryKey to use uuid
+    queryFn: () => getTrackdayById(uuid!),
+    enabled: !!uuid,
   });
 
   const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
@@ -125,12 +125,12 @@ const TrackdayEdit: React.FC = () => {
   }, [trackday, form]);
 
   const updateTrackdayMutation = useMutation({
-    mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(id!, payload),
+    mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(uuid!, payload), // Changed to uuid!
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trackday', id] });
+      queryClient.invalidateQueries({ queryKey: ['trackday', uuid] }); // Changed to uuid
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
       toast.success(t('trackday_updated_successfully'));
-      navigate(`/trackdays/${id}`);
+      navigate(`/trackdays/${uuid}`); // Changed to uuid
     },
     onError: (error: any) => {
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
@@ -138,7 +138,7 @@ const TrackdayEdit: React.FC = () => {
   });
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: () => deleteTrackday(id!),
+    mutationFn: () => deleteTrackday(uuid!), // Changed to uuid!
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
       toast.success(t('trackday_deleted_successfully'));
