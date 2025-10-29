@@ -430,5 +430,10 @@
   "no_active_subscription": "No active subscription found.",
   "free_tier_active": "You are currently on the Free tier.",
   "no_vehicles_added": "No vehicles added yet. Start by adding one!",
-  "an_unexpected_error_occurred": "An unexpected error occurred. Please try again."
+  "an_unexpected_error_occurred": "An unexpected error occurred. Please try again.",
+  "api_key_name": "API Key Name",
+  "capital": "Capital",
+  "city": "City",
+  "cancel": "Cancel",
+  "details": "Details"
 }

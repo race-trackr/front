@@ -430,5 +430,10 @@
   "no_active_subscription": "Aucun abonnement actif trouvé.",
   "free_tier_active": "Vous êtes actuellement sur le plan gratuit.",
   "no_vehicles_added": "Aucun véhicule ajouté pour le moment. Commencez par en ajouter un !",
-  "an_unexpected_error_occurred": "Une erreur inattendue est survenue. Veuillez réessayer."
+  "an_unexpected_error_occurred": "Une erreur inattendue est survenue. Veuillez réessayer.",
+  "api_key_name": "Nom de la clé API",
+  "capital": "Capitale",
+  "city": "Ville",
+  "cancel": "Annuler",
+  "details": "Détails"
 }
