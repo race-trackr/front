@@ -303,7 +303,12 @@ const TrackdayList: React.FC = () => {
         <Card className="w-full mx-auto text-center p-6">
           <CardContent className="flex flex-col items-center justify-center space-y-4">
             <Calendar className="h-12 w-12 text-muted-foreground" />
-            <p className="text-muted-foreground">{t('no_trackdays_recorded')}</p>
+            <p className="text-muted-foreground mb-4">{t('no_trackdays_recorded')}</p>
+            <Button asChild className="btn-primary-gradient">
+              <Link to="/trackdays/create">
+                <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_trackday')}
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       )}
