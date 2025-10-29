@@ -32,10 +32,14 @@ const VehicleList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [vehicleToDelete, setVehicleToDelete] = React.useState<number | null>(null);
 
-  const { data: vehicles, isLoading, isError } = useQuery<UserVehicleType[]>({
+  const { data: vehicles, isLoading, isError } = useQuery<
+    UserVehicleType[],
+    Error,
+    ['vehicles']
+  >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -48,7 +52,7 @@ const VehicleList: React.FC = () => {
       setIsDeleteDialogOpen(false);
       setVehicleToDelete(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setVehicleToDelete(null);
@@ -86,10 +90,10 @@ const VehicleList: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {vehicles && vehicles.length === 0 ? (
+        {vehicles && vehicles.length === 0 ? ( // Accessing vehicles safely
           <p className="text-muted-foreground">{t('no_vehicles_added')}</p>
         ) : (
-          vehicles?.map((vehicle) => (
+          vehicles?.map((vehicle) => ( // Accessing vehicles safely
             <Card key={vehicle.id} className="flex flex-col">
               <CardHeader>
                 <CardTitle>{vehicle.name}</CardTitle>

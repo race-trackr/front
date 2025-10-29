@@ -24,17 +24,21 @@ const VehicleView: React.FC = () => {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType>({
+  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', number]>({
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery<MaintenanceRecordType[]>({
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery<
+    MaintenanceRecordType[],
+    Error,
+    ['vehicleMaintenances', number]
+  >({
     queryKey: ['vehicleMaintenances', vehicleId],
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -46,7 +50,7 @@ const VehicleView: React.FC = () => {
       toast.success(t('vehicle_deleted_successfully'));
       navigate('/vehicles');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -162,9 +166,9 @@ const VehicleView: React.FC = () => {
             <div className="text-center">{t('loading_vehicle_maintenances')}</div>
           ) : isErrorMaintenances ? (
             <div className="text-center text-red-500">{t('error_loading_vehicle_maintenances')}</div>
-          ) : maintenances && maintenances.length > 0 ? (
+          ) : maintenances && maintenances.length > 0 ? ( // Accessing maintenances safely
             <ul className="space-y-4">
-              {maintenances.map((maintenance) => (
+              {maintenances.map((maintenance) => ( // Accessing maintenances safely
                 <li key={maintenance.id} className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0">
                   <div>
                     <p className="font-medium">{maintenance.name}</p>

@@ -61,7 +61,11 @@ const TrackdayList: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9; // Fixed limit of 9 items per page
 
-  const { data: paginatedTrackdaysResponse, isLoading, isError } = useQuery<PaginatedResponse<TrackDayType>>({
+  const { data: paginatedTrackdaysResponse, isLoading, isError } = useQuery<
+    PaginatedResponse<TrackDayType>,
+    Error,
+    ['trackdays', { page: number, limit: number, search?: string, filterVehicleId?: number, filterTrackId?: number }]
+  >({
     queryKey: ['trackdays', { page: currentPage, limit: itemsPerPage, search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: itemsPerPage,
@@ -70,23 +74,31 @@ const TrackdayList: React.FC = () => {
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery<
+    UserVehicleType[],
+    Error,
+    ['vehicles']
+  >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
-  const { data: tracks, isLoading: isLoadingTracks } = useQuery<TrackType[]>({
+  const { data: tracks, isLoading: isLoadingTracks } = useQuery<
+    TrackType[],
+    Error,
+    ['tracks']
+  >({
     queryKey: ['tracks'],
     queryFn: () => getTracks(),
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -99,7 +111,7 @@ const TrackdayList: React.FC = () => {
       setIsDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setTrackdayToDelete(null);
@@ -118,16 +130,16 @@ const TrackdayList: React.FC = () => {
   };
 
   const trackOptions = React.useMemo(() => {
-    const options = tracks?.map(track => ({
+    const options = tracks?.map(track => ({ // Accessing tracks safely
       value: track.id.toString(),
       label: track.name
     })) || [];
     return [{ value: 'all', label: t('all_tracks') }, ...options];
   }, [tracks, t]);
 
-  const totalItems = paginatedTrackdaysResponse?.meta?.total || 0;
+  const totalItems = paginatedTrackdaysResponse?.meta?.total || 0; // Accessing meta safely
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const paginatedTrackdays = paginatedTrackdaysResponse?.data || [];
+  const paginatedTrackdays = paginatedTrackdaysResponse?.data || []; // Accessing data safely
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
@@ -170,7 +182,7 @@ const TrackdayList: React.FC = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t('all_vehicles')}</SelectItem>
-            {vehicles?.map((vehicle) => (
+            {vehicles?.map((vehicle) => ( // Accessing vehicles safely
               <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
                 {vehicle.brand} {vehicle.model}
               </SelectItem>
@@ -180,10 +192,10 @@ const TrackdayList: React.FC = () => {
         <Combobox
           options={trackOptions}
           value={filterTrackId?.toString() || 'all'}
-          onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
           placeholder={t('filter_by_track')}
           emptyMessage={t('no_track_found')}
           className="w-full md:w-[180px]"
+          onValueChange={(value) => setFilterTrackId(value === 'all' ? undefined : Number(value))}
         />
       </div>
 

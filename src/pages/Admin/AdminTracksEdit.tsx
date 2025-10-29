@@ -67,7 +67,7 @@ const AdminTracksEdit: React.FC = () => {
     },
   });
 
-  const { data: track, isLoading, isError } = useQuery<TrackType>({
+  const { data: track, isLoading, isError } = useQuery<TrackType, Error, TrackType, ['track', number]>({
     queryKey: ['track', trackId],
     queryFn: async () => {
       const response = await apiClient.get(`/tracks/${trackId}`);
@@ -76,13 +76,17 @@ const AdminTracksEdit: React.FC = () => {
     enabled: !!trackId && !isNaN(trackId),
   });
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<
+    CountryType[],
+    Error,
+    ['countries']
+  >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -116,7 +120,7 @@ const AdminTracksEdit: React.FC = () => {
       toast.success(t('track_updated_successfully'));
       navigate('/admin/tracks');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -130,7 +134,7 @@ const AdminTracksEdit: React.FC = () => {
       toast.success(t('track_deleted_successfully'));
       navigate('/admin/tracks');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -214,7 +218,7 @@ const AdminTracksEdit: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {countries?.map((country) => (
+                    {countries?.map((country) => ( // Accessing countries safely
                       <SelectItem key={country.id} value={country.id.toString()}>
                         {country.name}
                       </SelectItem>

@@ -21,13 +21,17 @@ const AdminTracks: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackToDelete, setTrackToDelete] = React.useState<number | null>(null);
 
-  const { data: tracks, isLoading, isError } = useQuery<TrackType[]>({
+  const { data: tracks, isLoading, isError } = useQuery<
+    TrackType[],
+    Error,
+    ['tracks']
+  >({
     queryKey: ['tracks'],
     queryFn: async () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -42,7 +46,7 @@ const AdminTracks: React.FC = () => {
       setIsDeleteDialogOpen(false);
       setTrackToDelete(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setTrackToDelete(null);
@@ -122,7 +126,7 @@ const AdminTracks: React.FC = () => {
       </div>
       <DataTable
         columns={columns}
-        data={tracks || []}
+        data={tracks || []} // Ensure tracks is an array
         filterColumnId="name"
         filterPlaceholder={t('search_tracks')}
         toolbarActions={

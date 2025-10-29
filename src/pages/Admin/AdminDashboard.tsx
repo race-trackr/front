@@ -12,24 +12,32 @@ import { toast } from 'sonner';
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
 
-  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<TrackType[]>({
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<
+    TrackType[],
+    Error,
+    ['tracks']
+  >({
     queryKey: ['tracks'],
     queryFn: async () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<
+    CountryType[],
+    Error,
+    ['countries']
+  >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -54,7 +62,7 @@ const AdminDashboard: React.FC = () => {
             <Flag className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tracks?.length || 0}</div>
+            <div className="text-2xl font-bold">{tracks?.length || 0}</div> {/* Accessing tracks safely */}
             <p className="text-xs text-muted-foreground">{t('total_tracks_in_system')}</p>
             <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/tracks">{t('go_to_tracks')}</Link>
@@ -68,7 +76,7 @@ const AdminDashboard: React.FC = () => {
             <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{countries?.length || 0}</div>
+            <div className="text-2xl font-bold">{countries?.length || 0}</div> {/* Accessing countries safely */}
             <p className="text-xs text-muted-foreground">{t('total_countries_in_system')}</p>
             <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/countries">{t('go_to_countries')}</Link>

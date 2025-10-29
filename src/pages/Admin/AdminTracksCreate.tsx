@@ -66,13 +66,17 @@ const AdminTracksCreate: React.FC = () => {
     },
   });
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<
+    CountryType[],
+    Error,
+    ['countries']
+  >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -87,7 +91,7 @@ const AdminTracksCreate: React.FC = () => {
       toast.success(t('track_created_successfully'));
       navigate('/admin/tracks');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -147,7 +151,7 @@ const AdminTracksCreate: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                        {countries?.map((country) => (
+                        {countries?.map((country) => ( // Accessing countries safely
                           <SelectItem key={country.id} value={country.id.toString()}>
                             {country.name}
                           </SelectItem>

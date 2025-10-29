@@ -21,13 +21,17 @@ const AdminCountries: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [countryToDelete, setCountryToDelete] = React.useState<number | null>(null);
 
-  const { data: countries, isLoading, isError } = useQuery<CountryType[]>({
+  const { data: countries, isLoading, isError } = useQuery<
+    CountryType[],
+    Error,
+    ['countries']
+  >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
     },
   });
@@ -42,7 +46,7 @@ const AdminCountries: React.FC = () => {
       setIsDeleteDialogOpen(false);
       setCountryToDelete(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => { // Corrected onError type
       toast.error(t('an_unexpected_error_occurred')); // Generic error message
       setIsDeleteDialogOpen(false);
       setCountryToDelete(null);
@@ -122,7 +126,7 @@ const AdminCountries: React.FC = () => {
       </div>
       <DataTable
         columns={columns}
-        data={countries || []}
+        data={countries || []} // Ensure countries is an array
         filterColumnId="name"
         filterPlaceholder={t('search_countries')}
         toolbarActions={
