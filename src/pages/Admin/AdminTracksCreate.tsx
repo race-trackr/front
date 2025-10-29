@@ -109,178 +109,179 @@ const AdminTracksCreate: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('create_new_track')}</h1>
-      <Card>
-        <CardHeader><CardTitle>{t('track_details')}</CardTitle></CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('track_name')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_track_name')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="countryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                    <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
+          <ArrowLeft className="h-4 w-4" />
+          <span className="sr-only">{t('back')}</span>
+        </Button>
+        <h1 className="text-3xl font-bold flex-1">{t('create_new_track')}</h1>
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('track_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_track_name')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="countryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
+                <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
                         {countries?.map((country) => (
                           <SelectItem key={country.id} value={country.id.toString()}>
                             {country.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="length"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('length_km')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('city')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_city')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('address')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_address')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="turns"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('turns')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_number_of_turns')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="width"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('width')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_track_width')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="maxDb"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('max_db')}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_max_db')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bestLapTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('best_laptime')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder="MM.SS.mmm" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bestLapTimePilot"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('best_laptime_pilot')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder={t('enter_best_laptime_pilot')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>{t('description')}</FormLabel>
-                    <FormControl>
-                      <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_track_description')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-between mt-4 md:col-span-2">
-                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-                  {t('cancel')}
-                </Button>
-                <Button type="submit" className="btn-primary-gradient" disabled={createTrackMutation.isPending}>
-                  {createTrackMutation.isPending ? t('creating') : t('save_track')}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="length"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('length_km')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.1" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('city')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_city')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('address')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_address')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="turns"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('turns')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_number_of_turns')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="width"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('width')}</FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_track_width')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="maxDb"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('max_db')}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_max_db')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bestLapTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('best_laptime')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder="MM.SS.mmm" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bestLapTimePilot"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('best_laptime_pilot')}</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ''} placeholder={t('enter_best_laptime_pilot')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>{t('description')}</FormLabel>
+                <FormControl>
+                  <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_track_description')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between mt-4 md:col-span-2">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+              {t('cancel')}
+            </Button>
+            <Button type="submit" className="btn-primary-gradient" disabled={createTrackMutation.isPending}>
+              {createTrackMutation.isPending ? t('creating') : t('save_track')}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

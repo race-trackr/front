@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import apiClient from '@/lib/apiClient';
 import { CountryType } from '@/types';
+import { ArrowLeft } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Le nom du pays est requis." }),
@@ -70,76 +71,77 @@ const AdminCountriesCreate: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('create_new_country')}</h1>
-      <Card>
-        <CardHeader><CardTitle>{t('country_details')}</CardTitle></CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_country_name')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="iso"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('country_iso')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g., US, FR" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="timezone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('timezone')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g., CET, EST" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="capital"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('capital')}<span className="text-destructive">*</span></FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t('enter_capital')} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-between mt-4 md:col-span-2">
-                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-                  {t('cancel')}
-                </Button>
-                <Button type="submit" className="btn-primary-gradient" disabled={createCountryMutation.isPending}>
-                  {createCountryMutation.isPending ? t('creating') : t('save_country')}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
+          <ArrowLeft className="h-4 w-4" />
+          <span className="sr-only">{t('back')}</span>
+        </Button>
+        <h1 className="text-3xl font-bold flex-1">{t('create_new_country')}</h1>
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_country_name')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="iso"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('country_iso')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g., US, FR" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="timezone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('timezone')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g., CET, EST" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="capital"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('capital')}<span className="text-destructive">*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_capital')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between mt-4 md:col-span-2">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+              {t('cancel')}
+            </Button>
+            <Button type="submit" className="btn-primary-gradient" disabled={createCountryMutation.isPending}>
+              {createCountryMutation.isPending ? t('creating') : t('save_country')}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
