@@ -48,23 +48,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Link
               to="/"
               className={cn(
-                "flex items-center gap-2 font-semibold",
-                isCollapsed && "hidden"
+                "flex items-center gap-2 font-semibold"
+                // Removed: isCollapsed && "hidden"
               )}
             >
               <span
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
                   "bg-gradient-to-r from-red-500 to-orange-500",
-                  !isCollapsed && "mr-2",
-                  isCollapsed && "hidden"
+                  !isCollapsed ? "mr-2" : "" // Adjust margin based on collapse state
                 )}
               >
                 R
               </span>
               <span
                 className={cn(
-                  "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out", // Changed duration to 500ms
+                  "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out",
                   isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100"
                 )}
               >
