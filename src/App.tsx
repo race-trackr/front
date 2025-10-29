@@ -160,7 +160,7 @@ const App: React.FC = () => {
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
                       const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('view_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('view_vehicle', { id: data?.params?.id || '' });
+                      return vehicle ? t('view_vehicle_name', { name: vehicle.name }) : t('view_vehicle', { id: data?.params?.id || '' });
                     }
                   },
                 },
@@ -174,7 +174,7 @@ const App: React.FC = () => {
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
                       const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('edit_vehicle_name', { brand: vehicle.brand, model: vehicle.model }) : t('edit_vehicle', { id: data?.params?.id || '' });
+                      return vehicle ? t('edit_vehicle_name', { name: vehicle.name }) : t('edit_vehicle', { id: data?.params?.id || '' });
                     }
                   },
                 },
