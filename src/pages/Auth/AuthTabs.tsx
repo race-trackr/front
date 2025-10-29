@@ -6,18 +6,33 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
+const backgroundImages = [
+  '/images/login-background-1.jpg',
+  '/images/login-background-2.jpg',
+  '/images/login-background-3.jpg',
+];
+
 const AuthTabs: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'login';
   const { t } = useTranslation();
+  const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState('');
+
+  React.useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+    setCurrentBackgroundImage(backgroundImages[randomIndex]);
+  }, []);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <div className="w-full max-w-[400px] flex flex-col items-center">
+    <div
+      className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center"
+      style={{ backgroundImage: `url(${currentBackgroundImage})` }}
+    >
+      <div className="w-full max-w-[400px] flex flex-col items-center bg-background/90 p-6 rounded-lg shadow-lg">
         <div className="flex flex-col items-center mb-6">
           <div
             className={cn(
