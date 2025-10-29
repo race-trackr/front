@@ -32,7 +32,7 @@ const AuthTabs: React.FC = () => {
       className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center"
       style={{ backgroundImage: `url(${currentBackgroundImage})` }}
     >
-      <div className="w-full max-w-[400px] flex flex-col items-center bg-background/90 p-6 rounded-lg shadow-lg">
+      <div className="w-full md:w-1/2 lg:max-w-xl flex flex-col items-center bg-background/90 p-6 rounded-lg shadow-lg">
         <div className="flex flex-col items-center mb-6">
           <div
             className={cn(
