@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
                       to={`/trackdays/${trackday.id}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
-                          {trackday.vehicle ? `${trackday.vehicle.brand} ${trackday.vehicle.model}` : trackday.userVehicleId} -
+                          {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
                           {trackday.track?.name || trackday.trackId}
                         </p>
                         <p className="text-sm text-muted-foreground">

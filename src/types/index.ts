@@ -70,7 +70,7 @@ export type VehicleCategory = 'car' | 'motorcycle' | 'karting' | 'other'; // Ren
 export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification' | 'other';
 
 export interface TrackDayType {
-  id: string; // Changed to string for UUID
+  id: string;
   userId: number;
   trackId: number;
   userVehicleId: number | null;
