@@ -64,7 +64,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </span>
               <span
                 className={cn(
-                  "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+                  "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out", // Changed duration to 500ms
                   isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100"
                 )}
               >
