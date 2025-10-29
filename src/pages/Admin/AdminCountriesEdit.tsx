@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import *as z from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -193,7 +193,10 @@ const AdminCountriesEdit: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end mt-4 md:col-span-2">
+              <div className="flex justify-between mt-4 md:col-span-2">
+                <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={updateCountryMutation.isPending}>
+                  {t('cancel')}
+                </Button>
                 <Button type="submit" className="btn-primary-gradient" disabled={updateCountryMutation.isPending}>
                   {updateCountryMutation.isPending ? t('saving') : t('save_changes')}
                 </Button>

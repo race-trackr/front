@@ -339,7 +339,10 @@ const AdminTracksEdit: React.FC = () => {
               </FormItem>
             )}
           />
-          <div className="flex justify-end mt-4 md:col-span-2">
+          <div className="flex justify-between mt-4 md:col-span-2">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={updateTrackMutation.isPending}>
+              {t('cancel')}
+            </Button>
             <Button type="submit" className="btn-primary-gradient" disabled={updateTrackMutation.isPending}>
               {updateTrackMutation.isPending ? t('saving') : t('save_changes')}
             </Button>
