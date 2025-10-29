@@ -33,6 +33,7 @@ import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/
 import { getVehicles } from '@/lib/api/vehicles';
 import { PlusCircle, Trash2, ArrowLeft } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { fr, enUS, es, it } from 'date-fns/locale';
 
 const formSchema = z.object({
   userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }),
@@ -50,7 +51,7 @@ const MaintenanceEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const maintenanceId = Number(id);
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
@@ -144,6 +145,18 @@ const MaintenanceEdit: React.FC = () => {
     deleteMaintenanceMutation.mutate();
   };
 
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'fr':
+        return fr;
+      case 'es':
+        return es;
+      case 'it':
+      default:
+        return enUS;
+    }
+  };
+
   if (isLoading) {
     return <div className="space-y-6">{t('loading_maintenance')}</div>;
   }
@@ -152,13 +165,15 @@ const MaintenanceEdit: React.FC = () => {
     return <div className="space-y-6 text-red-500">{t('error_loading_maintenance')}</div>;
   }
 
+  const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() });
+
   return (
     <div className="mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between mb-6">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{t('edit_maintenance', { id: maintenance.id })}</h1>
+        <h1 className="text-3xl font-bold">{t('edit_maintenance_name_date', { name: maintenance.name, date: formattedDate })}</h1>
         <Button
           variant="destructive"
           size="icon"
