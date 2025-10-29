@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react';
@@ -21,20 +21,24 @@ const AdminTracks: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [trackToDelete, setTrackToDelete] = React.useState<number | null>(null);
 
-  const { data: tracks, isLoading, isError } = useQuery<
-    TrackType[],
-    Error,
-    ['tracks']
+  const { data: tracks, isLoading, isError: isErrorTracks, error: tracksError } = useQuery<
+    TrackType[], // TQueryFnData
+    Error, // TError
+    TrackType[], // TData
+    ['tracks'] // TQueryKey
   >({
     queryKey: ['tracks'],
     queryFn: async () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorTracks && tracksError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorTracks, tracksError, t]);
 
   const deleteTrackMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -47,7 +51,7 @@ const AdminTracks: React.FC = () => {
       setTrackToDelete(null);
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
       setIsDeleteDialogOpen(false);
       setTrackToDelete(null);
     },
@@ -111,7 +115,7 @@ const AdminTracks: React.FC = () => {
     return <div className="space-y-6">{t('loading_tracks')}</div>;
   }
 
-  if (isError) {
+  if (isErrorTracks) { // Use specific error flag
     return <div className="space-y-6 text-red-500">{t('error_loading_tracks')}</div>;
   }
 

@@ -450,5 +450,7 @@
   "capital": "Capital",
   "city": "Ciudad",
   "cancel": "Cancelar",
-  "details": "Detalles"
+  "details": "Detalles",
+  "confirm_delete_trackday_title": "Confirmar eliminación de día de pista",
+  "confirm_delete_trackday_description": "¿Estás seguro de que quieres eliminar este día de pista? Esta acción no se puede deshacer."
 }

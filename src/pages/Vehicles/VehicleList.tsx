@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,17 +32,21 @@ const VehicleList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [vehicleToDelete, setVehicleToDelete] = React.useState<number | null>(null);
 
-  const { data: vehicles, isLoading, isError } = useQuery<
-    UserVehicleType[],
-    Error,
-    ['vehicles']
+  const { data: vehicles, isLoading, isError: isErrorVehicles, error: vehiclesError } = useQuery<
+    UserVehicleType[], // TQueryFnData
+    Error, // TError
+    UserVehicleType[], // TData
+    ['vehicles'] // TQueryKey
   >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorVehicles && vehiclesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorVehicles, vehiclesError, t]);
 
   const deleteVehicleMutation = useMutation({
     mutationFn: (id: number) => deleteVehicle(id),
@@ -53,7 +57,7 @@ const VehicleList: React.FC = () => {
       setVehicleToDelete(null);
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
       setIsDeleteDialogOpen(false);
       setVehicleToDelete(null);
     },
@@ -74,7 +78,7 @@ const VehicleList: React.FC = () => {
     return <div className="p-4 text-center">{t('loading_vehicles')}</div>;
   }
 
-  if (isError) {
+  if (isErrorVehicles) { // Use specific error flag
     return <div className="p-4 text-center text-red-500">{t('error_loading_vehicles')}</div>;
   }
 

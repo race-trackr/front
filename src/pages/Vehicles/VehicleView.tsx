@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -30,18 +30,22 @@ const VehicleView: React.FC = () => {
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances } = useQuery<
-    MaintenanceRecordType[],
-    Error,
-    ['vehicleMaintenances', number]
+  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances, error: maintenancesError } = useQuery<
+    MaintenanceRecordType[], // TQueryFnData
+    Error, // TError
+    MaintenanceRecordType[], // TData
+    ['vehicleMaintenances', number] // TQueryKey
   >({
     queryKey: ['vehicleMaintenances', vehicleId],
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorMaintenances && maintenancesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorMaintenances, maintenancesError, t]);
 
   const deleteVehicleMutation = useMutation({
     mutationFn: () => deleteVehicle(vehicleId),
@@ -51,7 +55,7 @@ const VehicleView: React.FC = () => {
       navigate('/vehicles');
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
     },
   });
 

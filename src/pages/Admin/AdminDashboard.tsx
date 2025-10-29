@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,35 +12,43 @@ import { toast } from 'sonner';
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
 
-  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<
-    TrackType[],
-    Error,
-    ['tracks']
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks, error: tracksError } = useQuery<
+    TrackType[], // TQueryFnData
+    Error, // TError
+    TrackType[], // TData
+    ['tracks'] // TQueryKey
   >({
     queryKey: ['tracks'],
     queryFn: async () => {
       const response = await apiClient.get('/tracks');
       return response.data;
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<
-    CountryType[],
-    Error,
-    ['countries']
+  useEffect(() => {
+    if (isErrorTracks && tracksError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorTracks, tracksError, t]);
+
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries, error: countriesError } = useQuery<
+    CountryType[], // TQueryFnData
+    Error, // TError
+    CountryType[], // TData
+    ['countries'] // TQueryKey
   >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorCountries && countriesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorCountries, countriesError, t]);
 
   if (isLoadingTracks || isLoadingCountries) {
     return <div className="space-y-6">{t('loading')}...</div>;

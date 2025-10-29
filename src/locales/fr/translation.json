@@ -435,5 +435,7 @@
   "capital": "Capitale",
   "city": "Ville",
   "cancel": "Annuler",
-  "details": "Détails"
+  "details": "Détails",
+  "confirm_delete_trackday_title": "Confirmer la suppression de la journée en piste",
+  "confirm_delete_trackday_description": "Êtes-vous sûr de vouloir supprimer cette journée en piste ? Cette action est irréversible."
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react';
@@ -21,20 +21,24 @@ const AdminCountries: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [countryToDelete, setCountryToDelete] = React.useState<number | null>(null);
 
-  const { data: countries, isLoading, isError } = useQuery<
-    CountryType[],
-    Error,
-    ['countries']
+  const { data: countries, isLoading, isError: isErrorCountries, error: countriesError } = useQuery<
+    CountryType[], // TQueryFnData
+    Error, // TError
+    CountryType[], // TData
+    ['countries'] // TQueryKey
   >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorCountries && countriesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorCountries, countriesError, t]);
 
   const deleteCountryMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -47,7 +51,7 @@ const AdminCountries: React.FC = () => {
       setCountryToDelete(null);
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
       setIsDeleteDialogOpen(false);
       setCountryToDelete(null);
     },
@@ -111,7 +115,7 @@ const AdminCountries: React.FC = () => {
     return <div className="space-y-6">{t('loading_countries')}</div>;
   }
 
-  if (isError) {
+  if (isErrorCountries) { // Use specific error flag
     return <div className="space-y-6 text-red-500">{t('error_loading_countries')}</div>;
   }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -61,47 +61,59 @@ const TrackdayList: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9; // Fixed limit of 9 items per page
 
-  const { data: paginatedTrackdaysResponse, isLoading, isError } = useQuery<
-    PaginatedResponse<TrackDayType>,
-    Error,
-    ['trackdays', { page: number, limit: number, search?: string, filterVehicleId?: number, filterTrackId?: number }]
+  const { data: paginatedTrackdaysResponse, isLoading, isError: isErrorTrackdays, error: trackdaysError } = useQuery<
+    PaginatedResponse<TrackDayType>, // TQueryFnData
+    Error, // TError
+    PaginatedResponse<TrackDayType>, // TData
+    ['trackdays', { page: number, limit: number, search?: string, filterVehicleId?: number, filterTrackId?: number }] // TQueryKey
   >({
     queryKey: ['trackdays', { page: currentPage, limit: itemsPerPage, search: debouncedSearch, filterVehicleId, filterTrackId }],
     queryFn: () => getTrackdays({
       limit: itemsPerPage,
-      page: currentPage, // Sending currentPage as 'page' parameter
+      page: currentPage,
       searchTerm: debouncedSearch || undefined,
       vehicleId: filterVehicleId,
       trackId: filterTrackId,
     }),
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery<
-    UserVehicleType[],
-    Error,
-    ['vehicles']
+  useEffect(() => {
+    if (isErrorTrackdays && trackdaysError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorTrackdays, trackdaysError, t]);
+
+  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles, error: vehiclesError } = useQuery<
+    UserVehicleType[], // TQueryFnData
+    Error, // TError
+    UserVehicleType[], // TData
+    ['vehicles'] // TQueryKey
   >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
 
-  const { data: tracks, isLoading: isLoadingTracks } = useQuery<
-    TrackType[],
-    Error,
-    ['tracks']
+  useEffect(() => {
+    if (isErrorVehicles && vehiclesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorVehicles, vehiclesError, t]);
+
+  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracksQuery, error: tracksError } = useQuery<
+    TrackType[], // TQueryFnData
+    Error, // TError
+    TrackType[], // TData
+    ['tracks'] // TQueryKey
   >({
     queryKey: ['tracks'],
     queryFn: () => getTracks(),
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorTracksQuery && tracksError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorTracksQuery, tracksError, t]);
 
   const deleteTrackdayMutation = useMutation({
     mutationFn: (id: string) => deleteTrackday(id),
@@ -111,8 +123,8 @@ const TrackdayList: React.FC = () => {
       setIsDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+    onError: (error: Error) => {
+      toast.error(t('an_unexpected_error_occurred'));
       setIsDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
@@ -147,7 +159,7 @@ const TrackdayList: React.FC = () => {
     }
   };
 
-  if (isError) {
+  if (isErrorTrackdays) { // Use specific error flag
     return <div className="space-y-6 p-4 text-center text-red-500">{t('error_loading_trackdays')}</div>;
   }
 

@@ -76,20 +76,24 @@ const AdminTracksEdit: React.FC = () => {
     enabled: !!trackId && !isNaN(trackId),
   });
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<
-    CountryType[],
-    Error,
-    ['countries']
+  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries, error: countriesError } = useQuery<
+    CountryType[], // TQueryFnData
+    Error, // TError
+    CountryType[], // TData
+    ['countries'] // TQueryKey
   >({
     queryKey: ['countries'],
     queryFn: async () => {
       const response = await apiClient.get('/countries');
       return response.data;
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-    },
   });
+
+  useEffect(() => {
+    if (isErrorCountries && countriesError) {
+      toast.error(t('an_unexpected_error_occurred'));
+    }
+  }, [isErrorCountries, countriesError, t]);
 
   useEffect(() => {
     if (track) {
@@ -121,7 +125,7 @@ const AdminTracksEdit: React.FC = () => {
       navigate('/admin/tracks');
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
     },
   });
 
@@ -135,7 +139,7 @@ const AdminTracksEdit: React.FC = () => {
       navigate('/admin/tracks');
     },
     onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
     },
   });
 
