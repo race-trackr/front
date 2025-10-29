@@ -7,6 +7,7 @@ import UserProfileForm from '@/components/UserProfileForm'; // Import the UserPr
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Gem } from 'lucide-react';
+import { Badge } from '@/components/ui/badge'; // Ensure Badge is imported
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
@@ -34,7 +35,13 @@ const Profile: React.FC = () => {
             <div>
               <p className="text-xl font-semibold">{displayName}</p>
               <p className="text-muted-foreground">{user?.email || "guest@example.com"}</p>
-              <p className="text-sm text-muted-foreground capitalize">{t('role')}: {user?.role || t('not_specified')}</p>
+              {user?.role ? (
+                <Badge variant="secondary" className="mt-1 capitalize">
+                  {t('role')}: {t(user.role)}
+                </Badge>
+              ) : (
+                <p className="text-sm text-muted-foreground capitalize">{t('role')}: {t('not_specified')}</p>
+              )}
             </div>
           </div>
         </CardContent>
