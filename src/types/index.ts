@@ -11,19 +11,34 @@ export interface CountryType {
   updatedAt: string;
 }
 
-export interface UserType {
-  id: number;
-  email: string;
-  password?: string;
-  fullName: string;
-  avatar: string | null;
-  role: 'user' | 'admin';
-  countryId: number; // Added countryId
+export type UserRole = 'owner' | 'admin' | 'user';
+
+export interface SubscriptionType {
+  id: string;
+  userId: number;
+  plan: 'free' | 'starter' | 'pro' | 'premium' | 'enterprise';
+  status: 'active' | 'inactive' | 'cancelled';
+  startDate: string;
+  endDate: string | null;
   createdAt: string;
   updatedAt: string;
-  trackDays?: TrackDayType[];
+}
+
+export interface UserType {
+  id: number;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  password?: string; // Made optional
+  countryId: number | null; // Made nullable
+  role: UserRole;
+  createdAt: string;
+  updatedAt: string | null;
+
+  // optional relations
   vehicles?: UserVehicleType[];
-  maintenances?: MaintenanceRecordType[];
+  trackDays?: TrackDayType[];
+  subscription?: SubscriptionType;
 }
 
 export interface TrackType {
@@ -133,7 +148,8 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   countryId: number;

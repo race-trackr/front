@@ -34,9 +34,10 @@ import { Separator } from '@/components/ui/separator';
 import { PasswordInput } from '@/components/PasswordInput'; // Import the new PasswordInput component
 
 const formSchema = z.object({
-  fullName: z.string().min(2, { message: "Le nom complet doit contenir au moins 2 caractères." }),
+  firstName: z.string().min(1, { message: "Le prénom est requis." }).nullable(),
+  lastName: z.string().min(1, { message: "Le nom de famille est requis." }).nullable(),
   email: z.string().email({ message: "Adresse email invalide." }),
-  countryId: z.coerce.number().min(1, { message: "Le pays est requis." }),
+  countryId: z.coerce.number().min(1, { message: "Le pays est requis." }).nullable(),
   currentPassword: z.string().optional(),
   newPassword: z.string().optional(),
   confirmNewPassword: z.string().optional(),
@@ -78,9 +79,10 @@ const UserProfileForm: React.FC = () => {
   const form = useForm<UserProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: user?.fullName || '',
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
       email: user?.email || '',
-      countryId: user?.countryId || 0,
+      countryId: user?.countryId || null,
       currentPassword: '',
       newPassword: '',
       confirmNewPassword: '',
@@ -98,7 +100,8 @@ const UserProfileForm: React.FC = () => {
   useEffect(() => {
     if (user) {
       form.reset({
-        fullName: user.fullName,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         countryId: user.countryId,
         currentPassword: '',
@@ -109,7 +112,7 @@ const UserProfileForm: React.FC = () => {
   }, [user, form]);
 
   const updateUserProfileMutation = useMutation({
-    mutationFn: async (payload: { fullName: string; email: string; countryId: number }) => {
+    mutationFn: async (payload: { firstName: string | null; lastName: string | null; email: string; countryId: number | null }) => {
       if (!user?.id) throw new Error("User ID is missing.");
       const response = await apiClient.put(`/users/${user.id}`, payload);
       return response.data;
@@ -143,7 +146,8 @@ const UserProfileForm: React.FC = () => {
 
   const onSubmit = async (values: UserProfileFormValues) => {
     const profilePayload = {
-      fullName: values.fullName,
+      firstName: values.firstName,
+      lastName: values.lastName,
       email: values.email,
       countryId: values.countryId,
     };
@@ -170,12 +174,25 @@ const UserProfileForm: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="fullName"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('full_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>{t('first_name')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('enter_full_name')} />
+                    <Input {...field} value={field.value || ''} placeholder={t('enter_first_name')} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('last_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value || ''} placeholder={t('enter_last_name')} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,7 +217,7 @@ const UserProfileForm: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || isSubmitting}>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString() || ''} disabled={isLoadingCountries || isErrorCountries || isSubmitting}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />

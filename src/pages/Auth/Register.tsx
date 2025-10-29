@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import *s z from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { RegisterPayload, CountryType } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const Register: React.FC = () => {
   const { register: authRegister, loading: authLoading } = useAuth();
@@ -23,7 +24,8 @@ const Register: React.FC = () => {
   const { t } = useTranslation();
 
   const formSchema = z.object({
-    fullName: z.string().min(2, { message: t('username_min_length') }),
+    firstName: z.string().min(1, { message: t('first_name_min_length') }),
+    lastName: z.string().min(1, { message: t('last_name_min_length') }),
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(6, { message: t('password_min_length') }),
     countryId: z.coerce.number().min(1, { message: t('country_required') }),
@@ -32,7 +34,8 @@ const Register: React.FC = () => {
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       countryId: 0,
@@ -66,12 +69,25 @@ const Register: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
             <FormField
               control={form.control}
-              name="fullName"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('username')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>{t('first_name')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
-                    <Input placeholder="JohnDoe" {...field} />
+                    <Input placeholder={t('enter_first_name')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('last_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormControl>
+                    <Input placeholder={t('enter_last_name')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,7 +113,7 @@ const Register: React.FC = () => {
                 <FormItem>
                   <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <PasswordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
