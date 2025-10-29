@@ -15,6 +15,7 @@ import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
+import { fr, enUS, es, it } from 'date-fns/locale'; // Import locales
 import {
   Select,
   SelectContent,
@@ -61,7 +62,7 @@ const formSchema = z.object({
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // Destructure i18n
   const queryClient = useQueryClient();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
@@ -187,6 +188,20 @@ const TrackdayEdit: React.FC = () => {
     })) || [];
   }, [tracks, t]);
 
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'fr':
+        return fr;
+      case 'es':
+        return es;
+      case 'it':
+      default:
+        return enUS;
+    }
+  };
+
+  const formattedDate = trackday ? format(new Date(trackday.date), 'PPP', { locale: getLocale() }) : '';
+
   if (isLoading) {
     return <div className="space-y-6">{t('loading_trackday')}</div>;
   }
@@ -201,7 +216,7 @@ const TrackdayEdit: React.FC = () => {
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
-        <h1 className="text-3xl font-bold">{t('edit_trackday', { id: trackday.id })}</h1>
+        <h1 className="text-3xl font-bold">{t('edit_session_of_date', { date: formattedDate })}</h1>
         <Button
           variant="destructive"
           size="icon"
