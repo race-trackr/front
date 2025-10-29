@@ -54,6 +54,7 @@ const Register: React.FC = () => {
     try {
       await authRegister(values);
       // Navigation to dashboard is now handled by the login function in authStore
+      navigate('/dashboard', { replace: true }); // Ajout de la redirection ici
     } catch (error) {
     }
   };
@@ -129,40 +130,40 @@ const Register: React.FC = () => {
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {countries?.map((country) => (
-                        <SelectItem key={country.id} value={country.id.toString()}>
-                          {country.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    {t('select_your_country')}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
-              {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
-            </Button>
-          </form>
-        </Form>
-        <div className="relative flex justify-center text-xs uppercase mt-6 mb-4">
-          <Separator className="absolute inset-0 flex items-center">
-            <span className="bg-background px-2 text-muted-foreground">{t('or_separator')}</span>
-          </Separator>
-        </div>
-        <Button variant="outline" className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-          <GoogleIcon />
-          {t('register_with_google')}
-        </Button>
-      </CardContent>
-    </Card>
-  );
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {countries?.map((country) => (
+                      <SelectItem key={country.id} value={country.id.toString()}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  {t('select_your_country')}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
+            {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
+          </Button>
+        </form>
+      </Form>
+      <div className="relative flex justify-center text-xs uppercase mt-6 mb-4">
+        <Separator className="absolute inset-0 flex items-center">
+          <span className="bg-background px-2 text-muted-foreground">{t('or_separator')}</span>
+        </Separator>
+      </div>
+      <Button variant="outline" className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+        <GoogleIcon />
+        {t('register_with_google')}
+      </Button>
+    </CardContent>
+  </Card>
+);
 };
 
 export default Register;
