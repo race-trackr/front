@@ -32,6 +32,7 @@ export interface UserType {
   password?: string; // Made optional
   countryId: number | null; // Made nullable
   role: UserRole;
+  avatar: string | null; // Added avatar property
   createdAt: string;
   updatedAt: string | null;
 

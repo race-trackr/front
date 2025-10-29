@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import *s z from 'zod';
+import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
   const onSubmit = async (values: RegisterPayload) => {
     try {
       await authRegister(values);
-      navigate('/auth?tab=login', { replace: true });
+      // Navigation to dashboard is now handled by the login function in authStore
     } catch (error) {
     }
   };

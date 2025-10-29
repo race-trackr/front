@@ -65,8 +65,9 @@ export const useAuthStore = create<AuthState>()(
         set({ loading: true });
         try {
           await apiClient.post('/auth/register', userData);
-          set({ loading: false });
           showSuccess(i18n.t('registration_successful'));
+          // Automatically log in the user after successful registration
+          await get().login({ email: userData.email, password: userData.password });
         } catch (error: any) {
           console.error('AuthStore: registration error', error.response?.data || error.message);
           set({ loading: false });

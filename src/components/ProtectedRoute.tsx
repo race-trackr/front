@@ -2,9 +2,10 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
+import { UserRole } from '@/types'; // Import UserRole type
 
 interface ProtectedRouteProps {
-  allowedRoles?: ('admin' | 'user')[];
+  allowedRoles?: UserRole[]; // Updated type to UserRole[]
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
