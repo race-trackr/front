@@ -65,7 +65,7 @@ export const useAuthStore = create<AuthState>()(
         set({ loading: true });
         try {
           await apiClient.post('/auth/register', userData);
-          showSuccess(i18n.t('registration_successful'));
+          // showSuccess(i18n.t('registration_successful')); // Supprimé car l'utilisateur est auto-connecté
           // Automatically log in the user after successful registration
           await get().login({ email: userData.email, password: userData.password });
         } catch (error: any) {
