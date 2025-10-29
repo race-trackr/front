@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react';
 import { TrackType } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -110,7 +110,13 @@ const AdminTracks: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('manage_tracks')}</h1>
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="outline" size="icon" onClick={() => navigate('/admin')}>
+          <ArrowLeft className="h-4 w-4" />
+          <span className="sr-only">{t('back')}</span>
+        </Button>
+        <h1 className="text-3xl font-bold flex-1">{t('manage_tracks')}</h1>
+      </div>
       <DataTable
         columns={columns}
         data={tracks || []}
