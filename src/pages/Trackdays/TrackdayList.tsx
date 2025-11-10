@@ -242,7 +242,7 @@ const TrackdayList: React.FC = () => {
                     <img
                       src={`/images/tracks/logo/${trackday.track.slug}.png`}
                       alt={trackday.track.name || 'Track Logo'}
-                      className="w-16 h-16 object-contain mb-4"
+                      className="object-contain"
                     />
                   )}
                   <CardTitle className="text-lg">

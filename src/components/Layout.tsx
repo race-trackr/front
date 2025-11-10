@@ -1,24 +1,20 @@
 import React, { ReactNode } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { MenuIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
-import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import AppBar from './AppBar';
 import { useSidebarStore } from '@/store/sidebarStore';
-import useBreadcrumbs from '@/hooks/useBreadcrumbs'; // Import the useBreadcrumbs hook
+import useBreadcrumbs from '@/hooks/useBreadcrumbs';
+import Logo from '/images/logo.svg?raw';
 
 interface LayoutProps {
   children?: ReactNode; // Made children optional
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
   const { isCollapsed, toggleCollapse } = useSidebarStore();
-  const { t } = useTranslation();
   const crumbs = useBreadcrumbs(); // Get dynamic breadcrumbs
 
   const dynamicSidebarWidth = isCollapsed ? '60px' : '280px';
@@ -51,15 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 "flex items-center gap-2 font-semibold"
               )}
             >
-              <span
-                className={cn(
-                  "flex items-center justify-center w-8 h-8 rounded-md font-bold text-white flex-shrink-0",
-                  "bg-gradient-to-r from-red-500 to-orange-500",
-                  !isCollapsed ? "mr-2" : "" // Adjust margin based on collapse state
-                )}
-              >
-                R
-              </span>
+              <img src={Logo} alt="Logo" className="h-8 w-8" />
               <span
                 className={cn(
                   "text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out",

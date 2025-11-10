@@ -28,8 +28,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
     logout();
   };
 
-  const displayName = user?.firstName && user?.lastName 
-    ? `${user.firstName} ${user.lastName}` 
+  const displayName = user?.firstName && user?.lastName
+    ? `${user.firstName} ${user.lastName}`
     : user?.email || t("guest");
   const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
 
@@ -81,14 +81,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
             <span>{t('my_account')}</span>
           </Link>
         </DropdownMenuItem>
-        {isFreeTier && (
+        {/* {isFreeTier && (
           <DropdownMenuItem asChild>
             <Link to="/upgrade" className="flex items-center btn-primary-gradient p-2 rounded-md">
               <Gem className="mr-2 h-5 w-5 flex-shrink-0" />
               <span>{t('upgrade_to_pro')}</span>
             </Link>
           </DropdownMenuItem>
-        )}
+        )} */}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="flex items-center text-destructive">
           <LogOut className="mr-2 h-5 w-5 flex-shrink-0" />
