@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
           const newToken = response.data.token;
           apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-          
+
           const userResponse = await apiClient.get('/auth/me');
           set({ token: newToken, user: userResponse.data.user, isAuthenticated: true, loading: false });
           showSuccess(i18n.t('logged_in_successfully'));

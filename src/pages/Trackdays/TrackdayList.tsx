@@ -237,7 +237,14 @@ const TrackdayList: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedTrackdays.map((trackday) => (
               <Card key={trackday.id} className="flex flex-col">
-                <CardHeader>
+                <CardHeader className="flex flex-col items-center text-center">
+                  {trackday.track?.slug && (
+                    <img
+                      src={`/images/tracks/logo/${trackday.track.slug}.png`}
+                      alt={trackday.track.name || 'Track Logo'}
+                      className="w-16 h-16 object-contain mb-4"
+                    />
+                  )}
                   <CardTitle className="text-lg">
                     {trackday.track?.name || trackday.trackId} - {format(new Date(trackday.date), 'PPP')}
                   </CardTitle>
