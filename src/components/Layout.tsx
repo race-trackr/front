@@ -40,7 +40,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex flex-col h-full">
           <div
             className={cn(
-              "flex h-14 items-center border-b justify-between lg:h-[60px]",
+              "flex h-16 items-center border-b justify-between",
               isCollapsed ? "px-2" : "px-4 lg:px-6",
               "mb-2" // Added margin-bottom for spacing
             )}
@@ -49,7 +49,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               to="/"
               className={cn(
                 "flex items-center gap-2 font-semibold"
-                // Removed: isCollapsed && "hidden"
               )}
             >
               <span
