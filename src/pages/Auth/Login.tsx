@@ -91,15 +91,6 @@ const Login: React.FC = () => {
             </Button>
           </form>
         </Form>
-        <div className="relative flex justify-center text-xs uppercase mt-6 mb-4">
-          <Separator className="absolute inset-0 flex items-center">
-            <span className="bg-background px-2 text-muted-foreground">{t('or_separator')}</span>
-          </Separator>
-        </div>
-        <Button variant="outline" className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-          <GoogleIcon />
-          {t('login_with_google')}
-        </Button>
       </CardContent>
     </Card>
   );
