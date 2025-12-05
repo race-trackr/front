@@ -30,11 +30,20 @@ const Dashboard: React.FC = () => {
 
   const {
     data: recentTrackdaysResponse,
-    isLoading: isLoadingTrackdays,
-    isError: isErrorTrackdays,
+    isLoading: isLoadingRecentTrackdays, // Renamed for clarity
+    isError: isErrorRecentTrackdays,
   } = useQuery<PaginatedResponse<TrackDayType>>({
-    queryKey: ["trackdays", { limit: 3 }],
+    queryKey: ["trackdays", { limit: 3, recent: true }],
     queryFn: () => getTrackdays({ limit: 3 }),
+  });
+
+  const {
+    data: allTrackdaysResponse,
+    isLoading: isLoadingAllTrackdays, // New query for all trackdays
+    isError: isErrorAllTrackdays,
+  } = useQuery<PaginatedResponse<TrackDayType>>({
+    queryKey: ["allTrackdays"],
+    queryFn: () => getTrackdays({ limit: 100 }), // Fetch a reasonable number for client-side filtering
   });
 
   const {
@@ -59,6 +68,7 @@ const Dashboard: React.FC = () => {
     mutationFn: (id: string) => deleteTrackday(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
+      queryClient.invalidateQueries({ queryKey: ['allTrackdays'] }); // Invalidate all trackdays query
       toast.success(t('trackday_deleted_successfully'));
       setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
@@ -124,11 +134,21 @@ const Dashboard: React.FC = () => {
   const recentTrackdays = recentTrackdaysResponse?.data || [];
   const totalTrackdaysCount = recentTrackdaysResponse?.meta?.total || 0;
 
-  if (isLoadingMaintenances || isLoadingTrackdays || isLoadingVehicles) {
+  const upcomingTrackdays = React.useMemo(() => {
+    if (!allTrackdaysResponse?.data) return [];
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // Normalize 'now' to start of day for comparison
+    return allTrackdaysResponse.data
+      .filter(td => new Date(td.date) >= now) // Include today's trackdays if they haven't passed
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .slice(0, 3); // Take top 3 upcoming
+  }, [allTrackdaysResponse]);
+
+  if (isLoadingMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
     return <div>{t("loading")}...</div>;
   }
 
-  if (isErrorMaintenances || isErrorTrackdays || isErrorVehicles) {
+  if (isErrorMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays) {
     return <div>{t("error_loading_dashboard_summary")}</div>;
   }
 
@@ -189,14 +209,14 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> {/* Changed to 2 columns for better layout with new card */}
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
             <h3 className="text-xl font-semibold mb-4">
               {t("recent_trackdays")}
             </h3>
             <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingTrackdays ? (
+            {isLoadingRecentTrackdays ? (
               <div>{t("loading")}...</div>
             ) : recentTrackdays && recentTrackdays.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
@@ -226,6 +246,7 @@ const Dashboard: React.FC = () => {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           navigate(`/trackdays/edit/${trackday.id}`);
                         }}
                       >
@@ -239,6 +260,7 @@ const Dashboard: React.FC = () => {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           handleDeleteTrackdayClick(trackday.id);
                         }}
                         className="btn-danger"
@@ -265,6 +287,82 @@ const Dashboard: React.FC = () => {
         </Card>
 
         <Card>
+          <CardContent className="flex flex-col items-center text-center p-6">
+            <h3 className="text-xl font-semibold mb-4">
+              {t("upcoming_trackdays")}
+            </h3>
+            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
+            {isLoadingAllTrackdays ? (
+              <div>{t("loading")}...</div>
+            ) : upcomingTrackdays && upcomingTrackdays.length > 0 ? (
+              <ul className="space-y-4 w-full mb-6">
+                {upcomingTrackdays.map((trackday) => (
+                  <li
+                    key={trackday.id}
+                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
+                  >
+                    <Link
+                      to={`/trackdays/${trackday.id}`} className="w-full">
+                      <div className="flex-1 text-left z-10">
+                        <p className="font-medium">
+                          {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
+                          {trackday.track?.name || trackday.trackId}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(trackday.date), "PPP", {
+                            locale: getLocale(),
+                          })}
+                          - {trackday.bestLapTime || t("no_best_laptime")}
+                        </p>
+                      </div>
+                    </Link>
+                    <div className="flex items-center gap-2 z-10">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          navigate(`/trackdays/edit/${trackday.id}`);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">
+                          {t("view_edit_details")}
+                        </span>
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleDeleteTrackdayClick(trackday.id);
+                        }}
+                        className="btn-danger"
+                        disabled={deleteTrackdayMutation.isPending}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">{t("delete_trackday")}</span>
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground mb-6">
+                {t("no_upcoming_trackdays")}
+              </p>
+            )}
+            <Button asChild className="btn-primary-gradient" size="sm">
+              <Link to="/trackdays/create">
+                <Plus className="h-4 w-4 mr-2" /> {t("add_trackday")}
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2"> {/* This card now spans 2 columns */}
           <CardContent className="flex flex-col items-center text-center p-6">
             <h3 className="text-xl font-semibold mb-4">
               {t("recent_maintenances")}
@@ -298,6 +396,7 @@ const Dashboard: React.FC = () => {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           navigate(`/maintenances/edit/${maintenance.id}`);
                         }}
                       >
@@ -309,6 +408,7 @@ const Dashboard: React.FC = () => {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           handleDeleteMaintenanceClick(maintenance.id);
                         }}
                         className="btn-danger"

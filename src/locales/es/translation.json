@@ -452,5 +452,7 @@
   "cancel": "Cancelar",
   "details": "Detalles",
   "confirm_delete_trackday_title": "Confirmar eliminación de día de pista",
-  "confirm_delete_trackday_description": "¿Estás seguro de que quieres eliminar este día de pista? Esta acción no se puede deshacer."
+  "confirm_delete_trackday_description": "¿Estás seguro de que quieres eliminar este día de pista? Esta acción no se puede deshacer.",
+  "upcoming_trackdays": "Próximos días de pista",
+  "no_upcoming_trackdays": "No hay próximos días de pista para mostrar."
 }
