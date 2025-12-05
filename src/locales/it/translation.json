@@ -323,601 +323,141 @@
   "copy_api_key": "Copier la clé API",
   "delete_api_key": "Supprimer la clé API",
   "confirm_delete_api_key_title": "Confirmer la suppression de la clé API",
-  "confirm_delete_api_key_description": "Êtes-vous sûr de vouloir supprimer cette clé API ? Cette action est irréversible.",
-  "delete": "Supprimer",
-  "api_key_copied_to_clipboard": "Clé API copiée dans le presse-papiers !",
-  "api_key_deleted_successfully": "Clé API supprimée avec succès !",
-  "api_key_created_successfully": "Clé API créée avec succès !",
-  "create": "Créer",
-  "read": "Lire",
-  "update": "Mettre à jour",
-  "plan_starter_name": "Débutant",
+  "confirm_delete_api_key_description": "Sei sicuro di voler eliminare questa chiave API? Questa azione non può essere annullata.",
+  "delete": "Elimina",
+  "api_key_copied_to_clipboard": "Chiave API copiata negli appunti!",
+  "api_key_deleted_successfully": "Chiave API eliminata con successo!",
+  "api_key_created_successfully": "Chiave API creata con successo!",
+  "create": "Crea",
+  "read": "Leggi",
+  "update": "Aggiorna",
+  "plan_starter_name": "Starter",
   "plan_starter_price": "9.99€",
-  "feature_trackdays_10": "10 Journées en piste",
-  "feature_vehicles_2": "2 Véhicules",
-  "feature_maintenance_20": "20 Enregistrements de maintenance",
-  "feature_basic_analytics": "Analyses de base",
-  "per_month": "par mois",
-  "get_started": "Commencer",
+  "feature_trackdays_10": "10 Giornate in pista",
+  "feature_vehicles_2": "2 Veicoli",
+  "feature_maintenance_20": "20 Record di manutenzione",
+  "feature_basic_analytics": "Analisi di base",
+  "per_month": "al mese",
+  "get_started": "Inizia",
   "plan_pro_name": "Pro",
   "plan_pro_price": "19.99€",
-  "feature_trackdays_unlimited": "Journées en piste illimitées",
-  "feature_vehicles_5": "5 Véhicules",
-  "feature_maintenance_unlimited": "Enregistrements de maintenance illimités",
-  "feature_advanced_analytics": "Analyses avancées",
-  "feature_priority_email_support": "Support e-mail prioritaire",
-  "go_pro": "Passer Pro",
+  "feature_trackdays_unlimited": "Giornate in pista illimitate",
+  "feature_vehicles_5": "5 Veicoli",
+  "feature_maintenance_unlimited": "Record di manutenzione illimitati",
+  "feature_advanced_analytics": "Analisi avanzate",
+  "feature_priority_email_support": "Supporto email prioritario",
+  "go_pro": "Passa a Pro",
   "plan_premium_name": "Premium",
   "plan_premium_price": "29.99€",
-  "feature_vehicles_unlimited": "Véhicules illimités",
-  "feature_24_7_support": "Support 24/7",
-  "feature_custom_branding": "Marque personnalisée",
-  "contact_sales": "Contacter les ventes",
-  "plan_enterprise_name": "Entreprise",
-  "plan_enterprise_price": "Personnalisé",
-  "feature_dedicated_support": "Support dédié",
-  "feature_custom_integrations": "Intégrations personnalisées",
-  "feature_on_premise_deployment": "Déploiement sur site",
-  "upgrade_description": "Choisissez le plan qui correspond le mieux à vos besoins et débloquez des fonctionnalités puissantes pour améliorer votre expérience de journée en piste.",
-  "width": "Largeur",
-  "enter_track_width": "Entrez la largeur de la piste (ex: 12.5m)",
+  "feature_vehicles_unlimited": "Veicoli illimitati",
+  "feature_24_7_support": "Supporto 24/7",
+  "feature_custom_branding": "Branding personalizzato",
+  "contact_sales": "Contatta le vendite",
+  "plan_enterprise_name": "Enterprise",
+  "plan_enterprise_price": "Personalizzato",
+  "feature_dedicated_support": "Supporto dedicato",
+  "feature_custom_integrations": "Integrazioni personalizzate",
+  "feature_on_premise_deployment": "Deployment on-premise",
+  "upgrade_description": "Scegli il piano più adatto alle tue esigenze e sblocca potenti funzionalità per migliorare la tua esperienza in pista.",
+  "width": "Larghezza",
+  "enter_track_width": "Inserisci la larghezza della pista (es. 12.5m)",
   "max_db": "Max dB",
-  "enter_max_db": "Entrez le niveau sonore maximum en dB",
-  "best_laptime_pilot": "Pilote du meilleur temps au tour",
-  "enter_best_laptime_pilot": "Entrez le nom du pilote du meilleur temps au tour",
-  "description": "Description",
-  "enter_track_description": "Entrez une description pour la piste",
-  "no_results": "Aucun résultat.",
-  "search_table": "Rechercher dans le<dyad-problem-report summary="2 problems">
-<problem file="src/pages/Dashboard.tsx" line="199" column="7" code="2552">Cannot find name 'isLoadingMaintenances'. Did you mean 'isLoadingAllMaintenances'?</problem>
-<problem file="src/pages/Dashboard.tsx" line="203" column="7" code="2552">Cannot find name 'isErrorMaintenances'. Did you mean 'isErrorAllMaintenances'?</problem>
-</dyad-problem-report><think>**Fixing Type Errors**
-
-I'm currently addressing TypeScript errors in `src/pages/Dashboard.tsx`. Specifically, I'm correcting the typos causing `TS2552` errors related to undefined variables. It seems I confused `isLoadingMaintenances` and `isErrorMaintenances` with their correctly named counterparts. I'm focusing on ensuring accurate variable names and data flow within the component.
-
-
-**Analyzing Variable Usage**
-
-I've re-evaluated the usage of `isLoading` and `isError` flags in `src/pages/Dashboard.tsx`. I realized the previous error was due to conflating the state of two different queries. The recent maintenance section uses `isLoadingMaintenances` and `isErrorMaintenances` as intended. But, the upcoming maintenance section requires checking  `isLoadingAllMaintenances` and `isErrorAllMaintenances` to properly reflect its loading and error states. This should clear up the remaining compile-time errors.
-
-
-**Correcting Error States**
-
-I'm now identifying that the global loading/error checks in `src/pages/Dashboard.tsx` are using the incorrect state variables.  Instead of `isLoadingMaintenances` and `isErrorMaintenances`, it should be `isLoadingAllMaintenances` and `isErrorAllMaintenances` to accurately reflect the loading status of the `upcomingMaintenances` section, derived from `allMaintenancesResponse`. I'm updating those checks accordingly.
-
-
-**Confirming Error Location**
-
-I'm now certain the error is in `Dashboard.tsx`, specifically regarding the "Upcoming Maintenances" section. The core issue revolves around using the loading and error states for "all maintenances" instead of just recent ones.  The global error check uses `isLoadingMaintenances`,  which only reflects the loading of a *limited* set of maintenances, not all.  The solution is to swap those variables with the 'all' variables.
-
-
-**Verifying Variable Scope**
-
-I'm now certain the error is a simple scope confusion in `src/pages/Dashboard.tsx`. Although the variables `isLoadingMaintenances` and `isErrorMaintenances` are defined, they're not the ones relevant to the "Upcoming Maintenances" section. Those states should be `isLoadingAllMaintenances` and `isErrorAllMaintenances` which reflects fetching the complete data. I will implement the swap to address the compile-time errors and resolve the incorrect loading status.
-
-
-**Updating Global State Checks**
-
-I'm now changing the `isLoadingMaintenances` and `isErrorMaintenances` variables in the global loading/error checks to `isLoadingAllMaintenances` and `isErrorAllMaintenances`, respectively, to ensure the global loading states accurately reflect the loading status of all maintenances, which includes the data displayed in the "Upcoming Maintenances" section. This will address the TypeScript compile-time errors and correctly represent the loading state of the dashboard.
-
-
-</think>Il semble que les variables de chargement et d'erreur pour les maintenances récentes (`isLoadingMaintenances`, `isErrorMaintenances`) étaient utilisées de manière incorrecte dans les vérifications globales de l'état du tableau de bord, alors que les sections "Maintenances à venir" et le total des maintenances dépendent de la requête `allMaintenancesResponse`.
-
-J'ai corrigé cela en utilisant `isLoadingAllMaintenances` et `isErrorAllMaintenances` dans les conditions globales de chargement et d'erreur pour refléter correctement l'état de toutes les données de maintenance.
-
-<dyad-write path="src/pages/Dashboard.tsx" description="Correction des erreurs de compilation TypeScript en utilisant les bonnes variables de chargement et d'erreur pour les maintenances.">
-"use client";
-
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Car, Wrench, Plus, Edit, Trash2, Cloud, Thermometer, Droplet, Sun, CloudRain } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { getDashboardSummary } from "@/lib/api/dashboard";
-import { getTrackdays, deleteTrackday } from "@/lib/api/trackdays";
-import { getMaintenances, deleteMaintenance } from "@/lib/api/maintenances";
-import { getVehicles } from "@/lib/api/vehicles";
-import { getWeatherForecast } from '@/lib/api/weather'; // Import the mock weather API
-import { format } from "date-fns";
-import { fr, enUS, es, it } from "date-fns/locale";
-import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse, WeatherForecast } from '@/types';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { toast } from 'sonner';
-
-const Dashboard: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const [isTrackdayDeleteDialogOpen, setIsTrackdayDeleteDialogOpen] = React.useState(false);
-  const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null);
-
-  const [isMaintenanceDeleteDialogOpen, setIsMaintenanceDeleteDialogOpen] = React.useState(false);
-  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
-
-  const {
-    data: recentTrackdaysResponse,
-    isLoading: isLoadingRecentTrackdays,
-    isError: isErrorRecentTrackdays,
-  } = useQuery<PaginatedResponse<TrackDayType>>({
-    queryKey: ["trackdays", { limit: 3, recent: true }],
-    queryFn: () => getTrackdays({ limit: 3 }),
-  });
-
-  const {
-    data: allTrackdaysResponse,
-    isLoading: isLoadingAllTrackdays,
-    isError: isErrorAllTrackdays,
-  } = useQuery<PaginatedResponse<TrackDayType>>({
-    queryKey: ["allTrackdays"],
-    queryFn: () => getTrackdays({ limit: 0 }), // Fetch all for client-side filtering
-  });
-
-  const {
-    data: vehicles,
-    isLoading: isLoadingVehicles,
-    isError: isErrorVehicles,
-  } = useQuery<UserVehicleType[]>({
-    queryKey: ["vehicles", { limit: 3 }],
-    queryFn: () => getVehicles({ limit: 3 }),
-  });
-
-  const {
-    data: allMaintenancesResponse, // New query for all maintenances
-    isLoading: isLoadingAllMaintenances,
-    isError: isErrorAllMaintenances,
-  } = useQuery<MaintenanceRecordType[]>({
-    queryKey: ["allMaintenances"],
-    queryFn: () => getMaintenances({ limit: 0 }), // Fetch all for client-side filtering
-  });
-
-  const deleteTrackdayMutation = useMutation({
-    mutationFn: (id: string) => deleteTrackday(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trackdays'] });
-      queryClient.invalidateQueries({ queryKey: ['allTrackdays'] });
-      toast.success(t('trackday_deleted_successfully'));
-      setIsTrackdayDeleteDialogOpen(false);
-      setTrackdayToDelete(null);
-    },
-    onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred'));
-      setIsTrackdayDeleteDialogOpen(false);
-      setTrackdayToDelete(null);
-    },
-  });
-
-  const deleteMaintenanceMutation = useMutation({
-    mutationFn: (id: number) => deleteMaintenance(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      queryClient.invalidateQueries({ queryKey: ['allMaintenances'] }); // Invalidate all maintenances query
-      toast.success(t('maintenance_deleted_successfully'));
-      setIsMaintenanceDeleteDialogOpen(false);
-      setMaintenanceToDelete(null);
-    },
-    onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-      setIsMaintenanceDeleteDialogOpen(false);
-      setMaintenanceToDelete(null);
-    },
-  });
-
-  const handleDeleteTrackdayClick = (id: string) => {
-    setTrackdayToDelete(id);
-    setIsTrackdayDeleteDialogOpen(true);
-  };
-
-  const handleConfirmTrackdayDelete = () => {
-    if (trackdayToDelete !== null) {
-      deleteTrackdayMutation.mutate(trackdayToDelete);
-    }
-  };
-
-  const handleDeleteMaintenanceClick = (id: number) => {
-    setMaintenanceToDelete(id);
-    setIsMaintenanceDeleteDialogOpen(true);
-  };
-
-  const handleConfirmMaintenanceDelete = () => {
-    if (maintenanceToDelete !== null) {
-      deleteMaintenanceMutation.mutate(maintenanceToDelete);
-    }
-  };
-
-  const getLocale = () => {
-    switch (i18n.language) {
-      case "fr":
-        return fr;
-      case "es":
-        return es;
-      case "it":
-        return it;
-      default:
-        return enUS;
-    }
-  };
-
-  const recentTrackdays = recentTrackdaysResponse?.data || [];
-  const totalTrackdaysCount = recentTrackdaysResponse?.meta?.total || 0;
-
-  const upcomingTrackdays = React.useMemo(() => {
-    if (!allTrackdaysResponse?.data) return [];
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Normalize 'now' to start of day for comparison
-    return allTrackdaysResponse.data
-      .filter(td => new Date(td.date) >= now) // Include today's trackdays if they haven't passed
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .slice(0, 3); // Take top 3 upcoming
-  }, [allTrackdaysResponse]);
-
-  const upcomingMaintenances = React.useMemo(() => {
-    if (!allMaintenancesResponse) return [];
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return allMaintenancesResponse
-      .filter(m => m.nextDueDate && new Date(m.nextDueDate) >= now)
-      .sort((a, b) => new Date(a.nextDueDate!).getTime() - new Date(b.nextDueDate!).getTime())
-      .slice(0, 3);
-  }, [allMaintenancesResponse]);
-
-  const WeatherForecastDisplay: React.FC<{ trackday: TrackDayType }> = ({ trackday }) => {
-    const { t } = useTranslation();
-    const { data: forecast, isLoading: isLoadingForecast, isError: isErrorForecast } = useQuery<WeatherForecast | null>({
-      queryKey: ['weatherForecast', trackday.trackId, trackday.date],
-      queryFn: () => getWeatherForecast(trackday.trackId, trackday.date),
-      enabled: !!trackday.trackId && !!trackday.date,
-    });
-
-    const getWeatherIcon = (condition: string | null) => {
-      switch (condition) {
-        case 'clear':
-          return <Sun className="h-5 w-5 text-yellow-500" />;
-        case 'cloudy':
-          return <Cloud className="h-5 w-5 text-gray-400" />;
-        case 'rainy':
-          return <CloudRain className="h-5 w-5 text-blue-500" />;
-        default:
-          return <Cloud className="h-5 w-5 text-muted-foreground" />;
-      }
-    };
-
-    if (isLoadingForecast) {
-      return <span className="text-sm text-muted-foreground">{t('loading_forecast')}...</span>;
-    }
-
-    if (isErrorForecast || !forecast) {
-      return <span className="text-sm text-muted-foreground">{t('no_forecast_available')}</span>;
-    }
-
-    return (
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        {getWeatherIcon(forecast.weather)}
-        <span>{forecast.airTemperature !== null ? `${forecast.airTemperature}°C` : t('not_specified')}</span>
-        {forecast.trackCondition && (
-          <span className="ml-1">({t(`track_condition_${forecast.trackCondition}`)})</span>
-        )}
-        <span className="text-xs text-muted-foreground">({t('forecast')})</span>
-      </div>
-    );
-  };
-
-  if (isLoadingAllMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
-    return <div>{t("loading")}...</div>;
-  }
-
-  if (isErrorAllMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays) {
-    return <div>{t("an_unexpected_error_occurred")}</div>;
-  }
-
-  return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6">{t("dashboard")}</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("my_trackdays")}
-            </CardTitle>
-            <div className="p-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300 rounded-md">
-              <CalendarDays className="h-6 w-6" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {totalTrackdaysCount}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {t("total_trackdays")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("my_vehicles")}
-            </CardTitle>
-            <div className="p-2 bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300 rounded-md">
-              <Car className="h-6 w-6" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{vehicles?.length || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              {t("total_vehicles")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("my_maintenances")}
-            </CardTitle>
-            <div className="p-2 bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300 rounded-md">
-              <Wrench className="h-6 w-6" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{allMaintenancesResponse?.length || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              {t("total_maintenances")}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardContent className="flex flex-col items-center text-center p-6">
-            <h3 className="text-xl font-semibold mb-4">
-              {t("recent_trackdays")}
-            </h3>
-            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingRecentTrackdays ? (
-              <div>{t("loading")}...</div>
-            ) : recentTrackdays && recentTrackdays.length > 0 ? (
-              <ul className="space-y-4 w-full mb-6">
-                {recentTrackdays.map((trackday) => (
-                  <li
-                    key={trackday.id}
-                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
-                  >
-                    <Link
-                      to={`/trackdays/${trackday.id}`} className="w-full">
-                      <div className="flex-1 text-left z-10">
-                        <p className="font-medium">
-                          {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
-                          {trackday.track?.name || trackday.trackId}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(trackday.date), "PPP", {
-                            locale: getLocale(),
-                          })}
-                          - {trackday.bestLapTime || t("no_best_laptime")}
-                        </p>
-                      </div>
-                    </Link>
-                    <div className="flex items-center gap-2 z-10">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          navigate(`/trackdays/edit/${trackday.id}`);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">
-                          {t("view_edit_details")}
-                        </span>
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleDeleteTrackdayClick(trackday.id);
-                        }}
-                        className="btn-danger"
-                        disabled={deleteTrackdayMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">{t("delete_trackday")}</span>
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground mb-6">
-                {t("no_recent_trackdays")}
-              </p>
-            )}
-            <Button asChild className="btn-primary-gradient" size="sm">
-              <Link to="/trackdays/create">
-                <Plus className="h-4 w-4 mr-2" /> {t("add_trackday")}
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="flex flex-col items-center text-center p-6">
-            <h3 className="text-xl font-semibold mb-4">
-              {t("upcoming_trackdays")}
-            </h3>
-            <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingAllTrackdays ? (
-              <div>{t("loading")}...</div>
-            ) : upcomingTrackdays && upcomingTrackdays.length > 0 ? (
-              <ul className="space-y-4 w-full mb-6">
-                {upcomingTrackdays.map((trackday) => (
-                  <li
-                    key={trackday.id}
-                    className="relative flex flex-col items-start justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
-                  >
-                    <Link
-                      to={`/trackdays/${trackday.id}`} className="w-full flex-1">
-                      <div className="flex-1 text-left z-10">
-                        <p className="font-medium">
-                          {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
-                          {trackday.track?.name || trackday.trackId}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(trackday.date), "PPP", {
-                            locale: getLocale(),
-                          })}
-                        </p>
-                        <WeatherForecastDisplay trackday={trackday} />
-                      </div>
-                    </Link>
-                    <div className="flex items-center gap-2 z-10 absolute top-3 right-3">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          navigate(`/trackdays/edit/${trackday.id}`);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">
-                          {t("view_edit_details")}
-                        </span>
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleDeleteTrackdayClick(trackday.id);
-                        }}
-                        className="btn-danger"
-                        disabled={deleteTrackdayMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">{t("delete_trackday")}</span>
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground mb-6">
-                {t("no_upcoming_trackdays")}
-              </p>
-            )}
-            <Button asChild className="btn-primary-gradient" size="sm">
-              <Link to="/trackdays/create">
-                <Plus className="h-4 w-4 mr-2" /> {t("add_trackday")}
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-2">
-          <CardContent className="flex flex-col items-center text-center p-6">
-            <h3 className="text-xl font-semibold mb-4">
-              {t("upcoming_maintenances")}
-            </h3>
-            <Wrench className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingAllMaintenances ? (
-              <div>{t("loading")}...</div>
-            ) : upcomingMaintenances && upcomingMaintenances.length > 0 ? (
-              <ul className="space-y-4 w-full mb-6">
-                {upcomingMaintenances.map((maintenance) => (
-                  <li
-                    key={maintenance.id}
-                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
-                  >
-                    <Link to={`/maintenances/${maintenance.id}`} className="w-full">
-                      <div className="flex-1 text-left z-10">
-                        <p className="font-medium">
-                          {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.name}` : maintenance.userVehicleId}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(maintenance.nextDueDate!), "PPP", {
-                            locale: getLocale(),
-                          })}
-                          {maintenance.nextDueMileage && ` - ${maintenance.nextDueMileage} km`}
-                        </p>
-                      </div>
-                    </Link>
-                    <div className="flex items-center gap-2 z-10">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          navigate(`/maintenances/edit/${maintenance.id}`);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">{t("view_edit_details")}</span>
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleDeleteMaintenanceClick(maintenance.id);
-                        }}
-                        className="btn-danger"
-                        disabled={deleteMaintenanceMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">{t("delete_maintenance_button")}</span>
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground mb-6">
-                {t("no_upcoming_maintenances")}
-              </p>
-            )}
-            <Button asChild className="btn-primary-gradient" size="sm">
-              <Link to="/maintenances/create">
-                <Plus className="h-4 w-4 mr-2" /> {t("add_new_maintenance")}
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      <ConfirmDeleteDialog
-        isOpen={isTrackdayDeleteDialogOpen}
-        onClose={() => setIsTrackdayDeleteDialogOpen(false)}
-        onConfirm={handleConfirmTrackdayDelete}
-        title={t('confirm_delete_trackday_title')}
-        description={t('confirm_delete_trackday_description')}
-        confirmButtonText={t('delete_trackday_button')}
-        cancelButtonText={t('cancel')}
-        isConfirming={deleteTrackdayMutation.isPending}
-      />
-
-      <ConfirmDeleteDialog
-        isOpen={isMaintenanceDeleteDialogOpen}
-        onClose={() => setIsMaintenanceDeleteDialogOpen(false)}
-        onConfirm={handleConfirmMaintenanceDelete}
-        title={t('confirm_delete_maintenance_title')}
-        description={t('confirm_delete_maintenance_description')}
-        confirmButtonText={t('delete_maintenance_button')}
-        cancelButtonText={t('cancel')}
-        isConfirming={deleteMaintenanceMutation.isPending}
-      />
-    </div>
-  );
-};
-
-export default Dashboard;
+  "enter_max_db": "Inserisci il livello massimo di rumore in dB",
+  "best_laptime_pilot": "Pilota miglior tempo sul giro",
+  "enter_best_laptime_pilot": "Inserisci il nome del pilota del miglior tempo sul giro",
+  "description": "Descrizione",
+  "enter_track_description": "Inserisci una descrizione per la pista",
+  "no_results": "Nessun risultato.",
+  "search_table": "Cerca nella tabella...",
+  "enter_brand_optional": "Inserisci la marca (opzionale)",
+  "enter_model_optional": "Inserisci il modello (opzionale)",
+  "enter_year_optional": "Inserisci l'anno (opzionale)",
+  "select_language": "Seleziona lingua",
+  "language_english": "Inglese",
+  "language_french": "Francese",
+  "language_italian": "Italiano",
+  "language_spanish": "Spagnolo",
+  "delete_trackday_button": "Elimina giornata in pista",
+  "delete_maintenance_button": "Elimina manutenzione",
+  "role": "Ruolo",
+  "auth_page_description": "Inserisci le tue credenziali per accedere al tuo account o crearne uno nuovo.",
+  "forgot_password": "Password dimenticata?",
+  "enter_email_for_reset": "Inserisci il tuo indirizzo email per ricevere un link di reset password.",
+  "search_countries": "Cerca paesi...",
+  "country_name": "Nome paese",
+  "country_iso": "Codice ISO",
+  "confirm_delete_country_title": "Conferma eliminazione paese",
+  "confirm_delete_country_description": "Sei sicuro di voler eliminare questo paese? Questa azione non può essere annullata.",
+  "delete_country_button": "Elimina paese",
+  "country_deleted_successfully": "Paese eliminato con successo!",
+  "failed_to_delete_country": "Impossibile eliminare il paese.",
+  "enter_country_name": "Inserisci il nome del paese",
+  "enter_capital": "Inserisci la capitale",
+  "country_created_successfully": "Paese creato con successo!",
+  "failed_to_create_country": "Impossibile creare il paese.",
+  "back": "Indietro",
+  "track_name": "Nome pista",
+  "enter_track_name": "Inserisci il nome della pista",
+  "length_km": "Lunghezza (km)",
+  "enter_city": "Inserisci la città",
+  "address": "Indirizzo",
+  "enter_address": "Inserisci l'indirizzo",
+  "enter_number_of_turns": "Inserisci il numero di curve",
+  "track_created_successfully": "Pista creata con successo!",
+  "failed_to_create_track": "Impossibile creare la pista.",
+  "search_tracks": "Cerca piste...",
+  "confirm_delete_track_title": "Conferma eliminazione pista",
+  "confirm_delete_track_description": "Sei sicuro di voler eliminare questa pista? Questa azione non può essere annullata.",
+  "delete_track_button": "Elimina pista",
+  "track_deleted_successfully": "Pista eliminata con successo!",
+  "failed_to_delete_track": "Impossibile eliminare la pista.",
+  "track_updated_successfully": "Pista aggiornata con successo!",
+  "failed_to_update_track": "Impossibile aggiornare la pista.",
+  "select_maintenance_type": "Seleziona tipo di manutenzione",
+  "maintenance_created_successfully": "Manutenzione creata con successo!",
+  "failed_to_create_maintenance": "Impossibile creare la manutenzione.",
+  "edit_maintenance_button": "Modifica manutenzione",
+  "maintenance_updated_successfully": "Manutenzione aggiornata con successo!",
+  "failed_to_update_maintenance": "Impossibile aggiornare la manutenzione.",
+  "no_track_found": "Nessuna pista trovata.",
+  "select_track_condition": "Seleziona condizione pista",
+  "total_distance": "Distanza totale",
+  "all_tracks": "Tutte le piste",
+  "edit_trackday_button": "Modifica giornata in pista",
+  "confirm_delete_vehicle_title": "Conferma eliminazione veicolo",
+  "confirm_delete_vehicle_description": "Sei sicuro di voler eliminare questo veicolo? Questa azione non può essere annullata.",
+  "delete_vehicle_button": "Elimina veicolo",
+  "edit_vehicle_button": "Modifica veicolo",
+  "first_name": "Nome",
+  "last_name": "Cognome",
+  "enter_first_name": "Inserisci il tuo nome",
+  "enter_last_name": "Inserisci il tuo cognome",
+  "first_name_min_length": "Il nome deve contenere almeno 1 carattere.",
+  "last_name_min_length": "Il cognome deve contenere almeno 1 carattere.",
+  "subscription": "Abbonamento",
+  "plan_free_name": "Gratuito",
+  "plan_free_price": "Gratuito",
+  "feature_free_tier_description": "Funzionalità limitate per utenti occasionali.",
+  "current_plan": "Piano attuale",
+  "status": "Stato",
+  "ends_on": "Termina il",
+  "manage_subscription": "Gestisci abbonamento",
+  "no_active_subscription": "Nessun abbonamento attivo trovato.",
+  "free_tier_active": "Attualmente sei nel piano gratuito.",
+  "no_vehicles_added": "Nessun veicolo aggiunto. Inizia aggiungendone uno!",
+  "an_unexpected_error_occurred": "Si è verificato un errore imprevisto. Riprova.",
+  "api_key_name": "Nome chiave API",
+  "capital": "Capitale",
+  "city": "Città",
+  "cancel": "Annulla",
+  "details": "Dettagli",
+  "confirm_delete_trackday_title": "Conferma eliminazione giornata in pista",
+  "confirm_delete_trackday_description": "Sei sicuro di voler eliminare questa giornata in pista? Questa azione non può essere annullata.",
+  "upcoming_trackdays": "Prossime giornate in pista",
+  "no_upcoming_trackdays": "Nessuna prossima giornata in pista da visualizzare.",
+  "loading_forecast": "Caricamento previsioni",
+  "no_forecast_available": "Nessuna previsione disponibile",
+  "forecast": "Previsione",
+  "upcoming_maintenances": "Prossime manutenzioni",
+  "no_upcoming_maintenances": "Nessuna prossima manutenzione da visualizzare."
+}

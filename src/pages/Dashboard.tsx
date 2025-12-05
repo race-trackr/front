@@ -138,11 +138,11 @@ const Dashboard: React.FC = () => {
   const upcomingTrackdays = React.useMemo(() => {
     if (!allTrackdaysResponse?.data) return [];
     const now = new Date();
-    now.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0); // Normalize 'now' to start of day for comparison
     return allTrackdaysResponse.data
-      .filter(td => new Date(td.date) >= now)
+      .filter(td => new Date(td.date) >= now) // Include today's trackdays if they haven't passed
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .slice(0, 3);
+      .slice(0, 3); // Take top 3 upcoming
   }, [allTrackdaysResponse]);
 
   const upcomingMaintenances = React.useMemo(() => {
@@ -196,11 +196,11 @@ const Dashboard: React.FC = () => {
     );
   };
 
-  if (isLoadingMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays || isLoadingAllMaintenances) {
+  if (isLoadingAllMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
     return <div>{t("loading")}...</div>;
   }
 
-  if (isErrorMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays || isErrorAllMaintenances) {
+  if (isErrorAllMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays) {
     return <div>{t("an_unexpected_error_occurred")}</div>;
   }
 
