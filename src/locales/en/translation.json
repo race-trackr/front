@@ -441,5 +441,6 @@
   "upcoming_trackdays": "Upcoming Trackdays",
   "no_upcoming_trackdays": "No upcoming trackdays to display.",
   "loading_forecast": "Loading forecast",
-  "no_forecast_available": "No forecast available"
+  "no_forecast_available": "No forecast available",
+  "forecast": "Forecast"
 }

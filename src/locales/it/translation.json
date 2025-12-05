@@ -456,5 +456,6 @@
   "upcoming_trackdays": "Journées en piste à venir",
   "no_upcoming_trackdays": "Aucune journée en piste à venir à afficher.",
   "loading_forecast": "Chargement des prévisions",
-  "no_forecast_available": "Aucune prévision disponible"
+  "no_forecast_available": "Aucune prévision disponible",
+  "forecast": "Prévision"
 }

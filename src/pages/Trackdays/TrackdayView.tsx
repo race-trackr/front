@@ -9,12 +9,13 @@ import { fr, enUS, es, it } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getTrackdayById, deleteTrackday } from '@/lib/api/trackdays';
-import { ArrowLeft, Edit, Trash2, Clock, Gauge, Car, Flag, Cloud, Thermometer, Droplet, BookText, ListOrdered, CalendarDays } from 'lucide-react';
-import { TrackDayType } from '@/types';
+import { ArrowLeft, Edit, Trash2, Clock, Gauge, Car, Flag, Cloud, Thermometer, Droplet, BookText, ListOrdered, CalendarDays, Sun, CloudRain } from 'lucide-react';
+import { TrackDayType, WeatherForecast } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { getWeatherForecast } from '@/lib/api/weather'; // Import the mock weather API
 
 const TrackdayView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +29,12 @@ const TrackdayView: React.FC = () => {
     queryKey: ['trackday', id],
     queryFn: () => getTrackdayById(id!),
     enabled: !!id,
+  });
+
+  const { data: forecast, isLoading: isLoadingForecast, isError: isErrorForecast } = useQuery<WeatherForecast | null>({
+    queryKey: ['weatherForecast', trackday?.trackId, trackday?.date],
+    queryFn: () => getWeatherForecast(trackday!.trackId, trackday!.date),
+    enabled: !!trackday?.trackId && !!trackday?.date,
   });
 
   const deleteTrackdayMutation = useMutation({
@@ -109,6 +116,19 @@ const TrackdayView: React.FC = () => {
     return `${String(avgMinutes).padStart(2, '0')}.${String(avgSeconds).padStart(2, '0')}.${String(avgMilliseconds).padStart(3, '0')}`;
   };
 
+  const getWeatherIcon = (condition: string | null) => {
+    switch (condition) {
+      case 'clear':
+        return <Sun className="h-5 w-5 text-yellow-500" />;
+      case 'cloudy':
+        return <Cloud className="h-5 w-5 text-gray-400" />;
+      case 'rainy':
+        return <CloudRain className="h-5 w-5 text-blue-500" />;
+      default:
+        return <Cloud className="h-5 w-5 text-muted-foreground" />;
+    }
+  };
+
   if (isLoading) {
     return <div className="p-4 text-center">{t('loading_trackday')}</div>;
   }
@@ -119,6 +139,8 @@ const TrackdayView: React.FC = () => {
 
   const formattedDate = getFormattedDate(trackday.date);
   const averageLapTime = calculateAverageLapTime(trackday.chronos) || trackday.bestLapTime;
+
+  const isUpcoming = new Date(trackday.date) > new Date();
 
   return (
     <div className="p-4 space-y-6">
@@ -173,26 +195,81 @@ const TrackdayView: React.FC = () => {
                 <p className="text-xs text-muted-foreground">{trackday.track.city}, {trackday.track.country?.name || t('unknown_country')}</p>
               )}
             </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
-              <p className="text-lg">{trackday.weather ? t(`weather_${trackday.weather}`) : t('not_specified')}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
-              <p className="text-lg">
-                {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
-              <p className="text-lg">
-                {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
-              <p className="text-lg">{trackday.trackCondition ? t(`track_condition_${trackday.trackCondition}`) : t('not_specified')}</p>
-            </div>
+            {isUpcoming && (
+              <>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('weather')} ({t('forecast')})</p>
+                  {isLoadingForecast ? (
+                    <p className="text-lg">{t('loading_forecast')}...</p>
+                  ) : isErrorForecast || !forecast ? (
+                    <p className="text-lg">{t('no_forecast_available')}</p>
+                  ) : (
+                    <div className="flex items-center gap-2 text-lg">
+                      {getWeatherIcon(forecast.weather)}
+                      <span>{forecast.weather ? t(`weather_${forecast.weather}`) : t('not_specified')}</span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')} ({t('forecast')})</p>
+                  {isLoadingForecast ? (
+                    <p className="text-lg">{t('loading_forecast')}...</p>
+                  ) : isErrorForecast || !forecast ? (
+                    <p className="text-lg">{t('no_forecast_available')}</p>
+                  ) : (
+                    <p className="text-lg">
+                      {forecast.airTemperature !== null ? `${forecast.airTemperature}°C` : t('not_specified')}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')} ({t('forecast')})</p>
+                  {isLoadingForecast ? (
+                    <p className="text-lg">{t('loading_forecast')}...</p>
+                  ) : isErrorForecast || !forecast ? (
+                    <p className="text-lg">{t('no_forecast_available')}</p>
+                  ) : (
+                    <p className="text-lg">
+                      {forecast.trackTemperature !== null ? `${forecast.trackTemperature}°C` : t('not_specified')}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('track_condition')} ({t('forecast')})</p>
+                  {isLoadingForecast ? (
+                    <p className="text-lg">{t('loading_forecast')}...</p>
+                  ) : isErrorForecast || !forecast ? (
+                    <p className="text-lg">{t('no_forecast_available')}</p>
+                  ) : (
+                    <p className="text-lg">{forecast.trackCondition ? t(`track_condition_${forecast.trackCondition}`) : t('not_specified')}</p>
+                  )}
+                </div>
+              </>
+            )}
+            {!isUpcoming && (
+              <>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('weather')}</p>
+                  <p className="text-lg">{trackday.weather ? t(`weather_${trackday.weather}`) : t('not_specified')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('air_temperature')}</p>
+                  <p className="text-lg">
+                    {trackday.airTemperature !== null ? `${trackday.airTemperature}°C` : t('not_specified')}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('track_temperature')}</p>
+                  <p className="text-lg">
+                    {trackday.trackTemperature !== null ? `${trackday.trackTemperature}°C` : t('not_specified')}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('track_condition')}</p>
+                  <p className="text-lg">{trackday.trackCondition ? t(`track_condition_${trackday.trackCondition}`) : t('not_specified')}</p>
+                </div>
+              </>
+            )}
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('total_laps')}</p>
               <p className="text-lg">{trackday.totalLaps !== null ? trackday.totalLaps : t('not_specified')}</p>

@@ -182,6 +182,7 @@ const Dashboard: React.FC = () => {
         {forecast.trackCondition && (
           <span className="ml-1">({t(`track_condition_${forecast.trackCondition}`)})</span>
         )}
+        <span className="text-xs text-muted-foreground">({t('forecast')})</span>
       </div>
     );
   };
