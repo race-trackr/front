@@ -410,7 +410,7 @@
   "all_tracks": "Toutes les pistes",
   "edit_trackday_button": "Modifier la journée en piste",
   "confirm_delete_vehicle_title": "Confirmer la suppression du véhicule",
-  "confirm_delete_vehicle_description": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action ne peut pas être annulée.",
+  "confirm_delete_vehicle_description": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.",
   "delete_vehicle_button": "Supprimer le véhicule",
   "edit_vehicle_button": "Modifier le véhicule",
   "first_name": "Prénom",
@@ -442,5 +442,7 @@
   "no_upcoming_trackdays": "Aucune journée en piste à venir à afficher.",
   "loading_forecast": "Chargement des prévisions",
   "no_forecast_available": "Aucune prévision disponible",
-  "forecast": "Prévision"
+  "forecast": "Prévision",
+  "upcoming_maintenances": "Maintenances à venir",
+  "no_upcoming_maintenances": "Aucune maintenance à venir à afficher."
 }

@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
 
   const {
     data: recentTrackdaysResponse,
-    isLoading: isLoadingRecentTrackdays, // Renamed for clarity
+    isLoading: isLoadingRecentTrackdays,
     isError: isErrorRecentTrackdays,
   } = useQuery<PaginatedResponse<TrackDayType>>({
     queryKey: ["trackdays", { limit: 3, recent: true }],
@@ -40,11 +40,11 @@ const Dashboard: React.FC = () => {
 
   const {
     data: allTrackdaysResponse,
-    isLoading: isLoadingAllTrackdays, // New query for all trackdays
+    isLoading: isLoadingAllTrackdays,
     isError: isErrorAllTrackdays,
   } = useQuery<PaginatedResponse<TrackDayType>>({
     queryKey: ["allTrackdays"],
-    queryFn: () => getTrackdays({ limit: 100 }), // Fetch a reasonable number for client-side filtering
+    queryFn: () => getTrackdays({ limit: 0 }), // Fetch all for client-side filtering
   });
 
   const {
@@ -57,25 +57,25 @@ const Dashboard: React.FC = () => {
   });
 
   const {
-    data: maintenances,
-    isLoading: isLoadingMaintenances,
-    isError: isErrorMaintenances,
+    data: allMaintenancesResponse, // New query for all maintenances
+    isLoading: isLoadingAllMaintenances,
+    isError: isErrorAllMaintenances,
   } = useQuery<MaintenanceRecordType[]>({
-    queryKey: ["maintenances", { limit: 3 }],
-    queryFn: () => getMaintenances({ limit: 3 }),
+    queryKey: ["allMaintenances"],
+    queryFn: () => getMaintenances({ limit: 0 }), // Fetch all for client-side filtering
   });
 
   const deleteTrackdayMutation = useMutation({
     mutationFn: (id: string) => deleteTrackday(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
-      queryClient.invalidateQueries({ queryKey: ['allTrackdays'] }); // Invalidate all trackdays query
+      queryClient.invalidateQueries({ queryKey: ['allTrackdays'] });
       toast.success(t('trackday_deleted_successfully'));
       setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
       setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
     },
@@ -85,12 +85,13 @@ const Dashboard: React.FC = () => {
     mutationFn: (id: number) => deleteMaintenance(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] });
+      queryClient.invalidateQueries({ queryKey: ['allMaintenances'] }); // Invalidate all maintenances query
       toast.success(t('maintenance_deleted_successfully'));
       setIsMaintenanceDeleteDialogOpen(false);
       setMaintenanceToDelete(null);
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
       setIsMaintenanceDeleteDialogOpen(false);
       setMaintenanceToDelete(null);
     },
@@ -131,21 +132,29 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Extract the actual trackday data from the paginated response
   const recentTrackdays = recentTrackdaysResponse?.data || [];
   const totalTrackdaysCount = recentTrackdaysResponse?.meta?.total || 0;
 
   const upcomingTrackdays = React.useMemo(() => {
     if (!allTrackdaysResponse?.data) return [];
     const now = new Date();
-    now.setHours(0, 0, 0, 0); // Normalize 'now' to start of day for comparison
+    now.setHours(0, 0, 0, 0);
     return allTrackdaysResponse.data
-      .filter(td => new Date(td.date) >= now) // Include today's trackdays if they haven't passed
+      .filter(td => new Date(td.date) >= now)
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .slice(0, 3); // Take top 3 upcoming
+      .slice(0, 3);
   }, [allTrackdaysResponse]);
 
-  // Component to display weather forecast for a single trackday
+  const upcomingMaintenances = React.useMemo(() => {
+    if (!allMaintenancesResponse) return [];
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return allMaintenancesResponse
+      .filter(m => m.nextDueDate && new Date(m.nextDueDate) >= now)
+      .sort((a, b) => new Date(a.nextDueDate!).getTime() - new Date(b.nextDueDate!).getTime())
+      .slice(0, 3);
+  }, [allMaintenancesResponse]);
+
   const WeatherForecastDisplay: React.FC<{ trackday: TrackDayType }> = ({ trackday }) => {
     const { t } = useTranslation();
     const { data: forecast, isLoading: isLoadingForecast, isError: isErrorForecast } = useQuery<WeatherForecast | null>({
@@ -187,12 +196,12 @@ const Dashboard: React.FC = () => {
     );
   };
 
-  if (isLoadingMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
+  if (isLoadingMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays || isLoadingAllMaintenances) {
     return <div>{t("loading")}...</div>;
   }
 
-  if (isErrorMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays) {
-    return <div>{t("error_loading_dashboard_summary")}</div>;
+  if (isErrorMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays || isErrorAllMaintenances) {
+    return <div>{t("an_unexpected_error_occurred")}</div>;
   }
 
   return (
@@ -244,7 +253,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{maintenances?.length || 0}</div>
+            <div className="text-2xl font-bold">{allMaintenancesResponse?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_maintenances")}
             </p>
@@ -252,7 +261,7 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> {/* Changed to 2 columns for better layout with new card */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardContent className="flex flex-col items-center text-center p-6">
             <h3 className="text-xl font-semibold mb-4">
@@ -405,17 +414,17 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2"> {/* This card now spans 2 columns */}
+        <Card className="lg:col-span-2">
           <CardContent className="flex flex-col items-center text-center p-6">
             <h3 className="text-xl font-semibold mb-4">
-              {t("recent_maintenances")}
+              {t("upcoming_maintenances")}
             </h3>
             <Wrench className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingMaintenances ? (
+            {isLoadingAllMaintenances ? (
               <div>{t("loading")}...</div>
-            ) : maintenances && maintenances.length > 0 ? (
+            ) : upcomingMaintenances && upcomingMaintenances.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
-                {maintenances.map((maintenance) => (
+                {upcomingMaintenances.map((maintenance) => (
                   <li
                     key={maintenance.id}
                     className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
@@ -426,10 +435,10 @@ const Dashboard: React.FC = () => {
                           {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.name}` : maintenance.userVehicleId}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {format(new Date(maintenance.date), "PPP", {
+                          {format(new Date(maintenance.nextDueDate!), "PPP", {
                             locale: getLocale(),
                           })}
-                          - {maintenance.cost}€
+                          {maintenance.nextDueMileage && ` - ${maintenance.nextDueMileage} km`}
                         </p>
                       </div>
                     </Link>
@@ -466,7 +475,7 @@ const Dashboard: React.FC = () => {
               </ul>
             ) : (
               <p className="text-muted-foreground mb-6">
-                {t("no_recent_maintenances")}
+                {t("no_upcoming_maintenances")}
               </p>
             )}
             <Button asChild className="btn-primary-gradient" size="sm">

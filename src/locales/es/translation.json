@@ -457,5 +457,7 @@
   "no_upcoming_trackdays": "No hay próximos días de pista para mostrar.",
   "loading_forecast": "Cargando pronóstico",
   "no_forecast_available": "No hay pronóstico disponible",
-  "forecast": "Pronóstico"
+  "forecast": "Pronóstico",
+  "upcoming_maintenances": "Próximos mantenimientos",
+  "no_upcoming_maintenances": "No hay próximos mantenimientos para mostrar."
 }

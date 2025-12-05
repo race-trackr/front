@@ -442,5 +442,7 @@
   "no_upcoming_trackdays": "No upcoming trackdays to display.",
   "loading_forecast": "Loading forecast",
   "no_forecast_available": "No forecast available",
-  "forecast": "Forecast"
+  "forecast": "Forecast",
+  "upcoming_maintenances": "Upcoming Maintenances",
+  "no_upcoming_maintenances": "No upcoming maintenances to display."
 }
