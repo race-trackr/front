@@ -196,9 +196,16 @@ export interface PaginatedResponse<T> {
     currentPage: number;
     lastPage: number;
     firstPage: number;
-    firstPageUrl: string;
     lastPageUrl: string;
     nextPageUrl: string | null;
     previousPageUrl: string | null;
   };
+}
+
+export interface WeatherForecast {
+  date: string; // The date for which the forecast is valid
+  weather: WeatherCondition | null;
+  airTemperature: number | null;
+  trackTemperature: number | null;
+  trackCondition: TrackCondition | null;
 }

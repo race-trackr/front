@@ -4,16 +4,17 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Car, Wrench, Plus, Edit, Trash2 } from "lucide-react";
+import { CalendarDays, Car, Wrench, Plus, Edit, Trash2, Cloud, Thermometer, Droplet, Sun, CloudRain } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getDashboardSummary } from "@/lib/api/dashboard";
 import { getTrackdays, deleteTrackday } from "@/lib/api/trackdays";
 import { getMaintenances, deleteMaintenance } from "@/lib/api/maintenances";
 import { getVehicles } from "@/lib/api/vehicles";
+import { getWeatherForecast } from '@/lib/api/weather'; // Import the mock weather API
 import { format } from "date-fns";
 import { fr, enUS, es, it } from "date-fns/locale";
-import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types';
+import { TrackDayType, UserVehicleType, MaintenanceRecordType, PaginatedResponse, WeatherForecast } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 
@@ -143,6 +144,47 @@ const Dashboard: React.FC = () => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(0, 3); // Take top 3 upcoming
   }, [allTrackdaysResponse]);
+
+  // Component to display weather forecast for a single trackday
+  const WeatherForecastDisplay: React.FC<{ trackday: TrackDayType }> = ({ trackday }) => {
+    const { t } = useTranslation();
+    const { data: forecast, isLoading: isLoadingForecast, isError: isErrorForecast } = useQuery<WeatherForecast | null>({
+      queryKey: ['weatherForecast', trackday.trackId, trackday.date],
+      queryFn: () => getWeatherForecast(trackday.trackId, trackday.date),
+      enabled: !!trackday.trackId && !!trackday.date,
+    });
+
+    const getWeatherIcon = (condition: string | null) => {
+      switch (condition) {
+        case 'clear':
+          return <Sun className="h-5 w-5 text-yellow-500" />;
+        case 'cloudy':
+          return <Cloud className="h-5 w-5 text-gray-400" />;
+        case 'rainy':
+          return <CloudRain className="h-5 w-5 text-blue-500" />;
+        default:
+          return <Cloud className="h-5 w-5 text-muted-foreground" />;
+      }
+    };
+
+    if (isLoadingForecast) {
+      return <span className="text-sm text-muted-foreground">{t('loading_forecast')}...</span>;
+    }
+
+    if (isErrorForecast || !forecast) {
+      return <span className="text-sm text-muted-foreground">{t('no_forecast_available')}</span>;
+    }
+
+    return (
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        {getWeatherIcon(forecast.weather)}
+        <span>{forecast.airTemperature !== null ? `${forecast.airTemperature}°C` : t('not_specified')}</span>
+        {forecast.trackCondition && (
+          <span className="ml-1">({t(`track_condition_${forecast.trackCondition}`)})</span>
+        )}
+      </div>
+    );
+  };
 
   if (isLoadingMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
     return <div>{t("loading")}...</div>;
@@ -299,10 +341,10 @@ const Dashboard: React.FC = () => {
                 {upcomingTrackdays.map((trackday) => (
                   <li
                     key={trackday.id}
-                    className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
+                    className="relative flex flex-col items-start justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
                     <Link
-                      to={`/trackdays/${trackday.id}`} className="w-full">
+                      to={`/trackdays/${trackday.id}`} className="w-full flex-1">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
                           {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
@@ -312,11 +354,11 @@ const Dashboard: React.FC = () => {
                           {format(new Date(trackday.date), "PPP", {
                             locale: getLocale(),
                           })}
-                          - {trackday.bestLapTime || t("no_best_laptime")}
                         </p>
+                        <WeatherForecastDisplay trackday={trackday} />
                       </div>
                     </Link>
-                    <div className="flex items-center gap-2 z-10">
+                    <div className="flex items-center gap-2 z-10 absolute top-3 right-3">
                       <Button
                         variant="ghost"
                         size="icon"

@@ -439,5 +439,7 @@
   "confirm_delete_trackday_title": "Confirmer la suppression de la journée en piste",
   "confirm_delete_trackday_description": "Êtes-vous sûr de vouloir supprimer cette journée en piste ? Cette action est irréversible.",
   "upcoming_trackdays": "Journées en piste à venir",
-  "no_upcoming_trackdays": "Aucune journée en piste à venir à afficher."
+  "no_upcoming_trackdays": "Aucune journée en piste à venir à afficher.",
+  "loading_forecast": "Chargement des prévisions",
+  "no_forecast_available": "Aucune prévision disponible"
 }
