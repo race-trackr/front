@@ -59,7 +59,8 @@ const Analytics: React.FC = () => {
       if (selectedVehicleId) {
         filteredData = filteredData.filter(td => td.userVehicleId === selectedVehicleId);
       }
-      if (selectedTrackId) {
+      // Only filter by trackId if it's not 'all' (undefined)
+      if (selectedTrackId !== undefined) {
         filteredData = filteredData.filter(td => td.trackId === selectedTrackId);
       }
       if (startDate) {
@@ -109,14 +110,14 @@ const Analytics: React.FC = () => {
 
   // Memoized data for "Chronos by Track" chart
   const chronosByTrackData = React.useMemo(() => {
-    if (!trackdays || !selectedTrackId) return []; // Requires a track to be selected
+    if (!trackdays || selectedTrackId === undefined) return []; // Requires a track to be selected (or 'all' is not selected)
 
     const filteredTrackdays = trackdays.filter(td =>
       (selectedVehicleId === undefined || td.userVehicleId === selectedVehicleId) && // Conditionally filter by vehicle
-      td.trackId === selectedTrackId
+      (selectedTrackId === undefined || td.trackId === selectedTrackId) // Conditionally filter by track
     ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    const dataPoints: { date: string; lapTime: number }[] = []; // Changed bestLapTime to lapTime
+    const dataPoints: { date: string; lapTime: number }[] = [];
 
     filteredTrackdays.forEach(td => {
       let lapTimeForTrackdayInSeconds: number | null = null;
@@ -196,8 +197,9 @@ const Analytics: React.FC = () => {
   }, [vehicles, t]);
 
   const trackOptions = React.useMemo(() => {
-    return tracks?.map(t => ({ value: t.id.toString(), label: t.name })) || [];
-  }, [tracks]);
+    const options = tracks?.map(t => ({ value: t.id.toString(), label: t.name })) || [];
+    return [{ value: 'all', label: t('all_tracks') }, ...options];
+  }, [tracks, t]);
 
   const handleApplyFilters = () => {
     // The useQuery will automatically refetch when filter states change
@@ -316,7 +318,7 @@ const Analytics: React.FC = () => {
               </ResponsiveContainer>
             ) : (
               <p className="text-center text-muted-foreground">
-                {selectedTrackId
+                {selectedTrackId !== undefined
                   ? t('no_data_for_chart')
                   : t('select_a_track_for_chronos')}
               </p>
