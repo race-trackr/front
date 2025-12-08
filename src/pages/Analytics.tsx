@@ -27,6 +27,9 @@ import { UserVehicleType, TrackType, TrackDayType } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
 import { toast } from 'sonner';
 
+// Regex for chrono format MM.SS.mmm
+const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
+
 // Helper function to convert MM.SS.mmm to seconds
 const parseLapTimeToSeconds = (lapTime: string): number => {
   const parts = lapTime.split('.');
@@ -110,14 +113,44 @@ const Analytics: React.FC = () => {
 
     const filteredTrackdays = trackdays.filter(td =>
       (selectedVehicleId === undefined || td.userVehicleId === selectedVehicleId) && // Conditionally filter by vehicle
-      td.trackId === selectedTrackId &&
-      td.bestLapTime // Only include trackdays with a best lap time
-    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Sort by date
+      td.trackId === selectedTrackId
+    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    return filteredTrackdays.map(td => ({
-      date: format(new Date(td.date), 'MMM dd, yyyy'), // Format date for display
-      bestLapTime: parseLapTimeToSeconds(td.bestLapTime!), // Convert MM.SS.mmm to seconds for charting
-    }));
+    const dataPoints: { date: string; bestLapTime: number }[] = [];
+
+    filteredTrackdays.forEach(td => {
+      let bestLapTimeForTrackday: string | null = null;
+
+      if (td.chronos && td.chronos.length > 0) {
+        // Try to find a chrono marked as best
+        const explicitBest = td.chronos.find(c => c.isBest);
+        if (explicitBest) {
+          bestLapTimeForTrackday = explicitBest.lapTime;
+        } else {
+          // If no explicit best, find the minimum lap time
+          const validLapTimes = td.chronos.filter(c => c.lapTime && chronoFormatRegex.test(c.lapTime));
+          if (validLapTimes.length > 0) {
+            bestLapTimeForTrackday = validLapTimes.reduce((minChrono, currentChrono) => {
+              return parseLapTimeToSeconds(currentChrono.lapTime) < parseLapTimeToSeconds(minChrono.lapTime) ? currentChrono : minChrono;
+            }).lapTime;
+          }
+        }
+      }
+
+      // Fallback to the top-level bestLapTime if not found in chronos
+      if (!bestLapTimeForTrackday && td.bestLapTime) {
+        bestLapTimeForTrackday = td.bestLapTime;
+      }
+
+      if (bestLapTimeForTrackday && chronoFormatRegex.test(bestLapTimeForTrackday)) {
+        dataPoints.push({
+          date: format(new Date(td.date), 'MMM dd, yyyy'),
+          bestLapTime: parseLapTimeToSeconds(bestLapTimeForTrackday),
+        });
+      }
+    });
+
+    return dataPoints;
   }, [trackdays, selectedVehicleId, selectedTrackId]);
 
   // Custom Tooltip for Chronos by Track
