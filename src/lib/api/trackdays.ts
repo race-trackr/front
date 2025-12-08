@@ -16,7 +16,20 @@ export const getTrackdays = async (params?: GetTrackdaysParams): Promise<Paginat
   const response = await apiClient.get('/trackdays', {
     params: params,
   });
-  return response.data; // Assuming API returns { data: T[], total: number, limit: number, offset: number }
+  // Ensure response.data is always a PaginatedResponse, even if empty or null
+  return response.data || { 
+    data: [], 
+    meta: { 
+      total: 0, 
+      perPage: params?.limit || 0, 
+      currentPage: params?.page || 1, 
+      lastPage: 1, 
+      firstPage: 1, 
+      lastPageUrl: null, 
+      nextPageUrl: null, 
+      previousPageUrl: null 
+    } 
+  };
 };
 
 export const getTrackdayById = async (id: string): Promise<TrackDayType> => {
