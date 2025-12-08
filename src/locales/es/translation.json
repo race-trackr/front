@@ -459,5 +459,20 @@
   "no_forecast_available": "No hay pronóstico disponible",
   "forecast": "Pronóstico",
   "upcoming_maintenances": "Próximos mantenimientos",
-  "no_upcoming_maintenances": "No hay próximos mantenimientos para mostrar."
+  "no_upcoming_maintenances": "No hay próximos mantenimientos para mostrar.",
+  "analytics": "Análisis",
+  "filters": "Filtros",
+  "start_date": "Fecha de inicio",
+  "end_date": "Fecha de fin",
+  "select_start_date": "Seleccionar fecha de inicio",
+  "select_end_date": "Seleccionar fecha de fin",
+  "apply_filters": "Aplicar filtros",
+  "tracks_driven": "Pistas Recorridas",
+  "chronos_by_track": "Cronos por Pista",
+  "no_data_for_chart": "No hay datos disponibles para este gráfico con los filtros actuales.",
+  "select_vehicle_and_track_for_chronos": "Selecciona un vehículo y una pista para ver los datos de cronos.",
+  "error_loading_data": "Error al cargar los datos para el análisis.",
+  "not_specified_model": "Modelo no especificado",
+  "monthly_activity": "Actividad Mensual",
+  "total_distance_km": "Distancia Total (km)"
 }

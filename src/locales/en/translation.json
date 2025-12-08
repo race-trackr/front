@@ -444,5 +444,20 @@
   "no_forecast_available": "No forecast available",
   "forecast": "Forecast",
   "upcoming_maintenances": "Upcoming Maintenances",
-  "no_upcoming_maintenances": "No upcoming maintenances to display."
+  "no_upcoming_maintenances": "No upcoming maintenances to display.",
+  "analytics": "Analytics",
+  "filters": "Filters",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "select_start_date": "Select start date",
+  "select_end_date": "Select end date",
+  "apply_filters": "Apply Filters",
+  "tracks_driven": "Tracks Driven",
+  "chronos_by_track": "Chronos by Track",
+  "no_data_for_chart": "No data available for this chart with current filters.",
+  "select_vehicle_and_track_for_chronos": "Select a vehicle and a track to view chronos data.",
+  "error_loading_data": "Error loading data for analytics.",
+  "not_specified_model": "Not specified model",
+  "monthly_activity": "Monthly Activity",
+  "total_distance_km": "Total Distance (km)"
 }

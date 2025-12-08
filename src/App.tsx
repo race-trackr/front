@@ -31,7 +31,8 @@ import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
 import ForgotPassword from './pages/Auth/ForgotPassword';
-import ApiKeyCreate from './pages/Settings/ApiKeyCreate'; // Import the new component
+import ApiKeyCreate from './pages/Settings/ApiKeyCreate';
+import Analytics from './pages/Analytics'; // New import
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
@@ -224,12 +225,17 @@ const App: React.FC = () => {
               ],
             },
             {
+              path: "/analytics", // New route
+              element: <Analytics />,
+              handle: { crumb: () => t('analytics') },
+            },
+            {
               path: "/settings",
               element: <Settings />,
               handle: { crumb: () => t('settings') },
             },
             {
-              path: "/settings/api-keys/create", // New route for creating API keys
+              path: "/settings/api-keys/create",
               element: <ApiKeyCreate />,
               handle: { crumb: () => t('create_new_api_key') },
             },
