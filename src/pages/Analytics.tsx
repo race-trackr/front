@@ -94,10 +94,10 @@ const Analytics: React.FC = () => {
 
   // Memoized data for "Chronos by Track" chart
   const chronosByTrackData = React.useMemo(() => {
-    if (!trackdays || !selectedVehicleId || !selectedTrackId) return [];
+    if (!trackdays || !selectedTrackId) return []; // Requires a track to be selected
 
     const filteredTrackdays = trackdays.filter(td =>
-      td.userVehicleId === selectedVehicleId &&
+      (selectedVehicleId === undefined || td.userVehicleId === selectedVehicleId) && // Conditionally filter by vehicle
       td.trackId === selectedTrackId &&
       td.bestLapTime // Only include trackdays with a best lap time
     ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Sort by date
@@ -287,9 +287,9 @@ const Analytics: React.FC = () => {
               </ResponsiveContainer>
             ) : (
               <p className="text-center text-muted-foreground">
-                {selectedVehicleId && selectedTrackId
+                {selectedTrackId
                   ? t('no_data_for_chart')
-                  : t('select_vehicle_and_track_for_chronos')}
+                  : t('select_a_track_for_chronos')}
               </p>
             )}
           </CardContent>
