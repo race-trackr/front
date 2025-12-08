@@ -116,36 +116,32 @@ const Analytics: React.FC = () => {
       td.trackId === selectedTrackId
     ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    const dataPoints: { date: string; bestLapTime: number }[] = [];
+    const dataPoints: { date: string; lapTime: number }[] = []; // Changed bestLapTime to lapTime
 
     filteredTrackdays.forEach(td => {
-      let bestLapTimeForTrackday: string | null = null;
+      let lapTimeForTrackdayInSeconds: number | null = null;
 
       if (td.chronos && td.chronos.length > 0) {
-        // Try to find a chrono marked as best
-        const explicitBest = td.chronos.find(c => c.isBest);
-        if (explicitBest) {
-          bestLapTimeForTrackday = explicitBest.lapTime;
-        } else {
-          // If no explicit best, find the minimum lap time
-          const validLapTimes = td.chronos.filter(c => c.lapTime && chronoFormatRegex.test(c.lapTime));
-          if (validLapTimes.length > 0) {
-            bestLapTimeForTrackday = validLapTimes.reduce((minChrono, currentChrono) => {
-              return parseLapTimeToSeconds(currentChrono.lapTime) < parseLapTimeToSeconds(minChrono.lapTime) ? currentChrono : minChrono;
-            }).lapTime;
-          }
+        const validLapTimesInSeconds = td.chronos
+          .filter(c => c.lapTime && chronoFormatRegex.test(c.lapTime))
+          .map(c => parseLapTimeToSeconds(c.lapTime));
+
+        if (validLapTimesInSeconds.length > 0) {
+          // Calculate average lap time from all chronos
+          const sum = validLapTimesInSeconds.reduce((acc, time) => acc + time, 0);
+          lapTimeForTrackdayInSeconds = sum / validLapTimesInSeconds.length;
         }
       }
 
-      // Fallback to the top-level bestLapTime if not found in chronos
-      if (!bestLapTimeForTrackday && td.bestLapTime) {
-        bestLapTimeForTrackday = td.bestLapTime;
+      // Fallback to the top-level bestLapTime if no chronos or no valid chronos
+      if (lapTimeForTrackdayInSeconds === null && td.bestLapTime && chronoFormatRegex.test(td.bestLapTime)) {
+        lapTimeForTrackdayInSeconds = parseLapTimeToSeconds(td.bestLapTime);
       }
 
-      if (bestLapTimeForTrackday && chronoFormatRegex.test(bestLapTimeForTrackday)) {
+      if (lapTimeForTrackdayInSeconds !== null) {
         dataPoints.push({
           date: format(new Date(td.date), 'MMM dd, yyyy'),
-          bestLapTime: parseLapTimeToSeconds(bestLapTimeForTrackday),
+          lapTime: lapTimeForTrackdayInSeconds,
         });
       }
     });
@@ -164,7 +160,7 @@ const Analytics: React.FC = () => {
       return (
         <div className="rounded-lg border bg-background p-2 text-sm shadow-md">
           <p className="font-bold">{label}</p>
-          <p className="text-muted-foreground">{t('best_laptime')}: <span className="font-semibold text-foreground">{formattedTime}</span></p>
+          <p className="text-muted-foreground">{t('average_laptime')}: <span className="font-semibold text-foreground">{formattedTime}</span></p>
         </div>
       );
     }
@@ -315,7 +311,7 @@ const Analytics: React.FC = () => {
                   }} />
                   <Tooltip content={<CustomLapTimeTooltip />} />
                   <Legend />
-                  <Line type="monotone" dataKey="bestLapTime" stroke="#82ca9d" name={t('best_laptime')} activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="lapTime" stroke="#82ca9d" name={t('average_laptime')} activeDot={{ r: 8 }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : (
