@@ -27,6 +27,18 @@ import { UserVehicleType, TrackType, TrackDayType } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
 import { toast } from 'sonner';
 
+// Helper function to convert MM.SS.mmm to seconds
+const parseLapTimeToSeconds = (lapTime: string): number => {
+  const parts = lapTime.split('.');
+  if (parts.length === 3) {
+    const minutes = parseInt(parts[0], 10);
+    const seconds = parseInt(parts[1], 10);
+    const milliseconds = parseInt(parts[2], 10);
+    return (minutes * 60) + seconds + (milliseconds / 1000);
+  }
+  return 0; // Default to 0 if format is incorrect
+};
+
 const Analytics: React.FC = () => {
   const { t } = useTranslation();
 
@@ -107,18 +119,6 @@ const Analytics: React.FC = () => {
       bestLapTime: parseLapTimeToSeconds(td.bestLapTime!), // Convert MM.SS.mmm to seconds for charting
     }));
   }, [trackdays, selectedVehicleId, selectedTrackId]);
-
-  // Helper function to convert MM.SS.mmm to seconds
-  const parseLapTimeToSeconds = (lapTime: string): number => {
-    const parts = lapTime.split('.');
-    if (parts.length === 3) {
-      const minutes = parseInt(parts[0], 10);
-      const seconds = parseInt(parts[1], 10);
-      const milliseconds = parseInt(parts[2], 10);
-      return (minutes * 60) + seconds + (milliseconds / 1000);
-    }
-    return 0; // Default to 0 if format is incorrect
-  };
 
   // Custom Tooltip for Chronos by Track
   const CustomLapTimeTooltip = ({ active, payload, label }: any) => {
