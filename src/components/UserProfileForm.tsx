@@ -125,8 +125,8 @@ const UserProfileForm: React.FC = () => {
   const updateUserProfileMutation = useMutation({
     mutationFn: async (payload: { firstName: string | null; lastName: string | null; email: string; countryId: number | null }) => {
       if (!user?.id) throw new Error("User ID is missing.");
-      const response = await apiClient.put(`/users/${user.id}`, payload);
-      return response.data;
+      const response = await apiClient.put(`/users/me`, payload);
+      return response.data.user as UserType; // extract user from response
     },
     onSuccess: (updatedUser: UserType) => {
       queryClient.invalidateQueries({ queryKey: ['user', user?.id] });
@@ -174,6 +174,7 @@ const UserProfileForm: React.FC = () => {
   };
 
   const isSubmitting = updateUserProfileMutation.isPending || updatePasswordMutation.isPending;
+  const isDisabled = !form.formState.isDirty || !form.formState.isValid || isSubmitting;
 
   return (
     <Card className="w-full">
@@ -228,7 +229,7 @@ const UserProfileForm: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString() || ''} disabled={isLoadingCountries || isErrorCountries || isSubmitting}>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString() || ''} disabled={isLoadingCountries || isErrorCountries || isSubmitting || !form.formState.isValid}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
@@ -295,7 +296,7 @@ const UserProfileForm: React.FC = () => {
             </div>
 
             <div className="flex justify-end mt-4 md:col-span-2">
-              <Button type="submit" className="btn-primary-gradient" disabled={isSubmitting}>
+              <Button type="submit" className="btn-primary-gradient" disabled={isDisabled}>
                 {isSubmitting ? t('saving_profile') : t('update_profile')}
               </Button>
             </div>

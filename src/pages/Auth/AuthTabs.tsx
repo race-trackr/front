@@ -5,6 +5,7 @@ import Register from './Register';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { useContentHeight } from '@/hooks/useContentHeight';
 
 const backgroundImages = [
   '/images/login-background-1.jpg',
@@ -17,6 +18,8 @@ const AuthTabs: React.FC = () => {
   const defaultTab = searchParams.get('tab') || 'login';
   const { t } = useTranslation();
   const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState('');
+  const [activeTab, setActiveTab] = React.useState(defaultTab);
+  const { contentRef, height } = useContentHeight();
 
   React.useEffect(() => {
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
@@ -24,6 +27,7 @@ const AuthTabs: React.FC = () => {
   }, []);
 
   const handleTabChange = (value: string) => {
+    setActiveTab(value);
     setSearchParams({ tab: value });
   };
 
@@ -47,27 +51,34 @@ const AuthTabs: React.FC = () => {
             {t('auth_page_description')}
           </p>
         </div>
-        <Tabs defaultValue={defaultTab} onValueChange={handleTabChange} className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">{t('login')}</TabsTrigger>
             <TabsTrigger value="register">{t('register')}</TabsTrigger>
           </TabsList>
-          <TabsContent 
-            value="login" 
-            className="transition-all duration-300 ease-in-out 
-                       data-[state=inactive]:opacity-0 data-[state=inactive]:scale-90 data-[state=inactive]:-translate-y-4 
-                       data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0"
+          <div 
+            className="overflow-hidden transition-all duration-300 ease-in-out"
+            style={{ height: `${height}px` }}
           >
-            <Login />
-          </TabsContent>
-          <TabsContent 
-            value="register" 
-            className="transition-all duration-300 ease-in-out 
-                       data-[state=inactive]:opacity-0 data-[state=inactive]:scale-90 data-[state=inactive]:-translate-y-4 
-                       data-[state=active]:opacity-100 data-[state=active]:scale-100 data-[state=active]:translate-y-0"
-          >
-            <Register />
-          </TabsContent>
+            <div ref={contentRef}>
+              <TabsContent 
+                value="login" 
+                className="transition-all duration-300 ease-in-out 
+                           data-[state=inactive]:opacity-0 
+                           data-[state=active]:opacity-100"
+              >
+                <Login />
+              </TabsContent>
+              <TabsContent 
+                value="register" 
+                className="transition-all duration-300 ease-in-out 
+                           data-[state=inactive]:opacity-0 
+                           data-[state=active]:opacity-100"
+              >
+                <Register />
+              </TabsContent>
+            </div>
+          </div>
         </Tabs>
       </div>
     </div>

@@ -31,10 +31,10 @@ export const useAuthStore = create<AuthState>()(
         if (storedToken) {
           apiClient.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
           try {
-            const response = await apiClient.get('/auth/me');
+            const response = await apiClient.get('/users/me');
             set({ user: response.data.user, isAuthenticated: true, loading: false });
           } catch (error: any) {
-            console.error('AuthStore: /auth/me error', error);
+            console.error('AuthStore: /users/me error', error);
             set({ user: null, token: null, isAuthenticated: false, loading: false });
             delete apiClient.defaults.headers.common['Authorization'];
           }
@@ -50,7 +50,7 @@ export const useAuthStore = create<AuthState>()(
           const newToken = response.data.token;
           apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
-          const userResponse = await apiClient.get('/auth/me');
+          const userResponse = await apiClient.get('/users/me');
           set({ token: newToken, user: userResponse.data.user, isAuthenticated: true, loading: false });
           showSuccess(i18n.t('logged_in_successfully'));
         } catch (error: any) {

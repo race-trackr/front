@@ -12,13 +12,21 @@ interface TabItem {
 
 interface VerticalTabsProps {
   tabs: TabItem[];
-  defaultValue: string;
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
   className?: string;
 }
 
-const VerticalTabs: React.FC<VerticalTabsProps> = ({ tabs, defaultValue, className }) => {
+const VerticalTabs: React.FC<VerticalTabsProps> = ({ tabs, defaultValue, value, onValueChange, className }) => {
   return (
-    <Tabs defaultValue={defaultValue} orientation="vertical" className={cn("flex flex-col md:flex-row", className)}>
+    <Tabs
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={onValueChange}
+      orientation="vertical"
+      className={cn("flex flex-col md:flex-row", className)}
+    >
       <TabsList className="flex flex-col h-auto justify-start p-2 md:w-48 md:mr-4">
         {tabs.map((tab) => (
           <TabsTrigger

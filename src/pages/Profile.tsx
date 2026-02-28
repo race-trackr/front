@@ -13,14 +13,14 @@ const Profile: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
 
-  const displayName = user?.firstName && user?.lastName 
-    ? `${user.firstName} ${user.lastName}` 
+  const displayName = user?.firstName && user?.lastName
+    ? `${user.firstName} ${user.lastName}`
     : user?.email || t("guest");
   const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
   const isFreeTier = user?.subscription?.plan === 'free' || !user?.subscription;
 
   return (
-    <div className="mx-auto p-4 space-y-6">
+    <div className="p-4 space-y-6">
       <h1 className="text-3xl font-bold mb-6">{t('my_account')}</h1>
       <Card>
         <CardHeader>
@@ -47,7 +47,8 @@ const Profile: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Subscription infos */}
+      {/* <Card>
         <CardHeader>
           <CardTitle>{t('subscription')}</CardTitle>
         </CardHeader>
@@ -82,7 +83,7 @@ const Profile: React.FC = () => {
             </div>
           )}
         </CardContent>
-      </Card>
+      </Card> */}
 
       <UserProfileForm />
     </div>

@@ -13,6 +13,13 @@ export interface CountryType {
 
 export type UserRole = 'owner' | 'admin' | 'user';
 
+export interface UserPreferences {
+  emailNotifications?: boolean;
+  marketingEmails?: boolean;
+  securityEmails?: boolean;
+  pushNotifications?: boolean;
+}
+
 export interface SubscriptionType {
   id: string;
   userId: number;
@@ -33,6 +40,7 @@ export interface UserType {
   countryId: number | null; // Made nullable
   role: UserRole;
   avatar: string | null; // Added avatar property
+  preferences?: UserPreferences | null; // User preferences (notifications, marketing, etc.)
   createdAt: string;
   updatedAt: string | null;
 
