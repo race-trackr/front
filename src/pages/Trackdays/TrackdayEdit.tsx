@@ -4,33 +4,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { TrackDayType, UpdateTrackdayPayload, WeatherCondition, TrackCondition, UserVehicleType, TrackType } from '@/types';
-import { showSuccess, showError } from '@/utils/toast';
+import TrackdayForm from '@/components/TrackdayForm';
+import { TrackDayType, UpdateTrackdayPayload, UserVehicleType, TrackType } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
-import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale'; // Import locales
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { fr, enUS, es, it } from 'date-fns/locale';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getTrackdayById, updateTrackday, deleteTrackday } from '@/lib/api/trackdays';
 import { getVehicles } from '@/lib/api/vehicles';
-import { getTracks } from '@/lib/api/tracks';
-import { Combobox } from '@/components/ui/combobox';
-import { PlusCircle, Trash2, ArrowLeft } from 'lucide-react';
+import { Trash2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
-import MultiLineChronoInput from '@/components/MultiLineChronoInput';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 
 const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
@@ -195,6 +179,7 @@ const TrackdayEdit: React.FC = () => {
       case 'es':
         return es;
       case 'it':
+        return it;
       default:
         return enUS;
     }
@@ -229,243 +214,24 @@ const TrackdayEdit: React.FC = () => {
         </Button>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="userVehicleId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={(value) => {
-                  if (value === "create-new-vehicle") {
-                    navigate('/vehicles/create');
-                  } else {
-                    field.onChange(Number(value));
-                  }
-                }} value={field.value?.toString() || ''}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_a_vehicle')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {isLoadingVehicles ? (
-                      <SelectItem value="loading" disabled>{t('loading_vehicles')}</SelectItem>
-                    ) : isErrorVehicles || !vehicles || vehicles.length === 0 ? (
-                      <SelectItem value="create-new-vehicle" className="text-blue-600 cursor-pointer hover:bg-accent">
-                        <div className="flex items-center">
-                          <PlusCircle className="mr-2 h-4 w-4" /> {t('create_vehicle')}
-                        </div>
-                      </SelectItem>
-                    ) : (
-                      vehicles.map((vehicle) => (
-                        <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                          {vehicle.name} ({vehicle.licensePlate || t('not_specified')})
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="trackId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('track')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Combobox
-                    options={trackOptions}
-                    value={field.value.toString()}
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    placeholder={t('select_a_track')}
-                    emptyMessage={t('no_track_found')}
-                    disabled={isLoadingTracks}
-                    onCreateNew={() => navigate('/admin/tracks/create')}
-                    createNewLabel={t('create_track')}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('date')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <DatePicker
-                    value={field.value ? new Date(field.value) : undefined}
-                    onChange={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
-                    disabled={field.disabled}
-                    placeholder={t('pick_a_date')}
-                    open={isDatePickerOpen}
-                    onOpenChange={setIsDatePickerOpen}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="weather"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('weather')}</FormLabel>
-                <Select onValueChange={(value) => field.onChange(value === 'null-option' ? null : value)} value={field.value || 'null-option'}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_weather_condition')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="null-option">{t('not_specified')}</SelectItem>
-                    <SelectItem value="clear">{t('weather_clear')}</SelectItem>
-                    <SelectItem value="cloudy">{t('weather_cloudy')}</SelectItem>
-                    <SelectItem value="rainy">{t('weather_rainy')}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="airTemperature"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('air_temperature')}</FormLabel>
-                <FormControl>
-                  <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="trackTemperature"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('track_temperature')}</FormLabel>
-                <FormControl>
-                  <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="trackCondition"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('track_condition')}</FormLabel>
-                <Select onValueChange={(value) => field.onChange(value === 'null-option' ? null : value)} value={field.value || 'null-option'}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_track_condition')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="null-option">{t('not_specified')}</SelectItem>
-                    <SelectItem value="wet">{t('track_condition_wet')}</SelectItem>
-                    <SelectItem value="dry">{t('track_condition_dry')}</SelectItem>
-                    <SelectItem value="moist">{t('track_condition_moist')}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="bestLapTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('best_laptime')}</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder="MM.SS.mmm" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="totalLaps"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('total_laps')}</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} value={field.value === null ? '' : field.value} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="totalDistance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('total_distance')}</FormLabel>
-                <FormControl>
-                  <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="chronos"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('chronos')}</FormLabel>
-                <FormControl>
-                  <MultiLineChronoInput
-                    value={field.value}
-                    onChange={field.onChange}
-                    placeholder={t('enter_lap_time')}
-                    disabled={field.disabled}
-                  />
-                </FormControl>
-                <FormDescription>{t('enter_multiple_lap_times')}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t('notes')}</FormLabel>
-                <FormControl>
-                  <Textarea rows={3} {...field} value={field.value || ''} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-between mt-4 md:col-span-2">
-            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit" className="btn-primary-gradient" disabled={updateTrackdayMutation.isPending}>
-              {updateTrackdayMutation.isPending ? t('saving') : t('save_changes')}
-            </Button>
-          </div>
-        </form>
-      </Form>
+      <TrackdayForm
+        form={form}
+        onSubmit={onSubmit}
+        vehicles={vehicles}
+        tracks={tracks}
+        trackOptions={trackOptions}
+        isLoadingVehicles={isLoadingVehicles}
+        isErrorVehicles={isErrorVehicles}
+        isLoadingTracks={isLoadingTracks}
+        isErrorTracks={isErrorTracks}
+        isDatePickerOpen={isDatePickerOpen}
+        setIsDatePickerOpen={setIsDatePickerOpen}
+        isOwner={true}
+        submitLabel={t('save_changes')}
+        submitDisabled={updateTrackdayMutation.isPending}
+        cancelLabel={t('cancel')}
+        onCancel={() => navigate(-1)}
+      />
 
       <ConfirmDeleteDialog
         isOpen={isDeleteDialogOpen}
