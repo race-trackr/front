@@ -19,7 +19,6 @@
   "total_laps": "Tours totaux",
   "create_new_trackday": "Créer une nouvelle journée en piste",
   "trackday_details": "Détails de la journée en piste",
-  "creating": "Création en cours...",
   "create_trackday": "Créer une journée en piste",
   "trackday_created_successfully": "Journée en piste créée avec succès !",
   "failed_to_create_trackday": "Échec de la création de la journée en piste.",
@@ -486,5 +485,9 @@
   "manage_countries": "Gérer les pays",
   "select_a_track_for_chronos": "Sélectionnez une piste pour afficher les données de chronos.",
   "error_loading_vehicles": "Erreur lors du chargement des véhicules.",
-  "unspecified": "Non spécifié"
+  "unspecified": "Non spécifié",
+  "vehicle_updated_successfully": "Véhicule mis à jour avec succès !",
+  "vehicle_deleted_successfully": "Véhicule supprimé avec succès !",
+  "deleting": "Suppression en cours...",
+  "creating": "Création en cours..."
 }

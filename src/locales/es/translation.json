@@ -474,5 +474,9 @@
   "error_loading_data": "Error al cargar los datos para el análisis.",
   "not_specified_model": "Modelo no especificado",
   "monthly_activity": "Actividad Mensual",
-  "total_distance_km": "Distancia Total (km)"
+  "total_distance_km": "Distancia Total (km)",
+  "vehicle_updated_successfully": "¡Vehículo actualizado exitosamente!",
+  "vehicle_deleted_successfully": "¡Vehículo eliminado exitosamente!",
+  "deleting": "Eliminando...",
+  "creating": "Creando..."
 }

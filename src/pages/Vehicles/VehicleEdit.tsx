@@ -8,39 +8,12 @@ import * as z from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from '@/components/ui/textarea';
+import VehicleForm, { vehicleFormSchema } from '@/components/VehicleForm';
 import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles';
-import { CreateVehiclePayload, UserVehicleType, VehicleCategory, UpdateVehiclePayload } from '@/types/index';
+import { UserVehicleType, UpdateVehiclePayload } from '@/types/index';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Le nom du véhicule est requis." }),
-  type: z.enum(['car', 'motorcycle', 'karting', 'other'], { message: "Le type de véhicule est requis." }),
-  brand: z.string().nullable().optional(),
-  model: z.string().nullable().optional(),
-  year: z.coerce.number().min(1900, { message: "L'année doit être au moins 1900." }).max(new Date().getFullYear() + 1, { message: "L'année ne peut pas être dans le futur." }).nullable().optional(),
-  licensePlate: z.string().nullable().optional(),
-  details: z.string().nullable().optional(),
-});
 
 const VehicleEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,8 +24,8 @@ const VehicleEdit: React.FC = () => {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  const form = useForm<CreateVehiclePayload>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof vehicleFormSchema>>({
+    resolver: zodResolver(vehicleFormSchema),
     defaultValues: {
       name: '',
       type: 'car',
@@ -109,7 +82,7 @@ const VehicleEdit: React.FC = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof vehicleFormSchema>) => {
     const payload: UpdateVehiclePayload = {
       ...values,
       name: values.name,
@@ -140,9 +113,9 @@ const VehicleEdit: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto p-4 space-y-6">
+    <div className="p-4 space-y-6">
       <div className="flex items-center justify-between mb-6">
-        <Button variant="outline" onClick={() => navigate(-1)}>
+        <Button variant="outline" onClick={() => navigate(-1)} title={t('back')}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
         <h1 className="text-3xl font-bold">{vehicle.name}</h1>
@@ -152,125 +125,21 @@ const VehicleEdit: React.FC = () => {
           onClick={handleDeleteClick}
           disabled={deleteVehicleMutation.isPending}
           className="btn-danger"
+          title={deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}
         >
           <Trash2 className="h-4 w-4" />
           <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
         </Button>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_name')}<span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder={t('enter_vehicle_name')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_type')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_vehicle_type')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                        <SelectItem value="car">{t('type_car')}</SelectItem>
-                        <SelectItem value="motorcycle">{t('type_motorcycle')}</SelectItem>
-                        <SelectItem value="karting">{t('type_karting')}</SelectItem>
-                        <SelectItem value="other">{t('type_other')}</SelectItem>
-                      </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="brand"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_brand')}</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_brand_optional')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="model"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_model')}</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_model_optional')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="year"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_year')}</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_year_optional')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="licensePlate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('vehicle_license_plate')}</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_license_plate')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="details"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>{t('details')}</FormLabel>
-                <FormControl>
-                  <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_any_details')} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-between w-full md:col-span-2 mt-4">
-            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit" className="btn-primary-gradient" disabled={updateVehicleMutation.isPending}>
-              {updateVehicleMutation.isPending ? t('saving') : t('save_changes')}
-            </Button>
-          </div>
-        </form>
-      </Form>
+      <VehicleForm
+        form={form}
+        onSubmit={onSubmit}
+        isLoading={updateVehicleMutation.isPending}
+        submitLabel={t('save_changes')}
+        cancelLabel={t('cancel')}
+        onCancel={() => navigate(-1)}
+      />
 
       <ConfirmDeleteDialog
         isOpen={isDeleteDialogOpen}

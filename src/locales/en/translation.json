@@ -481,5 +481,9 @@
   "monthly_activity": "Monthly Activity",
   "total_distance_km": "Total Distance (km)",
   "manage_countries": "Manage Countries",
-  "select_a_track_for_chronos": "Select a track to view chronos data."
+  "select_a_track_for_chronos": "Select a track to view chronos data.",
+  "vehicle_updated_successfully": "Vehicle updated successfully!",
+  "vehicle_deleted_successfully": "Vehicle deleted successfully!",
+  "deleting": "Deleting...",
+  "creating": "Creating..."
 }
