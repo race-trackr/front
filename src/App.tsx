@@ -27,11 +27,14 @@ import AdminTracksEdit from './pages/Admin/AdminTracksEdit';
 import AdminCountries from './pages/Admin/AdminCountries';
 import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
 import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
-import Settings from './pages/Settings';
+import AdminUsers from './pages/Admin/AdminUsers';
+import AdminUserEdit from './pages/Admin/AdminUserEdit';
+
 import Profile from './pages/Profile';
 import Upgrade from './pages/Upgrade';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ApiKeyCreate from './pages/Settings/ApiKeyCreate';
+import Settings from './pages/Settings';
 import Analytics from './pages/Analytics'; // New import
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorPage from './components/ErrorPage';
@@ -254,7 +257,7 @@ const App: React.FC = () => {
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin']} />,
+      element: <ProtectedRoute allowedRoles={['admin', 'owner']} />,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -326,28 +329,55 @@ const App: React.FC = () => {
                     },
                   ],
                 },
+                {
+                  element: <ProtectedRoute allowedRoles={['owner']} />,
+                  children: [
+                    {
+                      path: "users",
+                      handle: { crumb: () => t('manage_users') },
+                      children: [
+                        {
+                          index: true,
+                          element: <AdminUsers />,
+                        },
+                        {
+                          path: "edit/:id",
+                          element: <AdminUserEdit />,
+                          handle: {
+                            crumb: ({ data }: RouteMatchWithData) => {
+                              const user = data?.user as any;
+                              return user ? t('edit_user', { id: user.id }) : t('edit_user', { id: data?.params?.id || '' });
+                            }
+                          },
+                          loader: async ({ params }) => {
+                            const response = await apiClient.get(`/admin/users/${params.id}`);
+                            return { user: response.data.user };
+                          }
+                        },
+                      ],
+                    },
+
+                  ],
+                },
               ],
             },
           ],
         },
-      ],
+      ]
     },
-    {
-      path: "*",
-      element: <NotFound />,
-      errorElement: <ErrorPage />,
-    },
+    // fallback route when nothing matches
+    { path: "*", element: <NotFound /> },
   ];
 
   const router = createBrowserRouter(routesConfig);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient} >
       <AuthProvider>
         <RouterProvider router={router} />
         <Toaster />
       </AuthProvider>
-    </QueryClientProvider>
+    </QueryClientProvider >
   );
 };
 

@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,6 +42,20 @@ const parseLapTimeToSeconds = (lapTime: string): number => {
 
 const Analytics: React.FC = () => {
   const { t } = useTranslation();
+  const [hiddenTracks, setHiddenTracks] = React.useState<Set<string>>(new Set());
+
+  const handleLegendClick = (data: any) => {
+    const { value } = data;
+    setHiddenTracks(prev => {
+      const next = new Set(prev);
+      if (next.has(value)) {
+        next.delete(value);
+      } else {
+        next.add(value);
+      }
+      return next;
+    });
+  };
 
   // State for filters
   const [selectedVehicleId, setSelectedVehicleId] = React.useState<number | undefined>(undefined);
@@ -110,16 +122,19 @@ const Analytics: React.FC = () => {
 
   // Memoized data for "Chronos by Track" chart
   const chronosByTrackData = React.useMemo(() => {
-    if (!trackdays || selectedTrackId === undefined) return []; // Requires a track to be selected (or 'all' is not selected)
+    if (!trackdays || !tracks) return [];
 
-    const filteredTrackdays = trackdays.filter(td =>
-      (selectedVehicleId === undefined || td.userVehicleId === selectedVehicleId) && // Conditionally filter by vehicle
-      (selectedTrackId === undefined || td.trackId === selectedTrackId) // Conditionally filter by track
-    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // filter by vehicle and optionally track
+    let filtered = trackdays.filter(td =>
+      (selectedVehicleId === undefined || td.userVehicleId === selectedVehicleId) &&
+      (selectedTrackId === undefined || td.trackId === selectedTrackId)
+    );
 
-    const dataPoints: { date: string; lapTime: number }[] = [];
+    filtered = filtered.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    filteredTrackdays.forEach(td => {
+    const dateMap: Record<string, any> = {};
+
+    filtered.forEach(td => {
       let lapTimeForTrackdayInSeconds: number | null = null;
 
       if (td.chronos && td.chronos.length > 0) {
@@ -128,40 +143,45 @@ const Analytics: React.FC = () => {
           .map(c => parseLapTimeToSeconds(c.lapTime));
 
         if (validLapTimesInSeconds.length > 0) {
-          // Calculate average lap time from all chronos
           const sum = validLapTimesInSeconds.reduce((acc, time) => acc + time, 0);
           lapTimeForTrackdayInSeconds = sum / validLapTimesInSeconds.length;
         }
       }
 
-      // Fallback to the top-level bestLapTime if no chronos or no valid chronos
       if (lapTimeForTrackdayInSeconds === null && td.bestLapTime && chronoFormatRegex.test(td.bestLapTime)) {
         lapTimeForTrackdayInSeconds = parseLapTimeToSeconds(td.bestLapTime);
       }
 
       if (lapTimeForTrackdayInSeconds !== null) {
-        dataPoints.push({
-          date: format(new Date(td.date), 'MMM dd, yyyy'),
-          lapTime: lapTimeForTrackdayInSeconds,
-        });
+        const date = format(new Date(td.date), 'MMM dd, yyyy');
+        if (!dateMap[date]) dateMap[date] = { date };
+        const trackName = tracks.find(t => t.id === td.trackId)?.name || `Track ${td.trackId}`;
+        // when a specific track is selected we still use its name so chart is consistent
+        dateMap[date][trackName] = lapTimeForTrackdayInSeconds;
       }
     });
 
-    return dataPoints;
-  }, [trackdays, selectedVehicleId, selectedTrackId]);
+    return Object.values(dateMap).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [trackdays, selectedVehicleId, selectedTrackId, tracks]);
 
   // Custom Tooltip for Chronos by Track
   const CustomLapTimeTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
-      const valueInSeconds = payload[0].value;
-      const minutes = Math.floor(valueInSeconds / 60);
-      const seconds = Math.floor(valueInSeconds % 60);
-      const milliseconds = Math.round((valueInSeconds - Math.floor(valueInSeconds)) * 1000);
-      const formattedTime = `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
       return (
         <div className="rounded-lg border bg-background p-2 text-sm shadow-md">
           <p className="font-bold">{label}</p>
-          <p className="text-muted-foreground">{t('average_laptime')}: <span className="font-semibold text-foreground">{formattedTime}</span></p>
+          {payload.map((p: any) => {
+            const valueInSeconds = p.value;
+            const minutes = Math.floor(valueInSeconds / 60);
+            const seconds = Math.floor(valueInSeconds % 60);
+            const milliseconds = Math.round((valueInSeconds - Math.floor(valueInSeconds)) * 1000);
+            const formattedTime = `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+            return (
+              <p key={p.name} className="text-muted-foreground">
+                {p.name}: <span className="font-semibold text-foreground">{formattedTime}</span>
+              </p>
+            );
+          })}
         </div>
       );
     }
@@ -254,7 +274,7 @@ const Analytics: React.FC = () => {
             <DatePicker
               value={startDate}
               onChange={setStartDate}
-              placeholder={t('select_start_date')}
+              placeholder={t('start_date')}
             />
           </div>
           <div className="flex flex-col space-y-1">
@@ -262,13 +282,8 @@ const Analytics: React.FC = () => {
             <DatePicker
               value={endDate}
               onChange={setEndDate}
-              placeholder={t('select_end_date')}
+              placeholder={t('end_date')}
             />
-          </div>
-          <div className="col-span-full flex justify-end">
-            <Button onClick={handleApplyFilters} className="btn-primary-gradient">
-              {t('apply_filters')}
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -312,15 +327,45 @@ const Analytics: React.FC = () => {
                     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                   }} />
                   <Tooltip content={<CustomLapTimeTooltip />} />
-                  <Legend />
-                  <Line type="monotone" dataKey="lapTime" stroke="#82ca9d" name={t('average_laptime')} activeDot={{ r: 8 }} />
+                  <Legend
+                    onClick={handleLegendClick}
+                    formatter={(value: string) => (
+                      <span style={{ textDecoration: hiddenTracks.has(value) ? 'line-through' : 'none' }}>
+                        {value}
+                      </span>
+                    )}
+                  />
+                  {chronosByTrackData.length > 0 && (() => {
+                    // gather all keys present in the dataset (there may be gaps)
+                    const keysSet = new Set<string>();
+                    chronosByTrackData.forEach(row => {
+                      Object.keys(row).forEach(k => {
+                        if (k !== 'date') keysSet.add(k);
+                      });
+                    });
+                    const keys = Array.from(keysSet);
+                    // cycle through some colors
+                    const colors = ['#82ca9d', '#8884d8', '#ffc658', '#ff7300', '#0088fe', '#00c49f'];
+                    return keys.map((key, idx) => (
+                      <Line
+                        key={key}
+                        type="monotone"
+                        dataKey={key}
+                        stroke={colors[idx % colors.length]}
+                        connectNulls={true}
+                        hide={hiddenTracks.has(key)}
+                        name={
+                          selectedTrackId !== undefined ? t('average_laptime') : key
+                        }
+                        activeDot={{ r: 8 }}
+                      />
+                    ));
+                  })()}
                 </LineChart>
               </ResponsiveContainer>
             ) : (
               <p className="text-center text-muted-foreground">
-                {selectedTrackId !== undefined
-                  ? t('no_data_for_chart')
-                  : t('select_a_track_for_chronos')}
+                {t('no_data_for_chart')}
               </p>
             )}
           </CardContent>

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import AppBar from './AppBar';
 import { useSidebarStore } from '@/store/sidebarStore';
 import useBreadcrumbs from '@/hooks/useBreadcrumbs';
-import Logo from '/images/logo.svg?raw';
+import Logo from '/images/logo.svg';
 
 interface LayoutProps {
   children?: ReactNode; // Made children optional

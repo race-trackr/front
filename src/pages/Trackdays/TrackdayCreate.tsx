@@ -33,6 +33,7 @@ import { getVehicles } from '@/lib/api/vehicles';
 import { getTracks } from '@/lib/api/tracks';
 import { UserVehicleType, CreateTrackdayPayload, TrackType, WeatherCondition, TrackCondition } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
+import { AuthContext } from '@/context/AuthContext';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 import apiClient from '@/lib/apiClient';
@@ -70,6 +71,9 @@ const TrackdayCreate: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false); // État pour contrôler l'ouverture du DatePicker
+
+  const auth = React.useContext(AuthContext);
+  const isOwner = auth?.user?.role === 'owner';
 
   const form = useForm<CreateTrackdayPayload>({
     resolver: zodResolver(formSchema),
@@ -204,8 +208,12 @@ const TrackdayCreate: React.FC = () => {
                     placeholder={t('select_a_track')}
                     emptyMessage={t('no_track_found')}
                     disabled={isLoadingTracks}
-                    onCreateNew={() => navigate('/admin/tracks/create')}
-                    createNewLabel={t('create_track')}
+                    {...(isOwner
+                      ? {
+                          onCreateNew: () => navigate('/admin/tracks/create'),
+                          createNewLabel: t('create_track'),
+                        }
+                      : {})}
                   />
                 </FormControl>
                 <FormMessage />

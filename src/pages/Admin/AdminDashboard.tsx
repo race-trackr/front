@@ -8,9 +8,11 @@ import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/apiClient';
 import { TrackType, CountryType } from '@/types';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks, error: tracksError } = useQuery<
     TrackType[], // TQueryFnData
@@ -91,6 +93,36 @@ const AdminDashboard: React.FC = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {user?.role === 'owner' && (
+          <>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{t('manage_users')}</CardTitle>
+                <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">{t('system_users_title')}</p>
+                <Button asChild className="mt-4 btn-primary-gradient">
+                  <Link to="/admin/users">{t('manage_users')}</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{t('send_email')}</CardTitle>
+                <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">{t('email_broadcast_title')}</p>
+                <Button asChild className="mt-4 btn-primary-gradient">
+                  <Link to="/admin/mailer">{t('send_email')}</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
     </div>
   );

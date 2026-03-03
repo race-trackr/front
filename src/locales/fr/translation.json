@@ -98,6 +98,32 @@
   "go_to_countries": "Aller aux pays",
   "add_new_country": "Ajouter un nouveau pays",
   "no_countries_added": "Aucun pays ajouté pour le moment.",
+
+  "manage_users": "Gérer les utilisateurs",
+  "system_users_title": "Utilisateurs du système",
+  "no_users_found": "Aucun utilisateur trouvé.",
+  "confirm_delete_user_title": "Confirmer la suppression de l'utilisateur",
+  "confirm_delete_user_description": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
+  "user_deleted_successfully": "Utilisateur supprimé avec succès !",
+
+  "send_email": "Envoyer un email",
+  "email_broadcast_title": "Envoi d'emails en masse",
+  "email_broadcast_description": "Envoyez un email à un utilisateur spécifique ou à tous les utilisateurs",
+  "recipient_type": "Type de destinataire",
+  "select_recipient_type": "Sélectionnez...",
+  "single_user": "Utilisateur unique",
+  "all_users": "Tous les utilisateurs",
+  "email_address": "Adresse email",
+  "enter_email": "Entrez une adresse email",
+  "email_of_recipient": "L'email du destinataire",
+  "subject": "Sujet",
+  "enter_subject": "Entrez le sujet",
+  "message": "Message",
+  "enter_message": "Entrez le message",
+  "email_sent_successfully": "Email envoyé avec succès",
+  "edit_user": "Modifier l'utilisateur #{{id}}",
+  "user_updated_successfully": "Utilisateur mis à jour avec succès !",
+
   "timezone": "Fuseau horaire",
   "your_maintenances": "Vos maintenances",
   "add_new_maintenance": "Ajouter une nouvelle maintenance",
@@ -459,5 +485,7 @@
   "error_loading_data": "Erreur lors du chargement des données pour l'analyse.",
   "not_specified_model": "Modèle non spécifié",
   "monthly_activity": "Activité Mensuelle",
-  "total_distance_km": "Distance Totale (km)"
+  "total_distance_km": "Distance Totale (km)",
+  "manage_countries": "Gérer les pays",
+  "select_a_track_for_chronos": "Sélectionnez une piste pour afficher les données de chronos."
 }
