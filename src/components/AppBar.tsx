@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -70,19 +68,19 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => setTheme("light")}
               className={cn(theme === "light" && "bg-accent text-accent-foreground")}
             >
               {t('Light')}
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => setTheme("dark")}
               className={cn(theme === "dark" && "bg-accent text-accent-foreground")}
             >
               {t('Dark')}
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => setTheme("system")}
               className={cn(theme === "system" && "bg-accent text-accent-foreground")}
             >

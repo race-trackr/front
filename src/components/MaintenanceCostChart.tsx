@@ -1,6 +1,4 @@
-"use client";
-
-import React from 'react';
+import { FC, useMemo } from 'react';
 import {
   ResponsiveContainer,
   LineChart,
@@ -21,7 +19,7 @@ interface MaintenanceCostChartProps {
   maintenances: MaintenanceRecordType[];
 }
 
-const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenances }) => {
+const MaintenanceCostChart: FC<MaintenanceCostChartProps> = ({ maintenances }) => {
   const { t, i18n } = useTranslation();
 
   const getLocale = () => {
@@ -31,12 +29,13 @@ const MaintenanceCostChart: React.FC<MaintenanceCostChartProps> = ({ maintenance
       case 'es':
         return es;
       case 'it':
+        return it;
       default:
         return enUS;
     }
   };
 
-  const aggregatedData = React.useMemo(() => {
+  const aggregatedData = useMemo(() => {
     const monthlyCosts: { [key: string]: { displayDate: string; cost: number } } = {};
 
     maintenances.forEach(m => {

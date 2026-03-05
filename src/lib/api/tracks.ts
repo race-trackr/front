@@ -1,5 +1,3 @@
-"use client";
-
 import apiClient from '@/lib/apiClient';
 import { TrackType } from '@/types';
 

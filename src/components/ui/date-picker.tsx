@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { format } from "date-fns";
 import { fr, enUS, es, it } from 'date-fns/locale'; // Import des locales
