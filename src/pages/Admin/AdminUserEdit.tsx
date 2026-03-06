@@ -30,7 +30,7 @@ const userSchema = z.object({
   email: z.string().email('Invalid email'),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  role: z.enum(['user', 'admin', 'owner']),
+  role: z.enum(['user', 'owner']),
 });
 
 type UserFormValues = z.infer<typeof userSchema>;
@@ -158,7 +158,6 @@ const AdminUserEdit: React.FC = () => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="user">{t('user')}</SelectItem>
-                    <SelectItem value="admin">{t('admin')}</SelectItem>
                     <SelectItem value="owner">{t('owner')}</SelectItem>
                   </SelectContent>
                 </Select>

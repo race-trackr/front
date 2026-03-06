@@ -71,10 +71,14 @@ const MaintenanceView: React.FC = () => {
   }
 
   const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() });
-  const formattedNextDueDate = maintenance.nextDueDate ? format(new Date(maintenance.nextDueDate), 'PPP', { locale: getLocale() }) : t('not_specified');
+  // if date is in the future, display it, otherwise display "not specified"
+  const formattedNextDueDate =
+    maintenance.date && new Date(maintenance.date) > new Date()
+      ? format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
+      : t('not_specified');
 
   return (
-    <div className="mx-auto p-4 space-y-6">
+    <div className="p-4 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
@@ -169,7 +173,7 @@ const MaintenanceView: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('next_due_mileage')}</p>
               <p className="text-lg">
-                {maintenance.nextDueMileage !== null ? `${maintenance.nextDueMileage} km` : t('not_specified')}
+                {maintenance.nextDueMileage ? `${maintenance.nextDueMileage} km` : t('not_specified')}
               </p>
             </div>
           </CardContent>

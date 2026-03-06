@@ -9,14 +9,20 @@ import MultiLineChronoInput from "@/components/MultiLineChronoInput";
 import { PlusCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { CreateTrackdayPayload, UserVehicleType, TrackType } from '@/types';
+import { useEffect } from 'react';
+
+const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
 
 type TrackOption = { value: string; label: string };
 
 type Props = {
-    form: any;
-    onSubmit: (values: any) => void;
-    vehicles?: any[];
-    tracks?: any[];
+    vehicles?: UserVehicleType[];
+    tracks?: TrackType[];
     trackOptions?: TrackOption[];
     isLoadingVehicles?: boolean;
     isErrorVehicles?: boolean;
@@ -29,10 +35,11 @@ type Props = {
     submitDisabled?: boolean;
     cancelLabel?: string;
     onCancel?: () => void;
+    onSubmit: (values: CreateTrackdayPayload) => void;
+    defaultValues?: Partial<CreateTrackdayPayload>;
 };
 
 export default function TrackdayForm({
-    form,
     onSubmit,
     vehicles,
     tracks,
@@ -48,24 +55,104 @@ export default function TrackdayForm({
     submitDisabled = false,
     cancelLabel = 'Cancel',
     onCancel,
+    defaultValues: propsDefaultValues,
 }: Props) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    const formSchema = z.object({
+        userVehicleId: z.coerce.number().min(1, { message: t('vehicle_required') }),
+        trackId: z.coerce.number().min(1, { message: t('track_required') }),
+        date: z.string().min(1, { message: t('date_required') }),
+        weather: z.enum(['clear', 'cloudy', 'rainy']).nullable().optional(),
+        airTemperature: z.coerce.number().min(-50).max(50, { message: t('air_temperature_invalid') }).nullable().optional(),
+        trackTemperature: z.coerce.number().min(-50).max(100, { message: t('track_temperature_invalid') }).nullable().optional(),
+        trackCondition: z.enum(['wet', 'dry', 'moist']).nullable().optional(),
+        notes: z.string().nullable().optional(),
+        bestLapTime: z.string().refine(
+            (val) => !val || chronoFormatRegex.test(val),
+            { message: t('laptime_format_invalid') }
+        ).nullable().optional(),
+        totalLaps: z.coerce.number().min(0, { message: t('total_laps_invalid') }).nullable().optional(),
+        totalDistance: z.coerce.number().min(0, { message: t('total_distance_invalid') }).nullable().optional(),
+        chronos: z.array(z.object({
+            lapTime: z.string().refine(
+                (val) => val === '' || chronoFormatRegex.test(val),
+                { message: t('laptime_format_invalid') }
+            ),
+            isBest: z.boolean(),
+        })).nullable().optional(),
+    });
+
+    const defaultFormValues = {
+        userVehicleId: null,
+        trackId: 0,
+        date: '',
+        weather: null,
+        airTemperature: null,
+        trackTemperature: null,
+        trackCondition: null,
+        notes: null,
+        bestLapTime: null,
+        totalLaps: null,
+        totalDistance: null,
+        chronos: null,
+    };
+
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: { ...defaultFormValues, ...propsDefaultValues },
+    });
+
+    useEffect(() => {
+        if (propsDefaultValues) {
+            form.reset({ ...defaultFormValues, ...propsDefaultValues });
+        }
+    }, [propsDefaultValues]);
+
+    const handleSubmit = (values: any) => {
+        const filteredChronos = values.chronos
+            ?.filter((c: any) => c.lapTime !== '')
+            .map((c: any) => ({ lapTime: c.lapTime, isBest: c.isBest })) || null;
+
+        const payload: CreateTrackdayPayload = {
+            ...values,
+            userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
+            trackId: values.trackId,
+            date: values.date,
+            weather: values.weather === undefined ? null : values.weather,
+            trackCondition: values.trackCondition === undefined ? null : values.trackCondition,
+            airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
+            trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
+            notes: values.notes === '' ? null : values.notes,
+            bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
+            totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
+            totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
+            chronos: filteredChronos && filteredChronos.length > 0 ? filteredChronos : null,
+        };
+        onSubmit(payload);
+    };
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                     control={form.control}
                     name="userVehicleId"
                     render={({ field }: any) => (
                         <FormItem>
-                            <FormLabel>{t('vehicle')}</FormLabel>
+                            <FormLabel>{t('vehicle')} <span className="text-destructive">*</span></FormLabel>
                             <Select onValueChange={(value: any) => {
                                 if (value === "create-new-vehicle") {
-                                    // handled by parent via onCancel/navigation
+                                    navigate('/vehicles/create');
+                                } else if (value === 'loading') {
+                                    return; // ignore
                                 } else {
-                                    field.onChange(Number(value));
+                                    const num = Number(value);
+                                    if (!isNaN(num)) {
+                                        field.onChange(num);
+                                    }
                                 }
-                            }} value={field.value?.toString() || ''}>
+                            }} value={field.value != null && field.value !== 0 ? field.value.toString() : undefined}>
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder={t('select_vehicle')} />
@@ -73,7 +160,7 @@ export default function TrackdayForm({
                                 </FormControl>
                                 <SelectContent>
                                     {isLoadingVehicles ? (
-                                        <SelectItem value="" disabled>{t('loading_vehicles')}</SelectItem>
+                                        <SelectItem value="loading" disabled>{t('loading_vehicles')}</SelectItem>
                                     ) : isErrorVehicles || !vehicles || vehicles.length === 0 ? (
                                         <SelectItem value="create-new-vehicle" className="text-blue-600 cursor-pointer hover:bg-accent">
                                             <div className="flex items-center">
@@ -99,14 +186,14 @@ export default function TrackdayForm({
                     name="trackId"
                     render={({ field }: any) => (
                         <FormItem>
-                            <FormLabel>{t('track')}</FormLabel>
+                            <FormLabel>{t('track')} <span className="text-destructive">*</span></FormLabel>
                             <FormControl>
                                 <Combobox
                                     options={trackOptions || []}
                                     value={field.value?.toString()}
                                     onValueChange={(value: any) => field.onChange(Number(value))}
-                                    placeholder="Sélectionner une piste"
-                                    emptyMessage="Aucune piste trouvée"
+                                    placeholder={t('select_track')}
+                                    emptyMessage={t('no_tracks_found')}
                                     disabled={isLoadingTracks}
                                     {...(isOwner ? { onCreateNew: undefined, createNewLabel: undefined } : {})}
                                 />
@@ -121,7 +208,7 @@ export default function TrackdayForm({
                     name="date"
                     render={({ field }: any) => (
                         <FormItem>
-                            <FormLabel>{t('date')}</FormLabel>
+                            <FormLabel>{t('date')} <span className="text-destructive">*</span></FormLabel>
                             <FormControl>
                                 <DatePicker
                                     value={field.value ? new Date(field.value) : undefined}

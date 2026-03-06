@@ -29,13 +29,14 @@ import {
 import apiClient from '@/lib/apiClient';
 import { CountryType, TrackType } from '@/types';
 import { ArrowLeft, Trash2 } from 'lucide-react';
+import { t } from 'i18next';
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Le nom de la piste est requis." }),
-  countryId: z.coerce.number().min(1, { message: "Le pays est requis." }),
-  length: z.coerce.number().min(0.1, { message: "La longueur doit être supérieure à 0." }),
+  name: z.string().min(1, { message: t('track_required') }),
+  countryId: z.coerce.number().min(1, { message: t('country_required') }),
+  length: z.coerce.number().min(0.1, { message: t('length_must_be_positive') }),
   address: z.string().nullable().optional(),
-  city: z.string().min(1, { message: "La ville est requise." }),
+  city: z.string().min(1, { message: t('city_required') }),
   turns: z.string().nullable().optional(),
   width: z.union([z.string(), z.coerce.number()]).nullable().optional(),
   maxDb: z.coerce.number().min(0).nullable().optional(),
@@ -155,12 +156,12 @@ const AdminTracksCreate: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                        {countries?.map((country) => ( // Accessing countries safely
-                          <SelectItem key={country.id} value={country.id.toString()}>
-                            {country.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
+                    {countries?.map((country) => ( // Accessing countries safely
+                      <SelectItem key={country.id} value={country.id.toString()}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>

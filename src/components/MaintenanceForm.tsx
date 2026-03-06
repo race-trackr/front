@@ -48,7 +48,6 @@ export const maintenanceFormSchema = z.object({
         .min(0, { message: "Le kilométrage ne peut pas être négatif." })
         .nullable()
         .optional(),
-    nextDueDate: z.string().nullable().optional(),
     nextDueMileage: z
         .coerce.number()
         .min(0, { message: "Le kilométrage de la prochaine échéance ne peut pas être négatif." })
@@ -249,28 +248,6 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({
                                     placeholder={t('enter_mileage')}
                                 />
                             </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="nextDueDate"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t('next_due_date')}</FormLabel>
-                            <FormControl>
-                                <DatePicker
-                                    value={field.value ? new Date(field.value) : undefined}
-                                    onChange={(date) =>
-                                        field.onChange(date ? format(date, 'yyyy-MM-dd') : null)
-                                    }
-                                    disabled={field.disabled}
-                                    placeholder={t('pick_next_due_date')}
-                                />
-                            </FormControl>
-                            <FormDescription>{t('optional_next_due_date')}</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}

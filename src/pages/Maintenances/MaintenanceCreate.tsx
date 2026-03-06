@@ -36,7 +36,6 @@ const MaintenanceCreate: React.FC = () => {
       details: null,
       cost: null,
       mileage: null,
-      nextDueDate: null,
       nextDueMileage: null,
     },
   });
@@ -69,7 +68,6 @@ const MaintenanceCreate: React.FC = () => {
       details: values.details === '' ? null : values.details,
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
-      nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
       nextDueMileage: values.nextDueMileage === undefined ? null : values.nextDueMileage,
     };
     createMaintenanceMutation.mutate(payload);

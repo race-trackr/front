@@ -120,7 +120,7 @@ const MaintenanceList: React.FC = () => {
               </span>
             </div>
             <p className="text-2xl font-bold">
-              {maintenances?.filter(m => m.nextDueDate && new Date(m.nextDueDate) > new Date()).length || 0}
+              {maintenances?.filter(m => m.date && new Date(m.date) > new Date()).length || 0}
             </p>
           </CardHeader>
         </Card>
@@ -143,8 +143,8 @@ const MaintenanceList: React.FC = () => {
           </Card>
         ) : (
           maintenances?.map((maintenance) => (
-            <Card 
-              key={maintenance.id} 
+            <Card
+              key={maintenance.id}
               className="flex flex-col transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary"
             >
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
@@ -167,9 +167,9 @@ const MaintenanceList: React.FC = () => {
                   </div>
                   {/* Removed nested Link, now the button directly navigates */}
                   <div className="flex items-center gap-2 ml-4">
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent the outer Link from triggering
                         e.preventDefault(); // Prevent default navigation behavior

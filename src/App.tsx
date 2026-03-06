@@ -257,9 +257,9 @@ const App: React.FC = () => {
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={['admin', 'owner']} />,
+      element: <ProtectedRoute allowedRoles={[ 'owner' ]} />,
       errorElement: <ErrorPage />,
-      children: [
+      children:[
         {
           element: <Layout />,
           children: [

@@ -9,7 +9,7 @@ export interface CountryType {
   updatedAt: string;
 }
 
-export type UserRole = 'owner' | 'admin' | 'user';
+export type UserRole = 'owner' | 'user';
 
 export interface UserPreferences {
   emailNotifications?: boolean;
@@ -126,7 +126,6 @@ export interface MaintenanceRecordType {
   details?: string | null;
   cost: number | null;
   mileage: number | null;
-  nextDueDate: string | null;
   nextDueMileage: number | null;
   createdAt: string;
   updatedAt: string;

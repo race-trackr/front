@@ -148,8 +148,8 @@ const Dashboard: React.FC = () => {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     return allMaintenancesResponse
-      .filter(m => m.nextDueDate && new Date(m.nextDueDate) >= now)
-      .sort((a, b) => new Date(a.nextDueDate!).getTime() - new Date(b.nextDueDate!).getTime())
+      .filter(m => m.date && new Date(m.date) >= now)
+      .sort((a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime())
       .slice(0, 3);
   }, [allMaintenancesResponse]);
 
@@ -433,7 +433,7 @@ const Dashboard: React.FC = () => {
                           {maintenance.name} - {maintenance.vehicle ? `${maintenance.vehicle.name}` : maintenance.userVehicleId}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {format(new Date(maintenance.nextDueDate!), "PPP", {
+                          {format(new Date(maintenance.date!), "PPP", {
                             locale: getLocale(),
                           })}
                           {maintenance.nextDueMileage && ` - ${maintenance.nextDueMileage} km`}

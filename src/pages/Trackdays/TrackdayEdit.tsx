@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import TrackdayForm from '@/components/TrackdayForm';
-import { TrackDayType, UpdateTrackdayPayload, UserVehicleType, TrackType } from '@/types';
+import { TrackDayType, UpdateTrackdayPayload, CreateTrackdayPayload, UserVehicleType, TrackType } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
@@ -17,58 +14,14 @@ import { Trash2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 
-const chronoFormatRegex = /^(\d{1,2})\.(\d{2})\.(\d{3})$/;
-
-const formSchema = z.object({
-  userVehicleId: z.coerce.number().min(1, { message: "Le véhicule est requis." }).nullable(),
-  trackId: z.coerce.number().min(1, { message: "La piste est requise." }).nullable(),
-  date: z.string().min(1, { message: "La date est requise." }),
-  weather: z.enum(['clear', 'cloudy', 'rainy'], { message: "La météo est requise et doit être 'clear', 'cloudy' ou 'rainy'." }).nullable().optional(), // Rendu optionnel
-  airTemperature: z.coerce.number().min(-50).max(50, { message: "La température de l'air doit être entre -50 et 50." }).nullable().optional(),
-  trackTemperature: z.coerce.number().min(-50).max(100, { message: "La température de la piste doit être entre -50 et 100." }).nullable().optional(),
-  trackCondition: z.enum(['wet', 'dry', 'moist'], { message: "La condition de la piste est requise et doit être 'wet', 'dry' ou 'moist'." }).nullable().optional(), // Rendu optionnel
-  notes: z.string().nullable().optional(),
-  bestLapTime: z.string().optional().refine(
-    (val) => !val || chronoFormatRegex.test(val),
-    { message: "Le meilleur temps au tour doit être au format MM.SS.mmm (ex: 01.23.456)" }
-  ).nullable().optional(),
-  totalLaps: z.coerce.number().min(0, { message: "Le nombre total de tours ne peut pas être négatif." }).nullable().optional(),
-  totalDistance: z.coerce.number().min(0, { message: "La distance totale ne peut pas être négative." }).nullable().optional(),
-  chronos: z.array(z.object({
-    lapTime: z.string().refine(
-      (val) => val === '' || chronoFormatRegex.test(val), // Allow empty string OR match regex
-      { message: "Chaque temps chrono doit être au format MM.SS.mmm (ex: 01.23.456)" }
-    ),
-    isBest: z.boolean(),
-  })).nullable().optional(),
-});
-
 const TrackdayEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); // Destructure i18n
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false); // État pour contrôler l'ouverture du DatePicker
-
-  const form = useForm<UpdateTrackdayPayload>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      userVehicleId: null,
-      trackId: 0,
-      date: '',
-      weather: null, // Défini à null
-      airTemperature: null,
-      trackTemperature: null,
-      trackCondition: null, // Défini à null
-      notes: null,
-      bestLapTime: null,
-      totalLaps: null,
-      totalDistance: null,
-      chronos: null,
-    },
-  });
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
 
   const { data: trackday, isLoading, isError } = useQuery<TrackDayType>({
     queryKey: ['trackday', id],
@@ -89,25 +42,6 @@ const TrackdayEdit: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    if (trackday) {
-      form.reset({
-        userVehicleId: trackday.userVehicleId || null,
-        trackId: trackday.trackId,
-        date: trackday.date,
-        weather: trackday.weather || null, // Gère les valeurs null
-        airTemperature: trackday.airTemperature || null,
-        trackTemperature: trackday.trackTemperature || null,
-        trackCondition: trackday.trackCondition || null, // Gère les valeurs null
-        notes: trackday.notes || null,
-        bestLapTime: trackday.bestLapTime || null,
-        totalLaps: trackday.totalLaps || null,
-        totalDistance: trackday.totalDistance || null,
-        chronos: trackday.chronos && trackday.chronos.length > 0 ? trackday.chronos : null,
-      });
-    }
-  }, [trackday, form]);
-
   const updateTrackdayMutation = useMutation({
     mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(id!, payload),
     onSuccess: () => {
@@ -117,7 +51,7 @@ const TrackdayEdit: React.FC = () => {
       navigate(`/trackdays/${id}`);
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
     },
   });
 
@@ -129,32 +63,12 @@ const TrackdayEdit: React.FC = () => {
       navigate('/trackdays');
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred'));
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const filteredChronos: ({ lapTime: string; isBest: boolean }[] | null) =
-      values.chronos
-        ?.filter((c): c is { lapTime: string; isBest: boolean } => c.lapTime !== '')
-        .map(c => ({ lapTime: c.lapTime, isBest: c.isBest })) || null;
-
-    const payload: UpdateTrackdayPayload = {
-      ...values,
-      userVehicleId: values.userVehicleId === undefined ? null : values.userVehicleId,
-      trackId: values.trackId,
-      date: values.date,
-      weather: values.weather === undefined ? null : values.weather, // Gère les valeurs undefined
-      trackCondition: values.trackCondition === undefined ? null : values.trackCondition, // Gère les valeurs undefined
-      airTemperature: values.airTemperature === undefined ? null : values.airTemperature,
-      trackTemperature: values.trackTemperature === undefined ? null : values.trackTemperature,
-      notes: values.notes === '' ? null : values.notes,
-      bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
-      totalLaps: values.totalLaps === undefined ? null : values.totalLaps,
-      totalDistance: values.totalDistance === undefined ? null : values.totalDistance,
-      chronos: filteredChronos && filteredChronos.length > 0 ? filteredChronos : null,
-    };
-    updateTrackdayMutation.mutate(payload);
+  const onSubmit = (values: CreateTrackdayPayload) => {
+    updateTrackdayMutation.mutate(values as UpdateTrackdayPayload);
   };
 
   const handleDeleteClick = () => {
@@ -187,6 +101,21 @@ const TrackdayEdit: React.FC = () => {
 
   const formattedDate = trackday ? format(new Date(trackday.date), 'PPP', { locale: getLocale() }) : '';
 
+  const defaultFormValues = trackday ? {
+    userVehicleId: trackday.userVehicleId || null,
+    trackId: trackday.trackId,
+    date: trackday.date,
+    weather: trackday.weather || null,
+    airTemperature: trackday.airTemperature || null,
+    trackTemperature: trackday.trackTemperature || null,
+    trackCondition: trackday.trackCondition || null,
+    notes: trackday.notes || null,
+    bestLapTime: trackday.bestLapTime || null,
+    totalLaps: trackday.totalLaps || null,
+    totalDistance: trackday.totalDistance || null,
+    chronos: trackday.chronos && trackday.chronos.length > 0 ? trackday.chronos : null,
+  } : undefined;
+
   if (isLoading) {
     return <div className="space-y-6">{t('loading_trackday')}</div>;
   }
@@ -215,7 +144,6 @@ const TrackdayEdit: React.FC = () => {
       </div>
 
       <TrackdayForm
-        form={form}
         onSubmit={onSubmit}
         vehicles={vehicles}
         tracks={tracks}
@@ -231,6 +159,7 @@ const TrackdayEdit: React.FC = () => {
         submitDisabled={updateTrackdayMutation.isPending}
         cancelLabel={t('cancel')}
         onCancel={() => navigate(-1)}
+        defaultValues={defaultFormValues}
       />
 
       <ConfirmDeleteDialog

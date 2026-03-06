@@ -41,7 +41,6 @@ const MaintenanceEdit: React.FC = () => {
       details: null,
       cost: null,
       mileage: null,
-      nextDueDate: null,
       nextDueMileage: null,
     },
   });
@@ -67,7 +66,6 @@ const MaintenanceEdit: React.FC = () => {
         details: maintenance.details || null,
         cost: maintenance.cost || null,
         mileage: maintenance.mileage || null,
-        nextDueDate: maintenance.nextDueDate || null,
         nextDueMileage: maintenance.nextDueMileage || null,
       });
     }
@@ -106,7 +104,6 @@ const MaintenanceEdit: React.FC = () => {
       details: values.details === '' ? null : values.details,
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
-      nextDueDate: values.nextDueDate === '' ? null : values.nextDueDate,
       nextDueMileage: values.nextDueMileage === undefined ? null : values.nextDueMileage,
     };
     updateMaintenanceMutation.mutate(payload);
