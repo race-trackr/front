@@ -61,7 +61,7 @@ export default function TrackdayForm({
     const navigate = useNavigate();
 
     const formSchema = z.object({
-        userVehicleId: z.coerce.number().min(1, { message: t('vehicle_required') }),
+        userVehicleId: z.coerce.number().min(1, { message: t('vehicle_required') }).nullable().optional(),
         trackId: z.coerce.number().min(1, { message: t('track_required') }),
         date: z.string().min(1, { message: t('date_required') }),
         weather: z.enum(['clear', 'cloudy', 'rainy']).nullable().optional(),
@@ -140,7 +140,7 @@ export default function TrackdayForm({
                     name="userVehicleId"
                     render={({ field }: any) => (
                         <FormItem>
-                            <FormLabel>{t('vehicle')} <span className="text-destructive">*</span></FormLabel>
+                            <FormLabel>{t('vehicle')}</FormLabel>
                             <Select onValueChange={(value: any) => {
                                 if (value === "create-new-vehicle") {
                                     navigate('/vehicles/create');
