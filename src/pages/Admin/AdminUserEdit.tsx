@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,19 +25,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const userSchema = z.object({
-  email: z.string().email('Invalid email'),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  role: z.enum(['user', 'owner']),
-});
-
-type UserFormValues = z.infer<typeof userSchema>;
-
 const AdminUserEdit: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+
+  const userSchema = z.object({
+    email: z.string().email({ message: t('invalid_email') }),
+    firstName: z.string().min(1, { message: t('first_name_required') }),
+    lastName: z.string().min(1, { message: t('last_name_required') }),
+    role: z.enum(['user', 'owner']),
+  });
+
+  type UserFormValues = z.infer<typeof userSchema>;
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
@@ -104,7 +103,7 @@ const AdminUserEdit: React.FC = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('email')}</FormLabel>
+                <FormLabel>{t('email')} <span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Input type="email" {...field} />
                 </FormControl>
@@ -118,7 +117,7 @@ const AdminUserEdit: React.FC = () => {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('first_name')}</FormLabel>
+                <FormLabel>{t('first_name')} <span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -132,7 +131,7 @@ const AdminUserEdit: React.FC = () => {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('last_name')}</FormLabel>
+                <FormLabel>{t('last_name')} <span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -146,7 +145,7 @@ const AdminUserEdit: React.FC = () => {
             name="role"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('role')}</FormLabel>
+                <FormLabel>{t('role')} <span className="text-destructive">*</span></FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}

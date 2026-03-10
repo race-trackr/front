@@ -120,7 +120,7 @@
   "message": "Message",
   "enter_message": "Entrez le message",
   "email_sent_successfully": "Email envoyé avec succès",
-  "edit_user": "Modifier l'utilisateur #{{id}}",
+  "edit_user": "Modifier l'utilisateur",
   "user_updated_successfully": "Utilisateur mis à jour avec succès !",
 
   "timezone": "Fuseau horaire",
@@ -503,6 +503,10 @@
   "total_distance_invalid": "La distance totale ne peut pas être négative.",
   "select_track": "Sélectionnez une piste",
   "no_tracks_found": "Aucune piste trouvée",
-  "loading_vehicles": "Chargement des véhicules...",
-  "lap_time_format": "MM.SS.mmm"
+  "seach_by_email": "Rechercher par email...",
+  "search_by_name": "Rechercher par nom...",
+  "search_by_username": "Rechercher par nom d'utilisateur...",
+  "add_new_user": "Ajouter un nouvel utilisateur",
+  "owner": "Propriétaire",
+  "delete_user": "Supprimer l'utilisateur"
 }

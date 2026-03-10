@@ -257,9 +257,9 @@ const App: React.FC = () => {
       ],
     },
     {
-      element: <ProtectedRoute allowedRoles={[ 'owner' ]} />,
+      element: <ProtectedRoute allowedRoles={['owner']} />,
       errorElement: <ErrorPage />,
-      children:[
+      children: [
         {
           element: <Layout />,
           children: [
@@ -353,6 +353,11 @@ const App: React.FC = () => {
                             const response = await apiClient.get(`/admin/users/${params.id}`);
                             return { user: response.data.user };
                           }
+                        },
+                        {
+                          path: "create",
+                          element: <AdminUserEdit />,
+                          handle: { crumb: () => t('create_new_user') },
                         },
                       ],
                     },

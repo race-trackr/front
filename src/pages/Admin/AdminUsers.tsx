@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Trash2, Edit, ArrowLeft } from 'lucide-react';
+import { Users, Trash2, Edit, ArrowLeft, PlusCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -17,6 +17,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import { DataTable } from '@/components/DataTable';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+
+const columnHelper = createColumnHelper<UserType>();
 
 const AdminUsers: React.FC = () => {
   const { t } = useTranslation();
@@ -71,6 +75,50 @@ const AdminUsers: React.FC = () => {
     return <div className="space-y-6 text-red-500">{t('an_unexpected_error_occurred')}</div>;
   }
 
+  const columns: ColumnDef<UserType>[] = [
+    columnHelper.accessor('email', {
+      header: () => t('email'),
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('firstName', {
+      header: () => t('first_name'),
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('lastName', {
+      header: () => t('last_name'),
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('role', {
+      header: () => t('role'),
+      cell: (info) => (<span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">{info.getValue()}</span>),
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: () => t('actions'),
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <Button title={t('edit_user')} asChild variant="outline" size="icon">
+            <Link to={`/admin/users/edit/${row.original.id}`}>
+              <Edit className="h-4 w-4" />
+              <span className="sr-only">{t('edit_user')}</span>
+            </Link>
+          </Button>
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={() => handleDeleteClick(row.original.id)}
+            disabled={deleteUserMutation.isPending}
+            className="btn-danger"
+            title={deleteUserMutation.isPending ? t('deleting') : t('delete_user')}
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">{deleteUserMutation.isPending ? t('deleting') : t('delete_user')}</span>
+          </Button>
+        </div>
+      ),
+    }),
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4 mb-6">
@@ -84,64 +132,19 @@ const AdminUsers: React.FC = () => {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('system_users_title', { defaultValue: 'Utilisateurs du système' })}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('email')}</TableHead>
-                  <TableHead>{t('first_name')}</TableHead>
-                  <TableHead>{t('last_name')}</TableHead>
-                  <TableHead>{t('role')}</TableHead>
-                  <TableHead className="text-right">{t('actions')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users && users.length > 0 ? (
-                  users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.firstName}</TableCell>
-                      <TableCell>{user.lastName}</TableCell>
-                      <TableCell>
-                        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
-                          {user.role}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Link to={`/admin/users/edit/${user.id}`}>
-                            <Button variant="outline" size="icon">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            onClick={() => handleDeleteClick(user.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                      {t('no_users_found')}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+      <DataTable
+        columns={columns}
+        data={users}
+        filterColumnId="email"
+        filterPlaceholder={t('search_by_email')}
+        toolbarActions={
+          <Button asChild className="btn-primary-gradient">
+            <Link to="/admin/users/create">
+              <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_new_user')}
+            </Link>
+          </Button>
+        }
+      ></DataTable>
 
       <ConfirmDeleteDialog
         isOpen={isDeleteDialogOpen}
