@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import TrackdayForm from '@/components/TrackdayForm';
 import { createTrackday } from '@/lib/api/trackdays';
 import { getVehicles } from '@/lib/api/vehicles';
-import { UserVehicleType, CreateTrackdayPayload, TrackType } from '@/types';
+import { UserVehicleType, CreateTrackdayPayload, TrackType, PaginatedResponse } from '@/types';
 import { AuthContext } from '@/context/AuthContext';
 import apiClient from '@/lib/apiClient';
 
@@ -20,10 +20,11 @@ const TrackdayCreate: FC = () => {
   const auth = useContext(AuthContext);
   const isOwner = auth?.user?.role === 'owner';
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<TrackType[]>({
     queryKey: ['tracks'],

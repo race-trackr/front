@@ -168,12 +168,10 @@ export interface AuthResponse {
 
 export type PermissionAction = 'create' | 'read' | 'update' | 'delete';
 
-// Nouvelle définition de ResourcePermissions pour correspondre au schéma Zod
 export type ResourcePermissions = {
   [action in PermissionAction]: boolean;
 };
 
-// Nouvelle définition de Permissions pour correspondre au schéma Zod
 export type Permissions = {
   trackdays: ResourcePermissions;
   vehicles: ResourcePermissions;
@@ -192,7 +190,6 @@ export interface ApiKey {
   permissions: Permissions;
 }
 
-// New interface for paginated responses
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {

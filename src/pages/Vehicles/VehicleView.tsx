@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles';
 import { getMaintenances } from '@/lib/api/maintenances';
 import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react';
-import { UserVehicleType, MaintenanceRecordType } from '@/types';
+import { UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types';
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
 import { toast } from 'sonner';
 
@@ -28,16 +28,17 @@ const VehicleView: React.FC = () => {
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
 
-  const { data: maintenances, isLoading: isLoadingMaintenances, isError: isErrorMaintenances, error: maintenancesError } = useQuery<
-    MaintenanceRecordType[], // TQueryFnData
-    Error, // TError
-    MaintenanceRecordType[], // TData
-    ['vehicleMaintenances', number] // TQueryKey
+  const { data: maintenancesResponse, isLoading: isLoadingMaintenances, isError: isErrorMaintenances, error: maintenancesError } = useQuery<
+    PaginatedResponse<MaintenanceRecordType>,
+    Error,
+    PaginatedResponse<MaintenanceRecordType>,
+    ['vehicleMaintenances', number]
   >({
     queryKey: ['vehicleMaintenances', vehicleId],
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
   });
+  const maintenances = maintenancesResponse?.data || [];
 
   useEffect(() => {
     if (isErrorMaintenances && maintenancesError) {

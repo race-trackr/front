@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { UserVehicleType, UpdateMaintenancePayload, MaintenanceRecordType } from '@/types';
+import { UserVehicleType, UpdateMaintenancePayload, MaintenanceRecordType, PaginatedResponse } from '@/types';
 import { getMaintenanceById, updateMaintenance, deleteMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
 import { Trash2, ArrowLeft } from 'lucide-react';
@@ -51,10 +51,11 @@ const MaintenanceEdit: React.FC = () => {
     enabled: !!maintenanceId && !isNaN(maintenanceId),
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   useEffect(() => {
     if (maintenance) {

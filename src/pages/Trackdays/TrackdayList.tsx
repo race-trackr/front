@@ -81,15 +81,16 @@ const TrackdayList: React.FC = () => {
     }
   }, [isErrorTrackdays, trackdaysError, t]);
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles, error: vehiclesError } = useQuery<
-    UserVehicleType[], // TQueryFnData
-    Error, // TError
-    UserVehicleType[], // TData
-    ['vehicles'] // TQueryKey
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles, error: vehiclesError } = useQuery<
+    PaginatedResponse<UserVehicleType>,
+    Error,
+    PaginatedResponse<UserVehicleType>,
+    ['vehicles']
   >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   useEffect(() => {
     if (isErrorVehicles && vehiclesError) {

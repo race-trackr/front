@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { CreateMaintenancePayload, UserVehicleType } from '@/types';
+import { CreateMaintenancePayload, UserVehicleType, PaginatedResponse } from '@/types';
 import { createMaintenance } from '@/lib/api/maintenances';
 import { getVehicles } from '@/lib/api/vehicles';
 import { ArrowLeft } from 'lucide-react';
@@ -40,10 +40,11 @@ const MaintenanceCreate: React.FC = () => {
     },
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   const createMaintenanceMutation = useMutation({
     mutationFn: createMaintenance,

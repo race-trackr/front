@@ -21,7 +21,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { UserVehicleType, TrackType, TrackDayType } from '@/types';
+import { UserVehicleType, TrackType, TrackDayType, PaginatedResponse } from '@/types';
 import { Combobox } from '@/components/ui/combobox';
 import { toast } from 'sonner';
 
@@ -91,10 +91,11 @@ const Analytics: React.FC = () => {
 
   const trackdays = allTrackdaysResponse || [];
 
-  const { data: vehicles, isLoading: isLoadingVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   const { data: tracks, isLoading: isLoadingTracks } = useQuery<TrackType[]>({
     queryKey: ['tracks'],

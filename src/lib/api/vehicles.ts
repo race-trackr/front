@@ -1,7 +1,7 @@
 import apiClient from '../apiClient';
-import { CreateVehiclePayload, UserVehicleType, UpdateVehiclePayload } from '@/types';
+import { CreateVehiclePayload, UserVehicleType, UpdateVehiclePayload, PaginatedResponse } from '@/types';
 
-export const getVehicles = async ({ limit = 10, offset = 0  }): Promise<UserVehicleType[]> => {
+export const getVehicles = async ({ limit = 10, offset = 0 } = {}): Promise<PaginatedResponse<UserVehicleType>> => {
   const response = await apiClient.get('/vehicles', {
     params: { limit, offset },
   });

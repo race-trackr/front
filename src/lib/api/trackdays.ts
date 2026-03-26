@@ -3,13 +3,12 @@ import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload, PaginatedRe
 
 interface GetTrackdaysParams {
   limit?: number;
-  page?: number; // Changed from offset to page
+  page?: number;
   searchTerm?: string;
   vehicleId?: number;
   trackId?: number;
-  // Removed startDate and endDate
-  // startDate?: string;
-  // endDate?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const getTrackdays = async (params?: GetTrackdaysParams): Promise<PaginatedResponse<TrackDayType>> => {

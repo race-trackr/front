@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import TrackdayForm from '@/components/TrackdayForm';
-import { TrackDayType, UpdateTrackdayPayload, CreateTrackdayPayload, UserVehicleType, TrackType } from '@/types';
+import { TrackDayType, UpdateTrackdayPayload, CreateTrackdayPayload, UserVehicleType, TrackType, PaginatedResponse } from '@/types';
 import apiClient from '@/lib/apiClient';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
@@ -29,10 +29,11 @@ const TrackdayEdit: React.FC = () => {
     enabled: !!id,
   });
 
-  const { data: vehicles, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<UserVehicleType[]>({
+  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks } = useQuery<TrackType[]>({
     queryKey: ['tracks'],

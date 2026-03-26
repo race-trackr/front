@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react';
-import { MaintenanceRecordType } from '@/types';
+import { MaintenanceRecordType, PaginatedResponse } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,10 +22,11 @@ const MaintenanceList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
 
-  const { data: maintenances, isLoading, isError } = useQuery<MaintenanceRecordType[]>({
+  const { data: maintenancesResponse, isLoading, isError } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
     queryKey: ['maintenances'],
     queryFn: () => getMaintenances({ limit: 0 }),
   });
+  const maintenances = maintenancesResponse?.data || [];
 
   const deleteMaintenanceMutation = useMutation({
     mutationFn: (id: number) => deleteMaintenance(id),

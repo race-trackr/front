@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Car, Bike, Edit, Trash2, Eye } from 'lucide-react';
-import { UserVehicleType } from '@/types/index';
+import { UserVehicleType, PaginatedResponse } from '@/types/index';
 import { useTranslation } from 'react-i18next';
 import { deleteVehicle, getVehicles } from '@/lib/api/vehicles';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -30,15 +30,16 @@ const VehicleList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [vehicleToDelete, setVehicleToDelete] = React.useState<number | null>(null);
 
-  const { data: vehicles, isLoading, isError: isErrorVehicles, error: vehiclesError } = useQuery<
-    UserVehicleType[], // TQueryFnData
-    Error, // TError
-    UserVehicleType[], // TData
-    ['vehicles'] // TQueryKey
+  const { data: vehiclesResponse, isLoading, isError: isErrorVehicles, error: vehiclesError } = useQuery<
+    PaginatedResponse<UserVehicleType>,
+    Error,
+    PaginatedResponse<UserVehicleType>,
+    ['vehicles']
   >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   });
+  const vehicles = vehiclesResponse?.data || [];
 
   useEffect(() => {
     if (isErrorVehicles && vehiclesError) {

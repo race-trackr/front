@@ -1,5 +1,5 @@
 import apiClient from '@/lib/apiClient';
-import { MaintenanceRecordType, CreateMaintenancePayload, UpdateMaintenancePayload } from '@/types';
+import { MaintenanceRecordType, CreateMaintenancePayload, UpdateMaintenancePayload, PaginatedResponse } from '@/types';
 
 interface GetMaintenancesParams {
   limit?: number;
@@ -7,7 +7,7 @@ interface GetMaintenancesParams {
   userVehicleId?: number;
 }
 
-export const getMaintenances = async (params?: GetMaintenancesParams): Promise<MaintenanceRecordType[]> => {
+export const getMaintenances = async (params?: GetMaintenancesParams): Promise<PaginatedResponse<MaintenanceRecordType>> => {
   const response = await apiClient.get('/maintenances', {
     params: params,
   });

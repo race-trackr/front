@@ -36,20 +36,22 @@ const Dashboard: React.FC = () => {
     queryFn: () => getTrackdays({ limit: 3 }),
   });
 
+  const today = new Date().toISOString().split('T')[0];
+
   const {
-    data: allTrackdaysResponse,
-    isLoading: isLoadingAllTrackdays,
-    isError: isErrorAllTrackdays,
+    data: upcomingTrackdaysResponse,
+    isLoading: isLoadingUpcomingTrackdays,
+    isError: isErrorUpcomingTrackdays,
   } = useQuery<PaginatedResponse<TrackDayType>>({
-    queryKey: ["allTrackdays"],
-    queryFn: () => getTrackdays({ limit: 0 }), // Fetch all for client-side filtering
+    queryKey: ["upcomingTrackdays"],
+    queryFn: () => getTrackdays({ limit: 3, startDate: today }),
   });
 
   const {
-    data: vehicles,
+    data: vehiclesResponse,
     isLoading: isLoadingVehicles,
     isError: isErrorVehicles,
-  } = useQuery<UserVehicleType[]>({
+  } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ["vehicles", { limit: 3 }],
     queryFn: () => getVehicles({ limit: 3 }),
   });
@@ -58,16 +60,16 @@ const Dashboard: React.FC = () => {
     data: allMaintenancesResponse, // New query for all maintenances
     isLoading: isLoadingAllMaintenances,
     isError: isErrorAllMaintenances,
-  } = useQuery<MaintenanceRecordType[]>({
+  } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
     queryKey: ["allMaintenances"],
-    queryFn: () => getMaintenances({ limit: 0 }), // Fetch all for client-side filtering
+    queryFn: () => getMaintenances({ limit: 3 }),
   });
 
   const deleteTrackdayMutation = useMutation({
     mutationFn: (id: string) => deleteTrackday(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] });
-      queryClient.invalidateQueries({ queryKey: ['allTrackdays'] });
+      queryClient.invalidateQueries({ queryKey: ['upcomingTrackdays'] });
       toast.success(t('trackday_deleted_successfully'));
       setIsTrackdayDeleteDialogOpen(false);
       setTrackdayToDelete(null);
@@ -134,22 +136,21 @@ const Dashboard: React.FC = () => {
   const totalTrackdaysCount = recentTrackdaysResponse?.meta?.total || 0;
 
   const upcomingTrackdays = React.useMemo(() => {
-    if (!allTrackdaysResponse?.data) return [];
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Normalize 'now' to start of day for comparison
-    return allTrackdaysResponse.data
-      .filter(td => new Date(td.date) >= now) // Include today's trackdays if they haven't passed
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .slice(0, 3); // Take top 3 upcoming
-  }, [allTrackdaysResponse]);
-
-  const upcomingMaintenances = React.useMemo(() => {
-    if (!allMaintenancesResponse) return [];
+    if (!upcomingTrackdaysResponse?.data) return [];
     const now = new Date();
     now.setHours(0, 0, 0, 0);
-    return allMaintenancesResponse
-      .filter(m => m.date && new Date(m.date) >= now)
-      .sort((a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime())
+    return upcomingTrackdaysResponse.data
+      .filter((td: TrackDayType) => new Date(td.date) >= now)
+      .sort((a: TrackDayType, b: TrackDayType) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [upcomingTrackdaysResponse]);
+
+  const upcomingMaintenances = React.useMemo(() => {
+    if (!allMaintenancesResponse?.data) return [];
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return allMaintenancesResponse.data
+      .filter((m: MaintenanceRecordType) => m.date && new Date(m.date) >= now)
+      .sort((a: MaintenanceRecordType, b: MaintenanceRecordType) => new Date(a.date!).getTime() - new Date(b.date!).getTime())
       .slice(0, 3);
   }, [allMaintenancesResponse]);
 
@@ -194,11 +195,11 @@ const Dashboard: React.FC = () => {
     );
   };
 
-  if (isLoadingAllMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingAllTrackdays) {
+  if (isLoadingAllMaintenances || isLoadingRecentTrackdays || isLoadingVehicles || isLoadingUpcomingTrackdays) {
     return <div>{t("loading")}...</div>;
   }
 
-  if (isErrorAllMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorAllTrackdays) {
+  if (isErrorAllMaintenances || isErrorRecentTrackdays || isErrorVehicles || isErrorUpcomingTrackdays) {
     return <div>{t("an_unexpected_error_occurred")}</div>;
   }
 
@@ -235,7 +236,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{vehicles?.length || 0}</div>
+            <div className="text-2xl font-bold">{vehiclesResponse?.meta?.total || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_vehicles")}
             </p>
@@ -251,7 +252,7 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{allMaintenancesResponse?.length || 0}</div>
+            <div className="text-2xl font-bold">{allMaintenancesResponse?.meta?.total || 0}</div>
             <p className="text-xs text-muted-foreground">
               {t("total_maintenances")}
             </p>
@@ -342,7 +343,7 @@ const Dashboard: React.FC = () => {
               {t("upcoming_trackdays")}
             </h3>
             <CalendarDays className="h-12 w-12 text-muted-foreground mb-6" />
-            {isLoadingAllTrackdays ? (
+            {isLoadingUpcomingTrackdays ? (
               <div>{t("loading")}...</div>
             ) : upcomingTrackdays && upcomingTrackdays.length > 0 ? (
               <ul className="space-y-4 w-full mb-6">
