@@ -517,5 +517,8 @@
   "total_laps_invalid": "El número total de vueltas no puede ser negativo",
   "vehicle_required": "El vehículo es requerido",
   "track_required": "La pista es requerida",
-  "date_required": "La fecha es requerida"
+  "date_required": "La fecha es requerida",
+  "maintenance_by_type": "Mantenimientos por tipo",
+  "filter_by_type": "Filtrar por tipo",
+  "all_types": "Todos los tipos"
 }

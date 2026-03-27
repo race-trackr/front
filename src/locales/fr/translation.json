@@ -527,5 +527,8 @@
   "maintenance_deleted_successfully": "Maintenance supprimée avec succès !",
   "length_must_be_positive": "La longueur doit être supérieure à 0",
   "error_loading_maintenance": "Erreur lors du chargement de la maintenance",
-  "loading_maintenance": "Chargement de la maintenance..."
+  "loading_maintenance": "Chargement de la maintenance...",
+  "maintenance_by_type": "Maintenances par type",
+  "filter_by_type": "Filtrer par type",
+  "all_types": "Tous les types"
 }

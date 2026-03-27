@@ -1,8 +1,8 @@
 import { FC, useMemo } from 'react'
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -46,7 +46,7 @@ const MaintenanceCostChart: FC<MaintenanceCostChartProps> = ({ maintenances }) =
       if (!monthlyCosts[sortKey]) {
         monthlyCosts[sortKey] = { displayDate, cost: 0 }
       }
-      monthlyCosts[sortKey].cost += m.cost || 0
+      monthlyCosts[sortKey].cost += Number(m.cost) || 0
     })
 
     const sortedData = Object.keys(monthlyCosts)
@@ -67,7 +67,7 @@ const MaintenanceCostChart: FC<MaintenanceCostChartProps> = ({ maintenances }) =
       <CardContent>
         {aggregatedData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={aggregatedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <BarChart data={aggregatedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -77,14 +77,8 @@ const MaintenanceCostChart: FC<MaintenanceCostChartProps> = ({ maintenances }) =
                 }
               />
               <Legend />
-              <Line
-                type="monotone"
-                dataKey="cost"
-                stroke="#82ca9d"
-                name={t('total_cost')}
-                activeDot={{ r: 8 }}
-              />
-            </LineChart>
+              <Bar dataKey="cost" fill="#82ca9d" name={t('total_cost')} />
+            </BarChart>
           </ResponsiveContainer>
         ) : (
           <p className="text-center text-muted-foreground">{t('no_maintenance_data_for_chart')}</p>

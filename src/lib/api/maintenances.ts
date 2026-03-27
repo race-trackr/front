@@ -6,10 +6,12 @@ import {
   PaginatedResponse,
 } from '@/types'
 
-interface GetMaintenancesParams {
+export interface GetMaintenancesParams {
+  page?: number
   limit?: number
-  offset?: number
-  userVehicleId?: number
+  vehicle_id?: number
+  type?: string
+  search?: string
 }
 
 export const getMaintenances = async (

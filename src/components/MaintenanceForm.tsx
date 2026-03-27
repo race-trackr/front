@@ -130,7 +130,7 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({
                   ) : (
                     vehicles.map((vehicle) => (
                       <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                        {vehicle.name} ({vehicle.licensePlate || t('not_specified')})
+                        {vehicle.name} ({vehicle.model || vehicle.brand || t('not_specified')})
                       </SelectItem>
                     ))
                   )}

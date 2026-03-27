@@ -517,5 +517,8 @@
   "total_laps_invalid": "Il numero totale di giri non può essere negativo",
   "vehicle_required": "Il veicolo è obbligatorio",
   "track_required": "La pista è obbligatoria",
-  "date_required": "La data è obbligatoria"
+  "date_required": "La data è obbligatoria",
+  "maintenance_by_type": "Manutenzioni per tipo",
+  "filter_by_type": "Filtra per tipo",
+  "all_types": "Tutti i tipi"
 }

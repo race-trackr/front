@@ -226,9 +226,9 @@ export default function TrackdayForm({
                       </div>
                     </SelectItem>
                   ) : (
-                    vehicles.map((vehicle: any) => (
+                    vehicles.map((vehicle) => (
                       <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
-                        {vehicle.name} ({vehicle.licensePlate || '—'})
+                        {vehicle.name} ({vehicle.model || vehicle.brand || t('not_specified')})
                       </SelectItem>
                     ))
                   )}

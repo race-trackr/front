@@ -518,5 +518,8 @@
   "total_laps_invalid": "Total laps cannot be negative",
   "vehicle_required": "Vehicle is required",
   "track_required": "Track is required",
-  "date_required": "Date is required"
+  "date_required": "Date is required",
+  "maintenance_by_type": "Maintenances by type",
+  "filter_by_type": "Filter by type",
+  "all_types": "All types"
 }
