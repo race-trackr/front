@@ -261,6 +261,7 @@
   "failed_to_update_profile": "Failed to update profile.",
   "password_updated_successfully": "Password updated successfully!",
   "failed_to_update_password": "Failed to update password.",
+  "incorrect_current_password": "Current password is incorrect.",
   "hide_password": "Hide password",
   "show_password": "Show password",
   "maintenance_name": "Maintenance Name",

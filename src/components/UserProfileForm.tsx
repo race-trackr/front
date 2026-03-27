@@ -30,6 +30,7 @@ import { CountryType, UserType } from '@/types'
 import { useAuthStore } from '@/store/authStore'
 import { Separator } from '@/components/ui/separator'
 import { PasswordInput } from '@/components/PasswordInput' // Import the new PasswordInput component
+import { t } from 'i18next'
 
 const formSchema = z
   .object({
@@ -42,27 +43,37 @@ const formSchema = z
     confirmNewPassword: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.newPassword && data.newPassword.length < 6) {
+    const hasCurrent = !!data.currentPassword
+    const hasNew = !!data.newPassword
+
+    if (hasNew && data.newPassword!.length < 8) {
       ctx.addIssue({
         code: z.ZodIssueCode.too_small,
-        minimum: 6,
+        minimum: 8,
         type: 'string',
         inclusive: true,
-        message: 'Le nouveau mot de passe doit contenir au moins 6 caractères.',
+        message: t('min_password_length', { length: 8 }),
         path: ['newPassword'],
       })
     }
-    if (data.newPassword && !data.currentPassword) {
+    if (hasCurrent && !hasNew) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Le mot de passe actuel est requis pour changer le mot de passe.',
+        message: t('new_password_required'),
+        path: ['newPassword'],
+      })
+    }
+    if (hasNew && !hasCurrent) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('current_password_required'),
         path: ['currentPassword'],
       })
     }
-    if (data.newPassword && data.newPassword !== data.confirmNewPassword) {
+    if (hasNew && data.newPassword !== data.confirmNewPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Les nouveaux mots de passe ne correspondent pas.',
+        message: t('passwords_do_not_match'),
         path: ['confirmNewPassword'],
       })
     }
@@ -73,7 +84,6 @@ export type UserProfileFormValues = z.infer<typeof formSchema>
 const UserProfileForm: React.FC = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const queryClient = useQueryClient()
   const setUserInStore = useAuthStore((state) => state.setUser)
 
   const form = useForm<UserProfileFormValues>({
@@ -133,59 +143,46 @@ const UserProfileForm: React.FC = () => {
       lastName: string | null
       email: string
       countryId: number | null
+      currentPassword?: string
+      newPassword?: string
     }) => {
-      if (!user?.id) throw new Error('User ID is missing.')
       const response = await apiClient.put(`/users/me`, payload)
-      return response.data.user as UserType // extract user from response
+      return response.data.user as UserType
     },
     onSuccess: (updatedUser: UserType) => {
-      queryClient.invalidateQueries({ queryKey: ['user', user?.id] })
       setUserInStore(updatedUser)
-      toast.success(t('profile_updated_successfully'))
-    },
-    onError: (error: Error) => {
-      // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'))
-    },
-  })
-
-  const updatePasswordMutation = useMutation({
-    mutationFn: async (payload: { currentPassword: string; newPassword: string }) => {
-      if (!user?.id) throw new Error('User ID is missing.')
-      const response = await apiClient.put(`/users/${user.id}/password`, payload)
-      return response.data
-    },
-    onSuccess: () => {
-      toast.success(t('password_updated_successfully'))
       form.resetField('currentPassword')
       form.resetField('newPassword')
       form.resetField('confirmNewPassword')
+      toast.success(t('profile_updated_successfully'))
     },
-    onError: (error: Error) => {
-      // Corrected onError type
+    onError: (error: any) => {
+      const errors: { field: string; message: string }[] = error.response?.data?.errors ?? []
+      const fieldError = errors.find((e) => e.field === 'currentPassword')
+      if (fieldError) {
+        form.setError('currentPassword', { message: t('incorrect_current_password') })
+        return
+      }
       toast.error(t('an_unexpected_error_occurred'))
     },
   })
 
-  const onSubmit = async (values: UserProfileFormValues) => {
-    const profilePayload = {
+  const onSubmit = (values: UserProfileFormValues) => {
+    const payload: Parameters<typeof updateUserProfileMutation.mutate>[0] = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
       countryId: values.countryId,
     }
-    await updateUserProfileMutation.mutateAsync(profilePayload)
-
     if (values.newPassword) {
-      const passwordPayload = {
-        currentPassword: values.currentPassword!,
-        newPassword: values.newPassword,
-      }
-      await updatePasswordMutation.mutateAsync(passwordPayload)
+      payload.currentPassword = values.currentPassword
+      payload.newPassword = values.newPassword
     }
+    updateUserProfileMutation.mutate(payload)
   }
 
-  const isSubmitting = updateUserProfileMutation.isPending || updatePasswordMutation.isPending
+  console.log(form.formState)
+  const isSubmitting = updateUserProfileMutation.isPending
   const isDisabled = !form.formState.isDirty || !form.formState.isValid || isSubmitting
 
   return (

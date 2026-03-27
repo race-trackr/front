@@ -253,6 +253,7 @@
   "failed_to_update_profile": "Échec de la mise à jour du profil.",
   "password_updated_successfully": "Mot de passe mis à jour avec succès !",
   "failed_to_update_password": "Échec de la mise à jour du mot de passe.",
+  "incorrect_current_password": "La password attuale non è corretta.",
   "hide_password": "Masquer le mot de passe",
   "show_password": "Afficher le mot de passe",
   "maintenance_name": "Nom de la maintenance",

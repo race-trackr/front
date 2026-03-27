@@ -253,6 +253,7 @@
   "failed_to_update_profile": "Error al actualizar el perfil.",
   "password_updated_successfully": "¡Contraseña actualizada con éxito!",
   "failed_to_update_password": "Error al actualizar la contraseña.",
+  "incorrect_current_password": "La contraseña actual es incorrecta.",
   "hide_password": "Ocultar contraseña",
   "show_password": "Mostrar contraseña",
   "maintenance_name": "Nombre del mantenimiento",
