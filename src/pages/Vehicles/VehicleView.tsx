@@ -14,7 +14,7 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 import { toast } from 'sonner'
 
 const VehicleView: React.FC = () => {
-  const { id: uuid } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()

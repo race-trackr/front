@@ -118,10 +118,10 @@ const App: React.FC = () => {
                   handle: { crumb: () => t('create_new_trackday') },
                 },
                 {
-                  path: ':id',
+                  path: ':uuid',
                   element: <TrackdayView />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!)
+                    const trackday = await getTrackdayById(params.uuid!)
                     return { trackday }
                   },
                   handle: {
@@ -133,15 +133,15 @@ const App: React.FC = () => {
                               locale: getLocale(i18n.language),
                             }),
                           })
-                        : t('view_trackday', { id: data?.params?.id || '' })
+                        : t('view_trackday', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
                 {
-                  path: 'edit/:id',
+                  path: 'edit/:uuid',
                   element: <TrackdayEdit />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!)
+                    const trackday = await getTrackdayById(params.uuid!)
                     return { trackday }
                   },
                   handle: {
@@ -153,7 +153,7 @@ const App: React.FC = () => {
                               locale: getLocale(i18n.language),
                             }),
                           })
-                        : t('edit_trackday', { id: data?.params?.id || '' })
+                        : t('edit_trackday', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
@@ -173,10 +173,10 @@ const App: React.FC = () => {
                   handle: { crumb: () => t('create_new_vehicle') },
                 },
                 {
-                  path: ':id',
+                  path: ':uuid',
                   element: <VehicleView />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleByUUID(params.id)
+                    const vehicle = await getVehicleByUUID(params.uuid)
                     return { vehicle }
                   },
                   handle: {
@@ -184,15 +184,15 @@ const App: React.FC = () => {
                       const vehicle = data?.vehicle as UserVehicleType
                       return vehicle
                         ? t('view_vehicle_name', { name: vehicle.name })
-                        : t('view_vehicle', { id: data?.params?.id || '' })
+                        : t('view_vehicle', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
                 {
-                  path: 'edit/:id',
+                  path: 'edit/:uuid',
                   element: <VehicleEdit />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleByUUID(params.id)
+                    const vehicle = await getVehicleByUUID(params.uuid)
                     return { vehicle }
                   },
                   handle: {
@@ -200,7 +200,7 @@ const App: React.FC = () => {
                       const vehicle = data?.vehicle as UserVehicleType
                       return vehicle
                         ? t('edit_vehicle_name', { name: vehicle.name })
-                        : t('edit_vehicle', { id: data?.params?.id || '' })
+                        : t('edit_vehicle', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
@@ -220,10 +220,10 @@ const App: React.FC = () => {
                   handle: { crumb: () => t('create_new_maintenance') },
                 },
                 {
-                  path: ':id',
+                  path: ':uuid',
                   element: <MaintenanceView />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(params.id!)
+                    const maintenance = await getMaintenanceById(params.uuid!)
                     return { maintenance }
                   },
                   handle: {
@@ -236,15 +236,15 @@ const App: React.FC = () => {
                               locale: getLocale(i18n.language),
                             }),
                           })
-                        : t('view_maintenance', { id: data?.params?.id || '' })
+                        : t('view_maintenance', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
                 {
-                  path: 'edit/:id',
+                  path: 'edit/:uuid',
                   element: <MaintenanceEdit />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(params.id!)
+                    const maintenance = await getMaintenanceById(params.uuid!)
                     return { maintenance }
                   },
                   handle: {
@@ -257,7 +257,7 @@ const App: React.FC = () => {
                               locale: getLocale(i18n.language),
                             }),
                           })
-                        : t('edit_maintenance', { id: data?.params?.id || '' })
+                        : t('edit_maintenance', { id: data?.params?.uuid || '' })
                     },
                   },
                 },
@@ -321,10 +321,10 @@ const App: React.FC = () => {
                       handle: { crumb: () => t('create_new_track') },
                     },
                     {
-                      path: 'edit/:id',
+                      path: 'edit/:uuid',
                       element: <AdminTracksEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/tracks/${params.id!}`)
+                        const response = await apiClient.get(`/tracks/${params.uuid!}`)
                         return { track: response.data }
                       },
                       handle: {
@@ -332,7 +332,7 @@ const App: React.FC = () => {
                           const track = data?.track as TrackType
                           return track
                             ? t('edit_track_name', { name: track.name })
-                            : t('edit_track', { id: data?.params?.id || '' })
+                            : t('edit_track', { id: data?.params?.uuid || '' })
                         },
                       },
                     },
@@ -352,10 +352,10 @@ const App: React.FC = () => {
                       handle: { crumb: () => t('create_new_country') },
                     },
                     {
-                      path: 'edit/:id',
+                      path: 'edit/:uuid',
                       element: <AdminCountriesEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/countries/${params.id!}`)
+                        const response = await apiClient.get(`/countries/${params.uuid!}`)
                         return { country: response.data }
                       },
                       handle: {
@@ -363,7 +363,7 @@ const App: React.FC = () => {
                           const country = data?.country as CountryType
                           return country
                             ? t('edit_country_name', { name: country.name })
-                            : t('edit_country', { id: data?.params?.id || '' })
+                            : t('edit_country', { id: data?.params?.uuid || '' })
                         },
                       },
                     },
@@ -381,18 +381,18 @@ const App: React.FC = () => {
                           element: <AdminUsers />,
                         },
                         {
-                          path: 'edit/:id',
+                          path: 'edit/:uuid',
                           element: <AdminUserEdit />,
                           handle: {
                             crumb: ({ data }: RouteMatchWithData) => {
                               const user = data?.user as any
                               return user
                                 ? t('edit_user', { id: user.id })
-                                : t('edit_user', { id: data?.params?.id || '' })
+                                : t('edit_user', { id: data?.params?.uuid || '' })
                             },
                           },
                           loader: async ({ params }) => {
-                            const response = await apiClient.get(`/admin/users/${params.id}`)
+                            const response = await apiClient.get(`/admin/users/${params.uuid}`)
                             return { user: response.data.user }
                           },
                         },

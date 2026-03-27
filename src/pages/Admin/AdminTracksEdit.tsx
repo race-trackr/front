@@ -44,8 +44,8 @@ const formSchema = z.object({
 })
 
 const AdminTracksEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const trackUUID = id
+  const { uuid } = useParams<{ uuid: string }>()
+  const trackUUID = uuid
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()

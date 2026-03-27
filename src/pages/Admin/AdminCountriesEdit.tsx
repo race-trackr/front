@@ -29,8 +29,8 @@ const formSchema = z.object({
 })
 
 const AdminCountriesEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const countryUUID = id
+  const { uuid } = useParams<{ uuid: string }>()
+  const countryUUID = uuid
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()

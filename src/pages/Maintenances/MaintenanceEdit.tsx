@@ -28,7 +28,7 @@ import MaintenanceForm, {
 // schema pulled from MaintenanceForm component.
 
 const MaintenanceEdit: React.FC = () => {
-  const { id: uuid } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()

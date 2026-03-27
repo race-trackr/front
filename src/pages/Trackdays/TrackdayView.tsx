@@ -32,7 +32,7 @@ import { Separator } from '@/components/ui/separator'
 import { getWeatherForecast } from '@/lib/api/weather' // Import the mock weather API
 
 const TrackdayView: React.FC = () => {
-  const { id: uuid } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()

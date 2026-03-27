@@ -22,7 +22,7 @@ import { toast } from 'sonner'
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 
 const TrackdayEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -35,9 +35,9 @@ const TrackdayEdit: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<TrackDayType>({
-    queryKey: ['trackday', id],
-    queryFn: () => getTrackdayById(id!),
-    enabled: !!id,
+    queryKey: ['trackday', uuid],
+    queryFn: () => getTrackdayById(uuid!),
+    enabled: !!uuid,
   })
 
   const {
@@ -63,12 +63,12 @@ const TrackdayEdit: React.FC = () => {
   })
 
   const updateTrackdayMutation = useMutation({
-    mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(id!, payload),
+    mutationFn: (payload: UpdateTrackdayPayload) => updateTrackday(uuid!, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trackday', id] })
+      queryClient.invalidateQueries({ queryKey: ['trackday', uuid] })
       queryClient.invalidateQueries({ queryKey: ['trackdays'] })
       toast.success(t('trackday_updated_successfully'))
-      navigate(`/trackdays/${id}`)
+      navigate(`/trackdays/${uuid}`)
     },
     onError: (error: any) => {
       toast.error(t('an_unexpected_error_occurred'))
@@ -76,7 +76,7 @@ const TrackdayEdit: React.FC = () => {
   })
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: () => deleteTrackday(id!),
+    mutationFn: () => deleteTrackday(uuid!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] })
       toast.success(t('trackday_deleted_successfully'))

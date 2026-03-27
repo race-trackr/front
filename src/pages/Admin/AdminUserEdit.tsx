@@ -28,7 +28,7 @@ import {
 const AdminUserEdit: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { id } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
 
   const userSchema = z.object({
     email: z.string().email({ message: t('invalid_email') }),
@@ -54,12 +54,12 @@ const AdminUserEdit: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<UserFormValues>({
-    queryKey: ['admin-user', id],
+    queryKey: ['admin-user', uuid],
     queryFn: async () => {
-      const response = await apiClient.get(`/admin/users/${id}`)
+      const response = await apiClient.get(`/admin/users/${uuid}`)
       return response.data.user
     },
-    enabled: !!id,
+    enabled: !!uuid,
   })
 
   const { data: ownerCount } = useQuery<{ total: number }>({
@@ -83,7 +83,7 @@ const AdminUserEdit: React.FC = () => {
 
   const updateMutation = useMutation({
     mutationFn: async (values: UserFormValues) => {
-      const response = await apiClient.put(`/admin/users/${id}`, values)
+      const response = await apiClient.put(`/admin/users/${uuid}`, values)
       return response.data
     },
     onSuccess: () => {
@@ -109,7 +109,7 @@ const AdminUserEdit: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{id ? t('edit_user') : t('create_user')}</h1>
+      <h1 className="text-3xl font-bold">{uuid ? t('edit_user') : t('create_user')}</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

@@ -24,7 +24,7 @@ import { toast } from 'sonner'
 import { Separator } from '@/components/ui/separator'
 
 const MaintenanceView: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -36,13 +36,13 @@ const MaintenanceView: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<MaintenanceRecordType>({
-    queryKey: ['maintenance', id],
-    queryFn: () => getMaintenanceById(id!),
-    enabled: !!id,
+    queryKey: ['maintenance', uuid],
+    queryFn: () => getMaintenanceById(uuid!),
+    enabled: !!uuid,
   })
 
   const deleteMaintenanceMutation = useMutation({
-    mutationFn: () => deleteMaintenance(id!),
+    mutationFn: () => deleteMaintenance(uuid!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] })

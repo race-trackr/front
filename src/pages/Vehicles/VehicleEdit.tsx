@@ -14,7 +14,7 @@ import { ArrowLeft, Trash2 } from 'lucide-react'
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 
 const VehicleEdit: React.FC = () => {
-  const { id: uuid } = useParams<{ id: string }>()
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
