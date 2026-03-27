@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { fr, enUS, es, it } from 'date-fns/locale'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles'
+import { getVehicleByUUID, deleteVehicle } from '@/lib/api/vehicles'
 import { getMaintenances } from '@/lib/api/maintenances'
 import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react'
 import { UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types'
@@ -14,8 +14,7 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 import { toast } from 'sonner'
 
 const VehicleView: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const vehicleId = Number(id)
+  const { id: uuid } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -24,12 +23,12 @@ const VehicleView: React.FC = () => {
 
   const {
     data: vehicle,
-    isLoading,
-    isError,
-  } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', number]>({
-    queryKey: ['vehicle', vehicleId],
-    queryFn: () => getVehicleById(vehicleId),
-    enabled: !!vehicleId && !isNaN(vehicleId),
+    isLoading: isLoadingVehicle,
+    isError: isErrorVehicle,
+  } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', string]>({
+    queryKey: ['vehicle', uuid!],
+    queryFn: () => getVehicleByUUID(uuid!),
+    enabled: !!uuid,
   })
 
   const {
@@ -41,22 +40,22 @@ const VehicleView: React.FC = () => {
     PaginatedResponse<MaintenanceRecordType>,
     Error,
     PaginatedResponse<MaintenanceRecordType>,
-    ['vehicleMaintenances', number]
+    ['vehicleMaintenances', string | undefined]
   >({
-    queryKey: ['vehicleMaintenances', vehicleId],
-    queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
-    enabled: !!vehicleId && !isNaN(vehicleId),
+    queryKey: ['vehicleMaintenances', vehicle?.uuid],
+    queryFn: () => getMaintenances({ vehicle_uuid: vehicle?.uuid, limit: 0 }),
+    enabled: !!vehicle?.id,
   })
   const maintenances = maintenancesResponse?.data || []
 
   useEffect(() => {
-    if (isErrorMaintenances && maintenancesError) {
+    if (isErrorMaintenances && maintenancesError && isErrorVehicle) {
       toast.error(t('an_unexpected_error_occurred'))
     }
   }, [isErrorMaintenances, maintenancesError, t])
 
   const deleteVehicleMutation = useMutation({
-    mutationFn: () => deleteVehicle(vehicleId),
+    mutationFn: () => deleteVehicle(uuid!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] })
       toast.success(t('vehicle_deleted_successfully'))
@@ -89,11 +88,11 @@ const VehicleView: React.FC = () => {
     }
   }
 
-  if (isLoading) {
+  if (isLoadingVehicle) {
     return <div className="p-4 text-center">{t('loading_vehicle')}</div>
   }
 
-  if (isError || !vehicle) {
+  if (isErrorVehicle || !vehicle) {
     return <div className="p-4 text-center text-red-500">{t('error_loading_vehicle')}</div>
   }
 
@@ -106,7 +105,7 @@ const VehicleView: React.FC = () => {
         <h1 className="text-3xl font-bold">{vehicle.name}</h1>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
-            <Link to={`/vehicles/edit/${vehicle.id}`}>
+            <Link to={`/vehicles/edit/${vehicle.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_vehicle_button')}</span>
             </Link>
@@ -192,7 +191,7 @@ const VehicleView: React.FC = () => {
                   maintenance // Accessing maintenances safely
                 ) => (
                   <li
-                    key={maintenance.id}
+                    key={maintenance.uuid}
                     className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0"
                   >
                     <div>
@@ -203,7 +202,7 @@ const VehicleView: React.FC = () => {
                       </p>
                     </div>
                     <Button asChild variant="outline" size="sm">
-                      <Link to={`/maintenances/edit/${maintenance.id}`}>
+                      <Link to={`/maintenances/edit/${maintenance.uuid}`}>
                         {t('view_edit_details')}
                       </Link>
                     </Button>
@@ -212,7 +211,7 @@ const VehicleView: React.FC = () => {
               )}
               <div className="pt-4">
                 <Button asChild className="btn-primary-gradient w-full">
-                  <Link to={`/maintenances/create?vehicleId=${vehicle.id}`}>
+                  <Link to={`/maintenances/create?vehicleId=${vehicle.uuid}`}>
                     <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_maintenance')}
                   </Link>
                 </Button>
@@ -223,7 +222,7 @@ const VehicleView: React.FC = () => {
               <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
               <p className="text-muted-foreground mb-4">{t('no_maintenance_records')}</p>
               <Button asChild className="btn-primary-gradient">
-                <Link to={`/maintenances/create?vehicleId=${vehicle.id}`}>
+                <Link to={`/maintenances/create?vehicleId=${vehicle.uuid}`}>
                   <PlusCircle className="mr-2 h-5 w-5 flex-shrink-0" /> {t('add_maintenance')}
                 </Link>
               </Button>

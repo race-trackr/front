@@ -45,7 +45,7 @@ const formSchema = z.object({
 
 const AdminTracksEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const trackId = Number(id)
+  const trackUUID = id
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -71,13 +71,13 @@ const AdminTracksEdit: React.FC = () => {
     data: track,
     isLoading,
     isError,
-  } = useQuery<TrackType, Error, TrackType, ['track', number]>({
-    queryKey: ['track', trackId],
+  } = useQuery<TrackType, Error, TrackType, ['track', string]>({
+    queryKey: ['track', trackUUID],
     queryFn: async () => {
-      const response = await apiClient.get(`/tracks/${trackId}`)
+      const response = await apiClient.get(`/tracks/${trackUUID}`)
       return response.data
     },
-    enabled: !!trackId && !isNaN(trackId),
+    enabled: !!trackUUID,
   })
 
   const {
@@ -124,11 +124,11 @@ const AdminTracksEdit: React.FC = () => {
 
   const updateTrackMutation = useMutation({
     mutationFn: async (payload: z.infer<typeof formSchema>) => {
-      const response = await apiClient.put(`/tracks/${trackId}`, payload)
+      const response = await apiClient.put(`/tracks/${trackUUID}`, payload)
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['track', trackId] })
+      queryClient.invalidateQueries({ queryKey: ['track', trackUUID] })
       queryClient.invalidateQueries({ queryKey: ['tracks'] })
       toast.success(t('track_updated_successfully'))
       navigate('/admin/tracks')
@@ -141,7 +141,7 @@ const AdminTracksEdit: React.FC = () => {
 
   const deleteTrackMutation = useMutation({
     mutationFn: async () => {
-      await apiClient.delete(`/tracks/${trackId}`)
+      await apiClient.delete(`/tracks/${trackUUID}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tracks'] })

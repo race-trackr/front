@@ -32,7 +32,7 @@ import { Separator } from '@/components/ui/separator'
 import { getWeatherForecast } from '@/lib/api/weather' // Import the mock weather API
 
 const TrackdayView: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id: uuid } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -44,9 +44,9 @@ const TrackdayView: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<TrackDayType>({
-    queryKey: ['trackday', id],
-    queryFn: () => getTrackdayById(id!),
-    enabled: !!id,
+    queryKey: ['trackday', uuid],
+    queryFn: () => getTrackdayById(uuid!),
+    enabled: !!uuid,
   })
 
   const {
@@ -60,7 +60,7 @@ const TrackdayView: React.FC = () => {
   })
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: () => deleteTrackday(id!),
+    mutationFn: () => deleteTrackday(uuid!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] })
       toast.success(t('trackday_deleted_successfully'))
@@ -175,7 +175,7 @@ const TrackdayView: React.FC = () => {
         <h1 className="text-3xl font-bold">{t('session_of_date', { date: formattedDate })}</h1>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
-            <Link to={`/trackdays/edit/${trackday.id}`}>
+            <Link to={`/trackdays/edit/${trackday.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_trackday_button')}</span>
             </Link>

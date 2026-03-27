@@ -28,8 +28,7 @@ import MaintenanceForm, {
 // schema pulled from MaintenanceForm component.
 
 const MaintenanceEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const maintenanceId = Number(id)
+  const { id: uuid } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -55,9 +54,9 @@ const MaintenanceEdit: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<MaintenanceRecordType>({
-    queryKey: ['maintenance', maintenanceId],
-    queryFn: () => getMaintenanceById(maintenanceId),
-    enabled: !!maintenanceId && !isNaN(maintenanceId),
+    queryKey: ['maintenance', uuid],
+    queryFn: () => getMaintenanceById(uuid!),
+    enabled: !!uuid,
   })
 
   const {
@@ -86,9 +85,9 @@ const MaintenanceEdit: React.FC = () => {
   }, [maintenance, form])
 
   const updateMaintenanceMutation = useMutation({
-    mutationFn: (payload: UpdateMaintenancePayload) => updateMaintenance(maintenanceId, payload),
+    mutationFn: (payload: UpdateMaintenancePayload) => updateMaintenance(uuid!, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenance', maintenanceId] })
+      queryClient.invalidateQueries({ queryKey: ['maintenance', uuid] })
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       toast.success(t('maintenance_updated_successfully'))
       navigate('/maintenances')
@@ -99,7 +98,7 @@ const MaintenanceEdit: React.FC = () => {
   })
 
   const deleteMaintenanceMutation = useMutation({
-    mutationFn: () => deleteMaintenance(maintenanceId),
+    mutationFn: () => deleteMaintenance(uuid),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] })

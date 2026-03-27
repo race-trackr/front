@@ -48,7 +48,7 @@ const MaintenanceList: React.FC = () => {
   const [vehicleFilter, setVehicleFilter] = React.useState<string>('all')
   const [currentPage, setCurrentPage] = React.useState(1)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
-  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null)
+  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<string | null>(null)
 
   useEffect(() => {
     setCurrentPage(1)
@@ -116,7 +116,7 @@ const MaintenanceList: React.FC = () => {
   }, [isErrorVehicles, vehiclesError, t])
 
   const deleteMaintenanceMutation = useMutation({
-    mutationFn: (id: number) => deleteMaintenance(id),
+    mutationFn: (id: string) => deleteMaintenance(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       toast.success(t('maintenance_deleted_successfully'))
@@ -147,8 +147,8 @@ const MaintenanceList: React.FC = () => {
     if (page > 0 && page <= totalPages) setCurrentPage(page)
   }
 
-  const handleDeleteClick = (id: number) => {
-    setMaintenanceToDelete(id)
+  const handleDeleteClick = (uuid: string) => {
+    setMaintenanceToDelete(uuid)
     setIsDeleteDialogOpen(true)
   }
 
@@ -288,7 +288,7 @@ const MaintenanceList: React.FC = () => {
               key={maintenance.id}
               className="flex flex-col transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary"
             >
-              <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
+              <Link to={`/maintenances/${maintenance.uuid}`} className="block h-full p-6">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-4 flex-1 pr-4">
                     <div
@@ -326,7 +326,7 @@ const MaintenanceList: React.FC = () => {
                       onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
-                        navigate(`/maintenances/edit/${maintenance.id}`)
+                        navigate(`/maintenances/edit/${maintenance.uuid}`)
                       }}
                     >
                       <Edit className="h-4 w-4" />
@@ -338,7 +338,7 @@ const MaintenanceList: React.FC = () => {
                       onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
-                        handleDeleteClick(maintenance.id)
+                        handleDeleteClick(maintenance.uuid)
                       }}
                       disabled={deleteMaintenanceMutation.isPending}
                       className="btn-danger"

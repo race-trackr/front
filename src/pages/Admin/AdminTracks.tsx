@@ -19,7 +19,7 @@ const AdminTracks: React.FC = () => {
   const queryClient = useQueryClient()
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
-  const [trackToDelete, setTrackToDelete] = React.useState<number | null>(null)
+  const [trackToDelete, setTrackToDelete] = React.useState<string | null>(null)
 
   const {
     data: tracks,
@@ -46,8 +46,8 @@ const AdminTracks: React.FC = () => {
   }, [isErrorTracks, tracksError, t])
 
   const deleteTrackMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/tracks/${id}`)
+    mutationFn: async (uuid: string) => {
+      await apiClient.delete(`/tracks/${uuid}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tracks'] })
@@ -63,8 +63,8 @@ const AdminTracks: React.FC = () => {
     },
   })
 
-  const handleDeleteClick = (id: number) => {
-    setTrackToDelete(id)
+  const handleDeleteClick = (uuid: string) => {
+    setTrackToDelete(uuid)
     setIsDeleteDialogOpen(true)
   }
 
@@ -97,7 +97,7 @@ const AdminTracks: React.FC = () => {
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
-            <Link to={`/admin/tracks/edit/${row.original.id}`}>
+            <Link to={`/admin/tracks/edit/${row.original.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_track')}</span>
             </Link>
@@ -105,7 +105,7 @@ const AdminTracks: React.FC = () => {
           <Button
             variant="destructive"
             size="icon"
-            onClick={() => handleDeleteClick(row.original.id)}
+            onClick={() => handleDeleteClick(row.original.uuid)}
             disabled={deleteTrackMutation.isPending}
             className="btn-danger"
           >

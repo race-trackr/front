@@ -1,5 +1,6 @@
 export interface CountryType {
   id: number
+  uuid: string
   name: string
   slug: string
   iso: string
@@ -31,6 +32,7 @@ export interface SubscriptionType {
 
 export interface UserType {
   id: number
+  uuid: string
   firstName: string | null
   lastName: string | null
   email: string
@@ -50,6 +52,7 @@ export interface UserType {
 
 export interface TrackType {
   id: number
+  uuid: string
   name: string
   slug: string
   city: string
@@ -77,6 +80,7 @@ export type MaintenanceRecordTypeType = 'maintenance' | 'repair' | 'modification
 
 export interface TrackDayType {
   id: string
+  uuid: string
   userId: number
   trackId: number
   userVehicleId: number | null
@@ -99,6 +103,7 @@ export interface TrackDayType {
 
 export interface UserVehicleType {
   id: number
+  uuid: string
   userId: number
   name: string
   slug: string
@@ -110,7 +115,6 @@ export interface UserVehicleType {
   details: string | null
   createdAt: string // Using string for DateTime consistency
   updatedAt: string // Using string for DateTime consistency
-
   user?: UserType
   trackDays?: TrackDayType[]
   maintenances?: MaintenanceRecordType[]
@@ -118,6 +122,7 @@ export interface UserVehicleType {
 
 export interface MaintenanceRecordType {
   id: number
+  uuid: string
   userId: number
   userVehicleId: number
   name: string

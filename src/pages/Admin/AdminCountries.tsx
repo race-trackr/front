@@ -19,7 +19,7 @@ const AdminCountries: React.FC = () => {
   const queryClient = useQueryClient()
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
-  const [countryToDelete, setCountryToDelete] = React.useState<number | null>(null)
+  const [countryToDelete, setCountryToDelete] = React.useState<string | null>(null)
 
   const {
     data: countries,
@@ -46,8 +46,8 @@ const AdminCountries: React.FC = () => {
   }, [isErrorCountries, countriesError, t])
 
   const deleteCountryMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/countries/${id}`)
+    mutationFn: async (uuid: string) => {
+      await apiClient.delete(`/countries/${uuid}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['countries'] })
@@ -63,8 +63,8 @@ const AdminCountries: React.FC = () => {
     },
   })
 
-  const handleDeleteClick = (id: number) => {
-    setCountryToDelete(id)
+  const handleDeleteClick = (uuid: string) => {
+    setCountryToDelete(uuid)
     setIsDeleteDialogOpen(true)
   }
 
@@ -97,7 +97,7 @@ const AdminCountries: React.FC = () => {
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
-            <Link to={`/admin/countries/edit/${row.original.id}`}>
+            <Link to={`/admin/countries/edit/${row.original.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_country')}</span>
             </Link>
@@ -105,7 +105,7 @@ const AdminCountries: React.FC = () => {
           <Button
             variant="destructive"
             size="icon"
-            onClick={() => handleDeleteClick(row.original.id)}
+            onClick={() => handleDeleteClick(row.original.uuid)}
             disabled={deleteCountryMutation.isPending}
             className="btn-danger"
           >

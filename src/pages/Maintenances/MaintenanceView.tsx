@@ -25,7 +25,6 @@ import { Separator } from '@/components/ui/separator'
 
 const MaintenanceView: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const maintenanceId = Number(id)
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -37,13 +36,13 @@ const MaintenanceView: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<MaintenanceRecordType>({
-    queryKey: ['maintenance', maintenanceId],
-    queryFn: () => getMaintenanceById(maintenanceId),
-    enabled: !!maintenanceId && !isNaN(maintenanceId),
+    queryKey: ['maintenance', id],
+    queryFn: () => getMaintenanceById(id!),
+    enabled: !!id,
   })
 
   const deleteMaintenanceMutation = useMutation({
-    mutationFn: () => deleteMaintenance(maintenanceId),
+    mutationFn: () => deleteMaintenance(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] })
@@ -110,7 +109,7 @@ const MaintenanceView: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
-            <Link to={`/maintenances/edit/${maintenance.id}`}>
+            <Link to={`/maintenances/edit/${maintenance.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_maintenance_button')}</span>
             </Link>

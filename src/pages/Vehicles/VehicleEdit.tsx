@@ -8,14 +8,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import VehicleForm, { vehicleFormSchema } from '@/components/VehicleForm'
-import { getVehicleById, updateVehicle, deleteVehicle } from '@/lib/api/vehicles'
+import { getVehicleByUUID, updateVehicle, deleteVehicle } from '@/lib/api/vehicles'
 import { UserVehicleType, UpdateVehiclePayload } from '@/types/index'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 
 const VehicleEdit: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const vehicleId = Number(id)
+  const { id: uuid } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -39,11 +38,12 @@ const VehicleEdit: React.FC = () => {
     data: vehicle,
     isLoading,
     isError,
-  } = useQuery<UserVehicleType>({
-    queryKey: ['vehicle', vehicleId],
-    queryFn: () => getVehicleById(vehicleId),
-    enabled: !!vehicleId && !isNaN(vehicleId),
+  } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', string]>({
+    queryKey: ['vehicle', uuid!],
+    queryFn: () => getVehicleByUUID(uuid!),
+    enabled: !!uuid,
   })
+
 
   useEffect(() => {
     if (vehicle) {
@@ -60,12 +60,12 @@ const VehicleEdit: React.FC = () => {
   }, [vehicle, form])
 
   const updateVehicleMutation = useMutation({
-    mutationFn: (payload: UpdateVehiclePayload) => updateVehicle(vehicleId, payload),
+    mutationFn: (payload: UpdateVehiclePayload) => updateVehicle(uuid!, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vehicle', vehicleId] })
+      queryClient.invalidateQueries({ queryKey: ['vehicle', uuid] })
       queryClient.invalidateQueries({ queryKey: ['vehicles'] })
       toast.success(t('vehicle_updated_successfully'))
-      navigate(`/vehicles/${vehicleId}`)
+      navigate(`/vehicles/${uuid}`)
     },
     onError: (error: any) => {
       toast.error(t('an_unexpected_error_occurred')) // Generic error message
@@ -73,7 +73,7 @@ const VehicleEdit: React.FC = () => {
   })
 
   const deleteVehicleMutation = useMutation({
-    mutationFn: () => deleteVehicle(vehicleId),
+    mutationFn: () => deleteVehicle(uuid!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] })
       toast.success(t('vehicle_deleted_successfully'))

@@ -49,7 +49,7 @@ const crumbs = useBreadcrumbs()
 {
   path: ':id',
   element: <VehicleView />,
-  loader: async ({ params }) => getVehicleById(params.id),
+  loader: async ({ params }) => getVehicleByUUID(params.id),
   handle: {
     crumb: ({ data }) => data?.vehicle?.name ?? t('view_vehicle')
   }

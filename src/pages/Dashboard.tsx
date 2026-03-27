@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
   const [trackdayToDelete, setTrackdayToDelete] = React.useState<string | null>(null)
 
   const [isMaintenanceDeleteDialogOpen, setIsMaintenanceDeleteDialogOpen] = React.useState(false)
-  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null)
+  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<string | null>(null)
 
   const {
     data: recentTrackdaysResponse,
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
   })
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: (id: string) => deleteTrackday(id),
+    mutationFn: (uuid: string) => deleteTrackday(uuid),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] })
       queryClient.invalidateQueries({ queryKey: ['upcomingTrackdays'] })
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
   })
 
   const deleteMaintenanceMutation = useMutation({
-    mutationFn: (id: number) => deleteMaintenance(id),
+    mutationFn: (uuid: string) => deleteMaintenance(uuid),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenances'] })
       queryClient.invalidateQueries({ queryKey: ['allMaintenances'] }) // Invalidate all maintenances query
@@ -115,8 +115,8 @@ const Dashboard: React.FC = () => {
     },
   })
 
-  const handleDeleteTrackdayClick = (id: string) => {
-    setTrackdayToDelete(id)
+  const handleDeleteTrackdayClick = (uuid: string) => {
+    setTrackdayToDelete(uuid)
     setIsTrackdayDeleteDialogOpen(true)
   }
 
@@ -126,8 +126,8 @@ const Dashboard: React.FC = () => {
     }
   }
 
-  const handleDeleteMaintenanceClick = (id: number) => {
-    setMaintenanceToDelete(id)
+  const handleDeleteMaintenanceClick = (uuid: string) => {
+    setMaintenanceToDelete(uuid)
     setIsMaintenanceDeleteDialogOpen(true)
   }
 
@@ -300,7 +300,7 @@ const Dashboard: React.FC = () => {
                     key={trackday.id}
                     className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    <Link to={`/trackdays/${trackday.id}`} className="w-full">
+                    <Link to={`/trackdays/${trackday.uuid}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
                           {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
@@ -321,7 +321,7 @@ const Dashboard: React.FC = () => {
                         onClick={(e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          navigate(`/trackdays/edit/${trackday.id}`)
+                          navigate(`/trackdays/edit/${trackday.uuid}`)
                         }}
                       >
                         <Edit className="h-4 w-4" />
@@ -369,7 +369,7 @@ const Dashboard: React.FC = () => {
                     key={trackday.id}
                     className="relative flex flex-col items-start justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    <Link to={`/trackdays/${trackday.id}`} className="w-full flex-1">
+                    <Link to={`/trackdays/${trackday.uuid}`} className="w-full flex-1">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
                           {trackday.vehicle ? `${trackday.vehicle.name}` : trackday.userVehicleId} -
@@ -390,7 +390,7 @@ const Dashboard: React.FC = () => {
                         onClick={(e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          navigate(`/trackdays/edit/${trackday.id}`)
+                          navigate(`/trackdays/edit/${trackday.uuid}`)
                         }}
                       >
                         <Edit className="h-4 w-4" />
@@ -438,7 +438,7 @@ const Dashboard: React.FC = () => {
                     key={maintenance.id}
                     className="relative flex items-center justify-between border rounded-md p-3 group hover:bg-accent/50 transition-colors"
                   >
-                    <Link to={`/maintenances/${maintenance.id}`} className="w-full">
+                    <Link to={`/maintenances/${maintenance.uuid}`} className="w-full">
                       <div className="flex-1 text-left z-10">
                         <p className="font-medium">
                           {maintenance.name} -{' '}
@@ -461,7 +461,7 @@ const Dashboard: React.FC = () => {
                         onClick={(e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          navigate(`/maintenances/edit/${maintenance.id}`)
+                          navigate(`/maintenances/edit/${maintenance.uuid}`)
                         }}
                       >
                         <Edit className="h-4 w-4" />
@@ -473,7 +473,7 @@ const Dashboard: React.FC = () => {
                         onClick={(e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          handleDeleteMaintenanceClick(maintenance.id)
+                          handleDeleteMaintenanceClick(maintenance.uuid)
                         }}
                         className="btn-danger"
                         disabled={deleteMaintenanceMutation.isPending}

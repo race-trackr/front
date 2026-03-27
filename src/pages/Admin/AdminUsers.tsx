@@ -17,7 +17,7 @@ const AdminUsers: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const [selectedUserId, setSelectedUserId] = React.useState<number | null>(null)
+  const [selectedUserId, setSelectedUserId] = React.useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
 
   // Fetch users
@@ -36,7 +36,7 @@ const AdminUsers: React.FC = () => {
 
   // Delete mutation
   const deleteUserMutation = useMutation({
-    mutationFn: async (userId: number) => {
+    mutationFn: async (userId: string) => {
       const response = await apiClient.delete(`/admin/users/${userId}`)
       // response returns 204 on success with no content
       return response.data
@@ -54,7 +54,7 @@ const AdminUsers: React.FC = () => {
 
   const ownerCount = users?.filter((u) => u.role === 'owner').length ?? 0
 
-  const handleDeleteClick = (userId: number) => {
+  const handleDeleteClick = (userId: string) => {
     setSelectedUserId(userId)
     setIsDeleteDialogOpen(true)
   }
@@ -100,7 +100,7 @@ const AdminUsers: React.FC = () => {
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button title={t('edit_user')} asChild variant="outline" size="icon">
-            <Link to={`/admin/users/edit/${row.original.id}`}>
+            <Link to={`/admin/users/edit/${row.original.uuid}`}>
               <Edit className="h-4 w-4" />
               <span className="sr-only">{t('edit_user')}</span>
             </Link>
@@ -108,7 +108,7 @@ const AdminUsers: React.FC = () => {
           <Button
             variant="destructive"
             size="icon"
-            onClick={() => handleDeleteClick(row.original.id)}
+            onClick={() => handleDeleteClick(row.original.uuid)}
             disabled={
               deleteUserMutation.isPending || (row.original.role === 'owner' && ownerCount <= 1)
             }

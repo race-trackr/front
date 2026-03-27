@@ -9,7 +9,7 @@ import {
 export interface GetMaintenancesParams {
   page?: number
   limit?: number
-  vehicle_id?: number
+  vehicle_uuid?: string
   type?: string
   search?: string
 }
@@ -23,7 +23,7 @@ export const getMaintenances = async (
   return response.data
 }
 
-export const getMaintenanceById = async (id: number): Promise<MaintenanceRecordType> => {
+export const getMaintenanceById = async (id: string): Promise<MaintenanceRecordType> => {
   const response = await apiClient.get(`/maintenances/${id}`)
   return response.data
 }
@@ -36,13 +36,13 @@ export const createMaintenance = async (
 }
 
 export const updateMaintenance = async (
-  id: number,
+  id: string,
   payload: UpdateMaintenancePayload
 ): Promise<MaintenanceRecordType> => {
   const response = await apiClient.put(`/maintenances/${id}`, payload)
   return response.data
 }
 
-export const deleteMaintenance = async (id: number): Promise<void> => {
-  await apiClient.delete(`/maintenances/${id}`)
+export const deleteMaintenance = async (uuid: string): Promise<void> => {
+  await apiClient.delete(`/maintenances/${uuid}`)
 }

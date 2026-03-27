@@ -30,12 +30,12 @@ const formSchema = z.object({
 
 const AdminCountriesEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const countryId = Number(id)
+  const countryUUID = id
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
-  const form = useForm<Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>>({
+  const form = useForm<Omit<CountryType, 'id' | 'uuid' | 'slug' | 'createdAt' | 'updatedAt'>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -50,12 +50,12 @@ const AdminCountriesEdit: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<CountryType>({
-    queryKey: ['country', countryId],
+    queryKey: ['country', countryUUID],
     queryFn: async () => {
-      const response = await apiClient.get(`/countries/${countryId}`)
+      const response = await apiClient.get(`/countries/${countryUUID}`)
       return response.data
     },
-    enabled: !!countryId && !isNaN(countryId),
+    enabled: !!countryUUID,
   })
 
   useEffect(() => {
@@ -70,12 +70,12 @@ const AdminCountriesEdit: React.FC = () => {
   }, [country, form])
 
   const updateCountryMutation = useMutation({
-    mutationFn: async (payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>) => {
-      const response = await apiClient.put(`/countries/${countryId}`, payload)
+    mutationFn: async (payload: Omit<CountryType, 'id' | 'uuid' | 'slug' | 'createdAt' | 'updatedAt'>) => {
+      const response = await apiClient.put(`/countries/${countryUUID}`, payload)
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['country', countryId] })
+      queryClient.invalidateQueries({ queryKey: ['country', countryUUID] })
       queryClient.invalidateQueries({ queryKey: ['countries'] })
       toast.success(t('country_updated_successfully'))
       navigate('/admin/countries')
@@ -87,7 +87,7 @@ const AdminCountriesEdit: React.FC = () => {
 
   const deleteCountryMutation = useMutation({
     mutationFn: async () => {
-      await apiClient.delete(`/countries/${countryId}`)
+      await apiClient.delete(`/countries/${countryUUID}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['countries'] })
@@ -100,7 +100,7 @@ const AdminCountriesEdit: React.FC = () => {
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'> = {
+    const payload: Omit<CountryType, 'id' | 'uuid' | 'slug' | 'createdAt' | 'updatedAt'> = {
       ...values,
       name: values.name,
       iso: values.iso,

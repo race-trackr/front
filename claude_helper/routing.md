@@ -83,7 +83,7 @@ Les routes d'édition et de visualisation pré-chargent leurs données via `load
   path: ':id',
   element: <VehicleView />,
   loader: async ({ params }) => {
-    const vehicle = await getVehicleById(Number(params.id!));
+    const vehicle = await getVehicleByUUID(Number(params.id!));
     return { vehicle };
   },
   handle: { crumb: ({ data }) => data?.vehicle?.name ?? t('view_vehicle') }
@@ -118,7 +118,7 @@ Chaque route qui doit apparaître dans le breadcrumb définit un `handle.crumb`.
 ```typescript
 {
   path: ':id',
-  loader: async ({ params }) => getVehicleById(params.id),
+  loader: async ({ params }) => getVehicleByUUID(params.id),
   handle: {
     crumb: ({ data }: { data: { vehicle: UserVehicleType } }) =>
       data?.vehicle?.name ?? t('view_vehicle')

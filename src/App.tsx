@@ -43,7 +43,7 @@ import { format } from 'date-fns'
 import { fr, enUS, es, it } from 'date-fns/locale'
 import apiClient from '@/lib/apiClient'
 import { getTrackdayById } from '@/lib/api/trackdays'
-import { getVehicleById } from '@/lib/api/vehicles'
+import { getVehicleByUUID } from '@/lib/api/vehicles'
 import { getMaintenanceById } from '@/lib/api/maintenances'
 import {
   TrackDayType,
@@ -176,7 +176,7 @@ const App: React.FC = () => {
                   path: ':id',
                   element: <VehicleView />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!))
+                    const vehicle = await getVehicleByUUID(params.id)
                     return { vehicle }
                   },
                   handle: {
@@ -192,7 +192,7 @@ const App: React.FC = () => {
                   path: 'edit/:id',
                   element: <VehicleEdit />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!))
+                    const vehicle = await getVehicleByUUID(params.id)
                     return { vehicle }
                   },
                   handle: {
@@ -223,7 +223,7 @@ const App: React.FC = () => {
                   path: ':id',
                   element: <MaintenanceView />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!))
+                    const maintenance = await getMaintenanceById(params.id!)
                     return { maintenance }
                   },
                   handle: {
@@ -244,7 +244,7 @@ const App: React.FC = () => {
                   path: 'edit/:id',
                   element: <MaintenanceEdit />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!))
+                    const maintenance = await getMaintenanceById(params.id!)
                     return { maintenance }
                   },
                   handle: {

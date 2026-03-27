@@ -20,19 +20,19 @@ export const createVehicle = async (payload: CreateVehiclePayload): Promise<User
   return response.data
 }
 
-export const getVehicleById = async (id: number): Promise<UserVehicleType> => {
+export const getVehicleByUUID = async (id: string): Promise<UserVehicleType> => {
   const response = await apiClient.get(`/vehicles/${id}`)
   return response.data
 }
 
 export const updateVehicle = async (
-  id: number,
+  id: string,
   payload: UpdateVehiclePayload
 ): Promise<UserVehicleType> => {
   const response = await apiClient.put(`/vehicles/${id}`, payload)
   return response.data
 }
 
-export const deleteVehicle = async (id: number): Promise<void> => {
+export const deleteVehicle = async (id: string): Promise<void> => {
   await apiClient.delete(`/vehicles/${id}`)
 }

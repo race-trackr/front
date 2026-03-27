@@ -28,7 +28,7 @@ const VehicleList: React.FC = () => {
   const queryClient = useQueryClient()
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
-  const [vehicleToDelete, setVehicleToDelete] = React.useState<number | null>(null)
+  const [vehicleToDelete, setVehicleToDelete] = React.useState<string | null>(null)
 
   const {
     data: vehiclesResponse,
@@ -53,7 +53,7 @@ const VehicleList: React.FC = () => {
   }, [isErrorVehicles, vehiclesError, t])
 
   const deleteVehicleMutation = useMutation({
-    mutationFn: (id: number) => deleteVehicle(id),
+    mutationFn: (id: string) => deleteVehicle(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] })
       toast.success(t('vehicle_deleted_successfully'))
@@ -68,7 +68,7 @@ const VehicleList: React.FC = () => {
     },
   })
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setVehicleToDelete(id)
     setIsDeleteDialogOpen(true)
   }
@@ -139,7 +139,7 @@ const VehicleList: React.FC = () => {
                   <Button
                     variant="destructive"
                     size="icon"
-                    onClick={() => handleDeleteClick(vehicle.id)}
+                    onClick={() => handleDeleteClick(vehicle.uuid)}
                     disabled={deleteVehicleMutation.isPending}
                     className="btn-danger"
                   >
@@ -150,13 +150,13 @@ const VehicleList: React.FC = () => {
                   </Button>
                   <div className="flex gap-2">
                     <Button asChild variant="outline" size="icon">
-                      <Link to={`/vehicles/${vehicle.id}`}>
+                      <Link to={`/vehicles/${vehicle.uuid}`}>
                         <Eye className="h-4 w-4" />
                         <span className="sr-only">{t('view_details')}</span>
                       </Link>
                     </Button>
                     <Button asChild variant="outline" size="icon">
-                      <Link to={`/vehicles/edit/${vehicle.id}`}>
+                      <Link to={`/vehicles/edit/${vehicle.uuid}`}>
                         <Edit className="h-4 w-4" />
                         <span className="sr-only">{t('edit_vehicle_button')}</span>
                       </Link>

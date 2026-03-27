@@ -69,10 +69,10 @@ export const deleteVehicle = async (id: number): Promise<void> => {
 | Fonction                         | Méthode | Endpoint        |
 | -------------------------------- | ------- | --------------- |
 | `getVehicles({ limit, offset })` | GET     | `/vehicles`     |
-| `getVehicleById(id: number)`     | GET     | `/vehicles/:id` |
+| `getVehicleByUUID(uuid: string)` | GET     | `/vehicles/:uuid` |
 | `createVehicle(payload)`         | POST    | `/vehicles`     |
-| `updateVehicle(id, payload)`     | PUT     | `/vehicles/:id` |
-| `deleteVehicle(id)`              | DELETE  | `/vehicles/:id` |
+| `updateVehicle(id, payload)`     | PUT     | `/vehicles/:uuid` |
+| `deleteVehicle(id)`              | DELETE  | `/vehicles/:uuid` |
 
 ### trackdays.ts
 

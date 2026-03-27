@@ -149,7 +149,7 @@ const TrackdayList: React.FC = () => {
   }, [isErrorTracksQuery, tracksError, t])
 
   const deleteTrackdayMutation = useMutation({
-    mutationFn: (id: string) => deleteTrackday(id),
+    mutationFn: (uuid: string) => deleteTrackday(uuid),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trackdays'] })
       toast.success(t('trackday_deleted_successfully'))
@@ -163,8 +163,8 @@ const TrackdayList: React.FC = () => {
     },
   })
 
-  const handleDeleteClick = (id: string) => {
-    setTrackdayToDelete(id)
+  const handleDeleteClick = (uuid: string) => {
+    setTrackdayToDelete(uuid)
     setIsDeleteDialogOpen(true)
   }
 
@@ -314,7 +314,7 @@ const TrackdayList: React.FC = () => {
                   <Button
                     variant="destructive"
                     size="icon"
-                    onClick={() => handleDeleteClick(trackday.id)}
+                    onClick={() => handleDeleteClick(trackday.uuid)}
                     disabled={deleteTrackdayMutation.isPending}
                     className="btn-danger"
                   >
@@ -327,13 +327,13 @@ const TrackdayList: React.FC = () => {
                   </Button>
                   <div className="flex gap-2">
                     <Button asChild variant="outline" size="icon">
-                      <Link to={`/trackdays/${trackday.id}`}>
+                      <Link to={`/trackdays/${trackday.uuid}`}>
                         <Eye className="h-4 w-4" />
                         <span className="sr-only">{t('view_details')}</span>
                       </Link>
                     </Button>
                     <Button asChild variant="outline" size="icon">
-                      <Link to={`/trackdays/edit/${trackday.id}`}>
+                      <Link to={`/trackdays/edit/${trackday.uuid}`}>
                         <Edit className="h-4 w-4" />
                         <span className="sr-only">{t('edit_trackday_button')}</span>
                       </Link>
