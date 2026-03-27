@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 interface SidebarState {
-  isCollapsed: boolean;
-  toggleCollapse: () => void;
+  isCollapsed: boolean
+  toggleCollapse: () => void
 }
 
 export const useSidebarStore = create<SidebarState>()(
@@ -17,4 +17,4 @@ export const useSidebarStore = create<SidebarState>()(
       storage: createJSONStorage(() => localStorage), // use localStorage
     }
   )
-);
+)

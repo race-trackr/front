@@ -1,27 +1,32 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react';
-import { CountryType } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import apiClient from '@/lib/apiClient';
-import { DataTable } from '@/components/DataTable';
-import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react'
+import { CountryType } from '@/types'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import apiClient from '@/lib/apiClient'
+import { DataTable } from '@/components/DataTable'
+import { createColumnHelper, ColumnDef } from '@tanstack/react-table'
+import { toast } from 'sonner'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 
-const columnHelper = createColumnHelper<CountryType>();
+const columnHelper = createColumnHelper<CountryType>()
 
 const AdminCountries: React.FC = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [countryToDelete, setCountryToDelete] = React.useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [countryToDelete, setCountryToDelete] = React.useState<number | null>(null)
 
-  const { data: countries, isLoading, isError: isErrorCountries, error: countriesError } = useQuery<
+  const {
+    data: countries,
+    isLoading,
+    isError: isErrorCountries,
+    error: countriesError,
+  } = useQuery<
     CountryType[], // TQueryFnData
     Error, // TError
     CountryType[], // TData
@@ -29,44 +34,45 @@ const AdminCountries: React.FC = () => {
   >({
     queryKey: ['countries'],
     queryFn: async () => {
-      const response = await apiClient.get('/countries');
-      return response.data;
+      const response = await apiClient.get('/countries')
+      return response.data
     },
-  });
+  })
 
   useEffect(() => {
     if (isErrorCountries && countriesError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorCountries, countriesError, t]);
+  }, [isErrorCountries, countriesError, t])
 
   const deleteCountryMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/countries/${id}`);
+      await apiClient.delete(`/countries/${id}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['countries'] });
-      toast.success(t('country_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
-      setCountryToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ['countries'] })
+      toast.success(t('country_deleted_successfully'))
+      setIsDeleteDialogOpen(false)
+      setCountryToDelete(null)
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
-      setIsDeleteDialogOpen(false);
-      setCountryToDelete(null);
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
+      setIsDeleteDialogOpen(false)
+      setCountryToDelete(null)
     },
-  });
+  })
 
   const handleDeleteClick = (id: number) => {
-    setCountryToDelete(id);
-    setIsDeleteDialogOpen(true);
-  };
+    setCountryToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
     if (countryToDelete !== null) {
-      deleteCountryMutation.mutate(countryToDelete);
+      deleteCountryMutation.mutate(countryToDelete)
     }
-  };
+  }
 
   const columns: ColumnDef<CountryType>[] = [
     columnHelper.accessor('name', {
@@ -104,19 +110,22 @@ const AdminCountries: React.FC = () => {
             className="btn-danger"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteCountryMutation.isPending ? t('deleting') : t('delete_country_button')}</span>
+            <span className="sr-only">
+              {deleteCountryMutation.isPending ? t('deleting') : t('delete_country_button')}
+            </span>
           </Button>
         </div>
       ),
     }),
-  ];
+  ]
 
   if (isLoading) {
-    return <div className="space-y-6">{t('loading_countries')}</div>;
+    return <div className="space-y-6">{t('loading_countries')}</div>
   }
 
-  if (isErrorCountries) { // Use specific error flag
-    return <div className="space-y-6 text-red-500">{t('error_loading_countries')}</div>;
+  if (isErrorCountries) {
+    // Use specific error flag
+    return <div className="space-y-6 text-red-500">{t('error_loading_countries')}</div>
   }
 
   return (
@@ -152,7 +161,7 @@ const AdminCountries: React.FC = () => {
         isConfirming={deleteCountryMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default AdminCountries;
+export default AdminCountries

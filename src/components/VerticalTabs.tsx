@@ -1,29 +1,35 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
+import React from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/utils'
 
 interface TabItem {
-  value: string;
-  label: string;
-  content: React.ReactNode;
+  value: string
+  label: string
+  content: React.ReactNode
 }
 
 interface VerticalTabsProps {
-  tabs: TabItem[];
-  defaultValue?: string;
-  value?: string;
-  onValueChange?: (value: string) => void;
-  className?: string;
+  tabs: TabItem[]
+  defaultValue?: string
+  value?: string
+  onValueChange?: (value: string) => void
+  className?: string
 }
 
-const VerticalTabs: React.FC<VerticalTabsProps> = ({ tabs, defaultValue, value, onValueChange, className }) => {
+const VerticalTabs: React.FC<VerticalTabsProps> = ({
+  tabs,
+  defaultValue,
+  value,
+  onValueChange,
+  className,
+}) => {
   return (
     <Tabs
       value={value}
       defaultValue={defaultValue}
       onValueChange={onValueChange}
       orientation="vertical"
-      className={cn("flex flex-col md:flex-row", className)}
+      className={cn('flex flex-col md:flex-row', className)}
     >
       <TabsList className="flex flex-col h-auto justify-start p-2 md:w-48 md:mr-4">
         {tabs.map((tab) => (
@@ -44,7 +50,7 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({ tabs, defaultValue, value, 
         ))}
       </div>
     </Tabs>
-  );
-};
+  )
+}
 
-export default VerticalTabs;
+export default VerticalTabs

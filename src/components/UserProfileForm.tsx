@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useTranslation } from 'react-i18next'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import {
   Form,
   FormControl,
@@ -13,66 +13,68 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useAuth } from '@/hooks/useAuth';
-import apiClient from '@/lib/apiClient';
-import { CountryType, UserType } from '@/types';
-import { useAuthStore } from '@/store/authStore';
-import { Separator } from '@/components/ui/separator';
-import { PasswordInput } from '@/components/PasswordInput'; // Import the new PasswordInput component
+} from '@/components/ui/select'
+import { useAuth } from '@/hooks/useAuth'
+import apiClient from '@/lib/apiClient'
+import { CountryType, UserType } from '@/types'
+import { useAuthStore } from '@/store/authStore'
+import { Separator } from '@/components/ui/separator'
+import { PasswordInput } from '@/components/PasswordInput' // Import the new PasswordInput component
 
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: "Le prénom est requis." }).nullable(),
-  lastName: z.string().min(1, { message: "Le nom de famille est requis." }).nullable(),
-  email: z.string().email({ message: "Adresse email invalide." }),
-  countryId: z.coerce.number().min(1, { message: "Le pays est requis." }).nullable(),
-  currentPassword: z.string().optional(),
-  newPassword: z.string().optional(),
-  confirmNewPassword: z.string().optional(),
-}).superRefine((data, ctx) => {
-  if (data.newPassword && data.newPassword.length < 6) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.too_small,
-      minimum: 6,
-      type: "string",
-      inclusive: true,
-      message: "Le nouveau mot de passe doit contenir au moins 6 caractères.",
-      path: ["newPassword"],
-    });
-  }
-  if (data.newPassword && !data.currentPassword) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Le mot de passe actuel est requis pour changer le mot de passe.",
-      path: ["currentPassword"],
-    });
-  }
-  if (data.newPassword && data.newPassword !== data.confirmNewPassword) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Les nouveaux mots de passe ne correspondent pas.",
-      path: ["confirmNewPassword"],
-    });
-  }
-});
+const formSchema = z
+  .object({
+    firstName: z.string().min(1, { message: 'Le prénom est requis.' }).nullable(),
+    lastName: z.string().min(1, { message: 'Le nom de famille est requis.' }).nullable(),
+    email: z.string().email({ message: 'Adresse email invalide.' }),
+    countryId: z.coerce.number().min(1, { message: 'Le pays est requis.' }).nullable(),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    confirmNewPassword: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword && data.newPassword.length < 6) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 6,
+        type: 'string',
+        inclusive: true,
+        message: 'Le nouveau mot de passe doit contenir au moins 6 caractères.',
+        path: ['newPassword'],
+      })
+    }
+    if (data.newPassword && !data.currentPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Le mot de passe actuel est requis pour changer le mot de passe.',
+        path: ['currentPassword'],
+      })
+    }
+    if (data.newPassword && data.newPassword !== data.confirmNewPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Les nouveaux mots de passe ne correspondent pas.',
+        path: ['confirmNewPassword'],
+      })
+    }
+  })
 
-export type UserProfileFormValues = z.infer<typeof formSchema>;
+export type UserProfileFormValues = z.infer<typeof formSchema>
 
 const UserProfileForm: React.FC = () => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-  const setUserInStore = useAuthStore((state) => state.setUser);
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+  const setUserInStore = useAuthStore((state) => state.setUser)
 
   const form = useForm<UserProfileFormValues>({
     resolver: zodResolver(formSchema),
@@ -85,9 +87,14 @@ const UserProfileForm: React.FC = () => {
       newPassword: '',
       confirmNewPassword: '',
     },
-  });
+  })
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries, error: countriesError } = useQuery<
+  const {
+    data: countries,
+    isLoading: isLoadingCountries,
+    isError: isErrorCountries,
+    error: countriesError,
+  } = useQuery<
     CountryType[], // TQueryFnData
     Error, // TError
     CountryType[], // TData
@@ -95,16 +102,16 @@ const UserProfileForm: React.FC = () => {
   >({
     queryKey: ['countries'],
     queryFn: async () => {
-      const response = await apiClient.get('/countries');
-      return response.data;
+      const response = await apiClient.get('/countries')
+      return response.data
     },
-  });
+  })
 
   useEffect(() => {
     if (isErrorCountries && countriesError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorCountries, countriesError, t]);
+  }, [isErrorCountries, countriesError, t])
 
   useEffect(() => {
     if (user) {
@@ -116,42 +123,49 @@ const UserProfileForm: React.FC = () => {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
-      });
+      })
     }
-  }, [user, form]);
+  }, [user, form])
 
   const updateUserProfileMutation = useMutation({
-    mutationFn: async (payload: { firstName: string | null; lastName: string | null; email: string; countryId: number | null }) => {
-      if (!user?.id) throw new Error("User ID is missing.");
-      const response = await apiClient.put(`/users/me`, payload);
-      return response.data.user as UserType; // extract user from response
+    mutationFn: async (payload: {
+      firstName: string | null
+      lastName: string | null
+      email: string
+      countryId: number | null
+    }) => {
+      if (!user?.id) throw new Error('User ID is missing.')
+      const response = await apiClient.put(`/users/me`, payload)
+      return response.data.user as UserType // extract user from response
     },
     onSuccess: (updatedUser: UserType) => {
-      queryClient.invalidateQueries({ queryKey: ['user', user?.id] });
-      setUserInStore(updatedUser);
-      toast.success(t('profile_updated_successfully'));
+      queryClient.invalidateQueries({ queryKey: ['user', user?.id] })
+      setUserInStore(updatedUser)
+      toast.success(t('profile_updated_successfully'))
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
 
   const updatePasswordMutation = useMutation({
     mutationFn: async (payload: { currentPassword: string; newPassword: string }) => {
-      if (!user?.id) throw new Error("User ID is missing.");
-      const response = await apiClient.put(`/users/${user.id}/password`, payload);
-      return response.data;
+      if (!user?.id) throw new Error('User ID is missing.')
+      const response = await apiClient.put(`/users/${user.id}/password`, payload)
+      return response.data
     },
     onSuccess: () => {
-      toast.success(t('password_updated_successfully'));
-      form.resetField('currentPassword');
-      form.resetField('newPassword');
-      form.resetField('confirmNewPassword');
+      toast.success(t('password_updated_successfully'))
+      form.resetField('currentPassword')
+      form.resetField('newPassword')
+      form.resetField('confirmNewPassword')
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
 
   const onSubmit = async (values: UserProfileFormValues) => {
     const profilePayload = {
@@ -159,20 +173,20 @@ const UserProfileForm: React.FC = () => {
       lastName: values.lastName,
       email: values.email,
       countryId: values.countryId,
-    };
-    await updateUserProfileMutation.mutateAsync(profilePayload);
+    }
+    await updateUserProfileMutation.mutateAsync(profilePayload)
 
     if (values.newPassword) {
       const passwordPayload = {
         currentPassword: values.currentPassword!,
         newPassword: values.newPassword,
-      };
-      await updatePasswordMutation.mutateAsync(passwordPayload);
+      }
+      await updatePasswordMutation.mutateAsync(passwordPayload)
     }
-  };
+  }
 
-  const isSubmitting = updateUserProfileMutation.isPending || updatePasswordMutation.isPending;
-  const isDisabled = !form.formState.isDirty || !form.formState.isValid || isSubmitting;
+  const isSubmitting = updateUserProfileMutation.isPending || updatePasswordMutation.isPending
+  const isDisabled = !form.formState.isDirty || !form.formState.isValid || isSubmitting
 
   return (
     <Card className="w-full">
@@ -181,15 +195,25 @@ const UserProfileForm: React.FC = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('first_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('first_name')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ''} placeholder={t('enter_first_name')} />
+                    <Input
+                      {...field}
+                      value={field.value || ''}
+                      placeholder={t('enter_first_name')}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,9 +224,16 @@ const UserProfileForm: React.FC = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('last_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('last_name')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ''} placeholder={t('enter_last_name')} />
+                    <Input
+                      {...field}
+                      value={field.value || ''}
+                      placeholder={t('enter_last_name')}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -213,7 +244,10 @@ const UserProfileForm: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('email')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input type="email" {...field} placeholder="m@example.com" />
                   </FormControl>
@@ -226,19 +260,43 @@ const UserProfileForm: React.FC = () => {
               name="countryId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString() || ''} disabled={isLoadingCountries || isErrorCountries || isSubmitting || !form.formState.isValid}>
+                  <FormLabel>
+                    {t('country')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString() || ''}
+                    disabled={
+                      isLoadingCountries ||
+                      isErrorCountries ||
+                      isSubmitting ||
+                      !form.formState.isValid
+                    }
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
+                        <SelectValue
+                          placeholder={
+                            isLoadingCountries
+                              ? t('loading_countries')
+                              : isErrorCountries
+                                ? t('error_loading_countries')
+                                : t('select_country')
+                          }
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {countries?.map((country) => ( // Accessing countries safely
-                        <SelectItem key={country.id} value={country.id.toString()}>
-                          {country.name}
-                        </SelectItem>
-                      ))}
+                      {countries?.map(
+                        (
+                          country // Accessing countries safely
+                        ) => (
+                          <SelectItem key={country.id} value={country.id.toString()}>
+                            {country.name}
+                          </SelectItem>
+                        )
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -302,7 +360,7 @@ const UserProfileForm: React.FC = () => {
         </Form>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default UserProfileForm;
+export default UserProfileForm

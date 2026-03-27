@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,19 +8,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from '@/components/ui/button';
-import { useTranslation } from 'react-i18next';
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 interface ConfirmDeleteDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  title: string;
-  description: string;
-  confirmButtonText?: string;
-  cancelButtonText?: string;
-  isConfirming?: boolean;
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  title: string
+  description: string
+  confirmButtonText?: string
+  cancelButtonText?: string
+  isConfirming?: boolean
 }
 
 const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
@@ -33,7 +33,7 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
   cancelButtonText,
   isConfirming = false,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
@@ -49,14 +49,19 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={onConfirm} disabled={isConfirming} className="btn-danger">
-              {isConfirming ? t('deleting') : (confirmButtonText || t('delete'))}
+            <Button
+              variant="destructive"
+              onClick={onConfirm}
+              disabled={isConfirming}
+              className="btn-danger"
+            >
+              {isConfirming ? t('deleting') : confirmButtonText || t('delete')}
             </Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-};
+  )
+}
 
-export default ConfirmDeleteDialog;
+export default ConfirmDeleteDialog

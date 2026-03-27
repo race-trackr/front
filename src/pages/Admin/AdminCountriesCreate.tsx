@@ -1,13 +1,13 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import {
   Form,
   FormControl,
@@ -15,23 +15,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import apiClient from '@/lib/apiClient';
-import { CountryType } from '@/types';
-import { ArrowLeft } from 'lucide-react';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import apiClient from '@/lib/apiClient'
+import { CountryType } from '@/types'
+import { ArrowLeft } from 'lucide-react'
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Le nom du pays est requis." }),
-  iso: z.string().length(2, { message: "Le code ISO doit contenir 2 caractères." }),
-  timezone: z.string().min(1, { message: "Le fuseau horaire est requis." }),
-  capital: z.string().min(1, { message: "La capitale est requise." }),
-});
+  name: z.string().min(1, { message: 'Le nom du pays est requis.' }),
+  iso: z.string().length(2, { message: 'Le code ISO doit contenir 2 caractères.' }),
+  timezone: z.string().min(1, { message: 'Le fuseau horaire est requis.' }),
+  capital: z.string().min(1, { message: 'La capitale est requise.' }),
+})
 
 const AdminCountriesCreate: React.FC = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
 
   const form = useForm<Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>>({
     resolver: zodResolver(formSchema),
@@ -41,22 +41,22 @@ const AdminCountriesCreate: React.FC = () => {
       timezone: '',
       capital: '',
     },
-  });
+  })
 
   const createCountryMutation = useMutation({
     mutationFn: async (payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'>) => {
-      const response = await apiClient.post('/countries', payload);
-      return response.data;
+      const response = await apiClient.post('/countries', payload)
+      return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['countries'] });
-      toast.success(t('country_created_successfully'));
-      navigate('/admin/countries');
+      queryClient.invalidateQueries({ queryKey: ['countries'] })
+      toast.success(t('country_created_successfully'))
+      navigate('/admin/countries')
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred')) // Generic error message
     },
-  });
+  })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: Omit<CountryType, 'id' | 'slug' | 'createdAt' | 'updatedAt'> = {
@@ -65,9 +65,9 @@ const AdminCountriesCreate: React.FC = () => {
       iso: values.iso,
       timezone: values.timezone,
       capital: values.capital,
-    };
-    createCountryMutation.mutate(payload);
-  };
+    }
+    createCountryMutation.mutate(payload)
+  }
 
   return (
     <div className="space-y-6">
@@ -79,13 +79,19 @@ const AdminCountriesCreate: React.FC = () => {
         <h1 className="text-3xl font-bold flex-1">{t('create_new_country')}</h1>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('country_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('country_name')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder={t('enter_country_name')} />
                 </FormControl>
@@ -98,7 +104,10 @@ const AdminCountriesCreate: React.FC = () => {
             name="iso"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('country_iso')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('country_iso')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="e.g., US, FR" />
                 </FormControl>
@@ -111,7 +120,10 @@ const AdminCountriesCreate: React.FC = () => {
             name="timezone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('timezone')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('timezone')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="e.g., CET, EST" />
                 </FormControl>
@@ -124,7 +136,10 @@ const AdminCountriesCreate: React.FC = () => {
             name="capital"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('capital')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('capital')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder={t('enter_capital')} />
                 </FormControl>
@@ -136,14 +151,18 @@ const AdminCountriesCreate: React.FC = () => {
             <Button type="button" variant="outline" onClick={() => navigate(-1)}>
               {t('cancel')}
             </Button>
-            <Button type="submit" className="btn-primary-gradient" disabled={createCountryMutation.isPending}>
+            <Button
+              type="submit"
+              className="btn-primary-gradient"
+              disabled={createCountryMutation.isPending}
+            >
               {createCountryMutation.isPending ? t('creating') : t('save_country')}
             </Button>
           </div>
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default AdminCountriesCreate;
+export default AdminCountriesCreate

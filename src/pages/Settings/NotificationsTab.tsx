@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
-import { useAuthStore } from '@/store/authStore';
-import apiClient from '@/lib/apiClient';
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/useAuth'
+import { useAuthStore } from '@/store/authStore'
+import apiClient from '@/lib/apiClient'
 
 const NotificationsTab: React.FC = () => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-  const setUserInStore = useAuthStore((state) => state.setUser);
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+  const setUserInStore = useAuthStore((state) => state.setUser)
 
-  const currentPreferences = user?.preferences || {};
+  const currentPreferences = user?.preferences || {}
 
-  const [emailNotifications, setEmailNotifications] = useState(currentPreferences.emailNotifications ?? true);
-  const [marketingEmails, setMarketingEmails] = useState(currentPreferences.marketingEmails ?? false);
-  const [securityEmails, setSecurityEmails] = useState(currentPreferences.securityEmails ?? true);
-  const [pushNotifications, setPushNotifications] = useState(currentPreferences.pushNotifications ?? false);
+  const [emailNotifications, setEmailNotifications] = useState(
+    currentPreferences.emailNotifications ?? true
+  )
+  const [marketingEmails, setMarketingEmails] = useState(
+    currentPreferences.marketingEmails ?? false
+  )
+  const [securityEmails, setSecurityEmails] = useState(currentPreferences.securityEmails ?? true)
+  const [pushNotifications, setPushNotifications] = useState(
+    currentPreferences.pushNotifications ?? false
+  )
 
   // Check if any values have changed
   const hasChanged =
     emailNotifications !== (currentPreferences.emailNotifications ?? true) ||
     marketingEmails !== (currentPreferences.marketingEmails ?? false) ||
     securityEmails !== (currentPreferences.securityEmails ?? true) ||
-    pushNotifications !== (currentPreferences.pushNotifications ?? false);
+    pushNotifications !== (currentPreferences.pushNotifications ?? false)
 
   const updateNotificationsMutation = useMutation({
     mutationFn: async () => {
@@ -39,23 +45,23 @@ const NotificationsTab: React.FC = () => {
           securityEmails,
           pushNotifications,
         },
-      };
-      const response = await apiClient.put(`/users/me`, payload);
-      return response.data.user;
+      }
+      const response = await apiClient.put(`/users/me`, payload)
+      return response.data.user
     },
     onSuccess: (updatedUser) => {
-      setUserInStore(updatedUser);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      toast.success(t('notifications_saved_successfully'));
+      setUserInStore(updatedUser)
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+      toast.success(t('notifications_saved_successfully'))
     },
     onError: () => {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
 
   const handleSave = () => {
-    updateNotificationsMutation.mutate();
-  };
+    updateNotificationsMutation.mutate()
+  }
 
   return (
     <Card className="bg-transparent shadow-none border-none">
@@ -128,7 +134,7 @@ const NotificationsTab: React.FC = () => {
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default NotificationsTab;
+export default NotificationsTab

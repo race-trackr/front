@@ -1,34 +1,43 @@
-import React, { useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles';
-import { getMaintenances } from '@/lib/api/maintenances';
-import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react';
-import { UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { toast } from 'sonner';
+import React, { useEffect } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+import { fr, enUS, es, it } from 'date-fns/locale'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { getVehicleById, deleteVehicle } from '@/lib/api/vehicles'
+import { getMaintenances } from '@/lib/api/maintenances'
+import { ArrowLeft, Edit, Wrench, PlusCircle, Trash2 } from 'lucide-react'
+import { UserVehicleType, MaintenanceRecordType, PaginatedResponse } from '@/types'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import { toast } from 'sonner'
 
 const VehicleView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const vehicleId = Number(id);
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>()
+  const vehicleId = Number(id)
+  const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
+  const queryClient = useQueryClient()
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
 
-  const { data: vehicle, isLoading, isError } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', number]>({
+  const {
+    data: vehicle,
+    isLoading,
+    isError,
+  } = useQuery<UserVehicleType, Error, UserVehicleType, ['vehicle', number]>({
     queryKey: ['vehicle', vehicleId],
     queryFn: () => getVehicleById(vehicleId),
     enabled: !!vehicleId && !isNaN(vehicleId),
-  });
+  })
 
-  const { data: maintenancesResponse, isLoading: isLoadingMaintenances, isError: isErrorMaintenances, error: maintenancesError } = useQuery<
+  const {
+    data: maintenancesResponse,
+    isLoading: isLoadingMaintenances,
+    isError: isErrorMaintenances,
+    error: maintenancesError,
+  } = useQuery<
     PaginatedResponse<MaintenanceRecordType>,
     Error,
     PaginatedResponse<MaintenanceRecordType>,
@@ -37,54 +46,55 @@ const VehicleView: React.FC = () => {
     queryKey: ['vehicleMaintenances', vehicleId],
     queryFn: () => getMaintenances({ userVehicleId: vehicleId, limit: 0 }),
     enabled: !!vehicleId && !isNaN(vehicleId),
-  });
-  const maintenances = maintenancesResponse?.data || [];
+  })
+  const maintenances = maintenancesResponse?.data || []
 
   useEffect(() => {
     if (isErrorMaintenances && maintenancesError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorMaintenances, maintenancesError, t]);
+  }, [isErrorMaintenances, maintenancesError, t])
 
   const deleteVehicleMutation = useMutation({
     mutationFn: () => deleteVehicle(vehicleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vehicles'] });
-      toast.success(t('vehicle_deleted_successfully'));
-      navigate('/vehicles');
+      queryClient.invalidateQueries({ queryKey: ['vehicles'] })
+      toast.success(t('vehicle_deleted_successfully'))
+      navigate('/vehicles')
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
 
   const handleDeleteClick = () => {
-    setIsDeleteDialogOpen(true);
-  };
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
-    deleteVehicleMutation.mutate();
-  };
+    deleteVehicleMutation.mutate()
+  }
 
   const getLocale = () => {
     switch (i18n.language) {
       case 'fr':
-        return fr;
+        return fr
       case 'es':
-        return es;
+        return es
       case 'it':
-        return it;
+        return it
       default:
-        return enUS;
+        return enUS
     }
-  };
+  }
 
   if (isLoading) {
-    return <div className="p-4 text-center">{t('loading_vehicle')}</div>;
+    return <div className="p-4 text-center">{t('loading_vehicle')}</div>
   }
 
   if (isError || !vehicle) {
-    return <div className="p-4 text-center text-red-500">{t('error_loading_vehicle')}</div>;
+    return <div className="p-4 text-center text-red-500">{t('error_loading_vehicle')}</div>
   }
 
   return (
@@ -109,7 +119,9 @@ const VehicleView: React.FC = () => {
             className="btn-danger"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}</span>
+            <span className="sr-only">
+              {deleteVehicleMutation.isPending ? t('deleting') : t('delete_vehicle_button')}
+            </span>
           </Button>
         </div>
       </div>
@@ -147,7 +159,9 @@ const VehicleView: React.FC = () => {
           )}
           {vehicle.licensePlate && (
             <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('vehicle_license_plate')}</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t('vehicle_license_plate')}
+              </p>
               <p className="text-lg">{vehicle.licensePlate}</p>
             </div>
           )}
@@ -168,24 +182,34 @@ const VehicleView: React.FC = () => {
           {isLoadingMaintenances ? (
             <div className="text-center">{t('loading_vehicle_maintenances')}</div>
           ) : isErrorMaintenances ? (
-            <div className="text-center text-red-500">{t('error_loading_vehicle_maintenances')}</div>
+            <div className="text-center text-red-500">
+              {t('error_loading_vehicle_maintenances')}
+            </div>
           ) : maintenances && maintenances.length > 0 ? ( // Accessing maintenances safely
             <ul className="space-y-4">
-              {maintenances.map((maintenance) => ( // Accessing maintenances safely
-                <li key={maintenance.id} className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0">
-                  <div>
-                    <p className="font-medium">{maintenance.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {t(`maintenance_type_${maintenance.type}`)} - {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
-                    </p>
-                  </div>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to={`/maintenances/edit/${maintenance.id}`}>
-                      {t('view_edit_details')}
-                    </Link>
-                  </Button>
-                </li>
-              ))}
+              {maintenances.map(
+                (
+                  maintenance // Accessing maintenances safely
+                ) => (
+                  <li
+                    key={maintenance.id}
+                    className="flex items-center justify-between border-b pb-2 last:border-b-0 last:pb-0"
+                  >
+                    <div>
+                      <p className="font-medium">{maintenance.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t(`maintenance_type_${maintenance.type}`)} -{' '}
+                        {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
+                      </p>
+                    </div>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to={`/maintenances/edit/${maintenance.id}`}>
+                        {t('view_edit_details')}
+                      </Link>
+                    </Button>
+                  </li>
+                )
+              )}
               <div className="pt-4">
                 <Button asChild className="btn-primary-gradient w-full">
                   <Link to={`/maintenances/create?vehicleId=${vehicle.id}`}>
@@ -219,7 +243,7 @@ const VehicleView: React.FC = () => {
         isConfirming={deleteVehicleMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default VehicleView;
+export default VehicleView

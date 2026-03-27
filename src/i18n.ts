@@ -1,12 +1,12 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 // Importez directement vos fichiers de traduction
-import enTranslation from './locales/en/translation.json';
-import frTranslation from './locales/fr/translation.json';
-import itTranslation from './locales/it/translation.json';
-import esTranslation from './locales/es/translation.json';
+import enTranslation from './locales/en/translation.json'
+import frTranslation from './locales/fr/translation.json'
+import itTranslation from './locales/it/translation.json'
+import esTranslation from './locales/es/translation.json'
 
 i18n
   .use(LanguageDetector) // Détecte la langue de l'utilisateur
@@ -32,6 +32,6 @@ i18n
       escapeValue: false, // React est déjà protégé contre les attaques XSS
     },
     // Le backend n'est plus nécessaire car les ressources sont chargées directement
-  });
+  })
 
-export default i18n;
+export default i18n

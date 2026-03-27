@@ -1,29 +1,36 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import GoogleIcon from '@/components/GoogleIcon';
-import { LoginPayload } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { PasswordInput } from '@/components/PasswordInput'; // Import the PasswordInput component
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '@/hooks/useAuth'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
+import GoogleIcon from '@/components/GoogleIcon'
+import { LoginPayload } from '@/types'
+import { useTranslation } from 'react-i18next'
+import { PasswordInput } from '@/components/PasswordInput' // Import the PasswordInput component
 
 const Login: React.FC = () => {
-  const { login, loading } = useAuth();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { login, loading } = useAuth()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const formSchema = z.object({
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(3, { message: t('password_min_length') }),
-  });
+  })
 
   const form = useForm<LoginPayload>({
     resolver: zodResolver(formSchema),
@@ -31,17 +38,17 @@ const Login: React.FC = () => {
       email: '',
       password: '',
     },
-  });
+  })
 
   const onSubmit = async (values: LoginPayload) => {
     try {
-      await login(values);
-      console.log('Login successful');
-      navigate('/dashboard', { replace: true });
+      await login(values)
+      console.log('Login successful')
+      navigate('/dashboard', { replace: true })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <Card className="w-full">
@@ -57,7 +64,10 @@ const Login: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('email')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -71,7 +81,10 @@ const Login: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center">
-                    <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
+                    <FormLabel>
+                      {t('password')}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <Link
                       to="/auth/forgot-password"
                       className="ml-auto inline-block text-sm underline text-muted-foreground hover:text-primary"
@@ -86,14 +99,18 @@ const Login: React.FC = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || loading}>
+            <Button
+              type="submit"
+              className="w-full btn-primary-gradient"
+              disabled={form.formState.isSubmitting || loading}
+            >
               {form.formState.isSubmitting || loading ? t('logging_in') : t('login')}
             </Button>
           </form>
         </Form>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

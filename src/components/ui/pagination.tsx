@@ -1,58 +1,45 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
-import { useTranslation } from "react-i18next" // Import useTranslation
+import * as React from 'react'
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { useTranslation } from 'react-i18next' // Import useTranslation
 
-import { cn } from "@/lib/utils"
-import { ButtonProps, buttonVariants } from "@/components/ui/button"
+import { cn } from '@/lib/utils'
+import { ButtonProps, buttonVariants } from '@/components/ui/button'
 
-const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
+const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
     role="navigation"
     aria-label="Pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
+    className={cn('mx-auto flex w-full justify-center', className)}
     {...props}
   />
 )
-Pagination.displayName = "Pagination"
+Pagination.displayName = 'Pagination'
 
-const PaginationContent = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentProps<"ul">
->(({ className, ...props }, ref) => (
-  <ul
-    ref={ref}
-    className={cn("flex flex-row items-center gap-1", className)}
-    {...props}
-  />
-))
-PaginationContent.displayName = "PaginationContent"
+const PaginationContent = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'>>(
+  ({ className, ...props }, ref) => (
+    <ul ref={ref} className={cn('flex flex-row items-center gap-1', className)} {...props} />
+  )
+)
+PaginationContent.displayName = 'PaginationContent'
 
-const PaginationItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
-))
-PaginationItem.displayName = "PaginationItem"
+const PaginationItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(
+  ({ className, ...props }, ref) => <li ref={ref} className={cn('', className)} {...props} />
+)
+PaginationItem.displayName = 'PaginationItem'
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">
+} & Pick<ButtonProps, 'size'> &
+  React.ComponentProps<'a'>
 
-const PaginationLink = ({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) => (
+const PaginationLink = ({ className, isActive, size = 'icon', ...props }: PaginationLinkProps) => (
   <a
-    aria-current={isActive ? "page" : undefined}
+    aria-current={isActive ? 'page' : undefined}
     className={cn(
       buttonVariants({
-        variant: isActive ? "outline" : "ghost",
+        variant: isActive ? 'outline' : 'ghost',
         size,
       }),
       className
@@ -60,68 +47,65 @@ const PaginationLink = ({
     {...props}
   />
 )
-PaginationLink.displayName = "PaginationLink"
+PaginationLink.displayName = 'PaginationLink'
 
 const PaginationPrevious = ({
   className,
   disabled, // Add disabled prop
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { disabled?: boolean }) => {
-  const { t } = useTranslation(); // Use translation here
+  const { t } = useTranslation() // Use translation here
   return (
     <PaginationItem>
       <PaginationLink
-        aria-label={t("pagination_previous")}
+        aria-label={t('pagination_previous')}
         size="default"
-        className={cn("gap-1 pl-2.5", className, disabled && "pointer-events-none opacity-50")} // Apply disabled styles
+        className={cn('gap-1 pl-2.5', className, disabled && 'pointer-events-none opacity-50')} // Apply disabled styles
         aria-disabled={disabled} // Add aria-disabled
         {...props}
       >
         <ChevronLeft className="h-4 w-4" />
-        <span>{t("pagination_previous")}</span>
+        <span>{t('pagination_previous')}</span>
       </PaginationLink>
     </PaginationItem>
   )
 }
-PaginationPrevious.displayName = "PaginationPrevious"
+PaginationPrevious.displayName = 'PaginationPrevious'
 
 const PaginationNext = ({
   className,
   disabled, // Add disabled prop
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { disabled?: boolean }) => {
-  const { t } = useTranslation(); // Use translation here
+  const { t } = useTranslation() // Use translation here
   return (
     <PaginationItem>
       <PaginationLink
-        aria-label={t("pagination_next")}
+        aria-label={t('pagination_next')}
         size="default"
-        className={cn("gap-1 pr-2.5", className, disabled && "pointer-events-none opacity-50")} // Apply disabled styles
+        className={cn('gap-1 pr-2.5', className, disabled && 'pointer-events-none opacity-50')} // Apply disabled styles
         aria-disabled={disabled} // Add aria-disabled
         {...props}
       >
-        <span>{t("pagination_next")}</span>
+        <span>{t('pagination_next')}</span>
         <ChevronRight className="h-4 w-4" />
       </PaginationLink>
     </PaginationItem>
   )
 }
-PaginationNext.displayName = "PaginationNext"
+PaginationNext.displayName = 'PaginationNext'
 
-const PaginationEllipsis = ({
-  className,
-  ...props
-}: React.ComponentProps<"span">) => (
+const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
   <span
     aria-hidden
-    className={cn("flex h-9 w-9 items-center justify-center", className)}
+    className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
     <span className="sr-only">More pages</span>
   </span>
 )
-PaginationEllipsis.displayName = "PaginationEllipsis"
+PaginationEllipsis.displayName = 'PaginationEllipsis'
 
 export {
   Pagination,

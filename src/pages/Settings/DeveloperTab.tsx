@@ -1,35 +1,35 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { PlusCircle, Copy, Trash2, Key } from 'lucide-react';
-import { DataTable } from '@/components/DataTable';
-import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { format } from 'date-fns';
-import { v4 as uuidv4 } from 'uuid';
-import { ApiKey, Permissions } from '@/types';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { PlusCircle, Copy, Trash2, Key } from 'lucide-react'
+import { DataTable } from '@/components/DataTable'
+import { createColumnHelper, ColumnDef } from '@tanstack/react-table'
+import { toast } from 'sonner'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import { format } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
+import { ApiKey, Permissions } from '@/types'
+import { Badge } from '@/components/ui/badge'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Link, useNavigate } from 'react-router-dom' // Import useNavigate
 
-const columnHelper = createColumnHelper<ApiKey>();
+const columnHelper = createColumnHelper<ApiKey>()
 
 const PermissionsDisplay: React.FC<{ permissions: Permissions }> = ({ permissions }) => {
-  const { t } = useTranslation();
-  const activePermissions: string[] = [];
+  const { t } = useTranslation()
+  const activePermissions: string[] = []
 
   Object.entries(permissions).forEach(([tableName, actions]) => {
     Object.entries(actions).forEach(([action, isActive]) => {
       if (isActive) {
-        activePermissions.push(`${t(action)} ${t(tableName)}`);
+        activePermissions.push(`${t(action)} ${t(tableName)}`)
       }
-    });
-  });
+    })
+  })
 
   if (activePermissions.length === 0) {
-    return <span className="text-muted-foreground">{t('no_permissions')}</span>;
+    return <span className="text-muted-foreground">{t('no_permissions')}</span>
   }
 
   return (
@@ -44,21 +44,23 @@ const PermissionsDisplay: React.FC<{ permissions: Permissions }> = ({ permission
           <p className="font-semibold mb-1">{t('granted_permissions')}:</p>
           <ul className="list-disc list-inside space-y-0.5">
             {activePermissions.map((perm, index) => (
-              <li key={index} className="text-sm">{perm}</li>
+              <li key={index} className="text-sm">
+                {perm}
+              </li>
             ))}
           </ul>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
-};
+  )
+}
 
 const DeveloperTab: React.FC = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate(); // Initialize useNavigate
-  const [apiKeys, setApiKeys] = React.useState<ApiKey[]>([]);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [apiKeyToDelete, setApiKeyToDelete] = React.useState<string | null>(null);
+  const { t } = useTranslation()
+  const navigate = useNavigate() // Initialize useNavigate
+  const [apiKeys, setApiKeys] = React.useState<ApiKey[]>([])
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [apiKeyToDelete, setApiKeyToDelete] = React.useState<string | null>(null)
 
   // Simulate fetching API keys on component mount
   React.useEffect(() => {
@@ -79,28 +81,28 @@ const DeveloperTab: React.FC = () => {
           users: { create: false, read: false, update: false, delete: false },
         },
       },
-    ];
-    setApiKeys(mockApiKeys);
-  }, []);
+    ]
+    setApiKeys(mockApiKeys)
+  }, [])
 
   const copyApiKey = (key: string) => {
-    navigator.clipboard.writeText(key);
-    toast.success(t('api_key_copied_to_clipboard'));
-  };
+    navigator.clipboard.writeText(key)
+    toast.success(t('api_key_copied_to_clipboard'))
+  }
 
   const handleDeleteClick = (id: string) => {
-    setApiKeyToDelete(id);
-    setIsDeleteDialogOpen(true);
-  };
+    setApiKeyToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
     if (apiKeyToDelete) {
-      setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== apiKeyToDelete));
-      toast.success(t('api_key_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
-      setApiKeyToDelete(null);
+      setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== apiKeyToDelete))
+      toast.success(t('api_key_deleted_successfully'))
+      setIsDeleteDialogOpen(false)
+      setApiKeyToDelete(null)
     }
-  };
+  }
 
   const columns: ColumnDef<ApiKey>[] = [
     columnHelper.accessor('name', {
@@ -121,7 +123,7 @@ const DeveloperTab: React.FC = () => {
     }),
     columnHelper.accessor('expiresAt', {
       header: () => t('expires_at'),
-      cell: (info) => info.getValue() ? format(new Date(info.getValue()), 'PPP') : t('never'),
+      cell: (info) => (info.getValue() ? format(new Date(info.getValue()), 'PPP') : t('never')),
     }),
     columnHelper.accessor('permissions', {
       header: () => t('permissions'),
@@ -147,7 +149,7 @@ const DeveloperTab: React.FC = () => {
         </Button>
       ),
     }),
-  ];
+  ]
 
   return (
     <Card className="bg-transparent shadow-none border-none">
@@ -160,18 +162,29 @@ const DeveloperTab: React.FC = () => {
           <div className="flex flex-col items-center justify-center p-6 text-center border rounded-md">
             <Key className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground mb-4">{t('no_api_keys_created')}</p>
-            <Button onClick={() => navigate('/settings/api-keys/create')} className="btn-primary-gradient">
+            <Button
+              onClick={() => navigate('/settings/api-keys/create')}
+              className="btn-primary-gradient"
+            >
               <PlusCircle className="mr-2 h-5 w-5" /> {t('create_api_key')}
             </Button>
           </div>
         ) : (
           <>
             <div className="flex justify-end">
-              <Button onClick={() => navigate('/settings/api-keys/create')} className="btn-primary-gradient">
+              <Button
+                onClick={() => navigate('/settings/api-keys/create')}
+                className="btn-primary-gradient"
+              >
                 <PlusCircle className="mr-2 h-5 w-5" /> {t('create_api_key')}
               </Button>
             </div>
-            <DataTable columns={columns} data={apiKeys} filterColumnId="name" filterPlaceholder={t('search_api_keys')} />
+            <DataTable
+              columns={columns}
+              data={apiKeys}
+              filterColumnId="name"
+              filterPlaceholder={t('search_api_keys')}
+            />
           </>
         )}
       </CardContent>
@@ -186,7 +199,7 @@ const DeveloperTab: React.FC = () => {
         cancelButtonText={t('cancel')}
       />
     </Card>
-  );
-};
+  )
+}
 
-export default DeveloperTab;
+export default DeveloperTab

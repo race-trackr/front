@@ -13,7 +13,7 @@
 - Don't add comments if syntax error
 - Never remove translation key used in project
 - Never add {" "} block
-- Never add comments block like {/*  */}
+- Never add comments block like {/\* \*/}
 
 Available packages and libraries:
 

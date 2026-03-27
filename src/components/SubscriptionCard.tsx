@@ -1,31 +1,33 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Check } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface SubscriptionPlan {
-  nameKey: string;
-  priceKey: string;
-  featuresKeys: string[];
-  buttonTextKey: string;
-  isPopular?: boolean;
-  link?: string;
+  nameKey: string
+  priceKey: string
+  featuresKeys: string[]
+  buttonTextKey: string
+  isPopular?: boolean
+  link?: string
 }
 
 interface SubscriptionCardProps {
-  plan: SubscriptionPlan;
+  plan: SubscriptionPlan
 }
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ plan }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
-    <Card className={cn(
-      "flex flex-col justify-between p-6 border-2",
-      plan.isPopular ? "border-primary shadow-lg" : "border-muted"
-    )}>
+    <Card
+      className={cn(
+        'flex flex-col justify-between p-6 border-2',
+        plan.isPopular ? 'border-primary shadow-lg' : 'border-muted'
+      )}
+    >
       <CardHeader className="text-center pb-4">
         <CardTitle className="text-2xl font-bold mb-2">{t(plan.nameKey)}</CardTitle>
         <p className="text-4xl font-extrabold text-primary mb-4">{t(plan.priceKey)}</p>
@@ -40,7 +42,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ plan }) => {
             </li>
           ))}
         </ul>
-        <Button asChild className={cn("w-full", plan.isPopular && "btn-primary-gradient")}>
+        <Button asChild className={cn('w-full', plan.isPopular && 'btn-primary-gradient')}>
           {plan.link ? (
             <a href={plan.link}>{t(plan.buttonTextKey)}</a>
           ) : (
@@ -49,7 +51,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ plan }) => {
         </Button>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default SubscriptionCard;
+export default SubscriptionCard

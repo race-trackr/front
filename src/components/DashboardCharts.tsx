@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,8 +11,8 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-} from 'recharts';
-import { useTranslation } from 'react-i18next';
+} from 'recharts'
+import { useTranslation } from 'react-i18next'
 
 const trackdayData = [
   { name: 'Jan', trackdays: 4 },
@@ -21,7 +21,7 @@ const trackdayData = [
   { name: 'Apr', trackdays: 2 },
   { name: 'May', trackdays: 6 },
   { name: 'Jun', trackdays: 4 },
-];
+]
 
 const maintenanceData = [
   { name: 'Jan', cost: 300 },
@@ -30,10 +30,10 @@ const maintenanceData = [
   { name: 'Apr', cost: 600 },
   { name: 'May', cost: 350 },
   { name: 'Jun', cost: 700 },
-];
+]
 
 const DashboardCharts: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>
@@ -72,7 +72,7 @@ const DashboardCharts: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default DashboardCharts;
+export default DashboardCharts

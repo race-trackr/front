@@ -1,88 +1,94 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-import { Toaster } from '@/components/ui/sonner';
-import { AuthProvider } from './context/AuthContext';
-import Layout from './components/Layout';
-import Index from './pages/Index';
-import AuthTabs from './pages/Auth/AuthTabs';
-import ProtectedRoute from './components/ProtectedRoute';
-import NotFound from './pages/NotFound';
-import TrackdayList from './pages/Trackdays/TrackdayList';
-import TrackdayCreate from './pages/Trackdays/TrackdayCreate';
-import TrackdayEdit from './pages/Trackdays/TrackdayEdit';
-import TrackdayView from './pages/Trackdays/TrackdayView';
-import VehicleList from './pages/Vehicles/VehicleList';
-import VehicleCreate from './pages/Vehicles/VehicleCreate';
-import VehicleEdit from './pages/Vehicles/VehicleEdit';
-import VehicleView from './pages/Vehicles/VehicleView';
-import MaintenanceList from './pages/Maintenances/MaintenanceList';
-import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate';
-import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit';
-import MaintenanceView from './pages/Maintenances/MaintenanceView';
-import AdminDashboard from './pages/Admin/AdminDashboard';
-import AdminTracks from './pages/Admin/AdminTracks';
-import AdminTracksCreate from './pages/Admin/AdminTracksCreate';
-import AdminTracksEdit from './pages/Admin/AdminTracksEdit';
-import AdminCountries from './pages/Admin/AdminCountries';
-import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate';
-import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit';
-import AdminUsers from './pages/Admin/AdminUsers';
-import AdminUserEdit from './pages/Admin/AdminUserEdit';
+import React from 'react'
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
+import Dashboard from './pages/Dashboard'
+import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from './context/AuthContext'
+import Layout from './components/Layout'
+import Index from './pages/Index'
+import AuthTabs from './pages/Auth/AuthTabs'
+import ProtectedRoute from './components/ProtectedRoute'
+import NotFound from './pages/NotFound'
+import TrackdayList from './pages/Trackdays/TrackdayList'
+import TrackdayCreate from './pages/Trackdays/TrackdayCreate'
+import TrackdayEdit from './pages/Trackdays/TrackdayEdit'
+import TrackdayView from './pages/Trackdays/TrackdayView'
+import VehicleList from './pages/Vehicles/VehicleList'
+import VehicleCreate from './pages/Vehicles/VehicleCreate'
+import VehicleEdit from './pages/Vehicles/VehicleEdit'
+import VehicleView from './pages/Vehicles/VehicleView'
+import MaintenanceList from './pages/Maintenances/MaintenanceList'
+import MaintenanceCreate from './pages/Maintenances/MaintenanceCreate'
+import MaintenanceEdit from './pages/Maintenances/MaintenanceEdit'
+import MaintenanceView from './pages/Maintenances/MaintenanceView'
+import AdminDashboard from './pages/Admin/AdminDashboard'
+import AdminTracks from './pages/Admin/AdminTracks'
+import AdminTracksCreate from './pages/Admin/AdminTracksCreate'
+import AdminTracksEdit from './pages/Admin/AdminTracksEdit'
+import AdminCountries from './pages/Admin/AdminCountries'
+import AdminCountriesCreate from './pages/Admin/AdminCountriesCreate'
+import AdminCountriesEdit from './pages/Admin/AdminCountriesEdit'
+import AdminUsers from './pages/Admin/AdminUsers'
+import AdminUserEdit from './pages/Admin/AdminUserEdit'
 
-import Profile from './pages/Profile';
-import Upgrade from './pages/Upgrade';
-import ForgotPassword from './pages/Auth/ForgotPassword';
-import ApiKeyCreate from './pages/Settings/ApiKeyCreate';
-import Settings from './pages/Settings';
-import Analytics from './pages/Analytics'; // New import
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ErrorPage from './components/ErrorPage';
-import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import apiClient from '@/lib/apiClient';
-import { getTrackdayById } from '@/lib/api/trackdays';
-import { getVehicleById } from '@/lib/api/vehicles';
-import { getMaintenanceById } from '@/lib/api/maintenances';
-import { TrackDayType, UserVehicleType, MaintenanceRecordType, TrackType, CountryType } from '@/types';
+import Profile from './pages/Profile'
+import Upgrade from './pages/Upgrade'
+import ForgotPassword from './pages/Auth/ForgotPassword'
+import ApiKeyCreate from './pages/Settings/ApiKeyCreate'
+import Settings from './pages/Settings'
+import Analytics from './pages/Analytics' // New import
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ErrorPage from './components/ErrorPage'
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+import { fr, enUS, es, it } from 'date-fns/locale'
+import apiClient from '@/lib/apiClient'
+import { getTrackdayById } from '@/lib/api/trackdays'
+import { getVehicleById } from '@/lib/api/vehicles'
+import { getMaintenanceById } from '@/lib/api/maintenances'
+import {
+  TrackDayType,
+  UserVehicleType,
+  MaintenanceRecordType,
+  TrackType,
+  CountryType,
+} from '@/types'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 interface RouteMatchWithData {
-  params: { [key: string]: string | undefined };
-  data?: any; // This will hold the loader's return value
+  params: { [key: string]: string | undefined }
+  data?: any // This will hold the loader's return value
 }
 
 const App: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation()
 
   const getLocale = (lang: string) => {
     switch (lang) {
       case 'fr':
-        return fr;
+        return fr
       case 'es':
-        return es;
+        return es
       case 'it':
-        return it;
+        return it
       default:
-        return enUS;
+        return enUS
     }
-  };
+  }
 
   const routesConfig = [
     {
-      path: "/",
+      path: '/',
       element: <Index />,
       errorElement: <ErrorPage />,
     },
     {
-      path: "/auth",
+      path: '/auth',
       element: <AuthTabs />,
       errorElement: <ErrorPage />,
     },
     {
-      path: "/auth/forgot-password",
+      path: '/auth/forgot-password',
       element: <ForgotPassword />,
       errorElement: <ErrorPage />,
     },
@@ -94,12 +100,12 @@ const App: React.FC = () => {
           element: <Layout />,
           children: [
             {
-              path: "/dashboard",
+              path: '/dashboard',
               element: <Dashboard />,
               handle: { crumb: () => t('Dashboard') },
             },
             {
-              path: "/trackdays",
+              path: '/trackdays',
               handle: { crumb: () => t('trackdays') },
               children: [
                 {
@@ -107,42 +113,54 @@ const App: React.FC = () => {
                   element: <TrackdayList />,
                 },
                 {
-                  path: "create",
+                  path: 'create',
                   element: <TrackdayCreate />,
                   handle: { crumb: () => t('create_new_trackday') },
                 },
                 {
-                  path: ":id",
+                  path: ':id',
                   element: <TrackdayView />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
-                    return { trackday };
+                    const trackday = await getTrackdayById(params.id!)
+                    return { trackday }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_trackday', { id: data?.params?.id || '' });
-                    }
+                      const trackday = data?.trackday as TrackDayType
+                      return trackday
+                        ? t('session_of_date', {
+                            date: format(new Date(trackday.date), 'PPP', {
+                              locale: getLocale(i18n.language),
+                            }),
+                          })
+                        : t('view_trackday', { id: data?.params?.id || '' })
+                    },
                   },
                 },
                 {
-                  path: "edit/:id",
+                  path: 'edit/:id',
                   element: <TrackdayEdit />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.id!);
-                    return { trackday };
+                    const trackday = await getTrackdayById(params.id!)
+                    return { trackday }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const trackday = data?.trackday as TrackDayType;
-                      return trackday ? t('edit_session_of_date', { date: format(new Date(trackday.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_trackday', { id: data?.params?.id || '' });
-                    }
+                      const trackday = data?.trackday as TrackDayType
+                      return trackday
+                        ? t('edit_session_of_date', {
+                            date: format(new Date(trackday.date), 'PPP', {
+                              locale: getLocale(i18n.language),
+                            }),
+                          })
+                        : t('edit_trackday', { id: data?.params?.id || '' })
+                    },
                   },
                 },
               ],
             },
             {
-              path: "/vehicles",
+              path: '/vehicles',
               handle: { crumb: () => t('vehicles') },
               children: [
                 {
@@ -150,42 +168,46 @@ const App: React.FC = () => {
                   element: <VehicleList />,
                 },
                 {
-                  path: "create",
+                  path: 'create',
                   element: <VehicleCreate />,
                   handle: { crumb: () => t('create_new_vehicle') },
                 },
                 {
-                  path: ":id",
+                  path: ':id',
                   element: <VehicleView />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!));
-                    return { vehicle };
+                    const vehicle = await getVehicleById(Number(params.id!))
+                    return { vehicle }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('view_vehicle_name', { name: vehicle.name }) : t('view_vehicle', { id: data?.params?.id || '' });
-                    }
+                      const vehicle = data?.vehicle as UserVehicleType
+                      return vehicle
+                        ? t('view_vehicle_name', { name: vehicle.name })
+                        : t('view_vehicle', { id: data?.params?.id || '' })
+                    },
                   },
                 },
                 {
-                  path: "edit/:id",
+                  path: 'edit/:id',
                   element: <VehicleEdit />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleById(Number(params.id!));
-                    return { vehicle };
+                    const vehicle = await getVehicleById(Number(params.id!))
+                    return { vehicle }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const vehicle = data?.vehicle as UserVehicleType;
-                      return vehicle ? t('edit_vehicle_name', { name: vehicle.name }) : t('edit_vehicle', { id: data?.params?.id || '' });
-                    }
+                      const vehicle = data?.vehicle as UserVehicleType
+                      return vehicle
+                        ? t('edit_vehicle_name', { name: vehicle.name })
+                        : t('edit_vehicle', { id: data?.params?.id || '' })
+                    },
                   },
                 },
               ],
             },
             {
-              path: "/maintenances",
+              path: '/maintenances',
               handle: { crumb: () => t('maintenances') },
               children: [
                 {
@@ -193,62 +215,76 @@ const App: React.FC = () => {
                   element: <MaintenanceList />,
                 },
                 {
-                  path: "create",
+                  path: 'create',
                   element: <MaintenanceCreate />,
                   handle: { crumb: () => t('create_new_maintenance') },
                 },
                 {
-                  path: ":id",
+                  path: ':id',
                   element: <MaintenanceView />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!));
-                    return { maintenance };
+                    const maintenance = await getMaintenanceById(Number(params.id!))
+                    return { maintenance }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const maintenance = data?.maintenance as MaintenanceRecordType;
-                      return maintenance ? t('view_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('view_maintenance', { id: data?.params?.id || '' });
-                    }
+                      const maintenance = data?.maintenance as MaintenanceRecordType
+                      return maintenance
+                        ? t('view_maintenance_name_date', {
+                            name: maintenance.name,
+                            date: format(new Date(maintenance.date), 'PPP', {
+                              locale: getLocale(i18n.language),
+                            }),
+                          })
+                        : t('view_maintenance', { id: data?.params?.id || '' })
+                    },
                   },
                 },
                 {
-                  path: "edit/:id",
+                  path: 'edit/:id',
                   element: <MaintenanceEdit />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(Number(params.id!));
-                    return { maintenance };
+                    const maintenance = await getMaintenanceById(Number(params.id!))
+                    return { maintenance }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
-                      const maintenance = data?.maintenance as MaintenanceRecordType;
-                      return maintenance ? t('edit_maintenance_name_date', { name: maintenance.name, date: format(new Date(maintenance.date), 'PPP', { locale: getLocale(i18n.language) }) }) : t('edit_maintenance', { id: data?.params?.id || '' });
-                    }
+                      const maintenance = data?.maintenance as MaintenanceRecordType
+                      return maintenance
+                        ? t('edit_maintenance_name_date', {
+                            name: maintenance.name,
+                            date: format(new Date(maintenance.date), 'PPP', {
+                              locale: getLocale(i18n.language),
+                            }),
+                          })
+                        : t('edit_maintenance', { id: data?.params?.id || '' })
+                    },
                   },
                 },
               ],
             },
             {
-              path: "/analytics", // New route
+              path: '/analytics', // New route
               element: <Analytics />,
               handle: { crumb: () => t('analytics') },
             },
             {
-              path: "/settings",
+              path: '/settings',
               element: <Settings />,
               handle: { crumb: () => t('settings') },
             },
             {
-              path: "/settings/api-keys/create",
+              path: '/settings/api-keys/create',
               element: <ApiKeyCreate />,
               handle: { crumb: () => t('create_new_api_key') },
             },
             {
-              path: "/profile",
+              path: '/profile',
               element: <Profile />,
               handle: { crumb: () => t('my_account') },
             },
             {
-              path: "/upgrade",
+              path: '/upgrade',
               element: <Upgrade />,
               handle: { crumb: () => t('upgrade_to_pro') },
             },
@@ -264,7 +300,7 @@ const App: React.FC = () => {
           element: <Layout />,
           children: [
             {
-              path: "/admin",
+              path: '/admin',
               handle: { crumb: () => t('admin') },
               children: [
                 {
@@ -272,7 +308,7 @@ const App: React.FC = () => {
                   element: <AdminDashboard />,
                 },
                 {
-                  path: "tracks",
+                  path: 'tracks',
                   handle: { crumb: () => t('manage_tracks') },
                   children: [
                     {
@@ -280,28 +316,30 @@ const App: React.FC = () => {
                       element: <AdminTracks />,
                     },
                     {
-                      path: "create",
+                      path: 'create',
                       element: <AdminTracksCreate />,
                       handle: { crumb: () => t('create_new_track') },
                     },
                     {
-                      path: "edit/:id",
+                      path: 'edit/:id',
                       element: <AdminTracksEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/tracks/${params.id!}`);
-                        return { track: response.data };
+                        const response = await apiClient.get(`/tracks/${params.id!}`)
+                        return { track: response.data }
                       },
                       handle: {
                         crumb: ({ data }: RouteMatchWithData) => {
-                          const track = data?.track as TrackType;
-                          return track ? t('edit_track_name', { name: track.name }) : t('edit_track', { id: data?.params?.id || '' });
-                        }
+                          const track = data?.track as TrackType
+                          return track
+                            ? t('edit_track_name', { name: track.name })
+                            : t('edit_track', { id: data?.params?.id || '' })
+                        },
                       },
                     },
                   ],
                 },
                 {
-                  path: "countries",
+                  path: 'countries',
                   handle: { crumb: () => t('manage_countries') },
                   children: [
                     {
@@ -309,22 +347,24 @@ const App: React.FC = () => {
                       element: <AdminCountries />,
                     },
                     {
-                      path: "create",
+                      path: 'create',
                       element: <AdminCountriesCreate />,
                       handle: { crumb: () => t('create_new_country') },
                     },
                     {
-                      path: "edit/:id",
+                      path: 'edit/:id',
                       element: <AdminCountriesEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/countries/${params.id!}`);
-                        return { country: response.data };
+                        const response = await apiClient.get(`/countries/${params.id!}`)
+                        return { country: response.data }
                       },
                       handle: {
                         crumb: ({ data }: RouteMatchWithData) => {
-                          const country = data?.country as CountryType;
-                          return country ? t('edit_country_name', { name: country.name }) : t('edit_country', { id: data?.params?.id || '' });
-                        }
+                          const country = data?.country as CountryType
+                          return country
+                            ? t('edit_country_name', { name: country.name })
+                            : t('edit_country', { id: data?.params?.id || '' })
+                        },
                       },
                     },
                   ],
@@ -333,7 +373,7 @@ const App: React.FC = () => {
                   element: <ProtectedRoute allowedRoles={['owner']} />,
                   children: [
                     {
-                      path: "users",
+                      path: 'users',
                       handle: { crumb: () => t('manage_users') },
                       children: [
                         {
@@ -341,49 +381,50 @@ const App: React.FC = () => {
                           element: <AdminUsers />,
                         },
                         {
-                          path: "edit/:id",
+                          path: 'edit/:id',
                           element: <AdminUserEdit />,
                           handle: {
                             crumb: ({ data }: RouteMatchWithData) => {
-                              const user = data?.user as any;
-                              return user ? t('edit_user', { id: user.id }) : t('edit_user', { id: data?.params?.id || '' });
-                            }
+                              const user = data?.user as any
+                              return user
+                                ? t('edit_user', { id: user.id })
+                                : t('edit_user', { id: data?.params?.id || '' })
+                            },
                           },
                           loader: async ({ params }) => {
-                            const response = await apiClient.get(`/admin/users/${params.id}`);
-                            return { user: response.data.user };
-                          }
+                            const response = await apiClient.get(`/admin/users/${params.id}`)
+                            return { user: response.data.user }
+                          },
                         },
                         {
-                          path: "create",
+                          path: 'create',
                           element: <AdminUserEdit />,
                           handle: { crumb: () => t('create_new_user') },
                         },
                       ],
                     },
-
                   ],
                 },
               ],
             },
           ],
         },
-      ]
+      ],
     },
     // fallback route when nothing matches
-    { path: "*", element: <NotFound /> },
-  ];
+    { path: '*', element: <NotFound /> },
+  ]
 
-  const router = createBrowserRouter(routesConfig);
+  const router = createBrowserRouter(routesConfig)
 
   return (
-    <QueryClientProvider client={queryClient} >
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
         <Toaster />
       </AuthProvider>
-    </QueryClientProvider >
-  );
-};
+    </QueryClientProvider>
+  )
+}
 
-export default App;
+export default App

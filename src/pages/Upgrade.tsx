@@ -1,12 +1,12 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Gem } from 'lucide-react';
-import SubscriptionCard from '@/components/SubscriptionCard';
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Gem } from 'lucide-react'
+import SubscriptionCard from '@/components/SubscriptionCard'
 
 const Upgrade: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const plans = [
     {
@@ -66,7 +66,7 @@ const Upgrade: React.FC = () => {
       buttonTextKey: 'contact_sales',
       link: '#',
     },
-  ];
+  ]
 
   return (
     <div className="mx-auto p-4 space-y-8">
@@ -83,7 +83,7 @@ const Upgrade: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Upgrade;
+export default Upgrade

@@ -1,21 +1,21 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/useAuth'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const Index: React.FC = () => {
-  const { isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth()
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     if (!loading) {
       if (isAuthenticated) {
-        navigate('/dashboard', { replace: true });
+        navigate('/dashboard', { replace: true })
       } else {
-        navigate('/auth', { replace: true });
+        navigate('/auth', { replace: true })
       }
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, loading, navigate])
 
   if (loading) {
     return (
@@ -28,10 +28,10 @@ const Index: React.FC = () => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}
 
-export default Index;
+export default Index

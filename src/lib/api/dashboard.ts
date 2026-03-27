@@ -1,5 +1,5 @@
-import apiClient from '@/lib/apiClient';
-import { DashboardSummary } from '@/types';
+import apiClient from '@/lib/apiClient'
+import { DashboardSummary } from '@/types'
 
 export const getDashboardSummary = async (): Promise<DashboardSummary> => {
   // In a real application, this would fetch data from your backend.
@@ -10,5 +10,5 @@ export const getDashboardSummary = async (): Promise<DashboardSummary> => {
     totalTrackdays: 15,
     totalVehicles: 3,
     totalMaintenances: 7,
-  };
-};
+  }
+}

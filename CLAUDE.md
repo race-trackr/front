@@ -14,8 +14,8 @@ These rules are **non-negotiable**. They apply to every line of code in every se
 
 Never use `useState` + `useEffect` to fetch data from the API. All server state goes through `useQuery` (reads) and `useMutation` (writes). Local UI state (modals, form inputs) may use `useState`.
 
-| Wrong | Right |
-|---|---|
+| Wrong                                                                           | Right                                                                                   |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `const [vehicles, setVehicles] = useState([]); useEffect(() => fetch(...), [])` | `const { data: vehicles } = useQuery({ queryKey: ['vehicles'], queryFn: getVehicles })` |
 
 ### HR-2: Always invalidate the React Query cache after mutations
@@ -49,8 +49,8 @@ Every string visible to the user (labels, placeholders, error messages, button t
 
 All imports must use the `@/*` alias (maps to `src/*`). Never use relative paths that traverse up directories.
 
-| Wrong | Right |
-|---|---|
+| Wrong                                            | Right                                     |
+| ------------------------------------------------ | ----------------------------------------- |
 | `import apiClient from '../../../lib/apiClient'` | `import apiClient from '@/lib/apiClient'` |
 
 ### HR-7: Use existing shadcn/ui components — never build custom UI primitives
@@ -75,17 +75,17 @@ Never extract a function whose sole purpose is to wrap a one-liner used in only 
 
 Read the applicable `claude_helper/` guide before editing.
 
-| You're about to touch... | Read first |
-|---|---|
-| Une page / route | [`claude_helper/pages.md`](claude_helper/pages.md) + [`claude_helper/routing.md`](claude_helper/routing.md) |
-| Un formulaire | [`claude_helper/components.md`](claude_helper/components.md) + [`claude_helper/types.md`](claude_helper/types.md) |
-| Un appel API / mutation | [`claude_helper/api.md`](claude_helper/api.md) |
-| Un composant UI | [`claude_helper/components.md`](claude_helper/components.md) |
-| Un hook | [`claude_helper/hooks.md`](claude_helper/hooks.md) |
-| Auth / rôles / stores | [`claude_helper/store.md`](claude_helper/store.md) + [`claude_helper/routing.md`](claude_helper/routing.md) |
-| Une chaîne traduite | [`claude_helper/i18n.md`](claude_helper/i18n.md) |
-| Un type TypeScript | [`claude_helper/types.md`](claude_helper/types.md) |
-| Une nouvelle feature (plusieurs fichiers) | [`claude_helper/index.md`](claude_helper/index.md) puis les guides concernés |
+| You're about to touch...                  | Read first                                                                                                        |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Une page / route                          | [`claude_helper/pages.md`](claude_helper/pages.md) + [`claude_helper/routing.md`](claude_helper/routing.md)       |
+| Un formulaire                             | [`claude_helper/components.md`](claude_helper/components.md) + [`claude_helper/types.md`](claude_helper/types.md) |
+| Un appel API / mutation                   | [`claude_helper/api.md`](claude_helper/api.md)                                                                    |
+| Un composant UI                           | [`claude_helper/components.md`](claude_helper/components.md)                                                      |
+| Un hook                                   | [`claude_helper/hooks.md`](claude_helper/hooks.md)                                                                |
+| Auth / rôles / stores                     | [`claude_helper/store.md`](claude_helper/store.md) + [`claude_helper/routing.md`](claude_helper/routing.md)       |
+| Une chaîne traduite                       | [`claude_helper/i18n.md`](claude_helper/i18n.md)                                                                  |
+| Un type TypeScript                        | [`claude_helper/types.md`](claude_helper/types.md)                                                                |
+| Une nouvelle feature (plusieurs fichiers) | [`claude_helper/index.md`](claude_helper/index.md) puis les guides concernés                                      |
 
 ---
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,31 +7,32 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Settings, User as UserIcon, Gem, LogOut } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
+import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
 
 interface UserMenuProps {
-  isCollapsed: boolean;
+  isCollapsed: boolean
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
-  const { user, logout } = useAuth();
-  const { t } = useTranslation();
-  const isFreeTier = user?.subscription?.plan === 'free' || !user?.subscription; // Check if user is on free tier or has no subscription
+  const { user, logout } = useAuth()
+  const { t } = useTranslation()
+  const isFreeTier = user?.subscription?.plan === 'free' || !user?.subscription // Check if user is on free tier or has no subscription
 
   const handleLogout = () => {
-    logout();
-  };
+    logout()
+  }
 
-  const displayName = user?.firstName && user?.lastName
-    ? `${user.firstName} ${user.lastName}`
-    : user?.email || t("guest");
-  const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
+  const displayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email || t('guest')
+  const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'
 
   return (
     <DropdownMenu>
@@ -39,10 +40,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         <Button
           variant="ghost"
           className={cn(
-            "h-auto",
+            'h-auto',
             isCollapsed
-              ? "w-10 h-10 p-0 flex items-center justify-center gap-0"
-              : "w-full py-2 justify-start px-3"
+              ? 'w-10 h-10 p-0 flex items-center justify-center gap-0'
+              : 'w-full py-2 justify-start px-3'
           )}
         >
           <Avatar className="h-8 w-8 flex-shrink-0 flex items-center justify-center">
@@ -51,8 +52,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           </Avatar>
           <span
             className={cn(
-              "text-sm font-medium truncate overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
-              isCollapsed ? "max-w-0 opacity-0" : "max-w-full opacity-100 ml-3"
+              'text-sm font-medium truncate overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out',
+              isCollapsed ? 'max-w-0 opacity-0' : 'max-w-full opacity-100 ml-3'
             )}
           >
             {displayName}
@@ -64,7 +65,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{displayName}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email || "guest@example.com"}
+              {user?.email || 'guest@example.com'}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -96,7 +97,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default UserMenu;
+export default UserMenu

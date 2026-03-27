@@ -65,6 +65,7 @@ Composant-garde utilisé comme `element` sur les groupes de routes nécessitant 
 ```
 
 **Décision tree :**
+
 1. `loading === true` → `<Skeleton />` (init auth en cours)
 2. `!isAuthenticated` → `<Navigate to="/auth" />`
 3. `allowedRoles` défini et `user.role` absent → `<Navigate to="/dashboard" />`
@@ -93,6 +94,7 @@ const { vehicle } = useLoaderData() as { vehicle: UserVehicleType };
 ```
 
 **Quand utiliser un loader vs useQuery :**
+
 - Loader : données nécessaires au rendu initial de la page (détail, édition)
 - useQuery : données secondaires, rafraîchissables, paginées
 
@@ -142,6 +144,7 @@ Chaque route qui doit apparaître dans le breadcrumb définit un `handle.crumb`.
 ```
 
 Ne pas oublier :
+
 1. Ajouter le lien dans `Sidebar.tsx`
 2. Ajouter la clé de traduction dans les 4 locales
 
@@ -171,12 +174,12 @@ Ajouter dans le bloc `element: <ProtectedRoute allowedRoles={['owner']} />`.
 ## Navigation programmatique
 
 ```typescript
-import { useNavigate } from 'react-router-dom';
-const navigate = useNavigate();
+import { useNavigate } from 'react-router-dom'
+const navigate = useNavigate()
 
-navigate('/vehicles');           // push
-navigate(-1);                    // retour
-navigate('/vehicles', { replace: true }); // replace (après login)
+navigate('/vehicles') // push
+navigate(-1) // retour
+navigate('/vehicles', { replace: true }) // replace (après login)
 ```
 
 ---

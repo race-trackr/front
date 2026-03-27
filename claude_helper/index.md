@@ -8,24 +8,24 @@ SPA React pour gérer des **sessions piste (track days)**, **véhicules** et **m
 
 ## Tech Stack
 
-| Couche | Technologie | Version |
-|---|---|---|
-| Build tool | Vite + SWC | ^6.3.4 |
-| Langage | TypeScript | ~5.5 |
-| Framework UI | React | ^18.3 |
-| Routing | React Router DOM | ^6.26 |
-| État serveur | TanStack React Query | ^5.56 |
-| État client | Zustand | ^5.0 |
-| Formulaires | React Hook Form + Zod | ^7.55 + ^3.24 |
-| Composants UI | shadcn/ui (Radix UI) | — |
-| Styles | Tailwind CSS | ^3.4 |
-| Icônes | Lucide React | ^0.462 |
-| Graphiques | Recharts | ^2.12 |
-| i18n | i18next + react-i18next | ^25 + ^16 |
-| HTTP | Axios | ^1.12 |
-| Notifications | Sonner | ^1.5 |
-| Thème | next-themes | ^0.3 |
-| Dates | date-fns | ^3.6 |
+| Couche        | Technologie             | Version       |
+| ------------- | ----------------------- | ------------- |
+| Build tool    | Vite + SWC              | ^6.3.4        |
+| Langage       | TypeScript              | ~5.5          |
+| Framework UI  | React                   | ^18.3         |
+| Routing       | React Router DOM        | ^6.26         |
+| État serveur  | TanStack React Query    | ^5.56         |
+| État client   | Zustand                 | ^5.0          |
+| Formulaires   | React Hook Form + Zod   | ^7.55 + ^3.24 |
+| Composants UI | shadcn/ui (Radix UI)    | —             |
+| Styles        | Tailwind CSS            | ^3.4          |
+| Icônes        | Lucide React            | ^0.462        |
+| Graphiques    | Recharts                | ^2.12         |
+| i18n          | i18next + react-i18next | ^25 + ^16     |
+| HTTP          | Axios                   | ^1.12         |
+| Notifications | Sonner                  | ^1.5          |
+| Thème         | next-themes             | ^0.3          |
+| Dates         | date-fns                | ^3.6          |
 
 ---
 

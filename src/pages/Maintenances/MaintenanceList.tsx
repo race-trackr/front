@@ -1,78 +1,82 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react';
-import { MaintenanceRecordType, PaginatedResponse } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
-import MaintenanceCostChart from '@/components/MaintenanceCostChart';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays } from 'lucide-react'
+import { MaintenanceRecordType, PaginatedResponse } from '@/types'
+import { useTranslation } from 'react-i18next'
+import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import { toast } from 'sonner'
+import { format } from 'date-fns'
+import { fr, enUS, es, it } from 'date-fns/locale'
+import { cn } from '@/lib/utils'
+import MaintenanceCostChart from '@/components/MaintenanceCostChart'
 
 const MaintenanceList: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<number | null>(null)
 
-  const { data: maintenancesResponse, isLoading, isError } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
+  const {
+    data: maintenancesResponse,
+    isLoading,
+    isError,
+  } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
     queryKey: ['maintenances'],
     queryFn: () => getMaintenances({ limit: 0 }),
-  });
-  const maintenances = maintenancesResponse?.data || [];
+  })
+  const maintenances = maintenancesResponse?.data || []
 
   const deleteMaintenanceMutation = useMutation({
     mutationFn: (id: number) => deleteMaintenance(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      toast.success(t('maintenance_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
-      setMaintenanceToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ['maintenances'] })
+      toast.success(t('maintenance_deleted_successfully'))
+      setIsDeleteDialogOpen(false)
+      setMaintenanceToDelete(null)
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
-      setIsDeleteDialogOpen(false);
-      setMaintenanceToDelete(null);
+      toast.error(t('an_unexpected_error_occurred')) // Generic error message
+      setIsDeleteDialogOpen(false)
+      setMaintenanceToDelete(null)
     },
-  });
+  })
 
   const handleDeleteClick = (id: number) => {
-    setMaintenanceToDelete(id);
-    setIsDeleteDialogOpen(true);
-  };
+    setMaintenanceToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
     if (maintenanceToDelete !== null) {
-      deleteMaintenanceMutation.mutate(maintenanceToDelete);
+      deleteMaintenanceMutation.mutate(maintenanceToDelete)
     }
-  };
+  }
 
   const getLocale = () => {
     switch (i18n.language) {
       case 'fr':
-        return fr;
+        return fr
       case 'es':
-        return es;
+        return es
       case 'it':
-        return it;
+        return it
       default:
-        return enUS;
+        return enUS
     }
-  };
+  }
 
   if (isLoading) {
-    return <div className="text-center">{t('loading_maintenances')}</div>;
+    return <div className="text-center">{t('loading_maintenances')}</div>
   }
 
   if (isError) {
-    return <div className="text-center text-red-500">{t('error_loading_maintenances')}</div>;
+    return <div className="text-center text-red-500">{t('error_loading_maintenances')}</div>
   }
 
   return (
@@ -89,22 +93,23 @@ const MaintenanceList: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader>
-            <div className='flex items-center justify-between'>
-              <div className=''>
+            <div className="flex items-center justify-between">
+              <div className="">
                 {t('total_maintenances')}
-                <p className="text-2xl font-bold mt-2">{maintenances?.length || 0}</p></div>
-              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
-                <Wrench className='h-6 w-6 text-primary' />
+                <p className="text-2xl font-bold mt-2">{maintenances?.length || 0}</p>
+              </div>
+              <span className="p-2 bg-primary/10 text-red-700 rounded-lg">
+                <Wrench className="h-6 w-6 text-primary" />
               </span>
             </div>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
-            <div className='flex items-center justify-between'>
-              <CardTitle className='text-lg font-normal'>{t('total_cost')}</CardTitle>
-              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
-                <DollarSign className='h-6 w-6 text-primary' />
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-normal">{t('total_cost')}</CardTitle>
+              <span className="p-2 bg-primary/10 text-red-700 rounded-lg">
+                <DollarSign className="h-6 w-6 text-primary" />
               </span>
             </div>
             <p className="text-2xl font-bold">
@@ -114,14 +119,14 @@ const MaintenanceList: React.FC = () => {
         </Card>
         <Card>
           <CardHeader>
-            <div className='flex items-center justify-between'>
-              <CardTitle className='text-lg font-normal'>{t('upcoming_maintenances')}</CardTitle>
-              <span className='p-2 bg-primary/10 text-red-700 rounded-lg'>
-                <CalendarDays className='h-6 w-6 text-primary' />
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-normal">{t('upcoming_maintenances')}</CardTitle>
+              <span className="p-2 bg-primary/10 text-red-700 rounded-lg">
+                <CalendarDays className="h-6 w-6 text-primary" />
               </span>
             </div>
             <p className="text-2xl font-bold">
-              {maintenances?.filter(m => m.date && new Date(m.date) > new Date()).length || 0}
+              {maintenances?.filter((m) => m.date && new Date(m.date) > new Date()).length || 0}
             </p>
           </CardHeader>
         </Card>
@@ -151,20 +156,30 @@ const MaintenanceList: React.FC = () => {
               <Link to={`/maintenances/${maintenance.id}`} className="block h-full p-6">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-4 flex-1 pr-4">
-                    <div className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-md font-bold text-white flex-shrink-0",
-                      "bg-gradient-to-r from-red-500 to-orange-500"
-                    )}>
+                    <div
+                      className={cn(
+                        'flex items-center justify-center w-10 h-10 rounded-md font-bold text-white flex-shrink-0',
+                        'bg-gradient-to-r from-red-500 to-orange-500'
+                      )}
+                    >
                       <Wrench className="h-5 w-5" />
                     </div>
                     <div>
                       <CardTitle className="text-lg">{maintenance.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{t(`maintenance_type_${maintenance.type}`)}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t(`maintenance_type_${maintenance.type}`)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <p className="text-sm font-medium">{format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}</p>
-                    <p className="text-lg font-bold">{maintenance.cost !== null ? `${Number(maintenance.cost).toFixed(2)}€` : t('not_specified')}</p>
+                    <p className="text-sm font-medium">
+                      {format(new Date(maintenance.date), 'PPP', { locale: getLocale() })}
+                    </p>
+                    <p className="text-lg font-bold">
+                      {maintenance.cost !== null
+                        ? `${Number(maintenance.cost).toFixed(2)}€`
+                        : t('not_specified')}
+                    </p>
                   </div>
                   {/* Removed nested Link, now the button directly navigates */}
                   <div className="flex items-center gap-2 ml-4">
@@ -172,9 +187,9 @@ const MaintenanceList: React.FC = () => {
                       variant="outline"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent the outer Link from triggering
-                        e.preventDefault(); // Prevent default navigation behavior
-                        navigate(`/maintenances/edit/${maintenance.id}`);
+                        e.stopPropagation() // Prevent the outer Link from triggering
+                        e.preventDefault() // Prevent default navigation behavior
+                        navigate(`/maintenances/edit/${maintenance.id}`)
                       }}
                     >
                       <Edit className="h-4 w-4" />
@@ -184,15 +199,19 @@ const MaintenanceList: React.FC = () => {
                       variant="destructive"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent the outer Link from triggering
-                        e.preventDefault(); // Prevent default navigation behavior
-                        handleDeleteClick(maintenance.id);
+                        e.stopPropagation() // Prevent the outer Link from triggering
+                        e.preventDefault() // Prevent default navigation behavior
+                        handleDeleteClick(maintenance.id)
                       }}
                       disabled={deleteMaintenanceMutation.isPending}
                       className="btn-danger"
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}</span>
+                      <span className="sr-only">
+                        {deleteMaintenanceMutation.isPending
+                          ? t('deleting')
+                          : t('delete_maintenance_button')}
+                      </span>
                     </Button>
                   </div>
                 </div>
@@ -213,7 +232,7 @@ const MaintenanceList: React.FC = () => {
         isConfirming={deleteMaintenanceMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default MaintenanceList;
+export default MaintenanceList

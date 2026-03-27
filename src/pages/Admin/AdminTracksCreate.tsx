@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import {
   Form,
   FormControl,
@@ -16,20 +16,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from '@/components/ui/textarea';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import apiClient from '@/lib/apiClient';
-import { CountryType, TrackType } from '@/types';
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import { t } from 'i18next';
+} from '@/components/ui/select'
+import apiClient from '@/lib/apiClient'
+import { CountryType, TrackType } from '@/types'
+import { ArrowLeft, Trash2 } from 'lucide-react'
+import { t } from 'i18next'
 
 const formSchema = z.object({
   name: z.string().min(1, { message: t('track_required') }),
@@ -43,12 +43,12 @@ const formSchema = z.object({
   bestLapTime: z.string().nullable().optional(),
   bestLapTimePilot: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
-});
+})
 
 const AdminTracksCreate: React.FC = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,9 +65,14 @@ const AdminTracksCreate: React.FC = () => {
       bestLapTimePilot: null,
       description: null,
     },
-  });
+  })
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries, error: countriesError } = useQuery<
+  const {
+    data: countries,
+    isLoading: isLoadingCountries,
+    isError: isErrorCountries,
+    error: countriesError,
+  } = useQuery<
     CountryType[], // TQueryFnData
     Error, // TError
     CountryType[], // TData
@@ -75,31 +80,32 @@ const AdminTracksCreate: React.FC = () => {
   >({
     queryKey: ['countries'],
     queryFn: async () => {
-      const response = await apiClient.get('/countries');
-      return response.data;
+      const response = await apiClient.get('/countries')
+      return response.data
     },
-  });
+  })
 
   useEffect(() => {
     if (isErrorCountries && countriesError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorCountries, countriesError, t]);
+  }, [isErrorCountries, countriesError, t])
 
   const createTrackMutation = useMutation({
     mutationFn: async (payload: z.infer<typeof formSchema>) => {
-      const response = await apiClient.post('/tracks', payload);
-      return response.data;
+      const response = await apiClient.post('/tracks', payload)
+      return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tracks'] });
-      toast.success(t('track_created_successfully'));
-      navigate('/admin/tracks');
+      queryClient.invalidateQueries({ queryKey: ['tracks'] })
+      toast.success(t('track_created_successfully'))
+      navigate('/admin/tracks')
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: z.infer<typeof formSchema> = {
@@ -115,9 +121,9 @@ const AdminTracksCreate: React.FC = () => {
       bestLapTime: values.bestLapTime === '' ? null : values.bestLapTime,
       bestLapTimePilot: values.bestLapTimePilot === '' ? null : values.bestLapTimePilot,
       description: values.description === '' ? null : values.description,
-    };
-    createTrackMutation.mutate(payload);
-  };
+    }
+    createTrackMutation.mutate(payload)
+  }
 
   return (
     <div className="space-y-6">
@@ -129,13 +135,19 @@ const AdminTracksCreate: React.FC = () => {
         <h1 className="text-3xl font-bold flex-1">{t('create_new_track')}</h1>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('track_name')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('track_name')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder={t('enter_track_name')} />
                 </FormControl>
@@ -148,19 +160,38 @@ const AdminTracksCreate: React.FC = () => {
             name="countryId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}>
+                <FormLabel>
+                  {t('country')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value.toString()}
+                  disabled={isLoadingCountries || isErrorCountries || createTrackMutation.isPending}
+                >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
+                      <SelectValue
+                        placeholder={
+                          isLoadingCountries
+                            ? t('loading_countries')
+                            : isErrorCountries
+                              ? t('error_loading_countries')
+                              : t('select_country')
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {countries?.map((country) => ( // Accessing countries safely
-                      <SelectItem key={country.id} value={country.id.toString()}>
-                        {country.name}
-                      </SelectItem>
-                    ))}
+                    {countries?.map(
+                      (
+                        country // Accessing countries safely
+                      ) => (
+                        <SelectItem key={country.id} value={country.id.toString()}>
+                          {country.name}
+                        </SelectItem>
+                      )
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -172,7 +203,10 @@ const AdminTracksCreate: React.FC = () => {
             name="length"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('length_km')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('length_km')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input type="number" step="0.1" {...field} />
                 </FormControl>
@@ -185,7 +219,10 @@ const AdminTracksCreate: React.FC = () => {
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('city')}<span className="text-destructive">*</span></FormLabel>
+                <FormLabel>
+                  {t('city')}
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder={t('enter_city')} />
                 </FormControl>
@@ -213,7 +250,11 @@ const AdminTracksCreate: React.FC = () => {
               <FormItem>
                 <FormLabel>{t('turns')}</FormLabel>
                 <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_number_of_turns')} />
+                  <Input
+                    {...field}
+                    value={field.value || ''}
+                    placeholder={t('enter_number_of_turns')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -226,7 +267,13 @@ const AdminTracksCreate: React.FC = () => {
               <FormItem>
                 <FormLabel>{t('width')}</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.1" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_track_width')} />
+                  <Input
+                    type="number"
+                    step="0.1"
+                    {...field}
+                    value={field.value === null ? '' : field.value}
+                    placeholder={t('enter_track_width')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -239,7 +286,12 @@ const AdminTracksCreate: React.FC = () => {
               <FormItem>
                 <FormLabel>{t('max_db')}</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} value={field.value === null ? '' : field.value} placeholder={t('enter_max_db')} />
+                  <Input
+                    type="number"
+                    {...field}
+                    value={field.value === null ? '' : field.value}
+                    placeholder={t('enter_max_db')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -265,7 +317,11 @@ const AdminTracksCreate: React.FC = () => {
               <FormItem>
                 <FormLabel>{t('best_laptime_pilot')}</FormLabel>
                 <FormControl>
-                  <Input {...field} value={field.value || ''} placeholder={t('enter_best_laptime_pilot')} />
+                  <Input
+                    {...field}
+                    value={field.value || ''}
+                    placeholder={t('enter_best_laptime_pilot')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -278,7 +334,12 @@ const AdminTracksCreate: React.FC = () => {
               <FormItem className="md:col-span-2">
                 <FormLabel>{t('description')}</FormLabel>
                 <FormControl>
-                  <Textarea rows={3} {...field} value={field.value || ''} placeholder={t('enter_track_description')} />
+                  <Textarea
+                    rows={3}
+                    {...field}
+                    value={field.value || ''}
+                    placeholder={t('enter_track_description')}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -288,14 +349,18 @@ const AdminTracksCreate: React.FC = () => {
             <Button type="button" variant="outline" onClick={() => navigate(-1)}>
               {t('cancel')}
             </Button>
-            <Button type="submit" className="btn-primary-gradient" disabled={createTrackMutation.isPending}>
+            <Button
+              type="submit"
+              className="btn-primary-gradient"
+              disabled={createTrackMutation.isPending}
+            >
               {createTrackMutation.isPending ? t('creating') : t('save_track')}
             </Button>
           </div>
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default AdminTracksCreate;
+export default AdminTracksCreate

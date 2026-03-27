@@ -7,7 +7,7 @@
 Instance Axios centrale. **Tout appel HTTP passe par là — jamais `axios` directement, jamais `fetch`.**
 
 ```typescript
-import apiClient from '@/lib/apiClient';
+import apiClient from '@/lib/apiClient'
 ```
 
 ### Configuration
@@ -39,88 +39,91 @@ Un fichier par domaine. Chaque fonction wrape un appel `apiClient` et retourne l
 ```typescript
 // Lecture
 export const getVehicles = async (params?): Promise<UserVehicleType[]> => {
-  const response = await apiClient.get('/vehicles', { params });
-  return response.data;
-};
+  const response = await apiClient.get('/vehicles', { params })
+  return response.data
+}
 
 // Création
 export const createVehicle = async (payload: CreateVehiclePayload): Promise<UserVehicleType> => {
-  const response = await apiClient.post('/vehicles', payload);
-  return response.data;
-};
+  const response = await apiClient.post('/vehicles', payload)
+  return response.data
+}
 
 // Mise à jour
-export const updateVehicle = async (id: number, payload: UpdateVehiclePayload): Promise<UserVehicleType> => {
-  const response = await apiClient.put(`/vehicles/${id}`, payload);
-  return response.data;
-};
+export const updateVehicle = async (
+  id: number,
+  payload: UpdateVehiclePayload
+): Promise<UserVehicleType> => {
+  const response = await apiClient.put(`/vehicles/${id}`, payload)
+  return response.data
+}
 
 // Suppression
 export const deleteVehicle = async (id: number): Promise<void> => {
-  await apiClient.delete(`/vehicles/${id}`);
-};
+  await apiClient.delete(`/vehicles/${id}`)
+}
 ```
 
 ### vehicles.ts
 
-| Fonction | Méthode | Endpoint |
-|---|---|---|
-| `getVehicles({ limit, offset })` | GET | `/vehicles` |
-| `getVehicleById(id: number)` | GET | `/vehicles/:id` |
-| `createVehicle(payload)` | POST | `/vehicles` |
-| `updateVehicle(id, payload)` | PUT | `/vehicles/:id` |
-| `deleteVehicle(id)` | DELETE | `/vehicles/:id` |
+| Fonction                         | Méthode | Endpoint        |
+| -------------------------------- | ------- | --------------- |
+| `getVehicles({ limit, offset })` | GET     | `/vehicles`     |
+| `getVehicleById(id: number)`     | GET     | `/vehicles/:id` |
+| `createVehicle(payload)`         | POST    | `/vehicles`     |
+| `updateVehicle(id, payload)`     | PUT     | `/vehicles/:id` |
+| `deleteVehicle(id)`              | DELETE  | `/vehicles/:id` |
 
 ### trackdays.ts
 
-| Fonction | Méthode | Endpoint | Retour |
-|---|---|---|---|
-| `getTrackdays(params?)` | GET | `/trackdays` | `PaginatedResponse<TrackDayType>` |
-| `getTrackdayById(id: string)` | GET | `/trackdays/:id` | `TrackDayType` |
-| `createTrackday(payload)` | POST | `/trackdays` | `TrackDayType` |
-| `updateTrackday(id, payload)` | PUT | `/trackdays/:id` | `TrackDayType` |
-| `deleteTrackday(id)` | DELETE | `/trackdays/:id` | `void` |
+| Fonction                      | Méthode | Endpoint         | Retour                            |
+| ----------------------------- | ------- | ---------------- | --------------------------------- |
+| `getTrackdays(params?)`       | GET     | `/trackdays`     | `PaginatedResponse<TrackDayType>` |
+| `getTrackdayById(id: string)` | GET     | `/trackdays/:id` | `TrackDayType`                    |
+| `createTrackday(payload)`     | POST    | `/trackdays`     | `TrackDayType`                    |
+| `updateTrackday(id, payload)` | PUT     | `/trackdays/:id` | `TrackDayType`                    |
+| `deleteTrackday(id)`          | DELETE  | `/trackdays/:id` | `void`                            |
 
 **Paramètres de `getTrackdays` :**
 
 ```typescript
 interface GetTrackdaysParams {
-  limit?: number;
-  page?: number;       // pagination basée sur les pages
-  searchTerm?: string;
-  vehicleId?: number;
-  trackId?: number;
+  limit?: number
+  page?: number // pagination basée sur les pages
+  searchTerm?: string
+  vehicleId?: number
+  trackId?: number
 }
 ```
 
 ### maintenances.ts
 
-| Fonction | Méthode | Endpoint |
-|---|---|---|
-| `getMaintenances(params?)` | GET | `/maintenances` |
-| `getMaintenanceById(id: number)` | GET | `/maintenances/:id` |
-| `createMaintenance(payload)` | POST | `/maintenances` |
-| `updateMaintenance(id, payload)` | PUT | `/maintenances/:id` |
-| `deleteMaintenance(id)` | DELETE | `/maintenances/:id` |
+| Fonction                         | Méthode | Endpoint            |
+| -------------------------------- | ------- | ------------------- |
+| `getMaintenances(params?)`       | GET     | `/maintenances`     |
+| `getMaintenanceById(id: number)` | GET     | `/maintenances/:id` |
+| `createMaintenance(payload)`     | POST    | `/maintenances`     |
+| `updateMaintenance(id, payload)` | PUT     | `/maintenances/:id` |
+| `deleteMaintenance(id)`          | DELETE  | `/maintenances/:id` |
 
 ### dashboard.ts
 
-| Fonction | Méthode | Endpoint | Retour |
-|---|---|---|---|
-| `getDashboardSummary()` | GET | `/dashboard` | `DashboardSummary` |
+| Fonction                | Méthode | Endpoint     | Retour             |
+| ----------------------- | ------- | ------------ | ------------------ |
+| `getDashboardSummary()` | GET     | `/dashboard` | `DashboardSummary` |
 
 ### tracks.ts
 
-| Fonction | Méthode | Endpoint |
-|---|---|---|
-| `getTracks()` | GET | `/tracks` |
-| `getTrackById(id)` | GET | `/tracks/:id` |
+| Fonction           | Méthode | Endpoint      |
+| ------------------ | ------- | ------------- |
+| `getTracks()`      | GET     | `/tracks`     |
+| `getTrackById(id)` | GET     | `/tracks/:id` |
 
 ### weather.ts
 
-| Fonction | Méthode | Endpoint | Retour |
-|---|---|---|---|
-| `getWeatherForecast(trackId, date)` | GET | `/weather` | `WeatherForecast` |
+| Fonction                            | Méthode | Endpoint   | Retour            |
+| ----------------------------------- | ------- | ---------- | ----------------- |
+| `getWeatherForecast(trackId, date)` | GET     | `/weather` | `WeatherForecast` |
 
 ---
 
@@ -129,46 +132,50 @@ interface GetTrackdaysParams {
 ### Lecture — useQuery
 
 ```typescript
-const { data: vehicles, isLoading, isError } = useQuery({
+const {
+  data: vehicles,
+  isLoading,
+  isError,
+} = useQuery({
   queryKey: ['vehicles'],
   queryFn: getVehicles,
-});
+})
 
 // Avec paramètres (la queryKey inclut les params pour le cache)
 const { data } = useQuery({
   queryKey: ['trackdays', { page, vehicleId, searchTerm }],
   queryFn: () => getTrackdays({ page, vehicleId, searchTerm }),
-});
+})
 ```
 
 ### Écriture — useMutation
 
 ```typescript
-const queryClient = useQueryClient();
+const queryClient = useQueryClient()
 
 const mutation = useMutation({
   mutationFn: (payload: CreateVehiclePayload) => createVehicle(payload),
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['vehicles'] }); // OBLIGATOIRE
-    showSuccess(t('vehicle_created'));
-    navigate('/vehicles');
+    queryClient.invalidateQueries({ queryKey: ['vehicles'] }) // OBLIGATOIRE
+    showSuccess(t('vehicle_created'))
+    navigate('/vehicles')
   },
   onError: () => {
-    showError(t('an_unexpected_error_occurred'));
+    showError(t('an_unexpected_error_occurred'))
   },
-});
+})
 ```
 
 ### Clés de cache utilisées
 
-| Ressource | QueryKey |
-|---|---|
-| Véhicules | `['vehicles']` |
-| Sessions piste | `['trackdays']` ou `['trackdays', params]` |
-| Maintenances | `['maintenances']` ou `['maintenances', params]` |
-| Dashboard | `['dashboard']` |
-| Circuits | `['tracks']` |
-| Pays | `['countries']` |
+| Ressource      | QueryKey                                         |
+| -------------- | ------------------------------------------------ |
+| Véhicules      | `['vehicles']`                                   |
+| Sessions piste | `['trackdays']` ou `['trackdays', params]`       |
+| Maintenances   | `['maintenances']` ou `['maintenances', params]` |
+| Dashboard      | `['dashboard']`                                  |
+| Circuits       | `['tracks']`                                     |
+| Pays           | `['countries']`                                  |
 
 **Règle :** Toujours invalider la clé racine (ex: `['vehicles']`) pour toucher toutes les variantes cachées.
 

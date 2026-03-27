@@ -1,23 +1,24 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/useAuth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import UserProfileForm from '@/components/UserProfileForm'; // Import the UserProfileForm component
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { Gem } from 'lucide-react';
-import { Badge } from '@/components/ui/badge'; // Ensure Badge is imported
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useAuth } from '@/hooks/useAuth'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import UserProfileForm from '@/components/UserProfileForm' // Import the UserProfileForm component
+import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { Gem } from 'lucide-react'
+import { Badge } from '@/components/ui/badge' // Ensure Badge is imported
 
 const Profile: React.FC = () => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
+  const { t } = useTranslation()
+  const { user } = useAuth()
 
-  const displayName = user?.firstName && user?.lastName
-    ? `${user.firstName} ${user.lastName}`
-    : user?.email || t("guest");
-  const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
-  const isFreeTier = user?.subscription?.plan === 'free' || !user?.subscription;
+  const displayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email || t('guest')
+  const avatarFallback = user?.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'
+  const isFreeTier = user?.subscription?.plan === 'free' || !user?.subscription
 
   return (
     <div className="p-4 space-y-6">
@@ -29,18 +30,20 @@ const Profile: React.FC = () => {
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user?.avatar || "/placeholder-user.jpg"} alt={displayName} />
+              <AvatarImage src={user?.avatar || '/placeholder-user.jpg'} alt={displayName} />
               <AvatarFallback className="text-3xl">{avatarFallback}</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-xl font-semibold">{displayName}</p>
-              <p className="text-muted-foreground">{user?.email || "guest@example.com"}</p>
+              <p className="text-muted-foreground">{user?.email || 'guest@example.com'}</p>
               {user?.role ? (
                 <Badge variant="secondary" className="mt-1 capitalize">
                   {t('role')}: {t(user.role)}
                 </Badge>
               ) : (
-                <p className="text-sm text-muted-foreground capitalize">{t('role')}: {t('not_specified')}</p>
+                <p className="text-sm text-muted-foreground capitalize">
+                  {t('role')}: {t('not_specified')}
+                </p>
               )}
             </div>
           </div>
@@ -87,7 +90,7 @@ const Profile: React.FC = () => {
 
       <UserProfileForm />
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

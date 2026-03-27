@@ -1,23 +1,22 @@
-import * as React from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import * as React from 'react'
+import { Eye, EyeOff } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
-export interface PasswordInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, ...props }, ref) => {
-    const [showPassword, setShowPassword] = React.useState(false);
-    const { t } = useTranslation();
+    const [showPassword, setShowPassword] = React.useState(false)
+    const { t } = useTranslation()
 
     return (
       <div className="relative">
         <Input
-          type={showPassword ? "text" : "password"}
-          className={cn("pr-10", className)}
+          type={showPassword ? 'text' : 'password'}
+          className={cn('pr-10', className)}
           ref={ref}
           {...props}
         />
@@ -35,14 +34,12 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           ) : (
             <EyeOff className="h-4 w-4" aria-hidden="true" />
           )}
-          <span className="sr-only">
-            {showPassword ? t('hide_password') : t('show_password')}
-          </span>
+          <span className="sr-only">{showPassword ? t('hide_password') : t('show_password')}</span>
         </Button>
       </div>
-    );
-  },
-);
-PasswordInput.displayName = "PasswordInput";
+    )
+  }
+)
+PasswordInput.displayName = 'PasswordInput'
 
-export { PasswordInput };
+export { PasswordInput }

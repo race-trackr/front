@@ -1,27 +1,41 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import GoogleIcon from '@/components/GoogleIcon';
-import { RegisterPayload, CountryType } from '@/types';
-import apiClient from '@/lib/apiClient';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { PasswordInput } from '@/components/PasswordInput';
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/useAuth'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import GoogleIcon from '@/components/GoogleIcon'
+import { RegisterPayload, CountryType } from '@/types'
+import apiClient from '@/lib/apiClient'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { PasswordInput } from '@/components/PasswordInput'
 
 const Register: React.FC = () => {
-  const { register: authRegister, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { register: authRegister, loading: authLoading } = useAuth()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const formSchema = z.object({
     firstName: z.string().min(1, { message: t('first_name_min_length') }),
@@ -29,7 +43,7 @@ const Register: React.FC = () => {
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(6, { message: t('password_min_length') }),
     countryId: z.coerce.number().min(1, { message: t('country_required') }),
-  });
+  })
 
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(formSchema),
@@ -40,24 +54,27 @@ const Register: React.FC = () => {
       password: '',
       countryId: 0,
     },
-  });
+  })
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries } = useQuery<CountryType[]>({
+  const {
+    data: countries,
+    isLoading: isLoadingCountries,
+    isError: isErrorCountries,
+  } = useQuery<CountryType[]>({
     queryKey: ['countries'],
     queryFn: async () => {
-      const response = await apiClient.get('/countries');
-      return response.data;
+      const response = await apiClient.get('/countries')
+      return response.data
     },
-  });
+  })
 
   const onSubmit = async (values: RegisterPayload) => {
     try {
-      await authRegister(values);
+      await authRegister(values)
       // Navigation to dashboard is now handled by the login function in authStore
-      navigate('/dashboard', { replace: true }); // Ajout de la redirection ici
-    } catch (error) {
-    }
-  };
+      navigate('/dashboard', { replace: true }) // Ajout de la redirection ici
+    } catch (error) {}
+  }
 
   return (
     <Card className="w-full">
@@ -73,7 +90,10 @@ const Register: React.FC = () => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('first_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('first_name')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder={t('enter_first_name')} {...field} />
                   </FormControl>
@@ -86,7 +106,10 @@ const Register: React.FC = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('last_name')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('last_name')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder={t('enter_last_name')} {...field} />
                   </FormControl>
@@ -99,7 +122,10 @@ const Register: React.FC = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('email')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('email')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="m@example.com" {...field} />
                   </FormControl>
@@ -112,7 +138,10 @@ const Register: React.FC = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('password')}<span className="text-destructive">*</span></FormLabel>
+                  <FormLabel>
+                    {t('password')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
                   </FormControl>
@@ -125,36 +154,53 @@ const Register: React.FC = () => {
               name="countryId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('country')}<span className="text-destructive">*</span></FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value.toString()} disabled={isLoadingCountries || isErrorCountries || authLoading}>
+                  <FormLabel>
+                    {t('country')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value.toString()}
+                    disabled={isLoadingCountries || isErrorCountries || authLoading}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={isLoadingCountries ? t('loading_countries') : isErrorCountries ? t('error_loading_countries') : t('select_country')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {countries?.map((country) => (
-                      <SelectItem key={country.id} value={country.id.toString()}>
-                        {country.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  {t('select_your_country')}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-full btn-primary-gradient" disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}>
-            {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
-          </Button>
-        </form>
-      </Form>
-    </CardContent>
-  </Card>
-);
-};
+                        <SelectValue
+                          placeholder={
+                            isLoadingCountries
+                              ? t('loading_countries')
+                              : isErrorCountries
+                                ? t('error_loading_countries')
+                                : t('select_country')
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {countries?.map((country) => (
+                        <SelectItem key={country.id} value={country.id.toString()}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>{t('select_your_country')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full btn-primary-gradient"
+              disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}
+            >
+              {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  )
+}
 
-export default Register;
+export default Register

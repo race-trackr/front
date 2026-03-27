@@ -70,6 +70,7 @@ Navigation avec icônes Lucide + labels. Reçoit `isCollapsed: boolean` en prop.
 ## AppBar.tsx
 
 Barre supérieure. Reçoit `breadcrumbs: Breadcrumb[]`. Contient :
+
 - Breadcrumb navigation (liens cliquables sauf dernier)
 - `UserMenu` (profil, déconnexion)
 - `LanguageSwitcher`
@@ -88,6 +89,7 @@ Composant-garde wrappant les routes protégées.
 ```
 
 **Comportement :**
+
 - `loading: true` → affiche squelette Skeleton
 - `!isAuthenticated` → redirige vers `/auth`
 - `isAuthenticated` mais rôle non autorisé → redirige vers `/dashboard`
@@ -127,15 +129,19 @@ const mutation = useMutation({
 ```
 
 ### VehicleForm.tsx
+
 Champs : name, type (select), brand, model, year, licensePlate, details.
 
 ### TrackdayForm.tsx
+
 Champs : date, trackId (select), userVehicleId (select), weather, trackCondition, airTemperature, trackTemperature, bestLapTime, totalLaps, totalDistance, chronos (dynamique), notes.
 
 ### MaintenanceForm.tsx
+
 Champs : name, type (select), date, userVehicleId (select), cost, mileage, nextDueMileage, details.
 
 ### UserProfileForm.tsx
+
 Champs : firstName, lastName, email, countryId, avatar, preferences (notifications).
 
 ---
@@ -178,23 +184,23 @@ Input password avec toggle visibilité (œil). Wrapping de l'`Input` shadcn/ui.
 
 Toujours chercher ici avant de créer un nouveau composant. Composants disponibles (non exhaustif) :
 
-| Composant | Usage |
-|---|---|
-| `Button` | Tous les boutons — variantes: default, destructive, outline, ghost, link |
-| `Input` | Champs texte |
-| `Select` | Listes déroulantes |
-| `Dialog` | Modales |
-| `Card` + `CardHeader` + `CardContent` | Blocs de contenu |
-| `Form` + `FormField` + `FormItem` + `FormLabel` + `FormControl` + `FormMessage` | Wrapper react-hook-form |
-| `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent` | Onglets |
-| `Table` | Tableaux |
-| `Badge` | Étiquettes colorées |
-| `Skeleton` | Placeholder de chargement |
-| `Separator` | Ligne de séparation |
-| `Tooltip` | Info-bulles |
-| `DropdownMenu` | Menus déroulants |
-| `Sheet` | Panneau latéral mobile |
-| `Calendar` + `Popover` | Date picker |
+| Composant                                                                       | Usage                                                                    |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `Button`                                                                        | Tous les boutons — variantes: default, destructive, outline, ghost, link |
+| `Input`                                                                         | Champs texte                                                             |
+| `Select`                                                                        | Listes déroulantes                                                       |
+| `Dialog`                                                                        | Modales                                                                  |
+| `Card` + `CardHeader` + `CardContent`                                           | Blocs de contenu                                                         |
+| `Form` + `FormField` + `FormItem` + `FormLabel` + `FormControl` + `FormMessage` | Wrapper react-hook-form                                                  |
+| `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`                             | Onglets                                                                  |
+| `Table`                                                                         | Tableaux                                                                 |
+| `Badge`                                                                         | Étiquettes colorées                                                      |
+| `Skeleton`                                                                      | Placeholder de chargement                                                |
+| `Separator`                                                                     | Ligne de séparation                                                      |
+| `Tooltip`                                                                       | Info-bulles                                                              |
+| `DropdownMenu`                                                                  | Menus déroulants                                                         |
+| `Sheet`                                                                         | Panneau latéral mobile                                                   |
+| `Calendar` + `Popover`                                                          | Date picker                                                              |
 
 ### Utilisation correcte de Form (react-hook-form)
 

@@ -1,63 +1,81 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Flag, Users } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
-import apiClient from '@/lib/apiClient';
-import { TrackType, CountryType } from '@/types';
-import { toast } from 'sonner';
-import { useAuth } from '@/hooks/useAuth';
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Flag, Users } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
+import apiClient from '@/lib/apiClient'
+import { toast } from 'sonner'
+import { useAuth } from '@/hooks/useAuth'
 
 const AdminDashboard: React.FC = () => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
+  const { t } = useTranslation()
+  const { user } = useAuth()
 
-  const { data: tracks, isLoading: isLoadingTracks, isError: isErrorTracks, error: tracksError } = useQuery<
-    TrackType[], // TQueryFnData
-    Error, // TError
-    TrackType[], // TData
-    ['tracks'] // TQueryKey
-  >({
-    queryKey: ['tracks'],
+  const {
+    data: tracksCount,
+    isLoading: isLoadingTracks,
+    isError: isErrorTracks,
+    error: tracksError,
+  } = useQuery<{ total: number }, Error, { total: number }, ['tracks-count']>({
+    queryKey: ['tracks-count'],
     queryFn: async () => {
-      const response = await apiClient.get('/tracks');
-      return response.data;
+      const response = await apiClient.get('/tracks', {
+        params: { countOnly: true },
+      })
+      return response.data
     },
-  });
+  })
 
   useEffect(() => {
     if (isErrorTracks && tracksError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorTracks, tracksError, t]);
+  }, [isErrorTracks, tracksError, t])
 
-  const { data: countries, isLoading: isLoadingCountries, isError: isErrorCountries, error: countriesError } = useQuery<
-    CountryType[], // TQueryFnData
-    Error, // TError
-    CountryType[], // TData
-    ['countries'] // TQueryKey
-  >({
-    queryKey: ['countries'],
+  const {
+    data: countriesCount,
+    isLoading: isLoadingCountries,
+    isError: isErrorCountries,
+    error: countriesError,
+  } = useQuery<{ total: number }, Error, { total: number }, ['countries-count']>({
+    queryKey: ['countries-count'],
     queryFn: async () => {
-      const response = await apiClient.get('/countries');
-      return response.data;
+      const response = await apiClient.get('/countries', {
+        params: { countOnly: true },
+      })
+      return response.data
     },
-  });
+  })
+
+  const {
+    data: usersCount,
+    isLoading: isUsersLoading,
+    isError: isErrorUsers,
+    error: usersError,
+  } = useQuery<{ total: number }, Error, { total: number }, ['admin-users-count']>({
+    queryKey: ['admin-users-count'],
+    queryFn: async () => {
+      const response = await apiClient.get('/admin/users', {
+        params: { countOnly: true },
+      })
+      return response.data
+    },
+  })
 
   useEffect(() => {
-    if (isErrorCountries && countriesError) {
-      toast.error(t('an_unexpected_error_occurred'));
+    if (isErrorCountries && countriesError && isErrorUsers && usersError) {
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorCountries, countriesError, t]);
+  }, [isErrorCountries, countriesError, usersError, t])
 
-  if (isLoadingTracks || isLoadingCountries) {
-    return <div className="space-y-6">{t('loading')}...</div>;
+  if (isLoadingTracks || isLoadingCountries || isUsersLoading) {
+    return <div className="space-y-6">{t('loading')}...</div>
   }
 
-  if (isErrorTracks || isErrorCountries) {
-    return <div className="space-y-6 text-red-500">{t('error_loading_admin_dashboard')}</div>;
+  if (isErrorTracks || isErrorCountries || isErrorUsers) {
+    return <div className="space-y-6 text-red-500">{t('error_loading_admin_dashboard')}</div>
   }
 
   return (
@@ -72,7 +90,7 @@ const AdminDashboard: React.FC = () => {
             <Flag className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tracks?.length || 0}</div> {/* Accessing tracks safely */}
+            <div className="text-2xl font-bold">{tracksCount?.total ?? 0}</div>
             <p className="text-xs text-muted-foreground">{t('total_tracks_in_system')}</p>
             <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/tracks">{t('go_to_tracks')}</Link>
@@ -86,7 +104,7 @@ const AdminDashboard: React.FC = () => {
             <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{countries?.length || 0}</div> {/* Accessing countries safely */}
+            <div className="text-2xl font-bold">{countriesCount?.total ?? 0}</div>
             <p className="text-xs text-muted-foreground">{t('total_countries_in_system')}</p>
             <Button asChild className="mt-4 btn-primary-gradient">
               <Link to="/admin/countries">{t('go_to_countries')}</Link>
@@ -102,22 +120,10 @@ const AdminDashboard: React.FC = () => {
                 <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               </CardHeader>
               <CardContent>
-                <p className="text-xs text-muted-foreground">{t('system_users_title')}</p>
+                <div className="text-2xl font-bold">{usersCount?.total ?? 0}</div>
+                <p className="text-xs text-muted-foreground">{t('total_users_in_system')}</p>
                 <Button asChild className="mt-4 btn-primary-gradient">
                   <Link to="/admin/users">{t('manage_users')}</Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('send_email')}</CardTitle>
-                <Users className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-              </CardHeader>
-              <CardContent>
-                <p className="text-xs text-muted-foreground">{t('email_broadcast_title')}</p>
-                <Button asChild className="mt-4 btn-primary-gradient">
-                  <Link to="/admin/mailer">{t('send_email')}</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -125,7 +131,7 @@ const AdminDashboard: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

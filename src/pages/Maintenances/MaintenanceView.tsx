@@ -1,81 +1,97 @@
-import React from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { getMaintenanceById, deleteMaintenance } from '@/lib/api/maintenances';
-import { ArrowLeft, Edit, Trash2, Wrench, CalendarDays, GaugeCircle, DollarSign, Car, BookText } from 'lucide-react';
-import { MaintenanceRecordType } from '@/types';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { toast } from 'sonner';
-import { Separator } from '@/components/ui/separator';
+import React from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+import { fr, enUS, es, it } from 'date-fns/locale'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { getMaintenanceById, deleteMaintenance } from '@/lib/api/maintenances'
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  Wrench,
+  CalendarDays,
+  GaugeCircle,
+  DollarSign,
+  Car,
+  BookText,
+} from 'lucide-react'
+import { MaintenanceRecordType } from '@/types'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import { toast } from 'sonner'
+import { Separator } from '@/components/ui/separator'
 
 const MaintenanceView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const maintenanceId = Number(id);
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>()
+  const maintenanceId = Number(id)
+  const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
+  const queryClient = useQueryClient()
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
 
-  const { data: maintenance, isLoading, isError } = useQuery<MaintenanceRecordType>({
+  const {
+    data: maintenance,
+    isLoading,
+    isError,
+  } = useQuery<MaintenanceRecordType>({
     queryKey: ['maintenance', maintenanceId],
     queryFn: () => getMaintenanceById(maintenanceId),
     enabled: !!maintenanceId && !isNaN(maintenanceId),
-  });
+  })
 
   const deleteMaintenanceMutation = useMutation({
     mutationFn: () => deleteMaintenance(maintenanceId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] });
-      toast.success(t('maintenance_deleted_successfully'));
-      navigate('/maintenances');
+      queryClient.invalidateQueries({ queryKey: ['maintenances'] })
+      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] })
+      toast.success(t('maintenance_deleted_successfully'))
+      navigate('/maintenances')
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred')) // Generic error message
     },
-  });
+  })
 
   const handleDeleteClick = () => {
-    setIsDeleteDialogOpen(true);
-  };
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
-    deleteMaintenanceMutation.mutate();
-  };
+    deleteMaintenanceMutation.mutate()
+  }
 
   const getLocale = () => {
     switch (i18n.language) {
       case 'fr':
-        return fr;
+        return fr
       case 'es':
-        return es;
+        return es
       case 'it':
-        return it;
+        return it
       default:
-        return enUS;
+        return enUS
     }
-  };
+  }
 
   if (isLoading) {
-    return <div className="mx-auto p-4 text-center">{t('loading_maintenance')}</div>;
+    return <div className="mx-auto p-4 text-center">{t('loading_maintenance')}</div>
   }
 
   if (isError || !maintenance) {
-    return <div className="mx-auto p-4 text-center text-red-500">{t('error_loading_maintenance')}</div>;
+    return (
+      <div className="mx-auto p-4 text-center text-red-500">{t('error_loading_maintenance')}</div>
+    )
   }
 
-  const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() });
+  const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
   // if date is in the future, display it, otherwise display "not specified"
   const formattedNextDueDate =
     maintenance.date && new Date(maintenance.date) > new Date()
       ? format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
-      : t('not_specified');
+      : t('not_specified')
 
   return (
     <div className="p-4 space-y-6">
@@ -88,7 +104,9 @@ const MaintenanceView: React.FC = () => {
             <Wrench className="h-7 w-7 text-primary" />
             <h1 className="text-3xl font-bold">{maintenance.name}</h1>
           </div>
-          <p className="text-lg text-muted-foreground">{t(`maintenance_type_${maintenance.type}`)}</p>
+          <p className="text-lg text-muted-foreground">
+            {t(`maintenance_type_${maintenance.type}`)}
+          </p>
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="icon">
@@ -105,7 +123,9 @@ const MaintenanceView: React.FC = () => {
             className="btn-danger"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}</span>
+            <span className="sr-only">
+              {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}
+            </span>
           </Button>
         </div>
       </div>
@@ -123,7 +143,9 @@ const MaintenanceView: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('cost')}</p>
               <p className="text-lg">
-                {maintenance.cost !== null ? `${Number(maintenance.cost).toFixed(2)}€` : t('not_specified')}
+                {maintenance.cost !== null
+                  ? `${Number(maintenance.cost).toFixed(2)}€`
+                  : t('not_specified')}
               </p>
             </div>
             <div>
@@ -143,7 +165,9 @@ const MaintenanceView: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('vehicle_brand')}</p>
               <p className="text-lg">
-                {maintenance.vehicle ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}` : t('not_specified_vehicle')}
+                {maintenance.vehicle
+                  ? `${maintenance.vehicle.brand} ${maintenance.vehicle.model}`
+                  : t('not_specified_vehicle')}
               </p>
             </div>
             {maintenance.vehicle?.licensePlate && (
@@ -173,7 +197,9 @@ const MaintenanceView: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('next_due_mileage')}</p>
               <p className="text-lg">
-                {maintenance.nextDueMileage ? `${maintenance.nextDueMileage} km` : t('not_specified')}
+                {maintenance.nextDueMileage
+                  ? `${maintenance.nextDueMileage} km`
+                  : t('not_specified')}
               </p>
             </div>
           </CardContent>
@@ -202,7 +228,7 @@ const MaintenanceView: React.FC = () => {
         isConfirming={deleteMaintenanceMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default MaintenanceView;
+export default MaintenanceView

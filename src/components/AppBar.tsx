@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,35 +7,36 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
-import LanguageSwitcher from './LanguageSwitcher';
-import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next';
+} from '@/components/ui/dropdown-menu'
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from '@/components/theme-provider'
+import LanguageSwitcher from './LanguageSwitcher'
+import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 interface AppBarProps {
-  breadcrumbs?: { label: string; path?: string }[];
+  breadcrumbs?: { label: string; path?: string }[]
 }
 
 const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
-  const location = useLocation();
-  const { theme, setTheme } = useTheme();
-  const { t } = useTranslation();
+  const location = useLocation()
+  const { theme, setTheme } = useTheme()
+  const { t } = useTranslation()
 
   const defaultBreadcrumbs = [
     { label: t('Home'), path: '/' },
     { label: t('Dashboard'), path: '/dashboard' },
-  ];
+  ]
 
-  const currentBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
+  const currentBreadcrumbs =
+    breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs
 
   return (
     <div className="flex h-16 items-center px-4 border-b">
@@ -69,20 +70,20 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => setTheme("light")}
-              className={cn(theme === "light" && "bg-accent text-accent-foreground")}
+              onClick={() => setTheme('light')}
+              className={cn(theme === 'light' && 'bg-accent text-accent-foreground')}
             >
               {t('Light')}
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => setTheme("dark")}
-              className={cn(theme === "dark" && "bg-accent text-accent-foreground")}
+              onClick={() => setTheme('dark')}
+              className={cn(theme === 'dark' && 'bg-accent text-accent-foreground')}
             >
               {t('Dark')}
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => setTheme("system")}
-              className={cn(theme === "system" && "bg-accent text-accent-foreground")}
+              onClick={() => setTheme('system')}
+              className={cn(theme === 'system' && 'bg-accent text-accent-foreground')}
             >
               {t('System')}
             </DropdownMenuItem>
@@ -90,7 +91,7 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbs }) => {
         </DropdownMenu>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AppBar;
+export default AppBar

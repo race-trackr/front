@@ -1,30 +1,30 @@
-import React from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { CreateMaintenancePayload, UserVehicleType, PaginatedResponse } from '@/types';
-import { createMaintenance } from '@/lib/api/maintenances';
-import { getVehicles } from '@/lib/api/vehicles';
-import { ArrowLeft } from 'lucide-react';
+import React from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { format } from 'date-fns'
+import { CreateMaintenancePayload, UserVehicleType, PaginatedResponse } from '@/types'
+import { createMaintenance } from '@/lib/api/maintenances'
+import { getVehicles } from '@/lib/api/vehicles'
+import { ArrowLeft } from 'lucide-react'
 
 import MaintenanceForm, {
   maintenanceFormSchema,
   MaintenanceFormValues,
-} from '@/components/MaintenanceForm';
+} from '@/components/MaintenanceForm'
 
 // schema is imported from MaintenanceForm component.
 
 const MaintenanceCreate: React.FC = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams();
-  const preselectedVehicleId = searchParams.get('vehicleId');
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const [searchParams] = useSearchParams()
+  const preselectedVehicleId = searchParams.get('vehicleId')
 
   const form = useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceFormSchema),
@@ -38,26 +38,30 @@ const MaintenanceCreate: React.FC = () => {
       mileage: null,
       nextDueMileage: null,
     },
-  });
+  })
 
-  const { data: vehiclesResponse, isLoading: isLoadingVehicles, isError: isErrorVehicles } = useQuery<PaginatedResponse<UserVehicleType>>({
+  const {
+    data: vehiclesResponse,
+    isLoading: isLoadingVehicles,
+    isError: isErrorVehicles,
+  } = useQuery<PaginatedResponse<UserVehicleType>>({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
-  });
-  const vehicles = vehiclesResponse?.data || [];
+  })
+  const vehicles = vehiclesResponse?.data || []
 
   const createMaintenanceMutation = useMutation({
     mutationFn: createMaintenance,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenances'] });
-      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] });
-      toast.success(t('maintenance_created_successfully'));
-      navigate('/maintenances');
+      queryClient.invalidateQueries({ queryKey: ['maintenances'] })
+      queryClient.invalidateQueries({ queryKey: ['vehicleMaintenances'] })
+      toast.success(t('maintenance_created_successfully'))
+      navigate('/maintenances')
     },
     onError: (error: any) => {
-      toast.error(t('an_unexpected_error_occurred')); // Generic error message
+      toast.error(t('an_unexpected_error_occurred')) // Generic error message
     },
-  });
+  })
 
   const onSubmit = (values: MaintenanceFormValues) => {
     const payload: CreateMaintenancePayload = {
@@ -70,9 +74,9 @@ const MaintenanceCreate: React.FC = () => {
       cost: values.cost === undefined ? null : values.cost,
       mileage: values.mileage === undefined ? null : values.mileage,
       nextDueMileage: values.nextDueMileage === undefined ? null : values.nextDueMileage,
-    };
-    createMaintenanceMutation.mutate(payload);
-  };
+    }
+    createMaintenanceMutation.mutate(payload)
+  }
 
   return (
     <div className="space-y-6 p-4">
@@ -96,7 +100,7 @@ const MaintenanceCreate: React.FC = () => {
         isSubmitting={createMaintenanceMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default MaintenanceCreate;
+export default MaintenanceCreate

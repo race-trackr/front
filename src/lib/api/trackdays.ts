@@ -1,51 +1,63 @@
-import apiClient from '@/lib/apiClient';
-import { TrackDayType, CreateTrackdayPayload, UpdateTrackdayPayload, PaginatedResponse } from '@/types';
+import apiClient from '@/lib/apiClient'
+import {
+  TrackDayType,
+  CreateTrackdayPayload,
+  UpdateTrackdayPayload,
+  PaginatedResponse,
+} from '@/types'
 
 interface GetTrackdaysParams {
-  limit?: number;
-  page?: number;
-  searchTerm?: string;
-  vehicleId?: number;
-  trackId?: number;
-  startDate?: string;
-  endDate?: string;
+  limit?: number
+  page?: number
+  searchTerm?: string
+  vehicleId?: number
+  trackId?: number
+  startDate?: string
+  endDate?: string
 }
 
-export const getTrackdays = async (params?: GetTrackdaysParams): Promise<PaginatedResponse<TrackDayType>> => {
+export const getTrackdays = async (
+  params?: GetTrackdaysParams
+): Promise<PaginatedResponse<TrackDayType>> => {
   const response = await apiClient.get('/trackdays', {
     params: params,
-  });
+  })
   // Ensure response.data is always a PaginatedResponse, even if empty or null
-  return response.data || { 
-    data: [], 
-    meta: { 
-      total: 0, 
-      perPage: params?.limit || 0, 
-      currentPage: params?.page || 1, 
-      lastPage: 1, 
-      firstPage: 1, 
-      lastPageUrl: null, 
-      nextPageUrl: null, 
-      previousPageUrl: null 
-    } 
-  };
-};
+  return (
+    response.data || {
+      data: [],
+      meta: {
+        total: 0,
+        perPage: params?.limit || 0,
+        currentPage: params?.page || 1,
+        lastPage: 1,
+        firstPage: 1,
+        lastPageUrl: null,
+        nextPageUrl: null,
+        previousPageUrl: null,
+      },
+    }
+  )
+}
 
 export const getTrackdayById = async (id: string): Promise<TrackDayType> => {
-  const response = await apiClient.get(`/trackdays/${id}`);
-  return response.data;
-};
+  const response = await apiClient.get(`/trackdays/${id}`)
+  return response.data
+}
 
 export const createTrackday = async (payload: CreateTrackdayPayload): Promise<TrackDayType> => {
-  const response = await apiClient.post('/trackdays', payload);
-  return response.data;
-};
+  const response = await apiClient.post('/trackdays', payload)
+  return response.data
+}
 
-export const updateTrackday = async (id: string, payload: UpdateTrackdayPayload): Promise<TrackDayType> => {
-  const response = await apiClient.put(`/trackdays/${id}`, payload);
-  return response.data;
-};
+export const updateTrackday = async (
+  id: string,
+  payload: UpdateTrackdayPayload
+): Promise<TrackDayType> => {
+  const response = await apiClient.put(`/trackdays/${id}`, payload)
+  return response.data
+}
 
 export const deleteTrackday = async (id: string): Promise<void> => {
-  await apiClient.delete(`/trackdays/${id}`);
-};
+  await apiClient.delete(`/trackdays/${id}`)
+}

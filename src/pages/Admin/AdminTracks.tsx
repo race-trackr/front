@@ -1,27 +1,32 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react';
-import { TrackType } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import apiClient from '@/lib/apiClient';
-import { DataTable } from '@/components/DataTable';
-import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { PlusCircle, Edit, Trash2, ArrowLeft } from 'lucide-react'
+import { TrackType } from '@/types'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import apiClient from '@/lib/apiClient'
+import { DataTable } from '@/components/DataTable'
+import { createColumnHelper, ColumnDef } from '@tanstack/react-table'
+import { toast } from 'sonner'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
 
-const columnHelper = createColumnHelper<TrackType>();
+const columnHelper = createColumnHelper<TrackType>()
 
 const AdminTracks: React.FC = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [trackToDelete, setTrackToDelete] = React.useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [trackToDelete, setTrackToDelete] = React.useState<number | null>(null)
 
-  const { data: tracks, isLoading, isError: isErrorTracks, error: tracksError } = useQuery<
+  const {
+    data: tracks,
+    isLoading,
+    isError: isErrorTracks,
+    error: tracksError,
+  } = useQuery<
     TrackType[], // TQueryFnData
     Error, // TError
     TrackType[], // TData
@@ -29,44 +34,45 @@ const AdminTracks: React.FC = () => {
   >({
     queryKey: ['tracks'],
     queryFn: async () => {
-      const response = await apiClient.get('/tracks');
-      return response.data;
+      const response = await apiClient.get('/tracks')
+      return response.data
     },
-  });
+  })
 
   useEffect(() => {
     if (isErrorTracks && tracksError) {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     }
-  }, [isErrorTracks, tracksError, t]);
+  }, [isErrorTracks, tracksError, t])
 
   const deleteTrackMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/tracks/${id}`);
+      await apiClient.delete(`/tracks/${id}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tracks'] });
-      toast.success(t('track_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
-      setTrackToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ['tracks'] })
+      toast.success(t('track_deleted_successfully'))
+      setIsDeleteDialogOpen(false)
+      setTrackToDelete(null)
     },
-    onError: (error: Error) => { // Corrected onError type
-      toast.error(t('an_unexpected_error_occurred'));
-      setIsDeleteDialogOpen(false);
-      setTrackToDelete(null);
+    onError: (error: Error) => {
+      // Corrected onError type
+      toast.error(t('an_unexpected_error_occurred'))
+      setIsDeleteDialogOpen(false)
+      setTrackToDelete(null)
     },
-  });
+  })
 
   const handleDeleteClick = (id: number) => {
-    setTrackToDelete(id);
-    setIsDeleteDialogOpen(true);
-  };
+    setTrackToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
     if (trackToDelete !== null) {
-      deleteTrackMutation.mutate(trackToDelete);
+      deleteTrackMutation.mutate(trackToDelete)
     }
-  };
+  }
 
   const columns: ColumnDef<TrackType>[] = [
     columnHelper.accessor('name', {
@@ -104,19 +110,22 @@ const AdminTracks: React.FC = () => {
             className="btn-danger"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteTrackMutation.isPending ? t('deleting') : t('delete_track_button')}</span>
+            <span className="sr-only">
+              {deleteTrackMutation.isPending ? t('deleting') : t('delete_track_button')}
+            </span>
           </Button>
         </div>
       ),
     }),
-  ];
+  ]
 
   if (isLoading) {
-    return <div className="space-y-6">{t('loading_tracks')}</div>;
+    return <div className="space-y-6">{t('loading_tracks')}</div>
   }
 
-  if (isErrorTracks) { // Use specific error flag
-    return <div className="space-y-6 text-red-500">{t('error_loading_tracks')}</div>;
+  if (isErrorTracks) {
+    // Use specific error flag
+    return <div className="space-y-6 text-red-500">{t('error_loading_tracks')}</div>
   }
 
   return (
@@ -152,7 +161,7 @@ const AdminTracks: React.FC = () => {
         isConfirming={deleteTrackMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default AdminTracks;
+export default AdminTracks

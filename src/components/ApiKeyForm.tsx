@@ -1,13 +1,13 @@
-import React from 'react';
-import { useForm, Path } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+import React from 'react'
+import { useForm, Path } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -16,17 +16,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { DatePicker } from '@/components/ui/date-picker';
-import { ApiKey, Permissions, PermissionAction } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+} from '@/components/ui/form'
+import { DatePicker } from '@/components/ui/date-picker'
+import { ApiKey, Permissions, PermissionAction } from '@/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 
 interface ApiKeyFormProps {
-  onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void;
-  onCancel: () => void;
-  isSaving: boolean;
+  onSave: (newApiKey: Omit<ApiKey, 'id' | 'key' | 'createdAt'>) => void
+  onCancel: () => void
+  isSaving: boolean
 }
 
 // Define the schema for individual permission actions
@@ -35,10 +35,10 @@ const permissionActionsSchema = z.object({
   read: z.boolean().default(false),
   update: z.boolean().default(false),
   delete: z.boolean().default(false),
-});
+})
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Le nom de la clé API est requis." }),
+  name: z.string().min(1, { message: 'Le nom de la clé API est requis.' }),
   expiresAt: z.string().nullable().optional(),
   permissions: z.object({
     trackdays: permissionActionsSchema,
@@ -48,7 +48,7 @@ const formSchema = z.object({
     countries: permissionActionsSchema,
     users: permissionActionsSchema,
   }),
-});
+})
 
 // Le type inféré de defaultPermissionsForForm devrait maintenant correspondre correctement à Permissions
 const defaultPermissionsForForm: z.infer<typeof formSchema>['permissions'] = {
@@ -58,10 +58,10 @@ const defaultPermissionsForForm: z.infer<typeof formSchema>['permissions'] = {
   tracks: { create: false, read: false, update: false, delete: false },
   countries: { create: false, read: false, update: false, delete: false },
   users: { create: false, read: false, update: false, delete: false },
-};
+}
 
 const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,18 +70,25 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
       expiresAt: null,
       permissions: defaultPermissionsForForm,
     },
-  });
+  })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     onSave({
       name: values.name,
       expiresAt: values.expiresAt || null,
       permissions: values.permissions as Permissions, // Explicit cast to Permissions
-    });
-  };
+    })
+  }
 
-  const tableNames: Array<keyof Permissions> = ['trackdays', 'vehicles', 'maintenances', 'tracks', 'countries', 'users'];
-  const permissionActions: PermissionAction[] = ['create', 'read', 'update', 'delete'];
+  const tableNames: Array<keyof Permissions> = [
+    'trackdays',
+    'vehicles',
+    'maintenances',
+    'tracks',
+    'countries',
+    'users',
+  ]
+  const permissionActions: PermissionAction[] = ['create', 'read', 'update', 'delete']
 
   return (
     <Form {...form}>
@@ -92,7 +99,10 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('api_key_name')}<span className="text-destructive">*</span></FormLabel>
+              <FormLabel>
+                {t('api_key_name')}
+                <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input {...field} placeholder={t('enter_api_key_name')} />
               </FormControl>
@@ -135,7 +145,9 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
                     <FormField
                       key={`${tableName}-${action}`}
                       control={form.control}
-                      name={`permissions.${tableName}.${action}` as Path<z.infer<typeof formSchema>>}
+                      name={
+                        `permissions.${tableName}.${action}` as Path<z.infer<typeof formSchema>>
+                      }
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>
@@ -145,9 +157,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="capitalize">
-                              {t(action)}
-                            </FormLabel>
+                            <FormLabel className="capitalize">{t(action)}</FormLabel>
                           </div>
                         </FormItem>
                       )}
@@ -169,7 +179,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, onCancel, isSaving }) =
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default ApiKeyForm;
+export default ApiKeyForm

@@ -1,78 +1,76 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Trash2, Edit, ArrowLeft, PlusCircle } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import apiClient from '@/lib/apiClient';
-import { UserType } from '@/types';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog';
-import { DataTable } from '@/components/DataTable';
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Users, Trash2, Edit, ArrowLeft, PlusCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import apiClient from '@/lib/apiClient'
+import { UserType } from '@/types'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import { DataTable } from '@/components/DataTable'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 
-const columnHelper = createColumnHelper<UserType>();
+const columnHelper = createColumnHelper<UserType>()
 
 const AdminUsers: React.FC = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const [selectedUserId, setSelectedUserId] = React.useState<number | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const [selectedUserId, setSelectedUserId] = React.useState<number | null>(null)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
 
   // Fetch users
-  const { data: users, isLoading, isError, error } = useQuery<UserType[]>({
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<UserType[]>({
     queryKey: ['admin-users'],
     queryFn: async () => {
-      const response = await apiClient.get('/admin/users');
-      // the API wraps the users in an object: { users: [...] }
-      return response.data?.users || [];
+      const response = await apiClient.get('/admin/users')
+      return response.data?.data || []
     },
-  });
+  })
 
   // Delete mutation
   const deleteUserMutation = useMutation({
     mutationFn: async (userId: number) => {
-      const response = await apiClient.delete(`/admin/users/${userId}`);
-      return response.data;
+      const response = await apiClient.delete(`/admin/users/${userId}`)
+      // response returns 204 on success with no content
+      return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-      toast.success(t('user_deleted_successfully'));
-      setIsDeleteDialogOpen(false);
-      setSelectedUserId(null);
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] })
+      toast.success(t('user_deleted_successfully'))
+      setIsDeleteDialogOpen(false)
+      setSelectedUserId(null)
     },
     onError: () => {
-      toast.error(t('an_unexpected_error_occurred'));
+      toast.error(t('an_unexpected_error_occurred'))
     },
-  });
+  })
+
+  const ownerCount = users?.filter((u) => u.role === 'owner').length ?? 0
 
   const handleDeleteClick = (userId: number) => {
-    setSelectedUserId(userId);
-    setIsDeleteDialogOpen(true);
-  };
+    setSelectedUserId(userId)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleConfirmDelete = () => {
     if (selectedUserId) {
-      deleteUserMutation.mutate(selectedUserId);
+      deleteUserMutation.mutate(selectedUserId)
     }
-  };
+  }
 
   if (isLoading) {
-    return <div className="space-y-6">{t('loading')}...</div>;
+    return <div className="space-y-6">{t('loading')}...</div>
   }
 
   if (isError) {
-    return <div className="space-y-6 text-red-500">{t('an_unexpected_error_occurred')}</div>;
+    return <div className="space-y-6 text-red-500">{t('an_unexpected_error_occurred')}</div>
   }
 
   const columns: ColumnDef<UserType>[] = [
@@ -90,7 +88,11 @@ const AdminUsers: React.FC = () => {
     }),
     columnHelper.accessor('role', {
       header: () => t('role'),
-      cell: (info) => (<span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">{info.getValue()}</span>),
+      cell: (info) => (
+        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
+          {info.getValue()}
+        </span>
+      ),
     }),
     columnHelper.display({
       id: 'actions',
@@ -107,17 +109,27 @@ const AdminUsers: React.FC = () => {
             variant="destructive"
             size="icon"
             onClick={() => handleDeleteClick(row.original.id)}
-            disabled={deleteUserMutation.isPending}
+            disabled={
+              deleteUserMutation.isPending || (row.original.role === 'owner' && ownerCount <= 1)
+            }
             className="btn-danger"
-            title={deleteUserMutation.isPending ? t('deleting') : t('delete_user')}
+            title={
+              row.original.role === 'owner' && ownerCount <= 1
+                ? t('cannot_delete_last_owner')
+                : deleteUserMutation.isPending
+                  ? t('deleting')
+                  : t('delete_user')
+            }
           >
             <Trash2 className="h-4 w-4" />
-            <span className="sr-only">{deleteUserMutation.isPending ? t('deleting') : t('delete_user')}</span>
+            <span className="sr-only">
+              {deleteUserMutation.isPending ? t('deleting') : t('delete_user')}
+            </span>
           </Button>
         </div>
       ),
     }),
-  ];
+  ]
 
   return (
     <div className="space-y-6">
@@ -150,14 +162,18 @@ const AdminUsers: React.FC = () => {
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleConfirmDelete}
-        title={t('confirm_delete_user_title', { defaultValue: 'Supprimer cet utilisateur ?' })}
-        description={t('confirm_delete_user_description', { defaultValue: 'Cette action est irréversible.' })}
+        title={t('confirm_delete_user_title', {
+          defaultValue: 'Supprimer cet utilisateur ?',
+        })}
+        description={t('confirm_delete_user_description', {
+          defaultValue: 'Cette action est irréversible.',
+        })}
         confirmButtonText={t('delete')}
         cancelButtonText={t('cancel')}
         isConfirming={deleteUserMutation.isPending}
       />
     </div>
-  );
-};
+  )
+}
 
-export default AdminUsers;
+export default AdminUsers
