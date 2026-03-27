@@ -260,7 +260,6 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({
                   placeholder={t('enter_next_due_mileage')}
                 />
               </FormControl>
-              <FormDescription>{t('optional_next_due_mileage')}</FormDescription>
               <FormMessage />
             </FormItem>
           )}

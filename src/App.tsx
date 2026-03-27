@@ -53,7 +53,13 @@ import {
   CountryType,
 } from '@/types'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes — prevents background refetch after loader prefetch
+    },
+  },
+})
 
 interface RouteMatchWithData {
   params: { [key: string]: string | undefined }
@@ -121,8 +127,11 @@ const App: React.FC = () => {
                   path: ':uuid',
                   element: <TrackdayView />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.uuid!)
-                    return { trackday }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['trackday', params.uuid!],
+                      queryFn: () => getTrackdayById(params.uuid!),
+                    })
+                    return { trackday: queryClient.getQueryData<TrackDayType>(['trackday', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -141,8 +150,11 @@ const App: React.FC = () => {
                   path: 'edit/:uuid',
                   element: <TrackdayEdit />,
                   loader: async ({ params }) => {
-                    const trackday = await getTrackdayById(params.uuid!)
-                    return { trackday }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['trackday', params.uuid!],
+                      queryFn: () => getTrackdayById(params.uuid!),
+                    })
+                    return { trackday: queryClient.getQueryData<TrackDayType>(['trackday', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -176,8 +188,11 @@ const App: React.FC = () => {
                   path: ':uuid',
                   element: <VehicleView />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleByUUID(params.uuid)
-                    return { vehicle }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['vehicle', params.uuid!],
+                      queryFn: () => getVehicleByUUID(params.uuid),
+                    })
+                    return { vehicle: queryClient.getQueryData<UserVehicleType>(['vehicle', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -192,8 +207,11 @@ const App: React.FC = () => {
                   path: 'edit/:uuid',
                   element: <VehicleEdit />,
                   loader: async ({ params }) => {
-                    const vehicle = await getVehicleByUUID(params.uuid)
-                    return { vehicle }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['vehicle', params.uuid!],
+                      queryFn: () => getVehicleByUUID(params.uuid),
+                    })
+                    return { vehicle: queryClient.getQueryData<UserVehicleType>(['vehicle', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -223,8 +241,11 @@ const App: React.FC = () => {
                   path: ':uuid',
                   element: <MaintenanceView />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(params.uuid!)
-                    return { maintenance }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['maintenance', params.uuid!],
+                      queryFn: () => getMaintenanceById(params.uuid!),
+                    })
+                    return { maintenance: queryClient.getQueryData<MaintenanceRecordType>(['maintenance', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -244,8 +265,11 @@ const App: React.FC = () => {
                   path: 'edit/:uuid',
                   element: <MaintenanceEdit />,
                   loader: async ({ params }) => {
-                    const maintenance = await getMaintenanceById(params.uuid!)
-                    return { maintenance }
+                    await queryClient.prefetchQuery({
+                      queryKey: ['maintenance', params.uuid!],
+                      queryFn: () => getMaintenanceById(params.uuid!),
+                    })
+                    return { maintenance: queryClient.getQueryData<MaintenanceRecordType>(['maintenance', params.uuid!]) }
                   },
                   handle: {
                     crumb: ({ data }: RouteMatchWithData) => {
@@ -324,8 +348,14 @@ const App: React.FC = () => {
                       path: 'edit/:uuid',
                       element: <AdminTracksEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/tracks/${params.uuid!}`)
-                        return { track: response.data }
+                        await queryClient.prefetchQuery({
+                          queryKey: ['track', params.uuid!],
+                          queryFn: async () => {
+                            const response = await apiClient.get(`/tracks/${params.uuid!}`)
+                            return response.data
+                          },
+                        })
+                        return { track: queryClient.getQueryData<TrackType>(['track', params.uuid!]) }
                       },
                       handle: {
                         crumb: ({ data }: RouteMatchWithData) => {
@@ -355,8 +385,14 @@ const App: React.FC = () => {
                       path: 'edit/:uuid',
                       element: <AdminCountriesEdit />,
                       loader: async ({ params }) => {
-                        const response = await apiClient.get(`/countries/${params.uuid!}`)
-                        return { country: response.data }
+                        await queryClient.prefetchQuery({
+                          queryKey: ['country', params.uuid!],
+                          queryFn: async () => {
+                            const response = await apiClient.get(`/countries/${params.uuid!}`)
+                            return response.data
+                          },
+                        })
+                        return { country: queryClient.getQueryData<CountryType>(['country', params.uuid!]) }
                       },
                       handle: {
                         crumb: ({ data }: RouteMatchWithData) => {
@@ -392,8 +428,14 @@ const App: React.FC = () => {
                             },
                           },
                           loader: async ({ params }) => {
-                            const response = await apiClient.get(`/admin/users/${params.uuid}`)
-                            return { user: response.data.user }
+                            await queryClient.prefetchQuery({
+                              queryKey: ['admin-user', params.uuid!],
+                              queryFn: async () => {
+                                const response = await apiClient.get(`/admin/users/${params.uuid}`)
+                                return response.data.user
+                              },
+                            })
+                            return { user: queryClient.getQueryData(['admin-user', params.uuid!]) }
                           },
                         },
                         {

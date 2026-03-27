@@ -140,19 +140,19 @@ export interface MaintenanceRecordType {
 
 export type CreateVehiclePayload = Omit<
   UserVehicleType,
-  'id' | 'userId' | 'slug' | 'createdAt' | 'updatedAt' | 'user' | 'trackDays' | 'maintenances'
+  'id' | 'uuid' | 'userId' | 'slug' | 'createdAt' | 'updatedAt' | 'user' | 'trackDays' | 'maintenances'
 >
 export type UpdateVehiclePayload = Partial<CreateVehiclePayload>
 
 export type CreateTrackdayPayload = Omit<
   TrackDayType,
-  'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'track' | 'vehicle'
+  'id' | 'uuid' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'track' | 'vehicle'
 >
 export type UpdateTrackdayPayload = Partial<CreateTrackdayPayload>
 
 export type CreateMaintenancePayload = Omit<
   MaintenanceRecordType,
-  'id' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'vehicle'
+  'id' | 'uuid' | 'userId' | 'createdAt' | 'updatedAt' | 'user' | 'vehicle'
 >
 export type UpdateMaintenancePayload = Partial<CreateMaintenancePayload>
 

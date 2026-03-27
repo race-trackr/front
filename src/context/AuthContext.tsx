@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, ReactNode } from 'react'
+import React, { createContext, ReactNode } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { UserType, LoginPayload, RegisterPayload } from '@/types'
 
@@ -19,12 +19,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { user, token, isAuthenticated, login, register, logout, loading, initializeAuth } =
-    useAuthStore()
-
-  useEffect(() => {
-    initializeAuth()
-  }, [initializeAuth])
+  const { user, token, isAuthenticated, login, register, logout, loading } = useAuthStore()
 
   return (
     <AuthContext.Provider

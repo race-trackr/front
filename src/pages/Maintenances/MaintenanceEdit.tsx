@@ -42,7 +42,7 @@ const MaintenanceEdit: React.FC = () => {
       name: '',
       type: 'maintenance',
       date: format(new Date(), 'yyyy-MM-dd'),
-      details: null,
+      details: '',
       cost: null,
       mileage: null,
       nextDueMileage: null,
@@ -153,7 +153,7 @@ const MaintenanceEdit: React.FC = () => {
   const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
 
   return (
-    <div className="mx-auto p-4 space-y-6">
+    <div className="p-4 space-y-6">
       <div className="flex items-center justify-between mb-6">
         <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
