@@ -378,6 +378,7 @@
   "enter_track_description": "Enter a description for the track",
   "no_results": "No results.",
   "search_table": "Search table...",
+  "clear_filters": "Clear filters",
   "enter_brand_optional": "Enter brand (optional)",
   "enter_model_optional": "Enter model (optional)",
   "enter_year_optional": "Enter year (optional)",

@@ -370,6 +370,7 @@
   "enter_track_description": "Inserisci una descrizione per la pista",
   "no_results": "Nessun risultato.",
   "search_table": "Cerca nella tabella...",
+  "clear_filters": "Cancella filtri",
   "enter_brand_optional": "Inserisci la marca (opzionale)",
   "enter_model_optional": "Inserisci il modello (opzionale)",
   "enter_year_optional": "Inserisci l'anno (opzionale)",

@@ -21,8 +21,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { PlusCircle, Wrench, Edit, Trash2, DollarSign, CalendarDays, Search } from 'lucide-react'
-import { MaintenanceRecordType, MaintenanceRecordTypeType, PaginatedResponse, UserVehicleType } from '@/types'
+import { PlusCircle, Wrench, Edit, Trash2, DollarSign, Euro, CalendarDays, Search, X } from 'lucide-react'
+import {
+  MaintenanceRecordType,
+  MaintenanceRecordTypeType,
+  PaginatedResponse,
+  UserVehicleType,
+} from '@/types'
 import { deleteMaintenance, getMaintenances } from '@/lib/api/maintenances'
 import { getVehicles } from '@/lib/api/vehicles'
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
@@ -49,13 +54,16 @@ const MaintenanceList: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<string | null>(null)
+  const listRef = React.useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setCurrentPage(1)
   }, [debouncedSearch, typeFilter, vehicleFilter])
 
   // All data — stats + charts (no pagination)
-  const { data: overviewResponse, isError: isErrorOverview } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
+  const { data: overviewResponse, isError: isErrorOverview } = useQuery<
+    PaginatedResponse<MaintenanceRecordType>
+  >({
     queryKey: ['maintenances', 'overview'],
     queryFn: () => getMaintenances({ limit: 0 }),
   })
@@ -75,7 +83,10 @@ const MaintenanceList: React.FC = () => {
     PaginatedResponse<MaintenanceRecordType>,
     Error,
     PaginatedResponse<MaintenanceRecordType>,
-    ['maintenances', { page: number; limit: number; search?: string; type?: string; vehicle_id?: number }]
+    [
+      'maintenances',
+      { page: number; limit: number; search?: string; type?: string; vehicle_uuid?: string },
+    ]
   >({
     queryKey: [
       'maintenances',
@@ -84,7 +95,7 @@ const MaintenanceList: React.FC = () => {
         limit: PAGE_SIZE,
         search: debouncedSearch || undefined,
         type: typeFilter !== 'all' ? typeFilter : undefined,
-        vehicle_id: vehicleFilter !== 'all' ? Number(vehicleFilter) : undefined,
+        vehicle_uuid: vehicleFilter !== 'all' ? vehicleFilter : undefined,
       },
     ],
     queryFn: () =>
@@ -93,7 +104,7 @@ const MaintenanceList: React.FC = () => {
         limit: PAGE_SIZE,
         search: debouncedSearch || undefined,
         type: typeFilter !== 'all' ? typeFilter : undefined,
-        vehicle_id: vehicleFilter !== 'all' ? Number(vehicleFilter) : undefined,
+        vehicle_uuid: vehicleFilter !== 'all' ? vehicleFilter : undefined,
       }),
   })
 
@@ -101,11 +112,35 @@ const MaintenanceList: React.FC = () => {
     if (isError && error) toast.error(t('an_unexpected_error_occurred'))
   }, [isError, error, t])
 
+  useEffect(() => {
+    const el = listRef.current
+    if (!el || isLoading) return
+    let parent = el.parentElement
+    while (parent) {
+      const { overflowY } = window.getComputedStyle(parent)
+      if (overflowY === 'auto' || overflowY === 'scroll') {
+        const containerRect = parent.getBoundingClientRect()
+        const elRect = el.getBoundingClientRect()
+        parent.scrollTo({
+          top: parent.scrollTop + elRect.top - containerRect.top,
+          behavior: 'smooth',
+        })
+        return
+      }
+      parent = parent.parentElement
+    }
+  }, [debouncedSearch, typeFilter, vehicleFilter])
+
   const {
     data: vehiclesResponse,
     isError: isErrorVehicles,
     error: vehiclesError,
-  } = useQuery<PaginatedResponse<UserVehicleType>, Error, PaginatedResponse<UserVehicleType>, ['vehicles']>({
+  } = useQuery<
+    PaginatedResponse<UserVehicleType>,
+    Error,
+    PaginatedResponse<UserVehicleType>,
+    ['vehicles']
+  >({
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   })
@@ -132,10 +167,14 @@ const MaintenanceList: React.FC = () => {
 
   const getLocale = () => {
     switch (i18n.language) {
-      case 'fr': return fr
-      case 'es': return es
-      case 'it': return it
-      default: return enUS
+      case 'fr':
+        return fr
+      case 'es':
+        return es
+      case 'it':
+        return it
+      default:
+        return enUS
     }
   }
 
@@ -157,7 +196,11 @@ const MaintenanceList: React.FC = () => {
   }
 
   if (isError) {
-    return <div className="space-y-6 p-4 text-center text-red-500">{t('error_loading_maintenances')}</div>
+    return (
+      <div className="space-y-6 p-4 text-center text-red-500">
+        {t('error_loading_maintenances')}
+      </div>
+    )
   }
 
   return (
@@ -191,11 +234,20 @@ const MaintenanceList: React.FC = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg font-normal">{t('total_cost')}</CardTitle>
               <span className="p-2 bg-primary/10 text-red-700 rounded-lg">
-                <DollarSign className="h-6 w-6 text-primary" />
+                {i18n.language === 'en' ? (
+                  <DollarSign className="h-6 w-6 text-primary" />
+                ) : (
+                  <Euro className="h-6 w-6 text-primary" />
+                )}
               </span>
             </div>
             <p className="text-2xl font-bold">
-              {allMaintenances.reduce((sum, m) => sum + (Number(m.cost) || 0), 0).toFixed(2)}€
+              {new Intl.NumberFormat(i18n.language, {
+                style: 'currency',
+                currency: i18n.language === 'en' ? 'USD' : 'EUR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              }).format(allMaintenances.reduce((sum, m) => sum + (Number(m.cost) || 0), 0))}
             </p>
           </CardHeader>
         </Card>
@@ -231,8 +283,16 @@ const MaintenanceList: React.FC = () => {
             placeholder={t('search_table')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="pl-8 w-full"
+            className="pl-8 pr-8 w-full"
           />
+          {inputValue && (
+            <button
+              onClick={() => setInputValue('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
         <Select value={typeFilter} onValueChange={setTypeFilter}>
           <SelectTrigger className="w-full md:w-[180px]">
@@ -254,15 +314,28 @@ const MaintenanceList: React.FC = () => {
           <SelectContent>
             <SelectItem value="all">{t('all_vehicles')}</SelectItem>
             {vehicles.map((v) => (
-              <SelectItem key={v.id} value={String(v.id)}>
+              <SelectItem key={v.uuid} value={v.uuid}>
                 {v.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setInputValue('')
+            setTypeFilter('all')
+            setVehicleFilter('all')
+          }}
+          className="w-full md:w-auto"
+          disabled={inputValue || typeFilter !== 'all' || vehicleFilter !== 'all' ? false : true}
+        >
+          <X className="mr-2 h-4 w-4" /> {t('clear_filters')}
+        </Button>
       </div>
 
       {/* List */}
+      <div ref={listRef} />
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4">
           {Array.from({ length: PAGE_SIZE }).map((_, i) => (
@@ -345,7 +418,9 @@ const MaintenanceList: React.FC = () => {
                     >
                       <Trash2 className="h-4 w-4" />
                       <span className="sr-only">
-                        {deleteMaintenanceMutation.isPending ? t('deleting') : t('delete_maintenance_button')}
+                        {deleteMaintenanceMutation.isPending
+                          ? t('deleting')
+                          : t('delete_maintenance_button')}
                       </span>
                     </Button>
                   </div>
@@ -377,7 +452,10 @@ const MaintenanceList: React.FC = () => {
           />
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <PaginationItem key={page}>
-              <PaginationLink isActive={page === currentPage} onClick={() => handlePageChange(page)}>
+              <PaginationLink
+                isActive={page === currentPage}
+                onClick={() => handlePageChange(page)}
+              >
                 {page}
               </PaginationLink>
             </PaginationItem>

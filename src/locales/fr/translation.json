@@ -377,6 +377,7 @@
   "enter_track_description": "Entrez une description pour la piste",
   "no_results": "Aucun résultat.",
   "search_table": "Rechercher dans le tableau...",
+  "clear_filters": "Effacer les filtres",
   "enter_brand_optional": "Entrez la marque (facultatif)",
   "enter_model_optional": "Entrez le modèle (facultatif)",
   "enter_year_optional": "Entrez l'année (facultatif)",
