@@ -292,16 +292,16 @@ const App: React.FC = () => {
               element: <Analytics />,
               handle: { crumb: () => t('analytics') },
             },
-            {
-              path: '/settings',
-              element: <Settings />,
-              handle: { crumb: () => t('settings') },
-            },
-            {
-              path: '/settings/api-keys/create',
-              element: <ApiKeyCreate />,
-              handle: { crumb: () => t('create_new_api_key') },
-            },
+            // {
+            //   path: '/settings',
+            //   element: <Settings />,
+            //   handle: { crumb: () => t('settings') },
+            // },
+            // {
+            //   path: '/settings/api-keys/create',
+            //   element: <ApiKeyCreate />,
+            //   handle: { crumb: () => t('create_new_api_key') },
+            // },
             {
               path: '/profile',
               element: <Profile />,

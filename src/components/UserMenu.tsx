@@ -70,12 +70,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ isCollapsed }) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Link to="/settings" className="flex items-center">
             <Settings className="mr-2 h-5 w-5 flex-shrink-0" />
             <span>{t('settings')}</span>
           </Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuItem asChild>
           <Link to="/profile" className="flex items-center">
             <UserIcon className="mr-2 h-5 w-5 flex-shrink-0" />
