@@ -86,11 +86,6 @@ const MaintenanceView: React.FC = () => {
   }
 
   const formattedDate = format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
-  // if date is in the future, display it, otherwise display "not specified"
-  const formattedNextDueDate =
-    maintenance.date && new Date(maintenance.date) > new Date()
-      ? format(new Date(maintenance.date), 'PPP', { locale: getLocale() })
-      : t('not_specified')
 
   return (
     <div className="p-4 space-y-6">
@@ -189,10 +184,6 @@ const MaintenanceView: React.FC = () => {
             <CardTitle>{t('next_due')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('next_due_date')}</p>
-              <p className="text-lg">{formattedNextDueDate}</p>
-            </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('next_due_mileage')}</p>
               <p className="text-lg">

@@ -12,6 +12,8 @@ export interface GetMaintenancesParams {
   vehicle_uuid?: string
   type?: string
   search?: string
+  start_date?: string
+  order?: 'asc' | 'desc'
 }
 
 export const getMaintenances = async (

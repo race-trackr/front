@@ -17,7 +17,6 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { getDashboardSummary } from '@/lib/api/dashboard'
 import { getTrackdays, deleteTrackday } from '@/lib/api/trackdays'
 import { getMaintenances, deleteMaintenance } from '@/lib/api/maintenances'
 import { getVehicles } from '@/lib/api/vehicles'
@@ -75,12 +74,12 @@ const Dashboard: React.FC = () => {
   })
 
   const {
-    data: allMaintenancesResponse, // New query for all maintenances
+    data: allMaintenancesResponse,
     isLoading: isLoadingAllMaintenances,
     isError: isErrorAllMaintenances,
   } = useQuery<PaginatedResponse<MaintenanceRecordType>>({
-    queryKey: ['allMaintenances'],
-    queryFn: () => getMaintenances({ limit: 3 }),
+    queryKey: ['upcomingMaintenances', today],
+    queryFn: () => getMaintenances({ limit: 3, start_date: today, order: 'asc' }),
   })
 
   const deleteTrackdayMutation = useMutation({
