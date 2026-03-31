@@ -70,7 +70,7 @@ const ForgotPassword: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full btn-primary-gradient"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || !form.formState.isValid}
               >
                 {form.formState.isSubmitting ? t('sending_reset_link') : t('send_reset_link')}
               </Button>

@@ -42,6 +42,7 @@ const Register: React.FC = () => {
     lastName: z.string().min(1, { message: t('last_name_min_length') }),
     email: z.string().email({ message: t('invalid_email') }),
     password: z.string().min(6, { message: t('password_min_length') }),
+    passwordConfirmation: z.string().min(6, { message: t('password_confirmation_min_length') }),
     countryId: z.coerce.number().min(1, { message: t('country_required') }),
   })
 
@@ -52,6 +53,7 @@ const Register: React.FC = () => {
       lastName: '',
       email: '',
       password: '',
+      passwordConfirmation: '',
       countryId: 0,
     },
   })
@@ -70,6 +72,14 @@ const Register: React.FC = () => {
 
   const onSubmit = async (values: RegisterPayload) => {
     try {
+      // Check if password and passwordConfirmation match before sending the request
+      if (values.password !== values.passwordConfirmation) {
+        form.setError('passwordConfirmation', {
+          type: 'manual',
+          message: t('passwords_do_not_match'),
+        })
+        return
+      }
       await authRegister(values)
       // Navigation to dashboard is now handled by the login function in authStore
       navigate('/dashboard', { replace: true }) // Ajout de la redirection ici
@@ -149,6 +159,24 @@ const Register: React.FC = () => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('password_confirmation')}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="countryId"
@@ -192,7 +220,12 @@ const Register: React.FC = () => {
             <Button
               type="submit"
               className="w-full btn-primary-gradient"
-              disabled={form.formState.isSubmitting || isLoadingCountries || authLoading}
+              disabled={
+                !form.formState.isValid ||
+                form.formState.isSubmitting ||
+                isLoadingCountries ||
+                authLoading
+              }
             >
               {form.formState.isSubmitting || authLoading ? t('registering') : t('register')}
             </Button>

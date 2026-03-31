@@ -102,7 +102,11 @@ const Login: React.FC = () => {
             <Button
               type="submit"
               className="w-full btn-primary-gradient"
-              disabled={form.formState.isSubmitting || loading}
+              disabled={
+                !form.formState.isValid ||
+                form.formState.isSubmitting ||
+                loading
+              }
             >
               {form.formState.isSubmitting || loading ? t('logging_in') : t('login')}
             </Button>

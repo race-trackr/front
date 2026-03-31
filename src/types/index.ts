@@ -172,6 +172,7 @@ export interface RegisterPayload {
   lastName: string
   email: string
   password: string
+  passwordConfirmation: string
   countryId: number
 }
 
