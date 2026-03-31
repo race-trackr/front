@@ -26,6 +26,7 @@ const AdminDashboard: React.FC = () => {
       })
       return response.data
     },
+    staleTime: 5 * 60 * 1000,
   })
 
   useEffect(() => {
@@ -47,6 +48,7 @@ const AdminDashboard: React.FC = () => {
       })
       return response.data
     },
+    staleTime: 5 * 60 * 1000,
   })
 
   const {
@@ -62,6 +64,7 @@ const AdminDashboard: React.FC = () => {
       })
       return response.data
     },
+    staleTime: 5 * 60 * 1000,
   })
 
   useEffect(() => {

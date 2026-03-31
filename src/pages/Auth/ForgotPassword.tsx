@@ -80,7 +80,7 @@ const ForgotPassword: React.FC = () => {
             {t('remember_password')}
             <Link
               to="/auth?tab=login"
-              className="underline ml-1 text-primary hover:text-primary-foreground"
+              className="underline text-muted-foreground hover:text-primary"
             >
               {t('login')}
             </Link>

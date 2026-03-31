@@ -1,4 +1,4 @@
-import { useContext, useState, FC, useMemo } from 'react'
+import { useState, FC, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
@@ -7,8 +7,8 @@ import TrackdayForm from '@/components/TrackdayForm'
 import { createTrackday } from '@/lib/api/trackdays'
 import { getVehicles } from '@/lib/api/vehicles'
 import { UserVehicleType, CreateTrackdayPayload, TrackType, PaginatedResponse } from '@/types'
-import { AuthContext } from '@/context/AuthContext'
 import apiClient from '@/lib/apiClient'
+import { useAuth } from '@/hooks/useAuth'
 
 const TrackdayCreate: FC = () => {
   const { t } = useTranslation()
@@ -17,7 +17,7 @@ const TrackdayCreate: FC = () => {
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
-  const auth = useContext(AuthContext)
+  const auth = useAuth()
   const isOwner = auth?.user?.role === 'owner'
 
   const {
