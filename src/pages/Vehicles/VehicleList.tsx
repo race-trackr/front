@@ -2,13 +2,22 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { PlusCircle, Car, Bike, Edit, Trash2, Eye } from 'lucide-react'
-import { UserVehicleType, PaginatedResponse } from '@/types/index'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { PlusCircle, Car, Bike, Edit, Trash2, Eye, Search, X } from 'lucide-react'
+import { UserVehicleType, PaginatedResponse, VehicleCategory } from '@/types/index'
 import { useTranslation } from 'react-i18next'
 import { deleteVehicle, getVehicles } from '@/lib/api/vehicles'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog'
+import useDebounce from '@/hooks/useDebounce'
 
 const getVehicleIcon = (type: UserVehicleType['type']) => {
   switch (type) {
@@ -23,9 +32,16 @@ const getVehicleIcon = (type: UserVehicleType['type']) => {
   }
 }
 
+const VEHICLE_TYPES: VehicleCategory[] = ['car', 'motorcycle', 'karting', 'other']
+
 const VehicleList: React.FC = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
+
+  const [inputValue, setInputValue] = React.useState('')
+  const debouncedSearch = useDebounce(inputValue, 300)
+  const [typeFilter, setTypeFilter] = React.useState<VehicleCategory | 'all'>('all')
+  const hasFilters = inputValue !== '' || typeFilter !== 'all'
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
   const [vehicleToDelete, setVehicleToDelete] = React.useState<string | null>(null)
@@ -44,7 +60,21 @@ const VehicleList: React.FC = () => {
     queryKey: ['vehicles'],
     queryFn: () => getVehicles({ limit: 0 }),
   })
-  const vehicles = vehiclesResponse?.data || []
+  const allVehicles = vehiclesResponse?.data || []
+
+  const vehicles = React.useMemo(() => {
+    let data = allVehicles
+    if (typeFilter !== 'all') data = data.filter((v) => v.type === typeFilter)
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase()
+      data = data.filter((v) =>
+        [v.name, v.brand, v.model, v.year?.toString(), v.licensePlate].some((field) =>
+          field?.toLowerCase().includes(q)
+        )
+      )
+    }
+    return data
+  }, [allVehicles, typeFilter, debouncedSearch])
 
   useEffect(() => {
     if (isErrorVehicles && vehiclesError) {
@@ -99,8 +129,46 @@ const VehicleList: React.FC = () => {
         </Button>
       </div>
 
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder={t('search_vehicles')}
+            className="pl-8"
+          />
+        </div>
+        <Select
+          value={typeFilter}
+          onValueChange={(v) => setTypeFilter(v as VehicleCategory | 'all')}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder={t('all_types')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all_types')}</SelectItem>
+            {VEHICLE_TYPES.map((type) => (
+              <SelectItem key={type} value={type}>
+                {t(`type_${type}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          onClick={() => {
+            setInputValue('')
+            setTypeFilter('all')
+          }}
+          disabled={!hasFilters}
+        >
+          <X />
+          {t('clear_filters')}
+        </Button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {vehicles && vehicles.length === 0 ? ( // Accessing vehicles safely
+        {vehicles && vehicles.length === 0 ? (
           <Card className="w-full mx-auto text-center p-6 col-span-full">
             <CardContent className="flex flex-col items-center justify-center space-y-4">
               <Car className="h-12 w-12 text-muted-foreground" />

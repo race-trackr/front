@@ -515,5 +515,12 @@
   "loading_maintenance": "Chargement de la maintenance...",
   "maintenance_by_type": "Maintenances par type",
   "filter_by_type": "Filtrer par type",
-  "all_types": "Tous les types"
+  "all_types": "Tous les types",
+  "by_track": "par circuit",
+  "over_time": "dans le temps",
+  "sessions_and_laps_per_month": "Sessions & tours par mois",
+  "filters_active": "Filtré",
+  "best_lap_time": "Meilleur chrono",
+  "total_driving_time": "Temps total de roulage",
+  "search_vehicles": "Rechercher un véhicule…"
 }

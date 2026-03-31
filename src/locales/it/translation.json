@@ -515,5 +515,12 @@
   "select_track": "Seleziona una pista",
   "user": "Utente",
   "guest": "Ospite",
-  "password_confirmation": "Conferma password"
+  "password_confirmation": "Conferma password",
+  "by_track": "per pista",
+  "over_time": "nel tempo",
+  "sessions_and_laps_per_month": "Sessioni e giri per mese",
+  "filters_active": "Filtrato",
+  "best_lap_time": "Miglior giro",
+  "total_driving_time": "Tempo totale di guida",
+  "search_vehicles": "Cerca veicoli…"
 }

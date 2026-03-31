@@ -515,5 +515,12 @@
   "moist": "Moist",
   "lap_time_format": "Enter a lap time in MM.SS.mmm format.",
   "select_vehicle": "Select a vehicle",
-  "select_track": "Select a track"
+  "select_track": "Select a track",
+  "by_track": "by track",
+  "over_time": "over time",
+  "sessions_and_laps_per_month": "Sessions & laps per month",
+  "filters_active": "Filtered",
+  "best_lap_time": "Best lap",
+  "total_driving_time": "Total driving time",
+  "search_vehicles": "Search vehicles…"
 }

@@ -21,7 +21,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { PlusCircle, Wrench, Edit, Trash2, DollarSign, Euro, CalendarDays, Search, X } from 'lucide-react'
+import {
+  PlusCircle,
+  Wrench,
+  Edit,
+  Trash2,
+  DollarSign,
+  Euro,
+  CalendarDays,
+  Search,
+  X,
+} from 'lucide-react'
 import {
   MaintenanceRecordType,
   MaintenanceRecordTypeType,
@@ -55,6 +65,7 @@ const MaintenanceList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
   const [maintenanceToDelete, setMaintenanceToDelete] = React.useState<string | null>(null)
   const listRef = React.useRef<HTMLDivElement>(null)
+  const prevFilters = React.useRef({ search: '', type: 'all', vehicle: 'all' })
 
   useEffect(() => {
     setCurrentPage(1)
@@ -113,6 +124,11 @@ const MaintenanceList: React.FC = () => {
   }, [isError, error, t])
 
   useEffect(() => {
+    const prev = prevFilters.current
+    const changed =
+      prev.search !== debouncedSearch || prev.type !== typeFilter || prev.vehicle !== vehicleFilter
+    prevFilters.current = { search: debouncedSearch, type: typeFilter, vehicle: vehicleFilter }
+    if (!changed) return
     const el = listRef.current
     if (!el || isLoading) return
     let parent = el.parentElement
@@ -321,16 +337,14 @@ const MaintenanceList: React.FC = () => {
           </SelectContent>
         </Select>
         <Button
-          variant="ghost"
           onClick={() => {
             setInputValue('')
             setTypeFilter('all')
             setVehicleFilter('all')
           }}
-          className="w-full md:w-auto"
           disabled={inputValue || typeFilter !== 'all' || vehicleFilter !== 'all' ? false : true}
         >
-          <X className="mr-2 h-4 w-4" /> {t('clear_filters')}
+          <X /> {t('clear_filters')}
         </Button>
       </div>
 

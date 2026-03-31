@@ -25,43 +25,43 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         `grid h-screen w-full`,
         `md:grid-cols-[var(--sidebar-width)_1fr]`,
         `lg:grid-cols-[var(--sidebar-width)_1fr]`,
-        `transition-[grid-template-columns] duration-300 ease-in-out`
+        `transition-[grid-template-columns] duration-150 ease-in-out`
       )}
       style={{ '--sidebar-width': dynamicSidebarWidth } as React.CSSProperties}
     >
-      <div className={cn('hidden border-r md:block', 'transition-all duration-300 ease-in-out')}>
+      <div className={cn('hidden border-r md:block relative', 'transition-all duration-150 ease-in-out')}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={toggleCollapse}
+          className="absolute -right-3.5 top-[18px] z-10 h-7 w-7 rounded-full border bg-background shadow-sm"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
+          <span className="sr-only">Toggle sidebar</span>
+        </Button>
         <div className="flex flex-col h-full">
           <div
             className={cn(
-              'flex h-16 items-center border-b justify-between',
-              isCollapsed ? 'px-2' : 'px-4 lg:px-6',
-              'mb-2' // Added margin-bottom for spacing
+              'flex h-16 items-center border-b',
+              isCollapsed ? 'justify-center px-2' : 'px-4 lg:px-6',
+              'mb-2'
             )}
           >
             <Link to="/" className={cn('flex items-center gap-2 font-semibold')}>
               <img src={Logo} alt="Logo" className="h-8 w-8" />
               <span
                 className={cn(
-                  'text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out',
+                  'text-2xl font-bold text-primary overflow-hidden whitespace-nowrap transition-all duration-150 ease-in-out',
                   isCollapsed ? 'max-w-0 opacity-0' : 'max-w-full opacity-100'
                 )}
               >
                 Race Trackr
               </span>
             </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleCollapse}
-              className={cn('h-8 w-8', isCollapsed && 'w-full')}
-            >
-              {isCollapsed ? (
-                <ChevronRight className="h-5 w-5 flex-shrink-0" />
-              ) : (
-                <ChevronLeft className="h-5 w-5 flex-shrink-0" />
-              )}
-              <span className="sr-only">Toggle sidebar</span>
-            </Button>
           </div>
           <div className="flex-1 overflow-y-auto">
             <Sidebar isCollapsed={isCollapsed} />
